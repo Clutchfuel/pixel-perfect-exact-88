@@ -7,6 +7,7 @@ import { PageHero } from "@/components/PageHero";
 import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { makeMeta, canonical } from "@/lib/seo";
+import platformHero from "@/assets/platform-hero.jpg";
 
 export const Route = createFileRoute("/platform")({
   head: () => ({
@@ -32,6 +33,8 @@ function PlatformPage() {
           title="A real athlete performance platform."
           sub="Your Clutch Score, sweat profile, and hydration trends — in one place. Track your work, watch the line move."
           align="center"
+          bgImage={platformHero}
+          bgImageAlt="Athlete checking the ClutchFuel app on a phone"
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
             Unlock My Clutch Score →

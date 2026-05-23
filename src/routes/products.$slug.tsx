@@ -8,6 +8,7 @@ import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { getProduct, products, type Product } from "@/data/products";
+import { ComingSoonVisual } from "@/components/ComingSoonVisual";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -77,22 +78,18 @@ function ProductPage() {
             <Reveal>
               <div
                 className={cn(
-                  "relative aspect-square w-full overflow-hidden rounded-3xl border",
+                  "overflow-hidden rounded-3xl border",
                   product.accent
-                    ? "border-lime/40 bg-gradient-to-br from-ink to-panel lime-glow"
-                    : "border-ink/8 bg-gradient-to-br from-mist to-white"
+                    ? "border-lime/40 lime-glow"
+                    : "border-ink/8"
                 )}
               >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className={cn(
-                      "h-60 w-36 rounded-3xl border",
-                      product.accent
-                        ? "border-lime/50 bg-lime/10"
-                        : "border-ink/10 bg-white/60 backdrop-blur"
-                    )}
-                  />
-                </div>
+                <ComingSoonVisual
+                  productName={product.name}
+                  stage={product.stage}
+                  accent={product.accent}
+                  size="hero"
+                />
               </div>
             </Reveal>
 

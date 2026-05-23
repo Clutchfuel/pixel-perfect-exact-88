@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@/data/products";
+import { ComingSoonVisual } from "@/components/ComingSoonVisual";
 import { cn } from "@/lib/utils";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -13,25 +14,11 @@ export function ProductCard({ product }: { product: Product }) {
         product.accent ? "border-lime/40 lime-glow" : "border-ink/8"
       )}
     >
-      <div
-        className={cn(
-          "relative aspect-square w-full overflow-hidden rounded-2xl",
-          product.accent
-            ? "bg-gradient-to-br from-ink to-panel"
-            : "bg-gradient-to-br from-mist to-white border border-ink/5"
-        )}
-      >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className={cn(
-              "h-40 w-24 rounded-2xl border",
-              product.accent
-                ? "border-lime/50 bg-lime/10"
-                : "border-ink/10 bg-white/60 backdrop-blur"
-            )}
-          />
-        </div>
-      </div>
+      <ComingSoonVisual
+        productName={product.name}
+        stage={product.stage}
+        accent={product.accent}
+      />
       <div className="mt-6 flex flex-1 flex-col">
         <div className="tracking-eyebrow text-xs font-semibold uppercase text-muted-ink">
           {product.stage}
