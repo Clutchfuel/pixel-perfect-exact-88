@@ -24,7 +24,7 @@ function Index() {
         description="Hydration built for the big moment. Unlock your Clutch Score and train with an edge."
         canonical="/"
       />
-      <Header overDark />
+      <Header />
       <main>
         <HeroSection />
         <SystemSection />
