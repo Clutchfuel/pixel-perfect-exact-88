@@ -86,6 +86,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ClutchFuel — Performance Starts With Preparation." },
+      { name: "description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
+      { property: "og:description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
+      { name: "twitter:description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d2c8f8ba-3a1a-47a6-a98a-34f84cefaccb/id-preview-867834b8--6918a1a6-7166-4318-ac0b-6ebf6325d79f.lovable.app-1779548228432.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d2c8f8ba-3a1a-47a6-a98a-34f84cefaccb/id-preview-867834b8--6918a1a6-7166-4318-ac0b-6ebf6325d79f.lovable.app-1779548228432.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
