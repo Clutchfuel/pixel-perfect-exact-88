@@ -1,0 +1,212 @@
+export const hero = {
+  badge: "Performance Insights",
+  headline: "Hydration built for the big moment.",
+  sub: "For the athletes who perform under pressure.",
+  cta: "Unlock My Clutch Score",
+  supporting:
+    "Takes less than 60 seconds · Built for everyday athletes · Personalized hydration insights",
+};
+
+export const systemSection = {
+  headline: "A SMARTER HYDRATION SYSTEM FOR ATHLETES.",
+  sub: "Built to support performance at every stage. Hydration designed for how athletes actually train and compete.",
+  stages: ["Prepare", "Perform", "Recover"] as const,
+  products: [
+    {
+      name: "Clutch ISO",
+      stage: "Prepare",
+      copy: "Complete hydration system to prime your body before you start.",
+      accent: false,
+    },
+    {
+      name: "Clutch Flow",
+      stage: "Perform",
+      copy: "Clean, effective energy and electrolytes to keep you locked in.",
+      accent: true,
+    },
+    {
+      name: "Clutch Recovery",
+      stage: "Recover",
+      copy: "Replenish and rebuild so you bounce back stronger.",
+      accent: false,
+    },
+  ],
+  features: [
+    {
+      title: "Electrolyte-Focused",
+      copy: "Electrolytes and essential minerals to support hydration before it starts.",
+      icon: "droplet",
+    },
+    {
+      title: "Clean Energy",
+      copy: "Light, effective energy to help you perform without the crash.",
+      icon: "bolt",
+    },
+    {
+      title: "3-Stage System",
+      copy: "Hydration that works in sync with your training and goals.",
+      icon: "layers",
+    },
+  ],
+};
+
+export const sweatSection = {
+  eyebrow: "KNOW YOUR SWEAT RATE",
+  headline: "HYDRATION ISN'T ONE-SIZE-FITS-ALL.",
+  sub: "Your sweat rate determines how much fluid and electrolytes you actually need to perform at your best.",
+  rows: [
+    {
+      title: "Personalized Results",
+      copy: "Get hydration targets based on your body, training, and goals.",
+      icon: "user",
+    },
+    {
+      title: "Performance Focused",
+      copy: "Built around how you train to fuel better workouts and faster recovery.",
+      icon: "activity",
+    },
+    {
+      title: "Data You Can Use",
+      copy: "Simple insights to help you train, compete, and win.",
+      icon: "chart",
+    },
+  ],
+  card: {
+    title: "Get your Clutch Score",
+    stats: [
+      { value: "2 min", label: "to complete" },
+      { value: "5", label: "questions" },
+      { value: "Results", label: "instantly" },
+    ],
+    copy: "Answer a few quick questions and we'll estimate your hydration needs.",
+    cta: "Unlock My Clutch Score",
+  },
+};
+
+export const howItWorks = {
+  headline: "Three steps to your edge.",
+  steps: [
+    {
+      n: "01",
+      title: "Answer Questions",
+      copy: "Tell us about your body, training, and goals.",
+      icon: "list",
+    },
+    {
+      n: "02",
+      title: "Unlock Your Clutch Score",
+      copy: "Get your personalized hydration and performance profile.",
+      icon: "score",
+    },
+    {
+      n: "03",
+      title: "Track Your Performance",
+      copy: "Watch your trends improve every time you train.",
+      icon: "trend",
+    },
+  ],
+};
+
+export const dashboard = {
+  headline: "This is a real athlete performance platform.",
+  sub: "Your Clutch Score, sweat profile, and hydration trends — in one place.",
+  score: 87,
+  scoreLabel: "Clutch Score",
+  scoreDelta: "+4 this week",
+  sweatProfile: { title: "Sweat Profile", value: "Heavy Sweater", sub: "1.6 L / hr avg" },
+  tiles: [
+    { label: "Sessions", value: "14", sub: "last 30 days" },
+    { label: "Consistency", value: "92%", sub: "hydration goals hit" },
+  ],
+  trend: [
+    { d: "Mon", v: 72 },
+    { d: "Tue", v: 78 },
+    { d: "Wed", v: 75 },
+    { d: "Thu", v: 82 },
+    { d: "Fri", v: 80 },
+    { d: "Sat", v: 86 },
+    { d: "Sun", v: 87 },
+  ],
+  history: [
+    { name: "Court Session", time: "Today · 6:20 PM", score: 87, type: "Basketball" },
+    { name: "Threshold Run", time: "Yesterday · 7:00 AM", score: 84, type: "Run" },
+    { name: "Hyrox Sim", time: "Wed · 5:30 PM", score: 81, type: "Hyrox" },
+    { name: "Strength + Conditioning", time: "Tue · 6:00 AM", score: 79, type: "Gym" },
+  ],
+};
+
+export const profiles = {
+  headline: "Every athlete has a profile.",
+  sub: "Discover your performance identity.",
+  cards: [
+    {
+      name: "Balanced Sweater",
+      copy: "Steady output, steady losses. Your edge is consistency.",
+      icon: "balance",
+    },
+    {
+      name: "High Output Athlete",
+      copy: "You push the redline. Fuel matches the intensity.",
+      icon: "flame",
+    },
+    {
+      name: "Recovery Focused",
+      copy: "You play the long game. Bounce back stronger every session.",
+      icon: "heart",
+    },
+    {
+      name: "Heavy Sweater",
+      copy: "You leave it on the floor. Replace what you lose, precisely.",
+      icon: "droplet",
+    },
+  ],
+};
+
+export const longGame = {
+  headline: "Built for the long game.",
+  sub: "Track your score, your consistency, and your progress over time.",
+  trend: Array.from({ length: 12 }, (_, i) => ({
+    w: `W${i + 1}`,
+    v: 62 + Math.round(Math.sin(i / 2) * 6 + i * 2),
+  })),
+  streak: 38,
+  sessions: [
+    { d: "M", on: true },
+    { d: "T", on: true },
+    { d: "W", on: true },
+    { d: "T", on: false },
+    { d: "F", on: true },
+    { d: "S", on: true },
+    { d: "S", on: true },
+  ],
+};
+
+export const testimonials = {
+  headline: "Trusted by athletes and coaches.",
+  items: [
+    {
+      name: "Coach Marcus W.",
+      role: "Strength & Conditioning Coach",
+      quote:
+        "The sweat profile gave me a real number to coach to. My athletes feel the difference in the fourth quarter.",
+    },
+    {
+      name: "Imani R.",
+      role: "Hyrox Athlete",
+      quote:
+        "I used to bonk in the back half. Dialing in my hydration changed how I close races.",
+    },
+    {
+      name: "Eastside Performance",
+      role: "Training Facility",
+      quote:
+        "Our members finally have a simple read on hydration. Less guesswork, more progress.",
+    },
+  ],
+};
+
+export const finalCta = {
+  headline: "Performance Starts With Preparation.",
+  sub: "Unlock your Clutch Score and train with an edge.",
+  cta: "Unlock My Clutch Score",
+};
