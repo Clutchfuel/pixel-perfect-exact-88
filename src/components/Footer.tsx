@@ -7,8 +7,12 @@ export function Footer() {
     <footer className="bg-dark text-white">
       <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-14 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <Link to="/" className="inline-flex items-center gap-2 font-display text-2xl font-extrabold tracking-display text-white" aria-label="ClutchFuel home">
+          <div className="lg:col-span-4">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 font-display text-2xl font-extrabold tracking-display text-white"
+              aria-label="ClutchFuel home"
+            >
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-lime text-ink">
                 <Zap className="h-5 w-5" fill="currentColor" strokeWidth={0} />
               </span>
@@ -18,7 +22,6 @@ export function Footer() {
               {site.tagline}
             </p>
 
-            {/* Visual-only email capture */}
             <form
               onSubmit={(e) => e.preventDefault()}
               className="mt-8 flex w-full max-w-md items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur"
@@ -38,7 +41,7 @@ export function Footer() {
             </form>
           </div>
 
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
+          <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4 lg:col-span-8">
             {footer.columns.map((col) => (
               <div key={col.title}>
                 <div className="tracking-eyebrow text-xs font-semibold uppercase text-lime">
@@ -46,10 +49,13 @@ export function Footer() {
                 </div>
                 <ul className="mt-4 space-y-3">
                   {col.links.map((l) => (
-                    <li key={l}>
-                      <a href="#" className="text-sm text-white/70 transition hover:text-white">
-                        {l}
-                      </a>
+                    <li key={l.to}>
+                      <Link
+                        to={l.to}
+                        className="text-sm text-white/70 transition hover:text-white"
+                      >
+                        {l.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
