@@ -27,7 +27,7 @@ function InsightsPage() {
   );
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <PageHero
           eyebrow="INSIGHTS"

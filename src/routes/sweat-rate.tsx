@@ -24,7 +24,7 @@ export const Route = createFileRoute("/sweat-rate")({
 function SweatRatePage() {
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <PageHero
           eyebrow="KNOW YOUR SWEAT RATE"

@@ -69,7 +69,7 @@ function ArticlePage() {
 
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <section className="bg-background pt-28 md:pt-36">
           <div className="mx-auto max-w-3xl px-6 md:px-10">
