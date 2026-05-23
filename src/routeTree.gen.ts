@@ -9,12 +9,81 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SystemRouteImport } from './routes/system'
+import { Route as SweatRateRouteImport } from './routes/sweat-rate'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PlatformRouteImport } from './routes/platform'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
+import { Route as AthletesRouteImport } from './routes/athletes'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
+import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
+import { Route as AthletesSportRouteImport } from './routes/athletes.$sport'
 
+const SystemRoute = SystemRouteImport.update({
+  id: '/system',
+  path: '/system',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SweatRateRoute = SweatRateRouteImport.update({
+  id: '/sweat-rate',
+  path: '/sweat-rate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlatformRoute = PlatformRouteImport.update({
+  id: '/platform',
+  path: '/platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClutchScoreRoute = ClutchScoreRouteImport.update({
   id: '/clutch-score',
   path: '/clutch-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AthletesRoute = AthletesRouteImport.update({
+  id: '/athletes',
+  path: '/athletes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +91,234 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InsightsRoute,
+} as any)
+const AthletesSportRoute = AthletesSportRouteImport.update({
+  id: '/$sport',
+  path: '/$sport',
+  getParentRoute: () => AthletesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/athletes': typeof AthletesRouteWithChildren
   '/clutch-score': typeof ClutchScoreRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
+  '/platform': typeof PlatformRoute
+  '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sweat-rate': typeof SweatRateRoute
+  '/system': typeof SystemRoute
+  '/athletes/$sport': typeof AthletesSportRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/athletes': typeof AthletesRouteWithChildren
   '/clutch-score': typeof ClutchScoreRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
+  '/platform': typeof PlatformRoute
+  '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sweat-rate': typeof SweatRateRoute
+  '/system': typeof SystemRoute
+  '/athletes/$sport': typeof AthletesSportRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/athletes': typeof AthletesRouteWithChildren
   '/clutch-score': typeof ClutchScoreRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/insights': typeof InsightsRouteWithChildren
+  '/platform': typeof PlatformRoute
+  '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sweat-rate': typeof SweatRateRoute
+  '/system': typeof SystemRoute
+  '/athletes/$sport': typeof AthletesSportRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clutch-score'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/athletes'
+    | '/clutch-score'
+    | '/contact'
+    | '/faq'
+    | '/insights'
+    | '/platform'
+    | '/privacy'
+    | '/products'
+    | '/sitemap.xml'
+    | '/sweat-rate'
+    | '/system'
+    | '/athletes/$sport'
+    | '/insights/$slug'
+    | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/clutch-score'
-  id: '__root__' | '/' | '/clutch-score'
+  to:
+    | '/'
+    | '/about'
+    | '/athletes'
+    | '/clutch-score'
+    | '/contact'
+    | '/faq'
+    | '/insights'
+    | '/platform'
+    | '/privacy'
+    | '/products'
+    | '/sitemap.xml'
+    | '/sweat-rate'
+    | '/system'
+    | '/athletes/$sport'
+    | '/insights/$slug'
+    | '/products/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/athletes'
+    | '/clutch-score'
+    | '/contact'
+    | '/faq'
+    | '/insights'
+    | '/platform'
+    | '/privacy'
+    | '/products'
+    | '/sitemap.xml'
+    | '/sweat-rate'
+    | '/system'
+    | '/athletes/$sport'
+    | '/insights/$slug'
+    | '/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AthletesRoute: typeof AthletesRouteWithChildren
   ClutchScoreRoute: typeof ClutchScoreRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  InsightsRoute: typeof InsightsRouteWithChildren
+  PlatformRoute: typeof PlatformRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SweatRateRoute: typeof SweatRateRoute
+  SystemRoute: typeof SystemRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/system': {
+      id: '/system'
+      path: '/system'
+      fullPath: '/system'
+      preLoaderRoute: typeof SystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sweat-rate': {
+      id: '/sweat-rate'
+      path: '/sweat-rate'
+      fullPath: '/sweat-rate'
+      preLoaderRoute: typeof SweatRateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/platform': {
+      id: '/platform'
+      path: '/platform'
+      fullPath: '/platform'
+      preLoaderRoute: typeof PlatformRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clutch-score': {
       id: '/clutch-score'
       path: '/clutch-score'
       fullPath: '/clutch-score'
       preLoaderRoute: typeof ClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/athletes': {
+      id: '/athletes'
+      path: '/athletes'
+      fullPath: '/athletes'
+      preLoaderRoute: typeof AthletesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,13 +328,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof InsightsRoute
+    }
+    '/athletes/$sport': {
+      id: '/athletes/$sport'
+      path: '/$sport'
+      fullPath: '/athletes/$sport'
+      preLoaderRoute: typeof AthletesSportRouteImport
+      parentRoute: typeof AthletesRoute
+    }
   }
 }
 
+interface AthletesRouteChildren {
+  AthletesSportRoute: typeof AthletesSportRoute
+}
+
+const AthletesRouteChildren: AthletesRouteChildren = {
+  AthletesSportRoute: AthletesSportRoute,
+}
+
+const AthletesRouteWithChildren = AthletesRoute._addFileChildren(
+  AthletesRouteChildren,
+)
+
+interface InsightsRouteChildren {
+  InsightsSlugRoute: typeof InsightsSlugRoute
+}
+
+const InsightsRouteChildren: InsightsRouteChildren = {
+  InsightsSlugRoute: InsightsSlugRoute,
+}
+
+const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
+  InsightsRouteChildren,
+)
+
+interface ProductsRouteChildren {
+  ProductsSlugRoute: typeof ProductsSlugRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  ProductsSlugRoute: ProductsSlugRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AthletesRoute: AthletesRouteWithChildren,
   ClutchScoreRoute: ClutchScoreRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  InsightsRoute: InsightsRouteWithChildren,
+  PlatformRoute: PlatformRoute,
+  PrivacyRoute: PrivacyRoute,
+  ProductsRoute: ProductsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SweatRateRoute: SweatRateRoute,
+  SystemRoute: SystemRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
