@@ -103,7 +103,7 @@ function ArticlePage() {
           </Reveal>
 
           <div className="mt-12 space-y-10">
-            {article.body.map((section, i) => (
+            {article.body.map((section: ArticleSection, i: number) => (
               <Reveal key={i}>
                 <div>
                   {section.heading && (
