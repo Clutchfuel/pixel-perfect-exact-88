@@ -185,10 +185,10 @@ function ProductPage() {
             .filter((p) => p.slug !== product.slug)
             .map((p) => ({
               label: `${p.name} — ${p.stage}`,
-              to: `/products/${p.slug}` as const,
+              to: `/products/${p.slug}`,
               description: p.tagline,
             }))
-            .concat([{ label: "The System overview", to: "/system" as const, description: "How prepare, perform, recover work together." }])}
+            .concat([{ label: "The System overview", to: "/system", description: "How prepare, perform, recover work together." }])}
         />
       </main>
       <Footer />
