@@ -38,7 +38,7 @@ export function RelatedLinks({
           {items.map((item) => (
             <Link
               key={item.to}
-              to={item.to}
+              to={item.to as never}
               className={cn(
                 "group flex items-start justify-between gap-4 rounded-2xl border p-5 transition-all duration-200 hover:-translate-y-0.5",
                 isDark
