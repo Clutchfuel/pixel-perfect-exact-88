@@ -148,12 +148,12 @@ function SportPage() {
         <RelatedLinks
           title="Other sports"
           items={otherSports
-            .map((s) => ({
+            .map((s: Sport) => ({
               label: s.name,
-              to: `/athletes/${s.slug}` as const,
+              to: `/athletes/${s.slug}`,
               description: s.sub.split(".")[0] + ".",
             }))
-            .concat([{ label: "All insights", to: "/insights" as const, description: "Articles for every athlete." }])}
+            .concat([{ label: "All insights", to: "/insights", description: "Articles for every athlete." }])}
         />
       </main>
       <Footer />
