@@ -41,10 +41,10 @@ export const Route = createFileRoute("/athletes/$sport")({
 });
 
 function SportPage() {
-  const sport = Route.useLoaderData();
+  const sport = Route.useLoaderData() as Sport;
   const recommended = products.filter((p) => sport.recommendedProducts.includes(p.slug));
   const related = sport.relatedArticleSlug ? getArticle(sport.relatedArticleSlug) : undefined;
-  const otherSports = sports.filter((s) => s.slug !== sport.slug);
+  const otherSports = sports.filter((s: Sport) => s.slug !== sport.slug);
 
   return (
     <>
