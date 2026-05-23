@@ -59,7 +59,7 @@ function SportPage() {
 
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <PageHero
           eyebrow={sport.eyebrow}

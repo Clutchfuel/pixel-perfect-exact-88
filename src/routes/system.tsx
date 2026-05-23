@@ -44,7 +44,7 @@ export const Route = createFileRoute("/system")({
 function SystemPage() {
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <PageHero
           eyebrow="THE SYSTEM"

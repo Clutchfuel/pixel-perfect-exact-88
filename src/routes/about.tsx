@@ -24,7 +24,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <>
-      <Header />
+      <Header overDark />
       <main>
         <PageHero
           eyebrow={about.eyebrow}
