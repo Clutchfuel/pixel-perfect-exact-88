@@ -57,10 +57,10 @@ export const Route = createFileRoute("/insights/$slug")({
 });
 
 function ArticlePage() {
-  const article = Route.useLoaderData();
+  const article = Route.useLoaderData() as Article;
   const related = (article.relatedSlugs ?? [])
-    .map((s) => articles.find((a) => a.slug === s))
-    .filter((a): a is NonNullable<typeof a> => Boolean(a));
+    .map((s: string) => articles.find((a: Article) => a.slug === s))
+    .filter((a): a is Article => Boolean(a));
   const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
