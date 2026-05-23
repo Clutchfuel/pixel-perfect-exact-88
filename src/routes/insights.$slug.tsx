@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArticleCard } from "@/components/cards/ArticleCard";
 import { CFButton } from "@/components/CFButton";
 import { Reveal } from "@/components/Reveal";
-import { getArticle, articles } from "@/data/insights";
+import { getArticle, articles, type Article, type ArticleSection } from "@/data/insights";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
 import { Clock } from "lucide-react";
 
