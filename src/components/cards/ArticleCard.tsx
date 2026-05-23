@@ -3,11 +3,9 @@ import type { Article } from "@/data/insights";
 import { Clock } from "lucide-react";
 
 export function ArticleCard({ article }: { article: Article }) {
-  const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const d = new Date(article.publishedAt);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const date = `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
   return (
     <Link
       to="/insights/$slug"
