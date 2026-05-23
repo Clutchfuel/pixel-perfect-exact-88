@@ -7,7 +7,7 @@ import { CFButton } from "@/components/CFButton";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { getSport, sports } from "@/data/sports";
+import { getSport, sports, type Sport } from "@/data/sports";
 import { products } from "@/data/products";
 import { getArticle } from "@/data/insights";
 import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
