@@ -6,6 +6,7 @@ import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { makeMeta, canonical } from "@/lib/seo";
+import sweatHero from "@/assets/sweat-rate-hero.jpg";
 
 export const Route = createFileRoute("/sweat-rate")({
   head: () => ({
@@ -29,13 +30,15 @@ function SweatRatePage() {
           eyebrow="KNOW YOUR SWEAT RATE"
           title="Hydration isn't one-size-fits-all."
           sub="Your sweat rate is the single most important number behind a real hydration plan. Here's what it is, why it matters, and how to find yours."
+          bgImage={sweatHero}
+          bgImageAlt="Macro close-up of sweat on an athlete's shoulder"
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
             Estimate mine in 60 seconds →
           </CFButton>
         </PageHero>
 
-        <section className="mx-auto max-w-3xl px-6 pb-20 md:px-10">
+        <section className="mx-auto max-w-3xl px-6 py-20 md:px-10">
           <Reveal>
             <h2 className="font-display text-3xl font-extrabold tracking-display text-ink md:text-4xl">
               What sweat rate actually tells you

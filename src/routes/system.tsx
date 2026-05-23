@@ -11,6 +11,7 @@ import { products } from "@/data/products";
 import { makeMeta, canonical, SITE_URL } from "@/lib/seo";
 import { ArrowRight, Droplet, Zap, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
+import systemHero from "@/assets/system-hero.jpg";
 
 const iconMap = { droplet: Droplet, bolt: Zap, layers: Layers } as const;
 
@@ -49,6 +50,8 @@ function SystemPage() {
           eyebrow="THE SYSTEM"
           title="A smarter hydration system for athletes."
           sub={systemSection.sub}
+          bgImage={systemHero}
+          bgImageAlt="Athlete drinking from a sports bottle mid-training"
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
             Unlock My Clutch Score →

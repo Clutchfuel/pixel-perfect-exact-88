@@ -6,6 +6,7 @@ import { ArticleCard } from "@/components/cards/ArticleCard";
 import { Reveal } from "@/components/Reveal";
 import { articles } from "@/data/insights";
 import { makeMeta, canonical } from "@/lib/seo";
+import insightsHero from "@/assets/insights-hero.jpg";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -32,6 +33,8 @@ function InsightsPage() {
           eyebrow="INSIGHTS"
           title="Hydration and performance, decoded."
           sub="Educational guides built for everyday athletes — no fluff, no bro-science, just the science of how to perform under pressure."
+          bgImage={insightsHero}
+          bgImageAlt="Notebook with training notes and a sports bottle"
         />
 
         <section className="mx-auto max-w-7xl px-6 pb-24 md:px-10">

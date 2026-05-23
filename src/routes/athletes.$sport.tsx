@@ -7,11 +7,22 @@ import { CFButton } from "@/components/CFButton";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { getSport, sports, type Sport } from "@/data/sports";
+import { getSport, sports, type Sport, type SportSlug } from "@/data/sports";
 import { products } from "@/data/products";
 import { getArticle } from "@/data/insights";
 import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
 import { Quote } from "lucide-react";
+import basketballImg from "@/assets/sport-basketball.jpg";
+import runningImg from "@/assets/sport-running.jpg";
+import hyroxImg from "@/assets/sport-hyrox.jpg";
+import gymImg from "@/assets/sport-gym.jpg";
+
+const SPORT_IMAGES: Record<SportSlug, string> = {
+  basketball: basketballImg,
+  running: runningImg,
+  hyrox: hyroxImg,
+  gym: gymImg,
+};
 
 export const Route = createFileRoute("/athletes/$sport")({
   loader: ({ params }) => {
@@ -50,8 +61,20 @@ function SportPage() {
     <>
       <Header />
       <main>
-        <section className="bg-background pt-28 md:pt-36">
-          <div className="mx-auto max-w-5xl px-6 md:px-10">
+        <PageHero
+          eyebrow={sport.eyebrow}
+          title={sport.headline}
+          sub={sport.sub}
+          bgImage={SPORT_IMAGES[sport.slug]}
+          bgImageAlt={`${sport.name} athlete in action`}
+        >
+          <CFButton to="/clutch-score" variant="primary" size="lg">
+            Unlock My Clutch Score →
+          </CFButton>
+        </PageHero>
+
+        <section className="bg-background py-4">
+          <div className="mx-auto max-w-7xl px-6 md:px-10">
             <Breadcrumbs
               items={[
                 { name: "Home", to: "/" },
@@ -61,12 +84,6 @@ function SportPage() {
             />
           </div>
         </section>
-
-        <PageHero eyebrow={sport.eyebrow} title={sport.headline} sub={sport.sub} className="pt-8 md:pt-10">
-          <CFButton to="/clutch-score" variant="primary" size="lg">
-            Unlock My Clutch Score →
-          </CFButton>
-        </PageHero>
 
         <section className="mx-auto max-w-5xl px-6 py-16 md:px-10 md:py-20">
           <h2 className="font-display text-3xl font-extrabold tracking-display text-ink md:text-4xl">

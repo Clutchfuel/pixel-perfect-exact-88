@@ -6,6 +6,7 @@ import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { about } from "@/data/about";
 import { makeMeta, canonical } from "@/lib/seo";
+import aboutTeam from "@/assets/about-team.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -25,7 +26,13 @@ function AboutPage() {
     <>
       <Header />
       <main>
-        <PageHero eyebrow={about.eyebrow} title={about.headline} sub={about.intro} />
+        <PageHero
+          eyebrow={about.eyebrow}
+          title={about.headline}
+          sub={about.intro}
+          bgImage={aboutTeam}
+          bgImageAlt="ClutchFuel formulation lab"
+        />
 
         <section className="mx-auto max-w-3xl px-6 py-16 md:px-10 md:py-20">
           {about.story.map((p, i) => (
@@ -33,6 +40,21 @@ function AboutPage() {
               <p className="mt-6 text-lg leading-relaxed text-ink/80 first:mt-0">{p}</p>
             </Reveal>
           ))}
+        </section>
+
+        <section className="mx-auto max-w-7xl px-6 pb-20 md:px-10">
+          <Reveal>
+            <div className="overflow-hidden rounded-3xl border border-ink/8">
+              <img
+                src={aboutTeam}
+                alt="ClutchFuel team working on hydration formulations in the lab"
+                loading="lazy"
+                width={1536}
+                height={1024}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </Reveal>
         </section>
 
         <section className="bg-mist">

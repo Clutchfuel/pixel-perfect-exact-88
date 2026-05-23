@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/Badge";
 import { SEOHead } from "@/components/SEOHead";
 import { Sparkles } from "lucide-react";
+import clutchHero from "@/assets/clutch-score-hero.jpg";
 
 export const Route = createFileRoute("/clutch-score")({
   head: () => ({
@@ -27,8 +28,17 @@ function ClutchScorePage() {
   return (
     <>
       <SEOHead title="Clutch Score — ClutchFuel" canonical="/clutch-score" />
-      <Header />
+      <Header overDark />
       <main className="relative min-h-screen overflow-hidden bg-dark pt-28 pb-24 md:pt-36 md:pb-32">
+        <img
+          src={clutchHero}
+          alt="Athlete viewing performance data on a phone"
+          loading="eager"
+          width={1920}
+          height={1080}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-dark/60 via-dark/70 to-dark" />
         <div className="pointer-events-none absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime/15 blur-[140px]" />
 
         <div className="relative mx-auto max-w-2xl px-6 md:px-10">

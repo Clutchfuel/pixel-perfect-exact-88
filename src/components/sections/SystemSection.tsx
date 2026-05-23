@@ -1,5 +1,6 @@
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
+import { ComingSoonVisual } from "@/components/ComingSoonVisual";
 import { systemSection } from "@/data/home";
 import { ArrowRight, Droplet, Zap, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -45,29 +46,11 @@ export function SystemSection() {
                 p.accent ? "border-lime/40 lime-glow" : "border-ink/8"
               )}
             >
-              {/* product image placeholder — drop product shot here */}
-              <div
-                className={cn(
-                  "relative aspect-square w-full overflow-hidden rounded-2xl",
-                  p.accent
-                    ? "bg-gradient-to-br from-ink to-panel"
-                    : "bg-gradient-to-br from-mist to-white border border-ink/5"
-                )}
-              >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className={cn(
-                      "h-40 w-24 rounded-2xl border",
-                      p.accent
-                        ? "border-lime/50 bg-lime/10"
-                        : "border-ink/10 bg-white/60 backdrop-blur"
-                    )}
-                  />
-                </div>
-                <div className="absolute bottom-3 left-3 text-[10px] uppercase tracking-eyebrow text-white/40">
-                  product image
-                </div>
-              </div>
+              <ComingSoonVisual
+                productName={p.name}
+                stage={p.stage}
+                accent={p.accent}
+              />
               <div className="mt-6">
                 <div className="tracking-eyebrow text-xs font-semibold uppercase text-muted-ink">
                   {p.stage}
