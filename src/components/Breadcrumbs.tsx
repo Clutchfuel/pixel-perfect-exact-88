@@ -6,7 +6,13 @@ export interface Crumb {
   to?: string;
 }
 
-export function Breadcrumbs({ items, theme = "light" }: { items: Crumb[]; theme?: "light" | "dark" }) {
+export function Breadcrumbs({
+  items,
+  theme = "light",
+}: {
+  items: Crumb[];
+  theme?: "light" | "dark";
+}) {
   const muted = theme === "dark" ? "text-muted-dark" : "text-muted-ink";
   const strong = theme === "dark" ? "text-white" : "text-ink";
   return (

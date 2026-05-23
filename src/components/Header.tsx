@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { CFButton } from "./CFButton";
+import { Logo } from "./Logo";
 import { navLinks, site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -9,9 +10,13 @@ interface HeaderProps {
   overDark?: boolean;
 }
 
+const MENU_ID = "mobile-nav-menu";
+
 export function Header({ overDark = false }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -27,6 +32,37 @@ export function Header({ overDark = false }: HeaderProps) {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const menu = menuRef.current;
+    const focusable = menu?.querySelectorAll<HTMLElement>(
+      "a[href], button:not([disabled]), input:not([disabled])",
+    );
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    first?.focus();
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !focusable?.length) return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const solid = scrolled || open;
   const textCls = solid ? "text-ink" : overDark ? "text-white" : "text-ink";
 
@@ -35,34 +71,33 @@ export function Header({ overDark = false }: HeaderProps) {
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          solid ? "bg-white/85 backdrop-blur-xl border-b border-ink/5" : "bg-transparent"
+          solid ? "bg-white/85 backdrop-blur-xl border-b border-ink/5" : "bg-transparent",
         )}
       >
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 md:h-20 md:px-10">
+        <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between px-6 md:h-[5.25rem] md:px-10">
           <Link
             to="/"
-            className={cn(
-              "flex items-center gap-2 font-display text-xl font-extrabold tracking-display",
-              textCls
-            )}
+            className="group inline-flex shrink-0 items-center rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2"
             aria-label="ClutchFuel home"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-ink text-lime">
-              <Zap className="h-4 w-4" fill="currentColor" strokeWidth={0} />
-            </span>
-            <span>CLUTCHFUEL</span>
+            <Logo
+              variant={solid || !overDark ? "dark" : "light"}
+              size="lg"
+              compact
+              className="transition-opacity group-hover:opacity-90"
+            />
           </Link>
 
-          <nav className="hidden items-center gap-8 lg:flex">
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">
             {navLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:opacity-70",
-                  textCls
-                )}
-                activeProps={{ className: "opacity-100 underline underline-offset-8 decoration-lime decoration-2" }}
+                className={cn("text-sm font-medium transition-colors hover:opacity-70", textCls)}
+                activeProps={{
+                  className:
+                    "opacity-100 underline underline-offset-8 decoration-lime decoration-2",
+                }}
               >
                 {l.label}
               </Link>
@@ -76,8 +111,11 @@ export function Header({ overDark = false }: HeaderProps) {
           </div>
 
           <button
+            ref={toggleRef}
             type="button"
-            aria-label="Open menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls={MENU_ID}
             onClick={() => setOpen((v) => !v)}
             className={cn(
               "flex h-12 w-12 items-center justify-center rounded-full border lg:hidden",
@@ -85,7 +123,7 @@ export function Header({ overDark = false }: HeaderProps) {
                 ? "border-ink/15 text-ink"
                 : overDark
                   ? "border-white/30 text-white"
-                  : "border-ink/15 text-ink"
+                  : "border-ink/15 text-ink",
             )}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -94,13 +132,18 @@ export function Header({ overDark = false }: HeaderProps) {
       </header>
 
       <div
+        ref={menuRef}
+        id={MENU_ID}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
         className={cn(
           "fixed inset-0 z-40 bg-white transition-opacity duration-300 lg:hidden",
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       >
         <div className="flex h-full flex-col overflow-y-auto px-6 pt-24 pb-10">
-          <nav className="flex flex-col gap-1">
+          <nav className="flex flex-col gap-1" aria-label="Mobile">
             {navLinks.map((l) => (
               <Link
                 key={l.to}

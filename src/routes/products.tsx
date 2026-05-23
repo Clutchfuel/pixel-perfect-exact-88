@@ -7,7 +7,7 @@ import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { products } from "@/data/products";
-import { makeMeta, canonical } from "@/lib/seo";
+import { makeMeta, canonical, collectionPageSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -18,6 +18,14 @@ export const Route = createFileRoute("/products")({
       path: "/products",
     }),
     links: canonical("/products"),
+    scripts: [
+      collectionPageSchema({
+        name: "ClutchFuel Products",
+        description:
+          "Clutch ISO, Clutch Flow, and Clutch Recovery — a three-stage performance hydration system for everyday athletes.",
+        path: "/products",
+      }),
+    ],
   }),
   component: ProductsPage,
 });
@@ -54,7 +62,8 @@ function ProductsPage() {
             </h2>
             <p className="mt-4 max-w-xl text-muted-ink">
               Most athletes start with one product and build the full system as their training
-              demands grow. The Clutch Score recommends the right starting point for you in 60 seconds.
+              demands grow. The Clutch Score recommends the right starting point for you in 60
+              seconds.
             </p>
             <div className="mt-6">
               <CFButton to="/clutch-score" variant="dark" size="md">
@@ -66,9 +75,21 @@ function ProductsPage() {
 
         <RelatedLinks
           items={[
-            { label: "The System", to: "/system", description: "How prepare, perform, recover fit together." },
-            { label: "Know your sweat rate", to: "/sweat-rate", description: "Why personalization matters." },
-            { label: "Frequently asked questions", to: "/faq", description: "Common product questions answered." },
+            {
+              label: "The System",
+              to: "/system",
+              description: "How prepare, perform, recover fit together.",
+            },
+            {
+              label: "Know your sweat rate",
+              to: "/sweat-rate",
+              description: "Why personalization matters.",
+            },
+            {
+              label: "Frequently asked questions",
+              to: "/faq",
+              description: "Common product questions answered.",
+            },
           ]}
         />
       </main>

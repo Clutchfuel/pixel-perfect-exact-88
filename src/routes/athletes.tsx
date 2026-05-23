@@ -7,7 +7,7 @@ import { ProfilesSection } from "@/components/sections/ProfilesSection";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { sports } from "@/data/sports";
-import { makeMeta, canonical } from "@/lib/seo";
+import { makeMeta, canonical, collectionPageSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/athletes")({
   head: () => ({
@@ -18,6 +18,14 @@ export const Route = createFileRoute("/athletes")({
       path: "/athletes",
     }),
     links: canonical("/athletes"),
+    scripts: [
+      collectionPageSchema({
+        name: "Athletes — ClutchFuel",
+        description:
+          "Sport-specific hydration guidance for basketball, running, Hyrox, and gym athletes. Discover your performance profile.",
+        path: "/athletes",
+      }),
+    ],
   }),
   component: AthletesPage,
 });
@@ -43,14 +51,25 @@ function AthletesPage() {
           </div>
         </section>
 
-
         <ProfilesSection />
 
         <RelatedLinks
           items={[
-            { label: "Know your sweat rate", to: "/sweat-rate", description: "The number behind sport-specific plans." },
-            { label: "Insights & guides", to: "/insights", description: "Long-form articles for every athlete." },
-            { label: "Unlock your Clutch Score", to: "/clutch-score", description: "Personalized in 60 seconds." },
+            {
+              label: "Know your sweat rate",
+              to: "/sweat-rate",
+              description: "The number behind sport-specific plans.",
+            },
+            {
+              label: "Insights & guides",
+              to: "/insights",
+              description: "Long-form articles for every athlete.",
+            },
+            {
+              label: "Unlock your Clutch Score",
+              to: "/clutch-score",
+              description: "Personalized in 60 seconds.",
+            },
           ]}
         />
       </main>

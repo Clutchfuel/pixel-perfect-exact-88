@@ -11,7 +11,7 @@ import { products } from "@/data/products";
 import { makeMeta, canonical, SITE_URL } from "@/lib/seo";
 import { ArrowRight, Droplet, Zap, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
-import systemHero from "@/assets/system-hero.jpg";
+import { imageSets } from "@/assets/image-sets";
 
 const iconMap = { droplet: Droplet, bolt: Zap, layers: Layers } as const;
 
@@ -50,7 +50,7 @@ function SystemPage() {
           eyebrow="THE SYSTEM"
           title="A smarter hydration system for athletes."
           sub={systemSection.sub}
-          bgImage={systemHero}
+          heroImage={imageSets.systemHero}
           bgImageAlt="Athlete drinking from a sports bottle mid-training"
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
@@ -99,7 +99,11 @@ function SystemPage() {
                 const Icon = iconMap[f.icon as keyof typeof iconMap];
                 return (
                   <Reveal key={f.title}>
-                    <div className={cn("flex h-full items-start gap-4 rounded-2xl border border-ink/8 bg-white p-6")}>
+                    <div
+                      className={cn(
+                        "flex h-full items-start gap-4 rounded-2xl border border-ink/8 bg-white p-6",
+                      )}
+                    >
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lime/15 text-ink ring-1 ring-lime/30">
                         <Icon className="h-5 w-5" />
                       </div>
@@ -132,16 +136,31 @@ function SystemPage() {
               </CFButton>
             </div>
             <p className="mt-6 text-sm text-muted-dark">
-              Or <Link to="/sweat-rate" className="text-lime hover:underline">learn about sweat rate</Link>
+              Or{" "}
+              <Link to="/sweat-rate" className="text-lime hover:underline">
+                learn about sweat rate
+              </Link>
             </p>
           </div>
         </section>
 
         <RelatedLinks
           items={[
-            { label: "Know your sweat rate", to: "/sweat-rate", description: "Why hydration isn't one-size-fits-all." },
-            { label: "The Clutch Score platform", to: "/platform", description: "Track your score, sweat profile, and trends." },
-            { label: "All products", to: "/products", description: "Compare ISO, Flow, and Recovery." },
+            {
+              label: "Know your sweat rate",
+              to: "/sweat-rate",
+              description: "Why hydration isn't one-size-fits-all.",
+            },
+            {
+              label: "The Clutch Score platform",
+              to: "/platform",
+              description: "Track your score, sweat profile, and trends.",
+            },
+            {
+              label: "All products",
+              to: "/products",
+              description: "Compare ISO, Flow, and Recovery.",
+            },
           ]}
         />
       </main>

@@ -37,7 +37,7 @@ export function Eyebrow({ children, accent = false }: { children: ReactNode; acc
     <div
       className={cn(
         "tracking-eyebrow text-xs font-semibold uppercase",
-        accent ? "text-lime" : "text-muted-ink"
+        accent ? "text-lime" : "text-muted-ink",
       )}
     >
       {children}

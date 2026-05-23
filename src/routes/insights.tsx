@@ -5,8 +5,8 @@ import { PageHero } from "@/components/PageHero";
 import { ArticleCard } from "@/components/cards/ArticleCard";
 import { Reveal } from "@/components/Reveal";
 import { articles } from "@/data/insights";
-import { makeMeta, canonical } from "@/lib/seo";
-import insightsHero from "@/assets/insights-hero.jpg";
+import { makeMeta, canonical, collectionPageSchema } from "@/lib/seo";
+import { imageSets } from "@/assets/image-sets";
 
 export const Route = createFileRoute("/insights")({
   head: () => ({
@@ -17,13 +17,21 @@ export const Route = createFileRoute("/insights")({
       path: "/insights",
     }),
     links: canonical("/insights"),
+    scripts: [
+      collectionPageSchema({
+        name: "ClutchFuel Insights",
+        description:
+          "Long-form articles on hydration, sweat rate, electrolytes, and sport-specific strategy for everyday athletes.",
+        path: "/insights",
+      }),
+    ],
   }),
   component: InsightsPage,
 });
 
 function InsightsPage() {
   const sorted = [...articles].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );
   return (
     <>
@@ -33,7 +41,7 @@ function InsightsPage() {
           eyebrow="INSIGHTS"
           title="Hydration and performance, decoded."
           sub="Educational guides built for everyday athletes — no fluff, no bro-science, just the science of how to perform under pressure."
-          bgImage={insightsHero}
+          heroImage={imageSets.insightsHero}
           bgImageAlt="Notebook with training notes and a sports bottle"
         />
 

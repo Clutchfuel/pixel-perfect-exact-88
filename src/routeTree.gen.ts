@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SystemRouteImport } from './routes/system'
 import { Route as SweatRateRouteImport } from './routes/sweat-rate'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PlatformRouteImport } from './routes/platform'
@@ -25,6 +26,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as AthletesSportRouteImport } from './routes/athletes.$sport'
+import { Route as ApiLeadsNewsletterRouteImport } from './routes/api/leads/newsletter'
+import { Route as ApiLeadsContactRouteImport } from './routes/api/leads/contact'
+import { Route as ApiLeadsClutchScoreRouteImport } from './routes/api/leads/clutch-score'
 
 const SystemRoute = SystemRouteImport.update({
   id: '/system',
@@ -39,6 +43,11 @@ const SweatRateRoute = SweatRateRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -106,6 +115,21 @@ const AthletesSportRoute = AthletesSportRouteImport.update({
   path: '/$sport',
   getParentRoute: () => AthletesRoute,
 } as any)
+const ApiLeadsNewsletterRoute = ApiLeadsNewsletterRouteImport.update({
+  id: '/api/leads/newsletter',
+  path: '/api/leads/newsletter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeadsContactRoute = ApiLeadsContactRouteImport.update({
+  id: '/api/leads/contact',
+  path: '/api/leads/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeadsClutchScoreRoute = ApiLeadsClutchScoreRouteImport.update({
+  id: '/api/leads/clutch-score',
+  path: '/api/leads/clutch-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -118,12 +142,16 @@ export interface FileRoutesByFullPath {
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sweat-rate': typeof SweatRateRoute
   '/system': typeof SystemRoute
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
+  '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -136,12 +164,16 @@ export interface FileRoutesByTo {
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sweat-rate': typeof SweatRateRoute
   '/system': typeof SystemRoute
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
+  '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -155,12 +187,16 @@ export interface FileRoutesById {
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sweat-rate': typeof SweatRateRoute
   '/system': typeof SystemRoute
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
+  '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -175,12 +211,16 @@ export interface FileRouteTypes {
     | '/platform'
     | '/privacy'
     | '/products'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/sweat-rate'
     | '/system'
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/leads/clutch-score'
+    | '/api/leads/contact'
+    | '/api/leads/newsletter'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,12 +233,16 @@ export interface FileRouteTypes {
     | '/platform'
     | '/privacy'
     | '/products'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/sweat-rate'
     | '/system'
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/leads/clutch-score'
+    | '/api/leads/contact'
+    | '/api/leads/newsletter'
   id:
     | '__root__'
     | '/'
@@ -211,12 +255,16 @@ export interface FileRouteTypes {
     | '/platform'
     | '/privacy'
     | '/products'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/sweat-rate'
     | '/system'
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/leads/clutch-score'
+    | '/api/leads/contact'
+    | '/api/leads/newsletter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -230,9 +278,13 @@ export interface RootRouteChildren {
   PlatformRoute: typeof PlatformRoute
   PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SweatRateRoute: typeof SweatRateRoute
   SystemRoute: typeof SystemRoute
+  ApiLeadsClutchScoreRoute: typeof ApiLeadsClutchScoreRoute
+  ApiLeadsContactRoute: typeof ApiLeadsContactRoute
+  ApiLeadsNewsletterRoute: typeof ApiLeadsNewsletterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -256,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -349,6 +408,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AthletesSportRouteImport
       parentRoute: typeof AthletesRoute
     }
+    '/api/leads/newsletter': {
+      id: '/api/leads/newsletter'
+      path: '/api/leads/newsletter'
+      fullPath: '/api/leads/newsletter'
+      preLoaderRoute: typeof ApiLeadsNewsletterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/leads/contact': {
+      id: '/api/leads/contact'
+      path: '/api/leads/contact'
+      fullPath: '/api/leads/contact'
+      preLoaderRoute: typeof ApiLeadsContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/leads/clutch-score': {
+      id: '/api/leads/clutch-score'
+      path: '/api/leads/clutch-score'
+      fullPath: '/api/leads/clutch-score'
+      preLoaderRoute: typeof ApiLeadsClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -399,10 +479,24 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformRoute: PlatformRoute,
   PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SweatRateRoute: SweatRateRoute,
   SystemRoute: SystemRoute,
+  ApiLeadsClutchScoreRoute: ApiLeadsClutchScoreRoute,
+  ApiLeadsContactRoute: ApiLeadsContactRoute,
+  ApiLeadsNewsletterRoute: ApiLeadsNewsletterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

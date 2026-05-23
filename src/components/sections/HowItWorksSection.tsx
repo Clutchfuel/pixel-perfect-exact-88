@@ -1,7 +1,8 @@
+import { Link } from "@tanstack/react-router";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { howItWorks } from "@/data/home";
-import { ListChecks, Gauge, TrendingUp } from "lucide-react";
+import { ListChecks, Gauge, TrendingUp, ArrowRight } from "lucide-react";
 
 const iconMap = { list: ListChecks, score: Gauge, trend: TrendingUp } as const;
 
@@ -19,7 +20,10 @@ export function HowItWorksSection() {
           const Icon = iconMap[s.icon as keyof typeof iconMap];
           return (
             <Reveal key={s.n} delay={i * 0.08}>
-              <article className="group relative flex h-full flex-col rounded-3xl bg-dark p-8 text-white transition-all duration-300 hover:-translate-y-1">
+              <Link
+                to={s.href}
+                className="group relative flex h-full flex-col rounded-3xl bg-dark p-8 text-white transition-all duration-300 hover:-translate-y-1 hover:ring-1 hover:ring-lime/30"
+              >
                 <div className="flex items-center justify-between">
                   <span className="font-display text-sm font-bold tracking-eyebrow text-lime">
                     {s.n}
@@ -31,9 +35,13 @@ export function HowItWorksSection() {
                 <h3 className="mt-10 font-display text-2xl font-extrabold tracking-display text-white">
                   {s.title}
                 </h3>
-                <p className="mt-3 text-sm text-muted-dark">{s.copy}</p>
-                <div className="mt-8 h-px w-full bg-gradient-to-r from-lime/40 via-white/10 to-transparent" />
-              </article>
+                <p className="mt-3 flex-1 text-sm text-muted-dark">{s.copy}</p>
+                <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-lime">
+                  Learn more{" "}
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </span>
+                <div className="mt-4 h-px w-full bg-gradient-to-r from-lime/40 via-white/10 to-transparent" />
+              </Link>
             </Reveal>
           );
         })}

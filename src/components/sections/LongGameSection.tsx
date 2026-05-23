@@ -1,5 +1,7 @@
+import { Link } from "@tanstack/react-router";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
+import { CFButton } from "@/components/CFButton";
 import { longGame } from "@/data/home";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
@@ -15,7 +17,10 @@ export function LongGameSection() {
 
       <div className="mt-14 grid gap-5 lg:grid-cols-3">
         <Reveal delay={0.05}>
-          <div className="rounded-3xl glass-dark p-6 lg:col-span-2 h-full">
+          <Link
+            to="/platform"
+            className="block h-full rounded-3xl glass-dark p-6 lg:col-span-2 transition hover:ring-1 hover:ring-lime/30"
+          >
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
@@ -31,9 +36,24 @@ export function LongGameSection() {
             </div>
             <div className="mt-6 h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={longGame.trend} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                  <XAxis dataKey="w" stroke="oklch(1 0 0 / 0.3)" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="oklch(1 0 0 / 0.2)" fontSize={10} tickLine={false} axisLine={false} width={28} />
+                <LineChart
+                  data={longGame.trend}
+                  margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+                >
+                  <XAxis
+                    dataKey="w"
+                    stroke="oklch(1 0 0 / 0.3)"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="oklch(1 0 0 / 0.2)"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                    width={28}
+                  />
                   <Tooltip
                     contentStyle={{
                       background: "oklch(0.19 0 0)",
@@ -42,7 +62,11 @@ export function LongGameSection() {
                       color: "white",
                       fontSize: 12,
                     }}
-                    cursor={{ stroke: "oklch(0.92 0.18 130)", strokeWidth: 1, strokeDasharray: "3 3" }}
+                    cursor={{
+                      stroke: "oklch(0.92 0.18 130)",
+                      strokeWidth: 1,
+                      strokeDasharray: "3 3",
+                    }}
                   />
                   <Line
                     type="monotone"
@@ -55,12 +79,15 @@ export function LongGameSection() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </Link>
         </Reveal>
 
         <Reveal delay={0.12}>
           <div className="flex h-full flex-col gap-5">
-            <div className="rounded-3xl glass-dark p-6">
+            <Link
+              to="/platform"
+              className="rounded-3xl glass-dark p-6 transition hover:ring-1 hover:ring-lime/30"
+            >
               <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
                 Hydration streak
               </div>
@@ -84,16 +111,21 @@ export function LongGameSection() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Link>
             <div className="rounded-3xl glass-dark p-6">
               <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
                 Last 3 sessions
               </div>
               <ul className="mt-3 space-y-2.5">
-                {["Court Session · 87", "Threshold Run · 84", "Hyrox Sim · 81"].map((t) => (
-                  <li key={t} className="flex items-center justify-between text-sm text-white/80">
-                    <span>{t.split(" · ")[0]}</span>
-                    <span className="font-display font-extrabold text-lime">{t.split(" · ")[1]}</span>
+                {longGame.recentSessions.map((s) => (
+                  <li key={s.label}>
+                    <Link
+                      to={s.href}
+                      className="flex items-center justify-between text-sm text-white/80 transition hover:text-white"
+                    >
+                      <span>{s.label}</span>
+                      <span className="font-display font-extrabold text-lime">{s.score}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -101,6 +133,17 @@ export function LongGameSection() {
           </div>
         </Reveal>
       </div>
+
+      <Reveal delay={0.2}>
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <CFButton to="/platform" variant="ghost" size="md">
+            View platform
+          </CFButton>
+          <CFButton to="/clutch-score" variant="primary" size="md">
+            Get your Clutch Score
+          </CFButton>
+        </div>
+      </Reveal>
     </Section>
   );
 }

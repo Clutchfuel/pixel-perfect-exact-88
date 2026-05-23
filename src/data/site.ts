@@ -5,6 +5,12 @@ export const site = {
   ctaHref: "/clutch-score",
   description:
     "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights.",
+  social: {
+    instagram: "https://instagram.com/clutchfuel",
+    youtube: "https://youtube.com/@clutchfuel",
+    tiktok: "https://tiktok.com/@clutchfuel",
+    x: "https://x.com/clutchfuel",
+  },
 };
 
 export const navLinks = [

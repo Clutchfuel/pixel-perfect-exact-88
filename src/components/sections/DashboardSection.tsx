@@ -1,41 +1,10 @@
+import { Link } from "@tanstack/react-router";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
+import { ScoreRing } from "@/components/ScoreRing";
 import { dashboard } from "@/data/home";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from "recharts";
-import { TrendingUp, Droplets } from "lucide-react";
-
-function ScoreRing({ value }: { value: number }) {
-  const r = 70;
-  const c = 2 * Math.PI * r;
-  const offset = c - (value / 100) * c;
-  return (
-    <div className="relative h-44 w-44 sm:h-52 sm:w-52">
-      <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90">
-        <circle cx="80" cy="80" r={r} stroke="oklch(1 0 0 / 0.08)" strokeWidth="10" fill="none" />
-        <circle
-          cx="80"
-          cy="80"
-          r={r}
-          stroke="oklch(0.92 0.18 130)"
-          strokeWidth="10"
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={offset}
-          style={{ filter: "drop-shadow(0 0 12px oklch(0.92 0.18 130 / 0.6))" }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="font-display text-6xl font-extrabold tracking-display text-white sm:text-7xl">
-          {value}
-        </div>
-        <div className="mt-1 text-[11px] uppercase tracking-eyebrow text-muted-dark">
-          {dashboard.scoreLabel}
-        </div>
-      </div>
-    </div>
-  );
-}
+import { TrendingUp, Droplets, ArrowRight } from "lucide-react";
 
 export function DashboardSection() {
   return (
@@ -49,8 +18,10 @@ export function DashboardSection() {
 
       <Reveal delay={0.12}>
         <div className="mt-14 grid gap-5 lg:grid-cols-12">
-          {/* Score */}
-          <div className="rounded-3xl glass-dark p-8 lg:col-span-5">
+          <Link
+            to="/clutch-score"
+            className="group rounded-3xl glass-dark p-8 lg:col-span-5 transition hover:ring-1 hover:ring-lime/30"
+          >
             <div className="flex items-center justify-between">
               <div className="text-xs uppercase tracking-eyebrow text-muted-dark">Today</div>
               <div className="flex items-center gap-1 rounded-full bg-lime/15 px-2.5 py-1 text-[11px] font-semibold text-lime">
@@ -59,12 +30,14 @@ export function DashboardSection() {
               </div>
             </div>
             <div className="mt-6 flex justify-center">
-              <ScoreRing value={dashboard.score} />
+              <ScoreRing value={dashboard.score} label={dashboard.scoreLabel} />
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3">
               {dashboard.tiles.map((t) => (
                 <div key={t.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">{t.label}</div>
+                  <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                    {t.label}
+                  </div>
                   <div className="mt-1 font-display text-2xl font-extrabold tracking-display text-white">
                     {t.value}
                   </div>
@@ -72,12 +45,18 @@ export function DashboardSection() {
                 </div>
               ))}
             </div>
-          </div>
+            <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-lime">
+              Unlock your score{" "}
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+            </span>
+          </Link>
 
-          {/* Trend + sweat profile + history */}
           <div className="grid gap-5 lg:col-span-7">
             <div className="grid gap-5 sm:grid-cols-5">
-              <div className="rounded-3xl glass-dark p-6 sm:col-span-2">
+              <Link
+                to="/sweat-rate"
+                className="rounded-3xl glass-dark p-6 sm:col-span-2 transition hover:ring-1 hover:ring-lime/30"
+              >
                 <div className="flex items-center gap-2 text-xs uppercase tracking-eyebrow text-muted-dark">
                   <Droplets className="h-3.5 w-3.5 text-lime" />
                   {dashboard.sweatProfile.title}
@@ -86,7 +65,7 @@ export function DashboardSection() {
                   {dashboard.sweatProfile.value}
                 </div>
                 <div className="mt-1 text-sm text-muted-dark">{dashboard.sweatProfile.sub}</div>
-                <div className="mt-5 flex items-end gap-1.5 h-16">
+                <div className="mt-5 flex h-16 items-end gap-1.5">
                   {[35, 55, 48, 70, 62, 88, 80].map((h, i) => (
                     <div
                       key={i}
@@ -95,7 +74,7 @@ export function DashboardSection() {
                     />
                   ))}
                 </div>
-              </div>
+              </Link>
 
               <div className="rounded-3xl glass-dark p-6 sm:col-span-3">
                 <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
@@ -106,15 +85,30 @@ export function DashboardSection() {
                 </div>
                 <div className="mt-3 h-32">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={dashboard.trend} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                    <AreaChart
+                      data={dashboard.trend}
+                      margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+                    >
                       <defs>
                         <linearGradient id="limeFill" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="oklch(0.92 0.18 130)" stopOpacity={0.5} />
                           <stop offset="100%" stopColor="oklch(0.92 0.18 130)" stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <XAxis dataKey="d" stroke="oklch(1 0 0 / 0.3)" fontSize={10} tickLine={false} axisLine={false} />
-                      <YAxis stroke="oklch(1 0 0 / 0.2)" fontSize={10} tickLine={false} axisLine={false} width={28} />
+                      <XAxis
+                        dataKey="d"
+                        stroke="oklch(1 0 0 / 0.3)"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis
+                        stroke="oklch(1 0 0 / 0.2)"
+                        fontSize={10}
+                        tickLine={false}
+                        axisLine={false}
+                        width={28}
+                      />
                       <Tooltip
                         contentStyle={{
                           background: "oklch(0.19 0 0)",
@@ -123,7 +117,11 @@ export function DashboardSection() {
                           color: "white",
                           fontSize: 12,
                         }}
-                        cursor={{ stroke: "oklch(0.92 0.18 130)", strokeWidth: 1, strokeDasharray: "3 3" }}
+                        cursor={{
+                          stroke: "oklch(0.92 0.18 130)",
+                          strokeWidth: 1,
+                          strokeDasharray: "3 3",
+                        }}
                       />
                       <Area
                         type="monotone"
@@ -140,19 +138,30 @@ export function DashboardSection() {
 
             <div className="rounded-3xl glass-dark p-6">
               <div className="flex items-center justify-between">
-                <div className="text-xs uppercase tracking-eyebrow text-muted-dark">Recent sessions</div>
-                <a href="#" className="text-xs text-lime hover:underline">View all</a>
+                <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
+                  Recent sessions
+                </div>
+                <Link to="/platform" className="text-xs text-lime hover:underline">
+                  View all
+                </Link>
               </div>
               <ul className="mt-4 divide-y divide-white/5">
                 {dashboard.history.map((h) => (
-                  <li key={h.name} className="flex items-center justify-between gap-4 py-3">
-                    <div className="min-w-0">
-                      <div className="truncate font-medium text-white">{h.name}</div>
-                      <div className="text-xs text-muted-dark">{h.time} · {h.type}</div>
-                    </div>
-                    <div className="font-display text-xl font-extrabold tracking-display text-lime">
-                      {h.score}
-                    </div>
+                  <li key={h.name}>
+                    <Link
+                      to={h.href}
+                      className="flex items-center justify-between gap-4 py-3 transition hover:bg-white/[0.02]"
+                    >
+                      <div className="min-w-0">
+                        <div className="truncate font-medium text-white">{h.name}</div>
+                        <div className="text-xs text-muted-dark">
+                          {h.time} · {h.type}
+                        </div>
+                      </div>
+                      <div className="font-display text-xl font-extrabold tracking-display text-lime">
+                        {h.score}
+                      </div>
+                    </Link>
                   </li>
                 ))}
               </ul>

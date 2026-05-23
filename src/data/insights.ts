@@ -1,3 +1,6 @@
+import { extraArticles } from "./insights-extra";
+import { batch2Articles } from "./insights-batch2";
+
 export interface ArticleSection {
   heading?: string;
   paragraphs: string[];
@@ -16,7 +19,7 @@ export interface Article {
   relatedSlugs?: string[];
 }
 
-export const articles: Article[] = [
+export const baseArticles: Article[] = [
   {
     slug: "hydration-101-for-everyday-athletes",
     title: "Hydration 101 for Everyday Athletes",
@@ -68,7 +71,11 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["how-to-calculate-your-sweat-rate", "electrolytes-explained-sodium-potassium-magnesium"],
+    relatedSlugs: [
+      "how-much-water-should-athletes-drink",
+      "how-to-calculate-your-sweat-rate",
+      "electrolytes-explained-sodium-potassium-magnesium",
+    ],
   },
   {
     slug: "how-to-calculate-your-sweat-rate",
@@ -117,7 +124,10 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["hydration-101-for-everyday-athletes", "electrolytes-explained-sodium-potassium-magnesium"],
+    relatedSlugs: [
+      "hydration-101-for-everyday-athletes",
+      "electrolytes-explained-sodium-potassium-magnesium",
+    ],
   },
   {
     slug: "electrolytes-explained-sodium-potassium-magnesium",
@@ -160,7 +170,11 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["how-to-calculate-your-sweat-rate", "hydration-101-for-everyday-athletes"],
+    relatedSlugs: [
+      "how-to-calculate-your-sweat-rate",
+      "hydration-101-for-everyday-athletes",
+      "best-electrolytes-for-athletes",
+    ],
   },
   {
     slug: "hydration-for-basketball-performance",
@@ -212,7 +226,11 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["hydration-101-for-everyday-athletes", "pre-during-post-workout-hydration-guide"],
+    relatedSlugs: [
+      "hydration-101-for-everyday-athletes",
+      "pre-during-post-workout-hydration-guide",
+      "signs-of-dehydration-during-exercise",
+    ],
   },
   {
     slug: "hydration-strategy-for-hyrox-athletes",
@@ -260,7 +278,10 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["hydration-101-for-everyday-athletes", "electrolytes-explained-sodium-potassium-magnesium"],
+    relatedSlugs: [
+      "hydration-101-for-everyday-athletes",
+      "electrolytes-explained-sodium-potassium-magnesium",
+    ],
   },
   {
     slug: "pre-during-post-workout-hydration-guide",
@@ -317,9 +338,15 @@ export const articles: Article[] = [
         ],
       },
     ],
-    relatedSlugs: ["hydration-101-for-everyday-athletes", "how-to-calculate-your-sweat-rate"],
+    relatedSlugs: [
+      "hydration-101-for-everyday-athletes",
+      "how-to-calculate-your-sweat-rate",
+      "morning-hydration-routine-for-athletes",
+    ],
   },
 ];
+
+export const articles: Article[] = [...baseArticles, ...extraArticles, ...batch2Articles];
 
 export function getArticle(slug: string): Article | undefined {
   return articles.find((a) => a.slug === slug);

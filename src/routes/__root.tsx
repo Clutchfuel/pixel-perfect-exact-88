@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -9,8 +10,27 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { site } from "@/data/site";
+import { Analytics } from "@/components/Analytics";
+import { Toaster } from "@/components/ui/sonner";
+
+function useNoindexMeta() {
+  useEffect(() => {
+    let meta = document.querySelector('meta[name="robots"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "robots");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", "noindex, nofollow");
+    return () => {
+      meta?.remove();
+    };
+  }, []);
+}
 
 function NotFoundComponent() {
+  useNoindexMeta();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -33,7 +53,10 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+  useNoindexMeta();
+  if (import.meta.env.DEV) {
+    console.error(error);
+  }
   const router = useRouter();
 
   return (
@@ -72,34 +95,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ClutchFuel — Performance Starts With Preparation." },
-      {
-        name: "description",
-        content:
-          "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights.",
-      },
-      { name: "author", content: "ClutchFuel" },
-      { property: "og:title", content: "ClutchFuel — Performance Starts With Preparation." },
-      {
-        property: "og:description",
-        content: "Hydration built for the big moment. For the athletes who perform under pressure.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ClutchFuel — Performance Starts With Preparation." },
-      { name: "description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
-      { property: "og:description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
-      { name: "twitter:description", content: "ClutchFuel Website is a multi-page marketing site designed to attract organic traffic and showcase athletes and products." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d2c8f8ba-3a1a-47a6-a98a-34f84cefaccb/id-preview-867834b8--6918a1a6-7166-4318-ac0b-6ebf6325d79f.lovable.app-1779548228432.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d2c8f8ba-3a1a-47a6-a98a-34f84cefaccb/id-preview-867834b8--6918a1a6-7166-4318-ac0b-6ebf6325d79f.lovable.app-1779548228432.png" },
+      { name: "theme-color", content: "#0A0A0A" },
     ],
     links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap",
-      },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/site.webmanifest" },
       { rel: "stylesheet", href: appCss },
     ],
   }),
@@ -116,6 +119,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-lime focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink"
+        >
+          Skip to main content
+        </a>
         {children}
         <Scripts />
       </body>
@@ -129,6 +138,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <Toaster position="top-center" richColors />
+      <Analytics />
     </QueryClientProvider>
   );
 }

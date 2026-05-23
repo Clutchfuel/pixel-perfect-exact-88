@@ -82,7 +82,7 @@ export const sports: Sport[] = [
       name: "Imani R.",
       role: "Marathon Runner",
     },
-    relatedArticleSlug: "pre-during-post-workout-hydration-guide",
+    relatedArticleSlug: "marathon-hydration-strategy",
   },
   {
     slug: "hyrox",
@@ -150,6 +150,7 @@ export const sports: Sport[] = [
       name: "Jenna T.",
       role: "Functional Fitness Athlete",
     },
+    relatedArticleSlug: "strength-training-hydration-guide",
   },
 ];
 

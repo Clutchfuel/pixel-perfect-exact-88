@@ -1,30 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import type { Sport, SportSlug } from "@/data/sports";
-import basketball from "@/assets/sport-basketball.jpg";
-import running from "@/assets/sport-running.jpg";
-import hyrox from "@/assets/sport-hyrox.jpg";
-import gym from "@/assets/sport-gym.jpg";
-
-const SPORT_IMAGES: Record<SportSlug, string> = {
-  basketball,
-  running,
-  hyrox,
-  gym,
-};
+import type { Sport } from "@/data/sports";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { sportImageBySlug } from "@/assets/image-sets";
 
 export function SportCard({ sport }: { sport: Sport }) {
-  const image = SPORT_IMAGES[sport.slug];
+  const images = sportImageBySlug[sport.slug];
   return (
     <Link
       to="/athletes/$sport"
       params={{ sport: sport.slug }}
       className="group relative flex aspect-[4/5] h-full flex-col justify-between overflow-hidden rounded-3xl border border-ink/8 bg-dark p-6 text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
     >
-      <img
-        src={image}
+      <OptimizedImage
+        avif={images.avif}
+        webp={images.webp}
+        fallback={images.fallback}
         alt={`${sport.name} athlete`}
-        loading="lazy"
         width={1536}
         height={1024}
         className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-105 group-hover:opacity-80"

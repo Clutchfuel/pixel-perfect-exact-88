@@ -3,8 +3,7 @@ import type {} from "@tanstack/react-start";
 import { products } from "@/data/products";
 import { sports } from "@/data/sports";
 import { articles } from "@/data/insights";
-
-const BASE_URL = "https://pixel-perfect-exact-88.lovable.app";
+import { SITE_URL } from "@/config";
 
 interface SitemapEntry {
   path: string;
@@ -54,14 +53,14 @@ export const Route = createFileRoute("/sitemap.xml")({
         const urls = entries.map((e) =>
           [
             `  <url>`,
-            `    <loc>${BASE_URL}${e.path}</loc>`,
+            `    <loc>${SITE_URL}${e.path}</loc>`,
             e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,
           ]
             .filter(Boolean)
-            .join("\n")
+            .join("\n"),
         );
 
         const xml = [

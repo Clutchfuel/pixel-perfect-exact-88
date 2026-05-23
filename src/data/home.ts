@@ -17,18 +17,21 @@ export const systemSection = {
       stage: "Prepare",
       copy: "Complete hydration system to prime your body before you start.",
       accent: false,
+      href: "/products/clutch-iso",
     },
     {
       name: "Clutch Flow",
       stage: "Perform",
       copy: "Clean, effective energy and electrolytes to keep you locked in.",
       accent: true,
+      href: "/products/clutch-flow",
     },
     {
       name: "Clutch Recovery",
       stage: "Recover",
       copy: "Replenish and rebuild so you bounce back stronger.",
       accent: false,
+      href: "/products/clutch-recovery",
     },
   ],
   features: [
@@ -36,16 +39,19 @@ export const systemSection = {
       title: "Electrolyte-Focused",
       copy: "Electrolytes and essential minerals to support hydration before it starts.",
       icon: "droplet",
+      href: "/insights/electrolytes-explained-sodium-potassium-magnesium",
     },
     {
       title: "Clean Energy",
       copy: "Light, effective energy to help you perform without the crash.",
       icon: "bolt",
+      href: "/products/clutch-flow",
     },
     {
       title: "3-Stage System",
       copy: "Hydration that works in sync with your training and goals.",
       icon: "layers",
+      href: "/system",
     },
   ],
 };
@@ -59,16 +65,19 @@ export const sweatSection = {
       title: "Personalized Results",
       copy: "Get hydration targets based on your body, training, and goals.",
       icon: "user",
+      href: "/clutch-score",
     },
     {
       title: "Performance Focused",
       copy: "Built around how you train to fuel better workouts and faster recovery.",
       icon: "activity",
+      href: "/products/clutch-flow",
     },
     {
       title: "Data You Can Use",
       copy: "Simple insights to help you train, compete, and win.",
       icon: "chart",
+      href: "/platform",
     },
   ],
   card: {
@@ -91,18 +100,21 @@ export const howItWorks = {
       title: "Answer Questions",
       copy: "Tell us about your body, training, and goals.",
       icon: "list",
+      href: "/clutch-score",
     },
     {
       n: "02",
       title: "Unlock Your Clutch Score",
       copy: "Get your personalized hydration and performance profile.",
       icon: "score",
+      href: "/clutch-score",
     },
     {
       n: "03",
       title: "Track Your Performance",
       copy: "Watch your trends improve every time you train.",
       icon: "trend",
+      href: "/platform",
     },
   ],
 };
@@ -128,10 +140,34 @@ export const dashboard = {
     { d: "Sun", v: 87 },
   ],
   history: [
-    { name: "Court Session", time: "Today · 6:20 PM", score: 87, type: "Basketball" },
-    { name: "Threshold Run", time: "Yesterday · 7:00 AM", score: 84, type: "Run" },
-    { name: "Hyrox Sim", time: "Wed · 5:30 PM", score: 81, type: "Hyrox" },
-    { name: "Strength + Conditioning", time: "Tue · 6:00 AM", score: 79, type: "Gym" },
+    {
+      name: "Court Session",
+      time: "Today · 6:20 PM",
+      score: 87,
+      type: "Basketball",
+      href: "/athletes/basketball",
+    },
+    {
+      name: "Threshold Run",
+      time: "Yesterday · 7:00 AM",
+      score: 84,
+      type: "Run",
+      href: "/athletes/running",
+    },
+    {
+      name: "Hyrox Sim",
+      time: "Wed · 5:30 PM",
+      score: 81,
+      type: "Hyrox",
+      href: "/athletes/hyrox",
+    },
+    {
+      name: "Strength + Conditioning",
+      time: "Tue · 6:00 AM",
+      score: 79,
+      type: "Gym",
+      href: "/athletes/gym",
+    },
   ],
 };
 
@@ -143,24 +179,37 @@ export const profiles = {
       name: "Balanced Sweater",
       copy: "Steady output, steady losses. Your edge is consistency.",
       icon: "balance",
+      href: "/clutch-score",
     },
     {
       name: "High Output Athlete",
       copy: "You push the redline. Fuel matches the intensity.",
       icon: "flame",
+      href: "/clutch-score",
     },
     {
       name: "Recovery Focused",
       copy: "You play the long game. Bounce back stronger every session.",
       icon: "heart",
+      href: "/clutch-score",
     },
     {
       name: "Heavy Sweater",
       copy: "You leave it on the floor. Replace what you lose, precisely.",
       icon: "droplet",
+      href: "/clutch-score",
     },
   ],
 };
+
+export const featuredInsightSlugs = [
+  "how-much-water-should-athletes-drink",
+  "how-to-calculate-your-sweat-rate",
+  "hydration-myths-debunked",
+  "sweat-sodium-testing-guide",
+  "triathlon-hydration-guide",
+  "strength-training-hydration-guide",
+] as const;
 
 export const longGame = {
   headline: "Built for the long game.",
@@ -179,6 +228,11 @@ export const longGame = {
     { d: "S", on: true },
     { d: "S", on: true },
   ],
+  recentSessions: [
+    { label: "Court Session", score: 87, href: "/athletes/basketball" },
+    { label: "Threshold Run", score: 84, href: "/athletes/running" },
+    { label: "Hyrox Sim", score: 81, href: "/athletes/hyrox" },
+  ],
 };
 
 export const testimonials = {
@@ -189,18 +243,19 @@ export const testimonials = {
       role: "Strength & Conditioning Coach",
       quote:
         "The sweat profile gave me a real number to coach to. My athletes feel the difference in the fourth quarter.",
+      href: "/insights/hydration-for-basketball-performance",
     },
     {
       name: "Imani R.",
       role: "Hyrox Athlete",
-      quote:
-        "I used to bonk in the back half. Dialing in my hydration changed how I close races.",
+      quote: "I used to bonk in the back half. Dialing in my hydration changed how I close races.",
+      href: "/insights/hydration-strategy-for-hyrox-athletes",
     },
     {
       name: "Eastside Performance",
       role: "Training Facility",
-      quote:
-        "Our members finally have a simple read on hydration. Less guesswork, more progress.",
+      quote: "Our members finally have a simple read on hydration. Less guesswork, more progress.",
+      href: "/platform",
     },
   ],
 };

@@ -16,9 +16,7 @@ export function FinalCtaSection() {
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-dark md:text-xl">
-            {finalCta.sub}
-          </p>
+          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-dark md:text-xl">{finalCta.sub}</p>
         </Reveal>
         <Reveal delay={0.16}>
           <div className="mt-10">

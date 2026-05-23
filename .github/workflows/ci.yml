@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main, feat/cursor-optimization]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      VITE_SITE_URL: https://pixel-perfect-exact-88.lovable.app
+      CI: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run setup
+      - run: bun run build
+      - run: bun run test:clutch-score
+      - name: E2E smoke
+        run: |
+          bunx vite preview --port 8080 --host &
+          PREVIEW_PID=$!
+          sleep 8
+          SKIP_BUILD=1 bash scripts/e2e-smoke.sh http://localhost:8080
+          kill $PREVIEW_PID || true

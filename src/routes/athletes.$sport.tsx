@@ -7,22 +7,12 @@ import { CFButton } from "@/components/CFButton";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { getSport, sports, type Sport, type SportSlug } from "@/data/sports";
+import { getSport, sports, type Sport } from "@/data/sports";
 import { products } from "@/data/products";
 import { getArticle } from "@/data/insights";
 import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
+import { sportImageBySlug } from "@/assets/image-sets";
 import { Quote } from "lucide-react";
-import basketballImg from "@/assets/sport-basketball.jpg";
-import runningImg from "@/assets/sport-running.jpg";
-import hyroxImg from "@/assets/sport-hyrox.jpg";
-import gymImg from "@/assets/sport-gym.jpg";
-
-const SPORT_IMAGES: Record<SportSlug, string> = {
-  basketball: basketballImg,
-  running: runningImg,
-  hyrox: hyroxImg,
-  gym: gymImg,
-};
 
 export const Route = createFileRoute("/athletes/$sport")({
   loader: ({ params }) => {
@@ -65,7 +55,7 @@ function SportPage() {
           eyebrow={sport.eyebrow}
           title={sport.headline}
           sub={sport.sub}
-          bgImage={SPORT_IMAGES[sport.slug]}
+          heroImage={sportImageBySlug[sport.slug]}
           bgImageAlt={`${sport.name} athlete in action`}
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
@@ -110,7 +100,10 @@ function SportPage() {
             </h2>
             <ol className="mt-8 space-y-4">
               {sport.strategy.map((s, i) => (
-                <li key={i} className="flex items-start gap-4 rounded-2xl border border-ink/8 bg-white p-5">
+                <li
+                  key={i}
+                  className="flex items-start gap-4 rounded-2xl border border-ink/8 bg-white p-5"
+                >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime font-display font-extrabold text-ink">
                     {i + 1}
                   </span>
@@ -170,7 +163,13 @@ function SportPage() {
               to: `/athletes/${s.slug}`,
               description: s.sub.split(".")[0] + ".",
             }))
-            .concat([{ label: "All insights", to: "/insights", description: "Articles for every athlete." }])}
+            .concat([
+              {
+                label: "All insights",
+                to: "/insights",
+                description: "Articles for every athlete.",
+              },
+            ])}
         />
       </main>
       <Footer />

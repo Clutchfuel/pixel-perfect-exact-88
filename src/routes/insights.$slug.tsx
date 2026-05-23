@@ -7,6 +7,7 @@ import { CFButton } from "@/components/CFButton";
 import { Reveal } from "@/components/Reveal";
 import { getArticle, articles, type Article, type ArticleSection } from "@/data/insights";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
+import { DEFAULT_OG_IMAGE } from "@/config";
 import { Clock } from "lucide-react";
 
 export const Route = createFileRoute("/insights/$slug")({
@@ -40,7 +41,12 @@ export const Route = createFileRoute("/insights/$slug")({
               "@type": "Organization",
               name: "ClutchFuel",
               url: SITE_URL,
+              logo: {
+                "@type": "ImageObject",
+                url: `${SITE_URL}/logo-schema.png`,
+              },
             },
+            image: DEFAULT_OG_IMAGE,
             mainEntityOfPage: `${SITE_URL}/insights/${params.slug}`,
             articleSection: loaderData.category,
           }),

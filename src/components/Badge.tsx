@@ -21,10 +21,7 @@ export function Badge({
   return (
     <span className={cn(base, styles, className)}>
       <span
-        className={cn(
-          "h-1.5 w-1.5 rounded-full",
-          variant === "lime" ? "bg-lime" : "bg-lime"
-        )}
+        className={cn("h-1.5 w-1.5 rounded-full", variant === "lime" ? "bg-lime" : "bg-lime")}
       />
       {children}
     </span>

@@ -10,6 +10,7 @@ import { Reveal } from "@/components/Reveal";
 import { getProduct, products, type Product } from "@/data/products";
 import { ComingSoonVisual } from "@/components/ComingSoonVisual";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
+import { DEFAULT_OG_IMAGE } from "@/config";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +42,7 @@ export const Route = createFileRoute("/products/$slug")({
             brand: { "@type": "Brand", name: "ClutchFuel" },
             category: `Sports nutrition — ${loaderData.stage}`,
             url: `${SITE_URL}/products/${params.slug}`,
+            image: DEFAULT_OG_IMAGE,
           }),
         },
         breadcrumbSchema([
@@ -79,9 +81,7 @@ function ProductPage() {
               <div
                 className={cn(
                   "overflow-hidden rounded-3xl border",
-                  product.accent
-                    ? "border-lime/40 lime-glow"
-                    : "border-ink/8"
+                  product.accent ? "border-lime/40 lime-glow" : "border-ink/8",
                 )}
               >
                 <ComingSoonVisual
@@ -151,7 +151,10 @@ function ProductPage() {
           </h2>
           <div className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
             {product.ingredients.map((ing) => (
-              <div key={ing.name} className="flex flex-col gap-1 py-5 md:flex-row md:items-baseline md:gap-8">
+              <div
+                key={ing.name}
+                className="flex flex-col gap-1 py-5 md:flex-row md:items-baseline md:gap-8"
+              >
                 <div className="font-display text-lg font-extrabold tracking-display text-ink md:w-1/3">
                   {ing.name}
                 </div>
@@ -170,8 +173,14 @@ function ProductPage() {
               <FaqAccordion items={product.faqs} idPrefix={product.slug} />
             </div>
             <p className="mt-8 text-sm text-muted-ink">
-              More questions? <Link to="/faq" className="text-ink underline underline-offset-4">Full FAQ</Link> ·{" "}
-              <Link to="/contact" className="text-ink underline underline-offset-4">Contact us</Link>
+              More questions?{" "}
+              <Link to="/faq" className="text-ink underline underline-offset-4">
+                Full FAQ
+              </Link>{" "}
+              ·{" "}
+              <Link to="/contact" className="text-ink underline underline-offset-4">
+                Contact us
+              </Link>
             </p>
           </div>
         </section>
@@ -185,7 +194,13 @@ function ProductPage() {
               to: `/products/${p.slug}`,
               description: p.tagline,
             }))
-            .concat([{ label: "The System overview", to: "/system", description: "How prepare, perform, recover work together." }])}
+            .concat([
+              {
+                label: "The System overview",
+                to: "/system",
+                description: "How prepare, perform, recover work together.",
+              },
+            ])}
         />
       </main>
       <Footer />

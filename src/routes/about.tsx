@@ -6,7 +6,7 @@ import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { about } from "@/data/about";
 import { makeMeta, canonical } from "@/lib/seo";
-import aboutTeam from "@/assets/about-team.jpg";
+import { imageSets } from "@/assets/image-sets";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -30,7 +30,7 @@ function AboutPage() {
           eyebrow={about.eyebrow}
           title={about.headline}
           sub={about.intro}
-          bgImage={aboutTeam}
+          heroImage={imageSets.aboutTeam}
           bgImageAlt="ClutchFuel formulation lab"
         />
 

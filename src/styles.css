@@ -1,3 +1,11 @@
+@import "@fontsource/archivo/600.css";
+@import "@fontsource/archivo/700.css";
+@import "@fontsource/archivo/800.css";
+@import "@fontsource/archivo/900.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -68,7 +76,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --shadow-lime-glow: 0 0 0 1px oklch(0.92 0.18 130 / 0.35), 0 10px 40px -10px oklch(0.92 0.18 130 / 0.45);
+  --shadow-lime-glow:
+    0 0 0 1px oklch(0.92 0.18 130 / 0.35), 0 10px 40px -10px oklch(0.92 0.18 130 / 0.45);
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04), 0 8px 24px -12px oklch(0 0 0 / 0.08);
 }
 
@@ -144,7 +153,11 @@
     line-height: 1.55;
   }
 
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     font-family: var(--font-display);
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -158,9 +171,15 @@
 }
 
 @layer utilities {
-  .font-display { font-family: var(--font-display); }
-  .tracking-display { letter-spacing: -0.03em; }
-  .tracking-eyebrow { letter-spacing: 0.18em; }
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .tracking-display {
+    letter-spacing: -0.03em;
+  }
+  .tracking-eyebrow {
+    letter-spacing: 0.18em;
+  }
 
   .glass-light {
     background: color-mix(in oklab, white 70%, transparent);
@@ -177,10 +196,17 @@
   .lime-glow {
     box-shadow: var(--shadow-lime-glow);
   }
-  .hairline-dark { border-color: var(--hairline-dark); }
+  .hairline-dark {
+    border-color: var(--hairline-dark);
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.001ms !important;
       transition-duration: 0.001ms !important;
     }
