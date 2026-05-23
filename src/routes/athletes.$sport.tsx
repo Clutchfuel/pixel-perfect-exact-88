@@ -7,7 +7,7 @@ import { CFButton } from "@/components/CFButton";
 import { ProductCard } from "@/components/cards/ProductCard";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { getSport, sports } from "@/data/sports";
+import { getSport, sports, type Sport } from "@/data/sports";
 import { products } from "@/data/products";
 import { getArticle } from "@/data/insights";
 import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
@@ -41,10 +41,10 @@ export const Route = createFileRoute("/athletes/$sport")({
 });
 
 function SportPage() {
-  const sport = Route.useLoaderData();
+  const sport = Route.useLoaderData() as Sport;
   const recommended = products.filter((p) => sport.recommendedProducts.includes(p.slug));
   const related = sport.relatedArticleSlug ? getArticle(sport.relatedArticleSlug) : undefined;
-  const otherSports = sports.filter((s) => s.slug !== sport.slug);
+  const otherSports = sports.filter((s: Sport) => s.slug !== sport.slug);
 
   return (
     <>
@@ -148,12 +148,12 @@ function SportPage() {
         <RelatedLinks
           title="Other sports"
           items={otherSports
-            .map((s) => ({
+            .map((s: Sport) => ({
               label: s.name,
-              to: `/athletes/${s.slug}` as const,
+              to: `/athletes/${s.slug}`,
               description: s.sub.split(".")[0] + ".",
             }))
-            .concat([{ label: "All insights", to: "/insights" as const, description: "Articles for every athlete." }])}
+            .concat([{ label: "All insights", to: "/insights", description: "Articles for every athlete." }])}
         />
       </main>
       <Footer />

@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArticleCard } from "@/components/cards/ArticleCard";
 import { CFButton } from "@/components/CFButton";
 import { Reveal } from "@/components/Reveal";
-import { getArticle, articles } from "@/data/insights";
+import { getArticle, articles, type Article, type ArticleSection } from "@/data/insights";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
 import { Clock } from "lucide-react";
 
@@ -57,10 +57,10 @@ export const Route = createFileRoute("/insights/$slug")({
 });
 
 function ArticlePage() {
-  const article = Route.useLoaderData();
+  const article = Route.useLoaderData() as Article;
   const related = (article.relatedSlugs ?? [])
-    .map((s) => articles.find((a) => a.slug === s))
-    .filter((a): a is NonNullable<typeof a> => Boolean(a));
+    .map((s: string) => articles.find((a: Article) => a.slug === s))
+    .filter((a): a is Article => Boolean(a));
   const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -103,7 +103,7 @@ function ArticlePage() {
           </Reveal>
 
           <div className="mt-12 space-y-10">
-            {article.body.map((section, i) => (
+            {article.body.map((section: ArticleSection, i: number) => (
               <Reveal key={i}>
                 <div>
                   {section.heading && (
