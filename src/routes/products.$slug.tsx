@@ -7,7 +7,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { getProduct, products } from "@/data/products";
+import { getProduct, products, type Product } from "@/data/products";
 import { makeMeta, canonical, SITE_URL, breadcrumbSchema } from "@/lib/seo";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
