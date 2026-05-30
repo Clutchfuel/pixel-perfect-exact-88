@@ -36,6 +36,7 @@
   --color-panel: var(--panel);
   --color-lime: var(--lime);
   --color-lime-dark: var(--lime-dark);
+  --color-lime-ink: var(--lime-ink);
   --color-muted-ink: var(--muted-ink);
   --color-muted-dark: var(--muted-dark);
   --color-hairline: var(--hairline);
@@ -91,6 +92,8 @@
   --panel: oklch(0.19 0 0);
   --lime: oklch(0.92 0.18 130);
   --lime-dark: oklch(0.84 0.19 130);
+  /** Readable lime accent on light backgrounds (cards, mist sections) */
+  --lime-ink: oklch(0.52 0.14 130);
   --muted-ink: oklch(0.55 0.01 270);
   --muted-dark: oklch(0.72 0.01 270);
   --hairline: oklch(0.92 0 0);
