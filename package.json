@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "node scripts/run-ts.mjs scripts/test-clutch-score.ts && node scripts/test-security.mjs",
+    "test": "node scripts/run-ts.mjs scripts/test-clutch-score.ts && node scripts/test-security.mjs && node scripts/run-ts.mjs scripts/test-hydration-lab.ts",
     "test:clutch-score": "node scripts/run-ts.mjs scripts/test-clutch-score.ts",
     "test:security": "node scripts/test-security.mjs",
     "test:e2e": "node scripts/e2e-smoke.mjs",

@@ -20,6 +20,7 @@ import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
+import { Route as CalculatorRouteImport } from './routes/calculator'
 import { Route as AthletesRouteImport } from './routes/athletes'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -85,6 +86,11 @@ const ClutchScoreRoute = ClutchScoreRouteImport.update({
   path: '/clutch-score',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalculatorRoute = CalculatorRouteImport.update({
+  id: '/calculator',
+  path: '/calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AthletesRoute = AthletesRouteImport.update({
   id: '/athletes',
   path: '/athletes',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/athletes': typeof AthletesRouteWithChildren
+  '/calculator': typeof CalculatorRoute
   '/clutch-score': typeof ClutchScoreRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/athletes': typeof AthletesRouteWithChildren
+  '/calculator': typeof CalculatorRoute
   '/clutch-score': typeof ClutchScoreRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/athletes': typeof AthletesRouteWithChildren
+  '/calculator': typeof CalculatorRoute
   '/clutch-score': typeof ClutchScoreRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/athletes'
+    | '/calculator'
     | '/clutch-score'
     | '/contact'
     | '/faq'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/athletes'
+    | '/calculator'
     | '/clutch-score'
     | '/contact'
     | '/faq'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/athletes'
+    | '/calculator'
     | '/clutch-score'
     | '/contact'
     | '/faq'
@@ -271,6 +283,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AthletesRoute: typeof AthletesRouteWithChildren
+  CalculatorRoute: typeof CalculatorRoute
   ClutchScoreRoute: typeof ClutchScoreRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -364,6 +377,13 @@ declare module '@tanstack/react-router' {
       path: '/clutch-score'
       fullPath: '/clutch-score'
       preLoaderRoute: typeof ClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator': {
+      id: '/calculator'
+      path: '/calculator'
+      fullPath: '/calculator'
+      preLoaderRoute: typeof CalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/athletes': {
@@ -472,6 +492,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AthletesRoute: AthletesRouteWithChildren,
+  CalculatorRoute: CalculatorRoute,
   ClutchScoreRoute: ClutchScoreRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,

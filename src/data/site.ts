@@ -29,6 +29,7 @@ export const footer = {
       title: "Platform",
       links: [
         { label: "The System", to: "/system" },
+        { label: "Hydration Lab", to: "/calculator" },
         { label: "Sweat Rate", to: "/sweat-rate" },
         { label: "Clutch Score Platform", to: "/platform" },
         { label: "Clutch Score", to: "/clutch-score" },

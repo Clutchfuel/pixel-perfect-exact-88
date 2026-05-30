@@ -77,7 +77,7 @@ export function SweatSection() {
               </div>
               <p className="mt-5 text-sm text-muted-dark">{sweatSection.card.copy}</p>
               <div className="mt-6">
-                <CFButton to="/clutch-score" variant="primary" size="md">
+                <CFButton to="/calculator" variant="primary" size="md">
                   {sweatSection.card.cta} →
                 </CFButton>
               </div>

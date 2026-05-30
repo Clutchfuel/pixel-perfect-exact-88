@@ -81,14 +81,14 @@ export const sweatSection = {
     },
   ],
   card: {
-    title: "Get your Clutch Score",
+    title: "ClutchFuel Hydration Lab",
     stats: [
-      { value: "<15 sec", label: "quick estimate" },
-      { value: "Optional", label: "calories & devices" },
+      { value: "<60 sec", label: "quick mode" },
+      { value: "Scale or", label: "wearable data" },
       { value: "Results", label: "instantly" },
     ],
-    copy: "Quick estimate for repeat use, or full profile — calories optional, wearables coming soon.",
-    cta: "Unlock My Clutch Score",
+    copy: "Precision Mode with pre/post weight, or Quick Mode using calories from your watch or fitness app.",
+    cta: "Open Hydration Lab",
   },
 };
 
