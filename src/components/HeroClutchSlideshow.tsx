@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { heroClutchMoments } from "@/data/hero-slideshow";
 
-const TRANSITION_MS = 650;
+const TRANSITION_MS = 900;
+const PRE_END_SECONDS = 0.45;
+const TRANSITION_EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
 
 export function HeroClutchSlideshow() {
   const [visibleSlot, setVisibleSlot] = useState<0 | 1>(0);
@@ -14,7 +16,9 @@ export function HeroClutchSlideshow() {
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [dipActive, setDipActive] = useState(false);
   const transitioning = useRef(false);
+  const preEndTriggered = useRef(false);
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
 
   const currentIndex = slotIndices[visibleSlot];
@@ -27,11 +31,15 @@ export function HeroClutchSlideshow() {
       if (nextIndex === slotIndices[visibleSlot]) return;
 
       transitioning.current = true;
+      preEndTriggered.current = true;
+      setDipActive(true);
+
       const hiddenSlot = (visibleSlot === 0 ? 1 : 0) as 0 | 1;
       const video = videoRefs[hiddenSlot].current;
       const moment = heroClutchMoments[nextIndex];
       if (!video || !moment) {
         transitioning.current = false;
+        setDipActive(false);
         return;
       }
 
@@ -57,9 +65,11 @@ export function HeroClutchSlideshow() {
 
       window.setTimeout(() => {
         transitioning.current = false;
+        setDipActive(false);
+        preEndTriggered.current = false;
       }, TRANSITION_MS);
     },
-    [reduceMotion, slotIndices, visibleSlot],
+    [reduceMotion, slotIndices, visibleSlot, videoRefs],
   );
 
   const advance = useCallback(() => {
@@ -77,7 +87,7 @@ export function HeroClutchSlideshow() {
   useEffect(() => {
     if (reduceMotion) return;
     videoRefs[0].current?.play().catch(() => undefined);
-  }, [reduceMotion]);
+  }, [reduceMotion, videoRefs]);
 
   useEffect(() => {
     if (paused || reduceMotion) {
@@ -85,21 +95,46 @@ export function HeroClutchSlideshow() {
       return;
     }
     videoRefs[visibleSlot].current?.play().catch(() => undefined);
-  }, [paused, reduceMotion, visibleSlot]);
+  }, [paused, reduceMotion, visibleSlot, videoRefs]);
+
+  useEffect(() => {
+    preEndTriggered.current = false;
+  }, [currentIndex, visibleSlot]);
 
   useEffect(() => {
     const video = videoRefs[visibleSlot].current;
     if (!video || reduceMotion) return;
 
     const tick = () => {
-      if (video.duration && Number.isFinite(video.duration)) {
-        setProgress(video.currentTime / video.duration);
+      if (!video.duration || !Number.isFinite(video.duration)) return;
+
+      setProgress(video.currentTime / video.duration);
+
+      const remaining = video.duration - video.currentTime;
+      if (
+        remaining <= PRE_END_SECONDS &&
+        !preEndTriggered.current &&
+        !transitioning.current &&
+        !paused
+      ) {
+        preEndTriggered.current = true;
+        advance();
+      }
+    };
+
+    const onEnded = () => {
+      if (!preEndTriggered.current && !transitioning.current) {
+        advance();
       }
     };
 
     video.addEventListener("timeupdate", tick);
-    return () => video.removeEventListener("timeupdate", tick);
-  }, [reduceMotion, visibleSlot, currentIndex]);
+    video.addEventListener("ended", onEnded);
+    return () => {
+      video.removeEventListener("timeupdate", tick);
+      video.removeEventListener("ended", onEnded);
+    };
+  }, [reduceMotion, visibleSlot, currentIndex, advance, paused, videoRefs]);
 
   if (reduceMotion) {
     return (
@@ -125,6 +160,7 @@ export function HeroClutchSlideshow() {
       onSelect={goTo}
       activeIndex={currentIndex}
       onPause={setPaused}
+      dipActive={dipActive}
     >
       {([0, 1] as const).map((slot) => {
         const moment = heroClutchMoments[slotIndices[slot]]!;
@@ -137,9 +173,9 @@ export function HeroClutchSlideshow() {
             animate={{
               opacity: isVisible ? 1 : 0,
               scale: isVisible ? 1 : 1.06,
-              filter: isVisible ? "blur(0px)" : "blur(8px)",
+              filter: isVisible ? "blur(0px)" : "blur(10px)",
             }}
-            transition={{ duration: TRANSITION_MS / 1000, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: TRANSITION_MS / 1000, ease: TRANSITION_EASE }}
             aria-hidden={!isVisible}
           >
             <video
@@ -150,15 +186,14 @@ export function HeroClutchSlideshow() {
               muted
               playsInline
               preload={slot === 0 ? "auto" : "metadata"}
-              onEnded={isVisible ? advance : undefined}
             />
             {isVisible && (
               <motion.div
                 key={`flash-${slotIndices[slot]}`}
-                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-lime/25 via-transparent to-white/10 mix-blend-overlay"
-                initial={{ opacity: 0.5 }}
+                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-lime/20 via-transparent to-white/10 mix-blend-overlay"
+                initial={{ opacity: 0.25 }}
                 animate={{ opacity: 0 }}
-                transition={{ duration: 0.55, ease: "easeOut" }}
+                transition={{ duration: 0.65, ease: "easeOut" }}
               />
             )}
           </motion.div>
@@ -175,6 +210,7 @@ function HeroFrame({
   onSelect,
   activeIndex,
   onPause,
+  dipActive = false,
 }: {
   children: React.ReactNode;
   current: (typeof heroClutchMoments)[number];
@@ -182,6 +218,7 @@ function HeroFrame({
   onSelect: (index: number) => void;
   activeIndex: number;
   onPause?: (paused: boolean) => void;
+  dipActive?: boolean;
 }) {
   return (
     <div
@@ -194,12 +231,25 @@ function HeroFrame({
     >
       {children}
 
-      {/* Readability scrims for overlaid copy + header */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/65 to-ink/25" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/20 to-ink/85" />
-      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
+      <AnimatePresence>
+        {dipActive && (
+          <motion.div
+            key="dip"
+            className="pointer-events-none absolute inset-0 z-[2] bg-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.18 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: TRANSITION_MS / 2000, ease: TRANSITION_EASE }}
+          />
+        )}
+      </AnimatePresence>
 
-      <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex justify-end p-6 md:p-10">
+      {/* Readability scrims for overlaid copy + header */}
+      <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-r from-ink/95 via-ink/65 to-ink/25" />
+      <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-b from-ink/75 via-ink/20 to-ink/85" />
+      <div className="pointer-events-none absolute -bottom-20 -left-20 z-[3] h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
+
+      <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-[4] flex justify-end p-6 md:p-10">
         <div className="w-full max-w-xs text-right sm:max-w-sm">
           <div className="mb-3 h-0.5 overflow-hidden rounded-full bg-white/15">
             <div
@@ -218,7 +268,7 @@ function HeroFrame({
       </div>
 
       <div
-        className="pointer-events-auto absolute right-6 top-28 flex gap-1.5 md:right-10 md:top-32"
+        className="pointer-events-auto absolute right-6 top-28 z-[4] flex gap-1.5 md:right-10 md:top-32"
         role="tablist"
         aria-label="Clutch moment videos"
       >
