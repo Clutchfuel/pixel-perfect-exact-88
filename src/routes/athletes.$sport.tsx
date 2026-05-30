@@ -49,8 +49,8 @@ function SportPage() {
 
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <PageHero
           eyebrow={sport.eyebrow}
           title={sport.headline}
@@ -125,14 +125,14 @@ function SportPage() {
           </div>
         </section>
 
-        <section className="bg-dark">
+        <section className="bg-mist">
           <div className="mx-auto max-w-3xl px-6 py-20 text-center md:px-10 md:py-24">
             <Quote className="mx-auto h-8 w-8 text-lime" />
-            <p className="mt-6 font-display text-2xl font-extrabold tracking-display text-white md:text-3xl">
+            <p className="mt-6 font-display text-2xl font-extrabold tracking-display text-ink md:text-3xl">
               "{sport.testimonial.quote}"
             </p>
-            <div className="mt-6 text-sm text-muted-dark">
-              <div className="font-semibold text-white">{sport.testimonial.name}</div>
+            <div className="mt-6 text-sm text-muted-ink">
+              <div className="font-semibold text-ink">{sport.testimonial.name}</div>
               <div>{sport.testimonial.role}</div>
             </div>
           </div>

@@ -44,8 +44,8 @@ export const Route = createFileRoute("/system")({
 function SystemPage() {
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <PageHero
           eyebrow="THE SYSTEM"
           title="A smarter hydration system for athletes."
@@ -122,12 +122,12 @@ function SystemPage() {
         </section>
 
         {/* CTA strip */}
-        <section className="bg-dark">
+        <section className="bg-mist">
           <div className="mx-auto max-w-5xl px-6 py-20 text-center md:px-10 md:py-28">
-            <h2 className="font-display text-3xl font-extrabold tracking-display text-white md:text-5xl">
+            <h2 className="font-display text-3xl font-extrabold tracking-display text-ink md:text-5xl">
               Find the right system for you.
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-dark">
+            <p className="mx-auto mt-4 max-w-xl text-muted-ink">
               The Clutch Score turns five quick questions into a personal recommendation.
             </p>
             <div className="mt-8">
@@ -135,9 +135,9 @@ function SystemPage() {
                 Unlock My Clutch Score →
               </CFButton>
             </div>
-            <p className="mt-6 text-sm text-muted-dark">
+            <p className="mt-6 text-sm text-muted-ink">
               Or{" "}
-              <Link to="/sweat-rate" className="text-lime hover:underline">
+              <Link to="/sweat-rate" className="font-semibold text-ink hover:underline">
                 learn about sweat rate
               </Link>
             </p>

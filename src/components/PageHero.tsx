@@ -31,16 +31,14 @@ export function PageHero({
   bgImageAlt = "",
 }: PageHeroProps) {
   const hasBg = Boolean(bgImage || heroImage);
-  const isDark = theme === "dark" || hasBg;
+  const isDark = theme === "dark";
+  const lightHero = hasBg && !isDark;
+
   return (
     <section
       className={cn(
         "relative w-full overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20 lg:pt-44 lg:pb-24",
-        hasBg
-          ? "bg-dark text-white"
-          : theme === "dark"
-            ? "bg-dark text-white"
-            : "bg-background text-ink",
+        isDark ? "bg-dark text-white" : "bg-white text-ink",
         className,
       )}
     >
@@ -51,13 +49,22 @@ export function PageHero({
             webp={heroImage.webp}
             fallback={heroImage.fallback}
             alt={bgImageAlt}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+            className={cn(
+              "pointer-events-none absolute inset-0 h-full w-full object-cover",
+              lightHero ? "opacity-30" : "opacity-50",
+            )}
             width={1920}
             height={1080}
             priority
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-dark/30" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-dark/40" />
+          {lightHero ? (
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-white/75 to-white" />
+          ) : (
+            <>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-dark/30" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-dark/40" />
+            </>
+          )}
         </>
       )}
       {bgImage && !heroImage && (
@@ -65,13 +72,22 @@ export function PageHero({
           <img
             src={bgImage}
             alt={bgImageAlt}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+            className={cn(
+              "pointer-events-none absolute inset-0 h-full w-full object-cover",
+              lightHero ? "opacity-30" : "opacity-50",
+            )}
             loading="eager"
             width={1920}
             height={1080}
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-dark/30" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-dark/40" />
+          {lightHero ? (
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-white/75 to-white" />
+          ) : (
+            <>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-dark/30" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/90 via-transparent to-dark/40" />
+            </>
+          )}
         </>
       )}
       {isDark && !hasBg && (

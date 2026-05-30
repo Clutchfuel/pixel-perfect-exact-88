@@ -24,8 +24,8 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <PageHero
           eyebrow={about.eyebrow}
           title={about.headline}

@@ -35,8 +35,8 @@ function InsightsPage() {
   );
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <PageHero
           eyebrow="INSIGHTS"
           title="Hydration and performance, decoded."

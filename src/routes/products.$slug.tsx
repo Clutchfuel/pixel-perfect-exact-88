@@ -61,8 +61,8 @@ function ProductPage() {
 
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <section className="bg-background pt-28 md:pt-36">
           <div className="mx-auto max-w-7xl px-6 md:px-10">
             <Breadcrumbs

@@ -24,8 +24,8 @@ export const Route = createFileRoute("/sweat-rate")({
 function SweatRatePage() {
   return (
     <>
-      <Header overDark />
-      <main>
+      <Header />
+      <main className="bg-white">
         <PageHero
           eyebrow="KNOW YOUR SWEAT RATE"
           title="Hydration isn't one-size-fits-all."
