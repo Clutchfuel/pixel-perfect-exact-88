@@ -4,7 +4,7 @@ import { imageSets } from "@/assets/image-sets";
 export type ClutchMoment = {
   id: string;
   label: string;
-  /** Short stakes line ΓÇö whatΓÇÖs on the line when time/scarcity matter */
+  /** Short stakes line — what's on the line when time/scarcity matter */
   stakes?: string;
   sport: string;
   video: string;
@@ -15,14 +15,14 @@ export type ClutchMoment = {
 };
 
 /**
- * Homepage hero ΓÇö real clutch moments from HYROX Worlds, parkrun, and elite track (~6s each).
+ * Homepage hero — real high-intensity clutch moments (~6s each).
  * Segments sourced via scripts/fetch-clutch-videos.mjs (yt-dlp).
  */
 export const heroClutchMoments: ClutchMoment[] = [
   {
     id: "photo-finish",
     label: "Last-second pass",
-    stakes: "Final stride ┬╖ place on the line",
+    stakes: "Final stride · place on the line",
     sport: "Run club",
     video: "/videos/clutch/photo-finish.mp4",
     poster: imageSets.sportRunning,
@@ -32,7 +32,7 @@ export const heroClutchMoments: ClutchMoment[] = [
   {
     id: "pr-attempt",
     label: "Holds off rival",
-    stakes: "Worlds podium ┬╖ one move left",
+    stakes: "Worlds podium · one move left",
     sport: "Hyrox",
     video: "/videos/clutch/pr-attempt.mp4",
     poster: imageSets.sportHyrox,
@@ -41,32 +41,32 @@ export const heroClutchMoments: ClutchMoment[] = [
   },
   {
     id: "last-station",
-    label: "Wall ball grind",
-    stakes: "Final station ┬╖ everything left",
+    label: "HYROX photo finish",
+    stakes: "Finish line · result locked in",
     sport: "Hyrox",
     video: "/videos/clutch/last-station.mp4",
     poster: imageSets.sportHyrox,
-    alt: "Athlete grinding through wall balls in an all-out HYROX station finish",
-    sourceIds: "QLW6RcR-F6I",
+    alt: "Athletes lunging across the HYROX finish line in a dead-heat photo finish",
+    sourceIds: "PYTjfSUscT0",
   },
   {
     id: "finish-line",
-    label: "Sled surge",
-    stakes: "Heavy station ┬╖ move it or lose it",
+    label: "Title on the line",
+    stakes: "World champion · heavy station",
     sport: "Hyrox",
     video: "/videos/clutch/finish-line.mp4",
     poster: imageSets.sportHyrox,
-    alt: "Linda Meier surging through a sled pull at HYROX Chicago Worlds",
+    alt: "Linda Meier surging through a decisive station moment at HYROX Chicago Worlds",
     sourceIds: "GlENBVDgb2k",
   },
   {
     id: "surge-pace",
-    label: "Photo finish",
-    stakes: "Elite heat ┬╖ lean at the line",
+    label: "Closest finish ever",
+    stakes: "Dead heat · lean decides it",
     sport: "Run club",
     video: "/videos/clutch/surge-pace.mp4",
     poster: imageSets.sportRunning,
-    alt: "Sprinters dipping at the line in a dead-heat track finish",
-    sourceIds: "nmM8NNlMDjc",
+    alt: "Two runners dipping at the line in the closest sprint finish imaginable",
+    sourceIds: "CRR5R7b6Kn0",
   },
 ];

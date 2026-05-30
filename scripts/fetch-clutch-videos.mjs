@@ -6,8 +6,7 @@
  *
  * Requires: yt-dlp, ffmpeg
  *
- * Rubric: clutch moment + elite intensity (see hero-slideshow.ts).
- * Timestamps scrubbed from source videos — adjust start/end if a clip drifts.
+ * Clip list mirrors ClutchClips.jsx — prefer whole-short moments or finish slices.
  */
 
 import { execSync } from "node:child_process";
@@ -27,7 +26,7 @@ const CLIPS = [
     start: 8,
     end: 14,
     out: "photo-finish.mp4",
-    note: "Last-second parkrun pass — Tooting Common",
+    note: "Charlotte's last-second pass — Tooting parkrun",
   },
   {
     youtubeId: "5s_DDfNRo0c",
@@ -37,25 +36,25 @@ const CLIPS = [
     note: "Wenisch holds off McIntyre — HYROX 2025 Worlds Men",
   },
   {
-    youtubeId: "QLW6RcR-F6I",
-    start: 548,
-    end: 554,
+    youtubeId: "PYTjfSUscT0",
+    start: 19,
+    end: 25,
     out: "last-station.mp4",
-    note: "Wall-ball will to win — Wenisch (end of 11-min clip)",
+    note: "HYROX photo-finish at the line",
   },
   {
     youtubeId: "GlENBVDgb2k",
     start: 360,
     end: 366,
     out: "finish-line.mp4",
-    note: "Linda Meier sled-pull surge — HYROX 2025 Worlds Women",
+    note: "Linda Meier takes the title — HYROX 2025 Worlds Women",
   },
   {
-    youtubeId: "nmM8NNlMDjc",
-    start: 25,
-    end: 31,
+    youtubeId: "CRR5R7b6Kn0",
+    start: 26,
+    end: 32,
     out: "surge-pace.mp4",
-    note: "Photo-finish lean — sprint finishes compilation",
+    note: "The closest finish ever — photo finish",
   },
 ];
 
