@@ -1,5 +1,5 @@
 # Copy to .dev.vars for local dev (gitignored):
-#   cp .dev.vars.example .dev.vars
+#   bun run setup   OR   node scripts/setup.mjs
 #
 # Cloudflare production: set the same keys in the Worker dashboard
 # (Settings → Variables and Secrets). Never commit .dev.vars.
@@ -7,21 +7,25 @@
 # --- Client (Vite — exposed to browser, must be VITE_ prefixed) ---
 # Required in CI builds; optional locally (falls back to Lovable preview URL)
 VITE_SITE_URL=https://pixel-perfect-exact-88.lovable.app
-# Optional GA4 measurement ID (e.g. G-XXXXXXXXXX)
+# Optional GA4 measurement ID (e.g. G-XXXXXXXXXX) — loads only after cookie consent
 VITE_GA_MEASUREMENT_ID=
-# Optional Cloudflare Turnstile site key (enables bot protection on forms when set)
+# Turnstile site key — must be paired with TURNSTILE_SECRET_KEY (both or neither)
 VITE_TURNSTILE_SITE_KEY=
 
 # --- Server only (Worker — never prefix with VITE_) ---
-# Get from https://resend.com/api-keys — leave empty in dev to skip email (forms still succeed)
+# Required in production (skipped in dev/CI when empty)
 RESEND_API_KEY=
 # Must be a verified sender in Resend; onboarding@resend.dev works for testing
 RESEND_FROM_EMAIL=onboarding@resend.dev
 # Inbox that receives internal lead notification emails
 LEADS_TO_EMAIL=hello@clutchfuel.com
-# Optional Turnstile secret (required when VITE_TURNSTILE_SITE_KEY is set)
+# Required when VITE_TURNSTILE_SITE_KEY is set
 TURNSTILE_SECRET_KEY=
+# Optional webhook for structured error reports (JSON POST)
+ERROR_WEBHOOK_URL=
 
 # Clutch Score submit sends TWO emails when RESEND_API_KEY is set:
 #   1. User — formatted quiz results (score, profile, tips, product link)
 #   2. Team — internal lead notification to LEADS_TO_EMAIL
+#
+# Distributed rate limiting: create a KV namespace and bind as RATE_LIMIT_KV in wrangler.jsonc

@@ -31,6 +31,7 @@ function ContactPage() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,6 +44,7 @@ function ContactPage() {
           name,
           email,
           message,
+          marketingConsent: true,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -152,7 +154,12 @@ function ContactPage() {
                 {submitting ? "Sending…" : "Send message"}
               </button>
               <div className="mt-4">
-                <FormConsent />
+                <FormConsent
+                  id="contact-marketing-consent"
+                  checked={marketingConsent}
+                  onChange={setMarketingConsent}
+                  className="text-muted-ink"
+                />
               </div>
               <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken("")} />
             </form>

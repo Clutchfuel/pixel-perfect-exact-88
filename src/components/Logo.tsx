@@ -13,9 +13,9 @@ interface LogoProps {
 }
 
 const heights: Record<LogoSize, string> = {
-  sm: "h-5",
-  md: "h-5 md:h-6",
-  lg: "h-6 md:h-7 lg:h-7",
+  sm: "h-6",
+  md: "h-7 md:h-8",
+  lg: "h-8 md:h-9 lg:h-10",
 };
 
 /** Wordmark aspect ratio from logo-white.png (841×142) */

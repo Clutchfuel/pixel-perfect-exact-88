@@ -12,6 +12,7 @@ import {
 import appCss from "../styles.css?url";
 import { site } from "@/data/site";
 import { Analytics } from "@/components/Analytics";
+import { CookieConsent } from "@/components/CookieConsent";
 import { Toaster } from "@/components/ui/sonner";
 
 function useNoindexMeta() {
@@ -140,6 +141,7 @@ function RootComponent() {
       <Outlet />
       <Toaster position="top-center" richColors />
       <Analytics />
+      <CookieConsent />
     </QueryClientProvider>
   );
 }

@@ -51,6 +51,7 @@ function ClutchScorePage() {
   const [submitting, setSubmitting] = useState(false);
   const [saved, setSaved] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   const current = clutchScoreQuiz.steps[step];
   const isLast = step === clutchScoreQuiz.steps.length - 1;
@@ -104,6 +105,7 @@ function ClutchScorePage() {
         body: JSON.stringify({
           email,
           answers,
+          marketingConsent: true,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -238,7 +240,12 @@ function ClutchScorePage() {
                       </button>
                     </div>
                     <div className="mx-auto mt-4 max-w-md text-center text-white/60">
-                      <FormConsent />
+                      <FormConsent
+                        id="clutch-score-marketing-consent"
+                        checked={marketingConsent}
+                        onChange={setMarketingConsent}
+                        className="justify-center text-white/70 [&_a]:text-white/90"
+                      />
                     </div>
                     <TurnstileWidget
                       onToken={setTurnstileToken}

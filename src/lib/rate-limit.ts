@@ -1,20 +1,39 @@
-const buckets = new Map<string, { count: number; resetAt: number }>();
+import { getRateLimitKv } from "@/lib/env";
+import {
+  isRateLimitedMemory,
+  RATE_LIMIT_MAX_REQUESTS,
+  RATE_LIMIT_WINDOW_MS,
+  resetMemoryRateLimits,
+} from "@/lib/rate-limit-memory";
 
-const WINDOW_MS = 60 * 60 * 1000;
-const MAX_REQUESTS = 5;
+type RateLimitEntry = { count: number; resetAt: number };
 
-export function isRateLimited(key: string): boolean {
+async function isRateLimitedKv(kv: KVNamespace, key: string): Promise<boolean> {
+  const kvKey = `rl:${key}`;
   const now = Date.now();
-  const entry = buckets.get(key);
+  const existing = await kv.get<RateLimitEntry>(kvKey, "json");
 
-  if (!entry || now > entry.resetAt) {
-    buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
+  if (!existing || now > existing.resetAt) {
+    const entry: RateLimitEntry = { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
+    await kv.put(kvKey, JSON.stringify(entry), {
+      expirationTtl: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000) + 60,
+    });
     return false;
   }
 
-  if (entry.count >= MAX_REQUESTS) return true;
-  entry.count += 1;
+  if (existing.count >= RATE_LIMIT_MAX_REQUESTS) return true;
+
+  const next: RateLimitEntry = { count: existing.count + 1, resetAt: existing.resetAt };
+  await kv.put(kvKey, JSON.stringify(next), {
+    expirationTtl: Math.ceil((existing.resetAt - now) / 1000) + 60,
+  });
   return false;
+}
+
+export async function isRateLimited(key: string): Promise<boolean> {
+  const kv = getRateLimitKv();
+  if (kv) return isRateLimitedKv(kv, key);
+  return isRateLimitedMemory(key);
 }
 
 export function rateLimitKey(request: Request, email: string): string {
@@ -24,3 +43,5 @@ export function rateLimitKey(request: Request, email: string): string {
     "unknown";
   return `${ip}:${email.toLowerCase()}`;
 }
+
+export { resetMemoryRateLimits };

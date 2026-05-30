@@ -30,7 +30,7 @@ export const Route = createFileRoute("/api/leads/contact")({
           }
         }
 
-        if (isRateLimited(rateLimitKey(request, email))) {
+        if (await isRateLimited(rateLimitKey(request, email))) {
           return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
         }
 

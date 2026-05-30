@@ -57,6 +57,15 @@ function PrivacyPage() {
             </div>
             <div>
               <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                Cookies & analytics
+              </h2>
+              <p className="mt-3">
+                Optional analytics cookies (Google Analytics) load only if you accept them in the
+                cookie banner. Declining does not affect core site features or form submissions.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
                 Contact
               </h2>
               <p className="mt-3">

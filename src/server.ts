@@ -3,6 +3,8 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { bindWorkerEnv } from "./lib/env";
+import { reportError } from "./lib/observability";
+import { withSecurityHeaders } from "./lib/security-headers";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -61,8 +63,10 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
     return response;
   }
 
+  const captured = consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`);
+  reportError(captured, { source: "ssr" });
   if (import.meta.env.DEV) {
-    console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
+    console.error(captured);
   }
   return brandedErrorResponse();
 }
@@ -74,6 +78,10 @@ function withRobotsTag(response: Response): Response {
   return new Response(response.body, { status: response.status, headers });
 }
 
+function finalizeResponse(response: Response): Response {
+  return withSecurityHeaders(withRobotsTag(response));
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     bindWorkerEnv(env);
@@ -81,12 +89,13 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalized = await normalizeCatastrophicSsrResponse(response);
-      return withRobotsTag(normalized);
+      return finalizeResponse(normalized);
     } catch (error) {
+      reportError(error, { source: "worker", url: request.url });
       if (import.meta.env.DEV) {
         console.error(error);
       }
-      return brandedErrorResponse();
+      return finalizeResponse(brandedErrorResponse());
     }
   },
 };

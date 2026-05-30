@@ -33,7 +33,16 @@ export default tseslint.config(
         },
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
-      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
+  {
+    files: ["src/server.ts", "src/start.ts", "src/lib/**/*.ts", "src/routes/api/**/*.ts", "scripts/**/*.{ts,mjs}"],
+    languageOptions: {
+      globals: globals.node,
     },
   },
   eslintPluginPrettier,

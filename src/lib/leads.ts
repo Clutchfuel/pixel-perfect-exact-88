@@ -1,6 +1,13 @@
 import type { ClutchScoreResult } from "@/lib/clutch-score";
 import { teamLeadText, userClutchScoreHtml, userClutchScoreText } from "@/lib/email-templates";
 import { getEnv } from "@/lib/env";
+import { isProductionRuntime } from "@/lib/is-production";
+import { reportError } from "@/lib/observability";
+import {
+  turnstileEnabled,
+  turnstileMisconfigured,
+  turnstileSecretKey,
+} from "@/lib/turnstile";
 
 type LeadType = "contact" | "newsletter" | "clutch-score";
 
@@ -13,6 +20,9 @@ async function sendResend(opts: {
 }) {
   const apiKey = getEnv("RESEND_API_KEY");
   if (!apiKey) {
+    if (isProductionRuntime()) {
+      throw new Error("RESEND_API_KEY not configured");
+    }
     console.info("[leads] RESEND_API_KEY not set — skipping email", opts);
     return { ok: true as const, skipped: true };
   }
@@ -91,15 +101,19 @@ export async function sendClutchScoreEmails(email: string, result: ClutchScoreRe
 }
 
 export async function verifyTurnstile(token: string | undefined): Promise<boolean> {
-  const secret = getEnv("TURNSTILE_SECRET_KEY");
-  if (!secret) return true;
+  if (turnstileMisconfigured()) {
+    reportError(new Error("Turnstile misconfigured: site key set without secret"));
+    return false;
+  }
+
+  if (!turnstileEnabled()) return true;
 
   if (!token) return false;
 
   const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret, response: token }),
+    body: new URLSearchParams({ secret: turnstileSecretKey(), response: token }),
   });
 
   const data = (await res.json()) as { success?: boolean };

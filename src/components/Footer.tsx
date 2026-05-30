@@ -13,6 +13,7 @@ export function Footer() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,6 +26,7 @@ export function Footer() {
         body: JSON.stringify({
           email,
           source: "footer",
+          marketingConsent: true,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -77,7 +79,12 @@ export function Footer() {
               </button>
             </form>
             <div className="mt-3 max-w-md text-white/50">
-              <FormConsent />
+              <FormConsent
+                id="footer-marketing-consent"
+                checked={marketingConsent}
+                onChange={setMarketingConsent}
+                className="text-white/70 [&_a]:text-white/90"
+              />
             </div>
             <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken("")} />
           </div>

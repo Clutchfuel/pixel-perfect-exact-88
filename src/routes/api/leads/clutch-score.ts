@@ -31,7 +31,7 @@ export const Route = createFileRoute("/api/leads/clutch-score")({
           }
         }
 
-        if (isRateLimited(rateLimitKey(request, email))) {
+        if (await isRateLimited(rateLimitKey(request, email))) {
           return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
         }
 
