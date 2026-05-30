@@ -263,7 +263,10 @@ function HeroFrame({
           <p className="mt-1 font-display text-lg font-extrabold tracking-display text-white md:text-xl">
             {current.label}
           </p>
-          <p className="text-xs text-white/60">{current.sport}</p>
+          {current.stakes ? (
+            <p className="mt-0.5 text-xs font-medium text-white/75">{current.stakes}</p>
+          ) : null}
+          <p className="mt-0.5 text-xs text-white/50">{current.sport}</p>
         </div>
       </div>
 
@@ -278,7 +281,7 @@ function HeroFrame({
             type="button"
             role="tab"
             aria-selected={i === activeIndex}
-            aria-label={`${moment.label} — ${moment.sport}`}
+            aria-label={`${moment.label}${moment.stakes ? ` — ${moment.stakes}` : ""} — ${moment.sport}`}
             onClick={() => onSelect(i)}
             className={cn(
               "h-1.5 rounded-full transition-all duration-300",
