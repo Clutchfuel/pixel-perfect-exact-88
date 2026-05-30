@@ -8,6 +8,7 @@ import {
   zoneTagMap,
   type SweatRateZone,
 } from "@/data/hydration-lab";
+import { estimateSodiumLossMg } from "@/lib/metrics-estimates";
 
 export type HydrationLabMode = "precision" | "quick";
 
@@ -35,6 +36,8 @@ export type HydrationLabResult = {
   sweatRateLph: number;
   sweatRateOph: number;
   totalSweatLossL: number;
+  sodiumLossMg: number;
+  bodyMassLossKg: number | null;
   zone: SweatRateZone;
   shopifyTags: string[];
   modeLabel: string;
@@ -103,6 +106,8 @@ export function calculatePrecision(input: PrecisionInput): HydrationLabResult {
     sweatRateLph: roundedLph,
     sweatRateOph: Math.round(roundedLph * 33.814 * 10) / 10,
     totalSweatLossL: Math.round(totalSweatLossL * 100) / 100,
+    sodiumLossMg: estimateSodiumLossMg(totalSweatLossL, zone),
+    bodyMassLossKg: Math.round(weightLossL * 100) / 100,
     zone,
     shopifyTags: buildTags({
       mode: "precision",
@@ -133,6 +138,8 @@ export function calculateQuick(input: QuickInput): HydrationLabResult {
     sweatRateLph: roundedLph,
     sweatRateOph: Math.round(roundedLph * 33.814 * 10) / 10,
     totalSweatLossL: Math.round(totalSweatLossL * 100) / 100,
+    sodiumLossMg: estimateSodiumLossMg(adjustedSweatLoss, zone),
+    bodyMassLossKg: null,
     zone,
     shopifyTags: buildTags({
       mode: "quick",

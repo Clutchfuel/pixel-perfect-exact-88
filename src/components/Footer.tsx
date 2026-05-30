@@ -9,7 +9,8 @@ import { FormConsent } from "@/components/FormConsent";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
 import { leadErrorMessage } from "@/lib/form-errors";
 
-export function Footer() {
+export function Footer({ variant = "light" }: { variant?: "light" | "dark" }) {
+  const isDark = variant === "dark";
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -45,20 +46,30 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-dark text-white">
+    <footer className={isDark ? "bg-dark text-white" : "border-t border-ink/8 bg-white text-ink"}>
       <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Link to="/" className="inline-flex items-center" aria-label="ClutchFuel home">
-              <Logo variant="light" size="lg" />
+              <Logo variant={isDark ? "light" : "dark"} size="lg" />
             </Link>
-            <p className="mt-6 max-w-sm font-display text-2xl font-extrabold tracking-display text-white md:text-3xl">
+            <p
+              className={
+                isDark
+                  ? "mt-6 max-w-sm font-display text-2xl font-extrabold tracking-display text-white md:text-3xl"
+                  : "mt-6 max-w-sm font-display text-2xl font-extrabold tracking-display text-ink md:text-3xl"
+              }
+            >
               {site.tagline}
             </p>
 
             <form
               onSubmit={onSubmit}
-              className="mt-8 flex w-full max-w-md items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur"
+              className={
+                isDark
+                  ? "mt-8 flex w-full max-w-md items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur"
+                  : "mt-8 flex w-full max-w-md items-center gap-2 rounded-full border border-ink/10 bg-mist/40 p-1.5"
+              }
             >
               <input
                 type="email"
@@ -68,7 +79,11 @@ export function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 aria-label="Email"
                 placeholder={footer.emailPlaceholder}
-                className="flex-1 bg-transparent px-4 text-base text-white placeholder:text-white/40 focus:outline-none"
+                className={
+                  isDark
+                    ? "flex-1 bg-transparent px-4 text-base text-white placeholder:text-white/40 focus:outline-none"
+                    : "flex-1 bg-transparent px-4 text-base text-ink placeholder:text-muted-ink focus:outline-none"
+                }
               />
               <button
                 type="submit"
@@ -78,12 +93,16 @@ export function Footer() {
                 {submitting ? "…" : footer.emailCta}
               </button>
             </form>
-            <div className="mt-3 max-w-md text-white/50">
+            <div className={isDark ? "mt-3 max-w-md text-white/50" : "mt-3 max-w-md text-muted-ink"}>
               <FormConsent
                 id="footer-marketing-consent"
                 checked={marketingConsent}
                 onChange={setMarketingConsent}
-                className="text-white/70 [&_a]:text-white/90"
+                className={
+                  isDark
+                    ? "text-white/70 [&_a]:text-white/90"
+                    : "text-muted-ink [&_a]:text-ink"
+                }
               />
             </div>
             <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken("")} />
@@ -98,7 +117,14 @@ export function Footer() {
                 <ul className="mt-4 space-y-3">
                   {col.links.map((l) => (
                     <li key={l.to}>
-                      <Link to={l.to} className="text-sm text-white/70 transition hover:text-white">
+                      <Link
+                        to={l.to}
+                        className={
+                          isDark
+                            ? "text-sm text-white/70 transition hover:text-white"
+                            : "text-sm text-muted-ink transition hover:text-ink"
+                        }
+                      >
                         {l.label}
                       </Link>
                     </li>
@@ -109,38 +135,60 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center">
+        <div
+          className={
+            isDark
+              ? "mt-16 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center"
+              : "mt-16 flex flex-col items-start justify-between gap-6 border-t border-ink/8 pt-8 md:flex-row md:items-center"
+          }
+        >
           <div className="flex items-center gap-4">
             <a
               href={site.social.instagram}
               aria-label="Instagram"
-              className="text-white/60 transition hover:text-lime"
+              className={
+                isDark
+                  ? "text-white/60 transition hover:text-lime"
+                  : "text-muted-ink transition hover:text-ink"
+              }
             >
               <Instagram className="h-5 w-5" />
             </a>
             <a
               href={site.social.youtube}
               aria-label="YouTube"
-              className="text-white/60 transition hover:text-lime"
+              className={
+                isDark
+                  ? "text-white/60 transition hover:text-lime"
+                  : "text-muted-ink transition hover:text-ink"
+              }
             >
               <Youtube className="h-5 w-5" />
             </a>
             <a
               href={site.social.tiktok}
               aria-label="TikTok"
-              className="text-sm text-white/60 transition hover:text-lime"
+              className={
+                isDark
+                  ? "text-sm text-white/60 transition hover:text-lime"
+                  : "text-sm text-muted-ink transition hover:text-ink"
+              }
             >
               TikTok
             </a>
             <a
               href={site.social.x}
               aria-label="X"
-              className="text-sm text-white/60 transition hover:text-lime"
+              className={
+                isDark
+                  ? "text-sm text-white/60 transition hover:text-lime"
+                  : "text-sm text-muted-ink transition hover:text-ink"
+              }
             >
               X
             </a>
           </div>
-          <p className="text-xs text-white/40">
+          <p className={isDark ? "text-xs text-white/40" : "text-xs text-muted-ink"}>
             © {new Date().getFullYear()} ClutchFuel. All rights reserved.
           </p>
         </div>

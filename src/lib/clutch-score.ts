@@ -10,6 +10,7 @@ import {
   quickEstimateDurationMinutes,
   quickEstimateToQuizAnswers,
 } from "@/lib/calculator-metrics";
+import { estimateSodiumLossMgFromProfile } from "@/lib/metrics-estimates";
 
 export type SweatProfile =
   | "Balanced Sweater"
@@ -25,6 +26,7 @@ export type ClutchScoreResult = {
   sessionIntensity: number;
   estimatedSweatRateLhr: number;
   estimatedFluidLossOz: number;
+  estimatedSodiumLossMg: number;
   hydrationRecommendation: string;
   caloriesUsed: boolean;
 };
@@ -174,6 +176,11 @@ export function calculateClutchScore(input: CalculatorInput): ClutchScoreResult 
     durationMinutes,
   });
 
+  const estimatedSodiumLossMg = estimateSodiumLossMgFromProfile(
+    estimatedFluidLossOz,
+    answers.sweatLevel,
+  );
+
   return {
     score,
     profile,
@@ -182,6 +189,7 @@ export function calculateClutchScore(input: CalculatorInput): ClutchScoreResult 
     sessionIntensity,
     estimatedSweatRateLhr,
     estimatedFluidLossOz,
+    estimatedSodiumLossMg,
     hydrationRecommendation: buildHydrationRecommendation(profile, estimatedFluidLossOz),
     caloriesUsed: Boolean(input.caloriesBurned && input.caloriesBurned > 0),
   };

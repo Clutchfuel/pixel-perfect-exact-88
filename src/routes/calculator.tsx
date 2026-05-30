@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -6,9 +7,9 @@ import {
   HydrationLabFooterNote,
   HydrationLabHeader,
 } from "@/components/hydration-lab/HydrationLabCalculator";
-import { hydrationLabBrand } from "@/data/hydration-lab";
 import { makeMeta, canonical } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/calculator")({
   head: () => ({
@@ -25,23 +26,28 @@ export const Route = createFileRoute("/calculator")({
 });
 
 function CalculatorPage() {
+  const [reportMode, setReportMode] = useState(false);
+
   return (
     <>
-      <Header overDark />
+      <Header overDark={reportMode} />
       <main
         id="main"
-        className="min-h-screen pt-28 pb-24 md:pt-36 md:pb-32 performance-surface"
-        style={{ background: hydrationLabBrand.background }}
+        className={cn(
+          "min-h-screen pt-28 pb-24 md:pt-36 md:pb-32",
+          reportMode ? "performance-surface" : "bg-white",
+        )}
+        style={reportMode ? { background: "#0A0A0A" } : undefined}
       >
         <div className="mx-auto max-w-2xl px-6 md:px-10">
-          <HydrationLabHeader />
-          <div className="mt-12">
-            <HydrationLabCalculator />
+          {!reportMode && <HydrationLabHeader />}
+          <div className={reportMode ? "mt-0" : "mt-12"}>
+            <HydrationLabCalculator onPhaseChange={(p) => setReportMode(p === "results")} />
           </div>
-          <HydrationLabFooterNote />
+          {!reportMode && <HydrationLabFooterNote />}
         </div>
       </main>
-      <Footer />
+      <Footer variant={reportMode ? "dark" : "light"} />
     </>
   );
 }

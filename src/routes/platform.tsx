@@ -61,7 +61,7 @@ function PlatformPage() {
           ]}
         />
       </main>
-      <Footer />
+      <Footer variant="dark" />
     </>
   );
 }

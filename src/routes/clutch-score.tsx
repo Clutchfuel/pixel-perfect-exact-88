@@ -25,6 +25,9 @@ import { leadErrorMessage } from "@/lib/form-errors";
 import { makeMeta, canonical } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
 import { trackEvent } from "@/lib/analytics";
+import { ResultsMetricsGuide } from "@/components/ResultsMetricsGuide";
+import { cn } from "@/lib/utils";
+import { quizCardClass, quizMutedClass, quizSurface } from "@/lib/quiz-surface";
 
 export const Route = createFileRoute("/clutch-score")({
   head: () => ({
@@ -39,10 +42,6 @@ export const Route = createFileRoute("/clutch-score")({
   }),
   component: ClutchScorePage,
 });
-
-const CARD = "performance-card p-8 md:p-10";
-const BORDER = "#242424";
-const MUTED = "#A1A1A1";
 
 const emptyAnswers = (): QuizAnswers => ({
   bodyType: "",
@@ -68,8 +67,8 @@ function parseCalories(value: string): number | undefined {
 
 function CaloriesField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
-    <div className="mt-8 rounded-2xl border p-4" style={{ borderColor: BORDER, background: "#121212" }}>
-      <label htmlFor="calories-burned" className="flex items-center gap-2 text-sm font-medium text-white">
+    <div className="mt-8 rounded-2xl border border-ink/10 bg-mist/40 p-4">
+      <label htmlFor="calories-burned" className="flex items-center gap-2 text-sm font-medium text-ink">
         <Flame className="h-4 w-4 text-lime" aria-hidden />
         {calculatorMessaging.caloriesLabel}
       </label>
@@ -82,28 +81,23 @@ function CaloriesField({ value, onChange }: { value: string; onChange: (v: strin
         placeholder="e.g. 420"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 h-11 w-full rounded-xl border px-4 text-white placeholder:text-white/35 focus:outline-none focus:ring-1 focus:ring-lime"
-        style={{ borderColor: BORDER, background: "#0A0A0A" }}
+        className="mt-2 h-11 w-full rounded-xl border border-ink/15 bg-white px-4 text-ink placeholder:text-ink/35 focus:outline-none focus:ring-1 focus:ring-lime"
       />
-      <p className="mt-2 text-xs" style={{ color: MUTED }}>
-        {calculatorMessaging.caloriesHint}
-      </p>
+      <p className="mt-2 text-xs text-muted-ink">{calculatorMessaging.caloriesHint}</p>
     </div>
   );
 }
 
 function IntroCard({ onContinue }: { onContinue: () => void }) {
   return (
-    <div className={CARD}>
-      <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+    <div className={quizCardClass("light")}>
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-ink">
         {experienceCopy.badge}
       </p>
-      <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+      <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
         {experienceCopy.intro.headline}
       </h1>
-      <p className="mt-4 text-sm leading-relaxed" style={{ color: MUTED }}>
-        {experienceCopy.intro.body}
-      </p>
+      <p className="mt-4 text-sm leading-relaxed text-muted-ink">{experienceCopy.intro.body}</p>
       <button
         type="button"
         onClick={onContinue}
@@ -282,20 +276,27 @@ function ClutchScorePage() {
       ? quickStep + 1
       : step + 1;
   const progress = result ? 100 : Math.round((currentStepIndex / (totalSteps + 1)) * 100);
+  const isReport = Boolean(result);
+  const stepTheme = isReport ? "dark" : "light";
 
   return (
     <>
-      <Header overDark />
+      <Header overDark={isReport} />
       <main
         id="main"
-        className="relative min-h-screen performance-surface pt-28 pb-24 md:pt-36 md:pb-32"
-        style={{ background: "#0A0A0A" }}
+        className={cn(
+          "relative min-h-screen pt-28 pb-24 md:pt-36 md:pb-32",
+          isReport ? "performance-surface" : "bg-white",
+        )}
+        style={isReport ? { background: "#0A0A0A" } : undefined}
       >
         <div className="relative mx-auto max-w-2xl px-6 md:px-10">
           {!result && (
             <div
-              className="mb-8 flex rounded-full border p-1"
-              style={{ borderColor: BORDER, background: "#121212" }}
+              className={cn(
+                "mb-8 flex rounded-full border p-1",
+                isReport ? "border-[#242424] bg-[#121212]" : "border-ink/10 bg-mist/40",
+              )}
             >
               {(["quick", "full"] as const).map((m) => (
                 <button
@@ -315,8 +316,10 @@ function ClutchScorePage() {
           )}
 
           <div
-            className="mb-8 h-1 overflow-hidden rounded-full"
-            style={{ background: BORDER }}
+            className={cn(
+              "mb-8 h-1 overflow-hidden rounded-full",
+              isReport ? "bg-[#242424]" : "bg-ink/10",
+            )}
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
@@ -337,15 +340,15 @@ function ClutchScorePage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.25 }}
-                className={CARD}
+                className={cn(quizCardClass(stepTheme))}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+                <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass(stepTheme))}>
                   {experienceCopy.badge}
                 </p>
                 <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
                   {experienceCopy.results.headline}
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
+                <p className={cn("mt-3 text-sm leading-relaxed", quizMutedClass("dark"))}>
                   {experienceCopy.results.supporting}
                 </p>
 
@@ -356,22 +359,29 @@ function ClutchScorePage() {
                 <p className="mt-4 text-center font-display text-lg font-bold text-white">
                   {result.profile}
                 </p>
-                <p className="mx-auto mt-2 max-w-md text-center text-sm" style={{ color: MUTED }}>
+                <p className={cn("mx-auto mt-2 max-w-md text-center text-sm", quizMutedClass("dark"))}>
                   {getProfileCopy(result.profile)}
                 </p>
 
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {[
-                    { label: "Session intensity", value: result.sessionIntensity },
-                    { label: "Hydration demand", value: `${result.estimatedSweatRateLhr} L/hr` },
-                    { label: "Fluid loss", value: `${result.estimatedFluidLossOz} oz` },
+                    { label: "Session intensity", value: String(result.sessionIntensity) },
+                    { label: "Sweat rate", value: `${result.estimatedSweatRateLhr} L/hr` },
+                    { label: "Sweat loss", value: `${result.estimatedFluidLossOz} oz` },
+                    {
+                      label: "Sodium loss (est.)",
+                      value: `${result.estimatedSodiumLossMg.toLocaleString()} mg`,
+                    },
                   ].map((metric) => (
                     <div
                       key={metric.label}
                       className="rounded-2xl border p-4 text-center"
-                      style={{ borderColor: BORDER, background: "#121212" }}
+                      style={{
+                        borderColor: quizSurface.dark.optionBorder,
+                        background: quizSurface.dark.optionBg,
+                      }}
                     >
-                      <div className="text-[11px] uppercase tracking-wider" style={{ color: MUTED }}>
+                      <div className={cn("text-[11px] uppercase tracking-wider", quizMutedClass("dark"))}>
                         {metric.label}
                       </div>
                       <div className="mt-1 font-display text-2xl font-bold text-white">
@@ -381,21 +391,26 @@ function ClutchScorePage() {
                   ))}
                 </div>
 
+                <ResultsMetricsGuide theme="dark" className="mt-8" />
+
                 <div
                   className="mt-8 rounded-2xl border p-5"
-                  style={{ borderColor: BORDER, background: "#121212" }}
+                  style={{
+                    borderColor: quizSurface.dark.optionBorder,
+                    background: quizSurface.dark.optionBg,
+                  }}
                 >
                   <h2 className="font-display text-lg font-bold text-white">
                     {experienceCopy.results.hydrationInsightTitle}
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: MUTED }}>
+                  <p className={cn("mt-2 text-sm leading-relaxed", quizMutedClass("dark"))}>
                     {result.hydrationRecommendation || experienceCopy.results.hydrationInsightBody}
                   </p>
                 </div>
 
                 <ul className="mt-6 space-y-2">
                   {result.hydrationGuidance.map((tip) => (
-                    <li key={tip} className="text-sm leading-relaxed" style={{ color: MUTED }}>
+                    <li key={tip} className={cn("text-sm leading-relaxed", quizMutedClass("dark"))}>
                       {tip}
                     </li>
                   ))}
@@ -408,8 +423,7 @@ function ClutchScorePage() {
                   <button
                     type="button"
                     onClick={retakeQuiz}
-                    className="text-sm transition hover:text-white"
-                    style={{ color: MUTED }}
+                    className={cn("text-sm transition hover:text-white", quizMutedClass("dark"))}
                   >
                     {experienceCopy.results.retake}
                   </button>
@@ -418,10 +432,9 @@ function ClutchScorePage() {
                 {!saved ? (
                   <form
                     onSubmit={saveResults}
-                    className="mt-10 border-t pt-10"
-                    style={{ borderColor: BORDER }}
+                    className="mt-10 border-t border-[#242424] pt-10"
                   >
-                    <p className="text-center text-sm" style={{ color: MUTED }}>
+                    <p className={cn("text-center text-sm", quizMutedClass("dark"))}>
                       {clutchScoreQuiz.result.emailHint}
                     </p>
                     <div className="mx-auto mt-4 flex max-w-md flex-col gap-2 sm:flex-row">
@@ -432,8 +445,7 @@ function ClutchScorePage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={clutchScoreQuiz.result.emailPlaceholder}
-                        className="h-12 flex-1 rounded-full border px-5 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-lime"
-                        style={{ borderColor: BORDER, background: "#121212" }}
+                        className="h-12 flex-1 rounded-full border border-[#242424] bg-[#121212] px-5 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-lime"
                       />
                       <button
                         type="submit"
@@ -478,15 +490,15 @@ function ClutchScorePage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className={CARD}
+                className={quizCardClass("light")}
               >
-                <p className="text-xs uppercase tracking-wider" style={{ color: MUTED }}>
+                <p className="text-xs uppercase tracking-wider text-muted-ink">
                   Step {quickStep + 1} of {quickStepOrder.length}
                 </p>
-                <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+                <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
                   {quickStepCopy.headline}
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
+                <p className="mt-3 text-sm leading-relaxed text-muted-ink">
                   {quickStepCopy.subheadline}
                 </p>
 
@@ -496,19 +508,16 @@ function ClutchScorePage() {
                       key={opt.value}
                       type="button"
                       onClick={() => setQuick((prev) => ({ ...prev, [quickFieldKey]: opt.value }))}
-                      className={`rounded-2xl border px-4 py-4 text-left transition ${
-                        quickSelected === opt.value ? "border-lime bg-lime/10" : ""
-                      }`}
-                      style={{
-                        borderColor: quickSelected === opt.value ? undefined : BORDER,
-                        background: quickSelected === opt.value ? undefined : "#121212",
-                      }}
+                      className={cn(
+                        "rounded-2xl border px-4 py-4 text-left transition",
+                        quickSelected === opt.value
+                          ? "border-lime bg-lime/10"
+                          : "border-ink/10 bg-mist/30",
+                      )}
                     >
-                      <div className="font-medium text-white">{opt.label}</div>
+                      <div className="font-medium text-ink">{opt.label}</div>
                       {"description" in opt && opt.description ? (
-                        <div className="mt-1 text-xs" style={{ color: MUTED }}>
-                          {opt.description}
-                        </div>
+                        <div className="mt-1 text-xs text-muted-ink">{opt.description}</div>
                       ) : null}
                     </button>
                   ))}
@@ -525,8 +534,7 @@ function ClutchScorePage() {
                   <button
                     type="button"
                     onClick={goBackQuick}
-                    className="inline-flex items-center gap-2 text-sm transition hover:text-white"
-                    style={{ color: MUTED }}
+                    className="inline-flex items-center gap-2 text-sm text-muted-ink transition hover:text-ink"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back
@@ -549,19 +557,21 @@ function ClutchScorePage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className={CARD}
+                className={quizCardClass("light")}
               >
-                <p className="text-xs uppercase tracking-wider" style={{ color: MUTED }}>
+                <p className="text-xs uppercase tracking-wider text-muted-ink">
                   Step {step + 1} of {clutchScoreQuiz.steps.length}
                 </p>
                 <h1
                   id={`quiz-q-${step}`}
-                  className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl"
+                  className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl"
                 >
                   {current.question}
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
-                  {calculatorMessaging.fullProfileSub}
+                <p className="mt-3 text-sm leading-relaxed text-muted-ink">
+                  {step === 0
+                    ? "This helps personalize your hydration estimates — not medical labeling."
+                    : calculatorMessaging.fullProfileSub}
                 </p>
 
                 <div
@@ -576,18 +586,15 @@ function ClutchScorePage() {
                       role="radio"
                       aria-checked={selected === opt.value}
                       onClick={() => selectOption(opt.value)}
-                      className={`w-full rounded-2xl border px-5 py-4 text-left transition ${
-                        selected === opt.value ? "border-lime bg-lime/10" : ""
-                      }`}
-                      style={{
-                        borderColor: selected === opt.value ? undefined : BORDER,
-                        background: selected === opt.value ? undefined : "#121212",
-                      }}
+                      className={cn(
+                        "w-full rounded-2xl border px-5 py-4 text-left transition",
+                        selected === opt.value
+                          ? "border-lime bg-lime/10"
+                          : "border-ink/10 bg-mist/30",
+                      )}
                     >
-                      <div className="font-medium text-white">{opt.label}</div>
-                      <div className="mt-1 text-sm" style={{ color: MUTED }}>
-                        {opt.description}
-                      </div>
+                      <div className="font-medium text-ink">{opt.label}</div>
+                      <div className="mt-1 text-sm text-muted-ink">{opt.description}</div>
                     </button>
                   ))}
                 </div>
@@ -599,8 +606,7 @@ function ClutchScorePage() {
                   <button
                     type="button"
                     onClick={goBackFull}
-                    className="inline-flex items-center gap-2 text-sm transition hover:text-white"
-                    style={{ color: MUTED }}
+                    className="inline-flex items-center gap-2 text-sm text-muted-ink transition hover:text-ink"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back
@@ -619,7 +625,7 @@ function ClutchScorePage() {
             )}
           </AnimatePresence>
 
-          <p className="mt-8 text-center text-xs" style={{ color: MUTED }}>
+          <p className={cn("mt-8 text-center text-xs", isReport ? quizMutedClass("dark") : "text-muted-ink")}>
             Performance insights for educational and training purposes — not medical advice.{" "}
             <Link to="/privacy" className="underline hover:text-white">
               Privacy
@@ -627,7 +633,7 @@ function ClutchScorePage() {
           </p>
         </div>
       </main>
-      <Footer />
+      <Footer variant={isReport ? "dark" : "light"} />
     </>
   );
 }

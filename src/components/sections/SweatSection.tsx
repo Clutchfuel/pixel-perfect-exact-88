@@ -11,7 +11,7 @@ const iconMap = { user: User, activity: Activity, chart: BarChart3 } as const;
 
 export function SweatSection() {
   return (
-    <Section theme="dark" id="sweat-rate">
+    <Section theme="light" id="sweat-rate">
       <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-7">
           <Reveal>
@@ -20,12 +20,12 @@ export function SweatSection() {
             </Link>
           </Reveal>
           <Reveal delay={0.08}>
-            <h2 className="mt-4 font-display text-4xl font-extrabold uppercase tracking-display text-white sm:text-5xl lg:text-[64px]">
+            <h2 className="mt-4 font-display text-4xl font-extrabold uppercase tracking-display text-ink sm:text-5xl lg:text-[64px]">
               {sweatSection.headline}
             </h2>
           </Reveal>
           <Reveal delay={0.15}>
-            <p className="mt-6 max-w-xl text-lg text-muted-dark">{sweatSection.sub}</p>
+            <p className="mt-6 max-w-xl text-lg text-muted-ink">{sweatSection.sub}</p>
           </Reveal>
 
           <div className="mt-12 space-y-6">
@@ -35,16 +35,16 @@ export function SweatSection() {
                 <Reveal key={r.title} delay={0.1 + i * 0.08}>
                   <Link
                     to={r.href}
-                    className="group flex items-start gap-5 rounded-2xl p-2 -m-2 transition hover:bg-white/[0.03]"
+                    className="group flex items-start gap-5 rounded-2xl p-2 -m-2 transition hover:bg-mist/60"
                   >
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lime/10 text-lime ring-1 ring-lime/30">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-display text-xl font-extrabold tracking-display text-white group-hover:text-lime">
+                      <h3 className="font-display text-xl font-extrabold tracking-display text-ink group-hover:text-lime">
                         {r.title}
                       </h3>
-                      <p className="mt-1 max-w-md text-base text-muted-dark">{r.copy}</p>
+                      <p className="mt-1 max-w-md text-base text-muted-ink">{r.copy}</p>
                     </div>
                   </Link>
                 </Reveal>
@@ -53,9 +53,9 @@ export function SweatSection() {
           </div>
 
           <Reveal delay={0.3}>
-            <div className="mt-12 max-w-xl rounded-3xl glass-dark p-7 lime-glow">
+            <div className="mt-12 max-w-xl rounded-3xl border border-ink/10 bg-white p-7 shadow-card">
               <div className="flex items-center justify-between">
-                <h3 className="font-display text-2xl font-extrabold tracking-display text-white">
+                <h3 className="font-display text-2xl font-extrabold tracking-display text-ink">
                   {sweatSection.card.title}
                 </h3>
                 <span className="text-xs uppercase tracking-eyebrow text-lime">Free</span>
@@ -64,18 +64,18 @@ export function SweatSection() {
                 {sweatSection.card.stats.map((s) => (
                   <div
                     key={s.label}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center"
+                    className="rounded-2xl border border-ink/8 bg-mist/40 p-4 text-center"
                   >
-                    <div className="font-display text-2xl font-extrabold tracking-display text-white">
+                    <div className="font-display text-2xl font-extrabold tracking-display text-ink">
                       {s.value}
                     </div>
-                    <div className="mt-1 text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                    <div className="mt-1 text-[11px] uppercase tracking-eyebrow text-muted-ink">
                       {s.label}
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-sm text-muted-dark">{sweatSection.card.copy}</p>
+              <p className="mt-5 text-sm text-muted-ink">{sweatSection.card.copy}</p>
               <div className="mt-6">
                 <CFButton to="/clutch-score" variant="primary" size="md">
                   {sweatSection.card.cta} →
@@ -87,7 +87,7 @@ export function SweatSection() {
 
         <div className="lg:col-span-5">
           <Reveal delay={0.15}>
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border hairline-dark">
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-ink/10">
               <OptimizedImage
                 avif={imageSets.athleteSweat.avif}
                 webp={imageSets.athleteSweat.webp}
@@ -97,7 +97,7 @@ export function SweatSection() {
                 width={1200}
                 height={1400}
               />
-              <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-lime/30 blur-3xl" />
+              <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-lime/20 blur-3xl" />
             </div>
           </Reveal>
         </div>

@@ -58,8 +58,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <>
-      <Header overDark />
-      <main id="main">
+      <Header />
+      <main id="main" className="bg-white">
         <HeroSection />
         <SystemSection />
         <SweatSection />
@@ -75,7 +75,7 @@ function Index() {
         <TestimonialsSection />
         <FinalCtaSection />
       </main>
-      <Footer />
+      <Footer variant="light" />
     </>
   );
 }

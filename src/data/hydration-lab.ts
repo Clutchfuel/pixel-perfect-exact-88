@@ -44,16 +44,16 @@ export const stepCopy = {
     subheadline: "Duration is one of the biggest factors affecting hydration demand.",
   },
   conditions: {
-    headline: "Where did you train?",
-    subheadline: "Environment shapes how much hydration support your body may need.",
+    headline: "What were your training conditions?",
+    subheadline: "You don't need the exact temperature — pick what it felt like.",
   },
   intensity: {
     headline: "How Hard Did You Train?",
     subheadline: "The harder you push, the more hydration support your body may need.",
   },
   fluids: {
-    headline: "How did you hydrate during training?",
-    subheadline: "This helps us understand your preparation and in-session habits.",
+    headline: "Did you drink during training?",
+    subheadline: "Pick the closest match. We'll estimate how much you had.",
   },
   training: {
     headline: "What's Your Primary Sport?",
@@ -81,9 +81,9 @@ export const durationOptions = [
 ] as const;
 
 export const conditionOptions = [
-  { value: "indoor", label: "Indoor / Climate Controlled", modifier: 1.0, tag: "env_indoor" },
-  { value: "mild", label: "Mild Outdoor (under 75°F)", modifier: 1.15, tag: "env_mild" },
-  { value: "hot", label: "Hot & Humid (75°F+)", modifier: 1.35, tag: "env_hot" },
+  { value: "indoor", label: "Indoor / climate controlled", modifier: 1.0, tag: "env_indoor" },
+  { value: "mild", label: "Outdoor — comfortable", modifier: 1.15, tag: "env_mild" },
+  { value: "hot", label: "Outdoor — hot or humid", modifier: 1.35, tag: "env_hot" },
 ] as const;
 
 export const intensityOptions = [
@@ -94,10 +94,10 @@ export const intensityOptions = [
 ] as const;
 
 export const fluidOptions = [
-  { value: "none", label: "None", liters: 0 },
-  { value: "some", label: "Some", liters: 0.25 },
-  { value: "16oz", label: "16 oz", liters: 0.5 },
-  { value: "32oz", label: "32 oz+", liters: 1.0 },
+  { value: "none", label: "I didn't drink during training", liters: 0 },
+  { value: "some", label: "I sipped some water", liters: 0.35 },
+  { value: "regular", label: "I drank throughout the session", liters: 0.65 },
+  { value: "heavy", label: "I drank a lot (full bottle or more)", liters: 1.0 },
 ] as const;
 
 export const bathroomOptions = [

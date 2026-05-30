@@ -10,7 +10,7 @@ const quick = calculateQuick({
   durationKey: "60",
   conditionKey: "hot",
   intensityKey: "hard",
-  fluidKey: "16oz",
+  fluidKey: "regular",
   trainingType: "running",
 });
 
@@ -26,7 +26,7 @@ const precision = calculatePrecision({
   preWeight: 180,
   postWeight: 178.5,
   durationKey: "60",
-  fluidKey: "16oz",
+  fluidKey: "regular",
   bathroomKey: "none",
   trainingType: "hybrid",
 });

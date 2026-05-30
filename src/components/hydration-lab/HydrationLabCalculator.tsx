@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowLeft, ArrowRight, Scale, Watch } from "lucide-react";
@@ -23,38 +23,49 @@ import {
   type QuickInput,
 } from "@/lib/hydration-lab";
 import { CFButton } from "@/components/CFButton";
+import { ResultsMetricsGuide } from "@/components/ResultsMetricsGuide";
+import { cn } from "@/lib/utils";
+import { optionButtonClass, quizCardClass, quizMutedClass, quizSurface } from "@/lib/quiz-surface";
 
-const { accent: ACCENT, border: BORDER, surface: SURFACE, textSecondary: MUTED } = hydrationLabBrand;
+const ACCENT = hydrationLabBrand.accent;
+const DARK = quizSurface.dark;
 
 type StepId = keyof typeof stepCopy;
 
-type OptionButtonProps = {
+function OptionButton({
+  selected,
+  onClick,
+  label,
+  theme,
+}: {
   selected: boolean;
   onClick: () => void;
   label: string;
-};
-
-function OptionButton({ selected, onClick, label }: OptionButtonProps) {
+  theme: "light" | "dark";
+}) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="w-full rounded-2xl border px-5 py-4 text-left transition"
-      style={{
-        borderColor: selected ? ACCENT : BORDER,
-        background: selected ? "rgba(183, 255, 0, 0.08)" : SURFACE,
-      }}
-    >
-      <div className="font-medium text-white">{label}</div>
+    <button type="button" onClick={onClick} className={optionButtonClass(theme, selected)}>
+      <div className={cn("font-medium", theme === "light" ? "text-ink" : "text-white")}>{label}</div>
     </button>
   );
 }
 
-function PerformanceCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function PerformanceCard({
+  children,
+  theme,
+  className = "",
+}: {
+  children: React.ReactNode;
+  theme: "light" | "dark";
+  className?: string;
+}) {
+  if (theme === "light") {
+    return <div className={cn(quizCardClass("light"), className)}>{children}</div>;
+  }
   return (
     <div
-      className={`rounded-[20px] border p-8 md:p-10 ${className}`}
-      style={{ borderColor: BORDER, background: SURFACE }}
+      className={cn(quizCardClass("dark"), className)}
+      style={DARK.cardInline}
     >
       {children}
     </div>
@@ -72,14 +83,14 @@ function ResultsView({
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-      <PerformanceCard>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+      <PerformanceCard theme="dark">
+        <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass("dark"))}>
           {hydrationLabCopy.badge}
         </p>
         <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
           {hydrationLabCopy.resultsHeadline}
         </h2>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
+        <p className={cn("mt-3 text-sm leading-relaxed", quizMutedClass("dark"))}>
           {hydrationLabCopy.resultsSupporting}
         </p>
 
@@ -92,49 +103,63 @@ function ResultsView({
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border p-5" style={{ borderColor: BORDER, background: "#121212" }}>
-            <div className="text-xs uppercase tracking-wider" style={{ color: MUTED }}>
-              Hydration demand
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              label: "Sweat rate",
+              value: `${result.sweatRateLph} L/hr`,
+              sub: `${result.sweatRateOph} oz/hr`,
+            },
+            {
+              label: "Sweat loss",
+              value: `${result.totalSweatLossL} L`,
+              sub: result.modeLabel,
+            },
+            {
+              label: "Sodium loss (est.)",
+              value: `${result.sodiumLossMg.toLocaleString()} mg`,
+              sub: "Typical range for your profile",
+            },
+            ...(result.bodyMassLossKg != null
+              ? [
+                  {
+                    label: "Body mass loss",
+                    value: `${result.bodyMassLossKg} kg`,
+                    sub: "From pre/post weight",
+                  },
+                ]
+              : []),
+          ].map((metric) => (
+            <div
+              key={metric.label}
+              className="rounded-2xl border p-5"
+              style={{ borderColor: DARK.optionBorder, background: DARK.optionBg }}
+            >
+              <div className={cn("text-xs uppercase tracking-wider", quizMutedClass("dark"))}>
+                {metric.label}
+              </div>
+              <div className="mt-2 font-display text-2xl font-bold text-white">{metric.value}</div>
+              <div className={cn("mt-1 text-sm", quizMutedClass("dark"))}>{metric.sub}</div>
             </div>
-            <div className="mt-2 font-display text-3xl font-bold text-white">
-              {result.sweatRateLph}{" "}
-              <span className="text-base font-normal" style={{ color: MUTED }}>
-                L/hr
-              </span>
-            </div>
-            <div className="mt-1 text-sm" style={{ color: MUTED }}>
-              {result.sweatRateOph} oz/hr
-            </div>
-          </div>
-          <div className="rounded-2xl border p-5" style={{ borderColor: BORDER, background: "#121212" }}>
-            <div className="text-xs uppercase tracking-wider" style={{ color: MUTED }}>
-              Session fluid loss
-            </div>
-            <div className="mt-2 font-display text-3xl font-bold text-white">
-              {result.totalSweatLossL}{" "}
-              <span className="text-base font-normal" style={{ color: MUTED }}>
-                L
-              </span>
-            </div>
-            <div className="mt-1 text-sm" style={{ color: MUTED }}>
-              {result.modeLabel}
-            </div>
-          </div>
+          ))}
         </div>
+
+        <ResultsMetricsGuide
+          theme="dark"
+          showBodyMass={result.bodyMassLossKg != null}
+          className="mt-10"
+        />
 
         <div className="mt-10 space-y-6 text-sm leading-relaxed text-white/90">
           <div>
             <h3 className="font-display text-lg font-bold text-white">{zone.insightTitle}</h3>
-            <p className="mt-2" style={{ color: MUTED }}>
-              {zone.insightBody}
-            </p>
+            <p className={cn("mt-2", quizMutedClass("dark"))}>{zone.insightBody}</p>
           </div>
           <div>
             <h3 className="font-display text-lg font-bold text-white">Your Game Plan</h3>
             <ul className="mt-3 space-y-2">
               {zone.gamePlan.map((item) => (
-                <li key={item} className="flex gap-3" style={{ color: MUTED }}>
+                <li key={item} className={cn("flex gap-3", quizMutedClass("dark"))}>
                   <span style={{ color: ACCENT }} aria-hidden>
                     —
                   </span>
@@ -143,12 +168,13 @@ function ResultsView({
               ))}
             </ul>
           </div>
-          <p className="text-sm" style={{ color: MUTED }}>
-            {zone.keyInsight}
-          </p>
+          <p className={cn("text-sm", quizMutedClass("dark"))}>{zone.keyInsight}</p>
         </div>
 
-        <p className="mt-10 border-t pt-6 text-xs" style={{ borderColor: BORDER, color: MUTED }}>
+        <p
+          className={cn("mt-10 border-t pt-6 text-xs", quizMutedClass("dark"))}
+          style={{ borderColor: DARK.optionBorder }}
+        >
           {hydrationLabCopy.resultsDisclaimer}
         </p>
 
@@ -160,7 +186,7 @@ function ResultsView({
             type="button"
             onClick={onRestart}
             className="rounded-full border px-5 py-2.5 text-sm font-medium text-white/70 transition hover:text-white"
-            style={{ borderColor: BORDER }}
+            style={{ borderColor: DARK.optionBorder }}
           >
             {hydrationLabCopy.resultsRetake}
           </button>
@@ -170,7 +196,11 @@ function ResultsView({
   );
 }
 
-export function HydrationLabCalculator() {
+export function HydrationLabCalculator({
+  onPhaseChange,
+}: {
+  onPhaseChange?: (phase: "intro" | "mode" | "steps" | "results") => void;
+}) {
   const [phase, setPhase] = useState<"intro" | "mode" | "steps" | "results">("intro");
   const [mode, setMode] = useState<HydrationLabMode>("quick");
   const [step, setStep] = useState(0);
@@ -212,6 +242,11 @@ export function HydrationLabCalculator() {
   const steps = mode === "quick" ? quickSteps : precisionSteps;
   const current = steps[step];
   const copy = current ? stepCopy[current] : null;
+  const stepTheme = "light" as const;
+
+  useEffect(() => {
+    onPhaseChange?.(phase);
+  }, [phase, onPhaseChange]);
 
   function restart() {
     setPhase("intro");
@@ -302,21 +337,20 @@ export function HydrationLabCalculator() {
 
   if (phase === "intro") {
     return (
-      <PerformanceCard>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+      <PerformanceCard theme={stepTheme}>
+        <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass(stepTheme))}>
           {hydrationLabCopy.badge}
         </p>
-        <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
+        <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
           {hydrationLabCopy.introHeadline}
         </h2>
-        <p className="mt-4 text-sm leading-relaxed" style={{ color: MUTED }}>
+        <p className={cn("mt-4 text-sm leading-relaxed", quizMutedClass(stepTheme))}>
           {hydrationLabCopy.introBody}
         </p>
         <button
           type="button"
           onClick={() => setPhase("mode")}
-          className="mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-black transition"
-          style={{ background: ACCENT }}
+          className="mt-10 inline-flex items-center gap-2 rounded-full bg-lime px-6 py-3 text-sm font-semibold text-ink transition hover:bg-lime-dark"
         >
           Continue
           <ArrowRight className="h-4 w-4" />
@@ -328,50 +362,33 @@ export function HydrationLabCalculator() {
   if (phase === "mode") {
     return (
       <div className="space-y-4">
-        <p className="text-center text-sm" style={{ color: MUTED }}>
+        <p className={cn("text-center text-sm", quizMutedClass(stepTheme))}>
           How would you like to build your profile?
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() => selectMode("precision")}
-            className="rounded-[20px] border p-6 text-left transition hover:border-[#B7FF00]/40"
-            style={{ borderColor: BORDER, background: SURFACE }}
-          >
-            <Scale className="h-5 w-5" style={{ color: ACCENT }} />
-            <div className="mt-4 font-display text-lg font-bold text-white">
-              {hydrationLabCopy.modePrecision.label}
-            </div>
-            <div className="mt-1 text-sm font-medium" style={{ color: ACCENT }}>
-              {hydrationLabCopy.modePrecision.hint}
-            </div>
-            <p className="mt-3 text-sm" style={{ color: MUTED }}>
-              {hydrationLabCopy.modePrecision.description}
-            </p>
-          </button>
-          <button
-            type="button"
-            onClick={() => selectMode("quick")}
-            className="rounded-[20px] border p-6 text-left transition hover:border-[#B7FF00]/40"
-            style={{ borderColor: BORDER, background: SURFACE }}
-          >
-            <Watch className="h-5 w-5" style={{ color: ACCENT }} />
-            <div className="mt-4 font-display text-lg font-bold text-white">
-              {hydrationLabCopy.modeQuick.label}
-            </div>
-            <div className="mt-1 text-sm font-medium" style={{ color: ACCENT }}>
-              {hydrationLabCopy.modeQuick.hint}
-            </div>
-            <p className="mt-3 text-sm" style={{ color: MUTED }}>
-              {hydrationLabCopy.modeQuick.description}
-            </p>
-          </button>
+          {(
+            [
+              { mode: "precision" as const, icon: Scale, copy: hydrationLabCopy.modePrecision },
+              { mode: "quick" as const, icon: Watch, copy: hydrationLabCopy.modeQuick },
+            ] as const
+          ).map(({ mode: m, icon: Icon, copy: c }) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => selectMode(m)}
+              className="rounded-[20px] border border-ink/10 bg-white p-6 text-left shadow-sm transition hover:border-lime/50"
+            >
+              <Icon className="h-5 w-5 text-lime" />
+              <div className="mt-4 font-display text-lg font-bold text-ink">{c.label}</div>
+              <div className="mt-1 text-sm font-medium text-lime">{c.hint}</div>
+              <p className={cn("mt-3 text-sm", quizMutedClass(stepTheme))}>{c.description}</p>
+            </button>
+          ))}
         </div>
         <button
           type="button"
           onClick={() => setPhase("intro")}
-          className="mx-auto mt-4 flex items-center gap-2 text-sm transition hover:text-white"
-          style={{ color: MUTED }}
+          className={cn("mx-auto mt-4 flex items-center gap-2 text-sm transition hover:text-ink", quizMutedClass(stepTheme))}
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -389,31 +406,25 @@ export function HydrationLabCalculator() {
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
       >
-        <PerformanceCard>
+        <PerformanceCard theme={stepTheme}>
           <div className="mb-8 flex items-center justify-between gap-4">
-            <span className="text-xs uppercase tracking-wider" style={{ color: MUTED }}>
+            <span className={cn("text-xs uppercase tracking-wider", quizMutedClass(stepTheme))}>
               Step {step + 1} of {steps.length}
             </span>
-            <div
-              className="h-1 flex-1 max-w-[100px] overflow-hidden rounded-full"
-              style={{ background: BORDER }}
-            >
+            <div className="h-1 flex-1 max-w-[100px] overflow-hidden rounded-full bg-ink/10">
               <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${((step + 1) / steps.length) * 100}%`,
-                  background: ACCENT,
-                }}
+                className="h-full rounded-full bg-lime transition-all duration-500"
+                style={{ width: `${((step + 1) / steps.length) * 100}%` }}
               />
             </div>
           </div>
 
           {copy ? (
             <>
-              <h2 className="font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
                 {copy.headline}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed" style={{ color: MUTED }}>
+              <p className={cn("mt-3 text-sm leading-relaxed", quizMutedClass(stepTheme))}>
                 {copy.subheadline}
               </p>
             </>
@@ -428,8 +439,7 @@ export function HydrationLabCalculator() {
                 value={caloriesText}
                 onChange={(e) => setCaloriesText(e.target.value)}
                 placeholder="e.g. 520"
-                className="h-14 w-full rounded-2xl border px-4 text-xl text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#B7FF00]"
-                style={{ borderColor: BORDER, background: "#121212" }}
+                className="h-14 w-full rounded-2xl border border-ink/15 bg-mist/30 px-4 text-xl text-ink placeholder:text-ink/35 focus:outline-none focus:ring-1 focus:ring-lime"
               />
             )}
 
@@ -441,11 +451,12 @@ export function HydrationLabCalculator() {
                       key={u}
                       type="button"
                       onClick={() => setPrecision((p) => ({ ...p, weightUnit: u }))}
-                      className="rounded-full px-4 py-1.5 text-xs font-semibold uppercase"
-                      style={{
-                        background: precision.weightUnit === u ? ACCENT : BORDER,
-                        color: precision.weightUnit === u ? "#0A0A0A" : "#fff",
-                      }}
+                      className={cn(
+                        "rounded-full px-4 py-1.5 text-xs font-semibold uppercase",
+                        precision.weightUnit === u
+                          ? "bg-lime text-ink"
+                          : "bg-mist/50 text-ink",
+                      )}
                     >
                       {u}
                     </button>
@@ -457,8 +468,7 @@ export function HydrationLabCalculator() {
                   value={preWeightText}
                   onChange={(e) => setPreWeightText(e.target.value)}
                   placeholder={`Pre-training (${precision.weightUnit})`}
-                  className="h-14 w-full rounded-2xl border px-4 text-lg text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#B7FF00]"
-                  style={{ borderColor: BORDER, background: "#121212" }}
+                  className="h-14 w-full rounded-2xl border border-ink/15 bg-mist/30 px-4 text-lg text-ink placeholder:text-ink/35 focus:outline-none focus:ring-1 focus:ring-lime"
                 />
               </>
             )}
@@ -470,8 +480,7 @@ export function HydrationLabCalculator() {
                 value={postWeightText}
                 onChange={(e) => setPostWeightText(e.target.value)}
                 placeholder={`Post-training (${precision.weightUnit})`}
-                className="h-14 w-full rounded-2xl border px-4 text-lg text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#B7FF00]"
-                style={{ borderColor: BORDER, background: "#121212" }}
+                className="h-14 w-full rounded-2xl border border-ink/15 bg-mist/30 px-4 text-lg text-ink placeholder:text-ink/35 focus:outline-none focus:ring-1 focus:ring-lime"
               />
             )}
 
@@ -479,6 +488,7 @@ export function HydrationLabCalculator() {
               durationOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={
                     mode === "quick"
                       ? quick.durationKey === opt.value
@@ -498,6 +508,7 @@ export function HydrationLabCalculator() {
               conditionOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={quick.conditionKey === opt.value}
                   onClick={() => setQuick((q) => ({ ...q, conditionKey: opt.value }))}
                   label={opt.label}
@@ -509,6 +520,7 @@ export function HydrationLabCalculator() {
               intensityOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={quick.intensityKey === opt.value}
                   onClick={() => setQuick((q) => ({ ...q, intensityKey: opt.value }))}
                   label={opt.label}
@@ -519,6 +531,7 @@ export function HydrationLabCalculator() {
               fluidOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={
                     mode === "quick" ? quick.fluidKey === opt.value : precision.fluidKey === opt.value
                   }
@@ -536,6 +549,7 @@ export function HydrationLabCalculator() {
               bathroomOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={precision.bathroomKey === opt.value}
                   onClick={() => setPrecision((p) => ({ ...p, bathroomKey: opt.value }))}
                   label={opt.label}
@@ -546,6 +560,7 @@ export function HydrationLabCalculator() {
               trainingTypeOptions.map((opt) => (
                 <OptionButton
                   key={opt.value}
+                  theme={stepTheme}
                   selected={
                     mode === "quick"
                       ? quick.trainingType === opt.value
@@ -565,8 +580,7 @@ export function HydrationLabCalculator() {
             <button
               type="button"
               onClick={goBack}
-              className="inline-flex items-center gap-2 text-sm transition hover:text-white"
-              style={{ color: MUTED }}
+              className={cn("inline-flex items-center gap-2 text-sm transition hover:text-ink", quizMutedClass(stepTheme))}
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -575,8 +589,7 @@ export function HydrationLabCalculator() {
               type="button"
               onClick={goNext}
               disabled={!canAdvance()}
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-black transition disabled:opacity-40"
-              style={{ background: ACCENT }}
+              className="inline-flex items-center gap-2 rounded-full bg-lime px-6 py-3 text-sm font-semibold text-ink transition hover:bg-lime-dark disabled:opacity-40"
             >
               {step >= steps.length - 1 ? "See my profile" : "Next"}
               <ArrowRight className="h-4 w-4" />
@@ -591,19 +604,13 @@ export function HydrationLabCalculator() {
 export function HydrationLabHeader() {
   return (
     <div className="text-center">
-      <p
-        className="text-xs font-semibold uppercase tracking-[0.12em]"
-        style={{ color: hydrationLabBrand.textSecondary }}
-      >
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-ink">
         {hydrationLabCopy.badge}
       </p>
-      <h1 className="mt-5 font-display text-4xl font-bold tracking-tight text-white md:text-5xl">
+      <h1 className="mt-5 font-display text-4xl font-bold tracking-tight text-ink md:text-5xl">
         {hydrationLabCopy.title}
       </h1>
-      <p
-        className="mx-auto mt-4 max-w-xl text-base leading-relaxed"
-        style={{ color: hydrationLabBrand.textSecondary }}
-      >
+      <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-ink">
         {hydrationLabCopy.subtitle}
       </p>
     </div>
@@ -612,9 +619,9 @@ export function HydrationLabHeader() {
 
 export function HydrationLabFooterNote() {
   return (
-    <p className="mt-10 text-center text-xs" style={{ color: hydrationLabBrand.textSecondary }}>
+    <p className="mt-10 text-center text-xs text-muted-ink">
       Want the full experience?{" "}
-      <Link to="/clutch-score" className="text-white/80 underline hover:text-white">
+      <Link to="/clutch-score" className="text-ink underline hover:opacity-80">
         Unlock your Clutch Score
       </Link>
     </p>

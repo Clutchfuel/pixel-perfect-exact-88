@@ -5,11 +5,11 @@ export const clutchScoreQuiz = {
   steps: [
     {
       id: "bodyType",
-      question: "Which best describes your build?",
+      question: "What's your typical build?",
       options: [
-        { value: "lighter", label: "Lighter frame", description: "Under 160 lbs / lean build" },
-        { value: "average", label: "Average build", description: "160–200 lbs / athletic" },
-        { value: "heavier", label: "Heavier frame", description: "200+ lbs / power athlete" },
+        { value: "lighter", label: "Lean or lighter build", description: "Smaller frame for your sport" },
+        { value: "average", label: "Average athletic build", description: "Typical build for how you train" },
+        { value: "heavier", label: "Broader or heavier build", description: "More muscle mass or larger frame" },
       ],
     },
     {
