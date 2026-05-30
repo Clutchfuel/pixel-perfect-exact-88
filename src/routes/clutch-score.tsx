@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Droplets } from "lucide-react";
+import { ArrowLeft, ArrowRight, Droplets, Flame } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/Badge";
@@ -10,7 +10,14 @@ import { ScoreRing } from "@/components/ScoreRing";
 import { CFButton } from "@/components/CFButton";
 import { FormConsent } from "@/components/FormConsent";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
+import { DeviceConnectSection } from "@/components/DeviceConnectSection";
 import { clutchScoreQuiz, type QuizAnswers } from "@/data/clutch-score";
+import {
+  calculatorMessaging,
+  quickEstimateFields,
+  type CalculatorMode,
+  type QuickEstimateAnswers,
+} from "@/data/calculator";
 import { calculateClutchScore, getProfileCopy, type ClutchScoreResult } from "@/lib/clutch-score";
 import { leadErrorMessage } from "@/lib/form-errors";
 import { makeMeta, canonical } from "@/lib/seo";
@@ -26,7 +33,7 @@ export const Route = createFileRoute("/clutch-score")({
     meta: makeMeta({
       title: "Clutch Score — Personalized Hydration Profile | ClutchFuel",
       description:
-        "Answer 5 quick questions and unlock your Clutch Score, sweat profile, and personalized hydration guidance in under 60 seconds.",
+        "Quick estimate or full profile — optional calories and device sync ready. Personalized hydration insights in under 15 seconds.",
       path: "/clutch-score",
       image: DEFAULT_OG_IMAGE,
     }),
@@ -43,9 +50,56 @@ const emptyAnswers = (): QuizAnswers => ({
   goal: "",
 });
 
+const emptyQuick = (): QuickEstimateAnswers => ({
+  sport: "",
+  duration: "",
+  intensity: "",
+  sweatLevel: "",
+  hydrationFeeling: "",
+});
+
+function parseCalories(value: string): number | undefined {
+  const n = Number(value.trim());
+  if (!value.trim() || !Number.isFinite(n) || n < 50 || n > 5000) return undefined;
+  return Math.round(n);
+}
+
+function CaloriesField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+      <label htmlFor="calories-burned" className="flex items-center gap-2 text-sm font-medium text-white">
+        <Flame className="h-4 w-4 text-lime" aria-hidden />
+        {calculatorMessaging.caloriesLabel}
+      </label>
+      <input
+        id="calories-burned"
+        type="number"
+        min={50}
+        max={5000}
+        inputMode="numeric"
+        placeholder="e.g. 420"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-2 h-11 w-full rounded-xl border border-white/15 bg-dark/50 px-4 text-white placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-lime"
+      />
+      <p className="mt-2 text-xs text-muted-dark">{calculatorMessaging.caloriesHint}</p>
+      <p className="mt-2 text-xs text-white/50">{calculatorMessaging.caloriesDisclaimer}</p>
+    </div>
+  );
+}
+
 function ClutchScorePage() {
+  const [mode, setMode] = useState<CalculatorMode>("quick");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswers>(emptyAnswers);
+  const [quick, setQuick] = useState<QuickEstimateAnswers>(emptyQuick);
+  const [caloriesInput, setCaloriesInput] = useState("");
   const [result, setResult] = useState<ClutchScoreResult | null>(null);
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -57,6 +111,14 @@ function ClutchScorePage() {
   const isLast = step === clutchScoreQuiz.steps.length - 1;
   const field = current?.id;
   const selected = field ? answers[field] : "";
+  const caloriesBurned = parseCalories(caloriesInput);
+
+  const quickComplete =
+    quick.sport &&
+    quick.duration &&
+    quick.intensity &&
+    quick.sweatLevel &&
+    quick.hydrationFeeling;
 
   function selectOption(value: string) {
     if (!field) return;
@@ -67,20 +129,38 @@ function ClutchScorePage() {
     setResult(null);
     setStep(0);
     setAnswers(emptyAnswers());
+    setQuick(emptyQuick());
+    setCaloriesInput("");
     setEmail("");
     setSaved(false);
     setTurnstileToken("");
+  }
+
+  function runScore() {
+    const calories = parseCalories(caloriesInput);
+    if (mode === "quick") {
+      if (!quickComplete) return;
+      const scored = calculateClutchScore({ mode: "quick", quick, caloriesBurned: calories });
+      setResult(scored);
+      trackEvent("clutch_score_complete", {
+        score: scored.score,
+        profile: scored.profile,
+        mode: "quick",
+      });
+      return;
+    }
+    const finalAnswers = { ...answers, [field!]: selected } as QuizAnswers;
+    setAnswers(finalAnswers);
+    const scored = calculateClutchScore({ mode: "full", answers: finalAnswers, caloriesBurned: calories });
+    setResult(scored);
+    trackEvent("clutch_score_complete", { score: scored.score, profile: scored.profile, mode: "full" });
   }
 
   function goNext() {
     if (!selected || !field) return;
     trackEvent("clutch_score_step", { step: String(step + 1) });
     if (isLast) {
-      const finalAnswers = { ...answers, [field]: selected } as QuizAnswers;
-      setAnswers(finalAnswers);
-      const scored = calculateClutchScore(finalAnswers);
-      setResult(scored);
-      trackEvent("clutch_score_complete", { score: scored.score, profile: scored.profile });
+      runScore();
       return;
     }
     setStep((s) => s + 1);
@@ -99,12 +179,17 @@ function ClutchScorePage() {
     if (!result || !email) return;
     setSubmitting(true);
     try {
+      const payload =
+        mode === "quick"
+          ? { mode: "quick" as const, quick, caloriesBurned }
+          : { mode: "full" as const, answers, caloriesBurned };
+
       const res = await fetch("/api/leads/clutch-score", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          answers,
+          ...payload,
           marketingConsent: true,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
@@ -124,7 +209,11 @@ function ClutchScorePage() {
 
   const progress = result
     ? 100
-    : Math.round(((step + (selected ? 1 : 0)) / clutchScoreQuiz.steps.length) * 100);
+    : mode === "quick"
+      ? quickComplete
+        ? 100
+        : 40
+      : Math.round(((step + (selected ? 1 : 0)) / clutchScoreQuiz.steps.length) * 100);
 
   return (
     <>
@@ -147,13 +236,36 @@ function ClutchScorePage() {
         <div className="pointer-events-none absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime/15 blur-[140px]" />
 
         <div className="relative mx-auto max-w-2xl px-6 md:px-10">
+          {!result && (
+            <div className="mb-6 flex rounded-full border border-white/10 bg-white/5 p-1">
+              {(["quick", "full"] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => {
+                    setMode(m);
+                    setStep(0);
+                    setResult(null);
+                  }}
+                  className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+                    mode === m ? "bg-lime text-ink" : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  {m === "quick"
+                    ? calculatorMessaging.quickEstimateTitle
+                    : calculatorMessaging.fullProfileTitle}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div
             className="mb-8 h-1.5 overflow-hidden rounded-full bg-white/10"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={progress}
-            aria-label="Quiz progress"
+            aria-label="Calculator progress"
           >
             <div
               className="h-full rounded-full bg-lime transition-all duration-500"
@@ -187,7 +299,46 @@ function ClutchScorePage() {
                   <ScoreRing value={result.score} label="Clutch Score" />
                 </div>
 
-                <ul className="mt-10 space-y-3">
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                      Session intensity
+                    </div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-white">
+                      {result.sessionIntensity}
+                    </div>
+                    <div className="text-[11px] text-muted-dark">estimated</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                      Est. sweat rate
+                    </div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-white">
+                      {result.estimatedSweatRateLhr} L/hr
+                    </div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+                    <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                      Est. fluid loss
+                    </div>
+                    <div className="mt-1 font-display text-2xl font-extrabold text-white">
+                      {result.estimatedFluidLossOz} oz
+                    </div>
+                  </div>
+                </div>
+
+                {result.caloriesUsed && (
+                  <p className="mt-4 text-center text-xs text-lime">
+                    Calories included as a supporting intensity signal — hydration still driven by sweat
+                    profile and session load.
+                  </p>
+                )}
+
+                <p className="mt-6 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/85">
+                  {result.hydrationRecommendation}
+                </p>
+
+                <ul className="mt-8 space-y-3">
                   {result.hydrationGuidance.map((tip) => (
                     <li
                       key={tip}
@@ -212,7 +363,7 @@ function ClutchScorePage() {
                     onClick={retakeQuiz}
                     className="text-sm text-muted-dark underline-offset-4 hover:text-white hover:underline"
                   >
-                    Retake quiz
+                    Retake
                   </button>
                 </div>
 
@@ -258,6 +409,68 @@ function ClutchScorePage() {
                   </p>
                 )}
               </motion.div>
+            ) : mode === "quick" ? (
+              <motion.div
+                key="quick"
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                className="rounded-3xl glass-dark p-8 md:p-12 lime-glow"
+              >
+                <h1 className="font-display text-3xl font-extrabold tracking-display text-white md:text-4xl">
+                  {calculatorMessaging.quickEstimateTitle}
+                </h1>
+                <p className="mt-2 text-sm text-muted-dark">{calculatorMessaging.quickEstimateSub}</p>
+
+                <div className="mt-8 space-y-6">
+                  {(Object.keys(quickEstimateFields) as (keyof typeof quickEstimateFields)[]).map(
+                    (key) => {
+                      const fieldDef = quickEstimateFields[key];
+                      return (
+                        <fieldset key={key}>
+                          <legend className="text-sm font-medium text-white">{fieldDef.label}</legend>
+                          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                            {fieldDef.options.map((opt) => (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() =>
+                                  setQuick((prev) => ({ ...prev, [key]: opt.value }))
+                                }
+                                className={`rounded-xl border px-3 py-3 text-left text-sm transition ${
+                                  quick[key] === opt.value
+                                    ? "border-lime bg-lime/10 text-white"
+                                    : "border-white/10 bg-white/5 text-white/80 hover:border-white/25"
+                                }`}
+                              >
+                                <div className="font-medium">{opt.label}</div>
+                                {"description" in opt && opt.description && (
+                                  <div className="mt-0.5 text-xs text-muted-dark">
+                                    {opt.description}
+                                  </div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </fieldset>
+                      );
+                    },
+                  )}
+                </div>
+
+                <CaloriesField value={caloriesInput} onChange={setCaloriesInput} />
+                <DeviceConnectSection />
+
+                <button
+                  type="button"
+                  onClick={runScore}
+                  disabled={!quickComplete}
+                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-lime px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-lime-dark disabled:opacity-40"
+                >
+                  Get my Clutch Score
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </motion.div>
             ) : (
               <motion.div
                 key={`step-${step}`}
@@ -275,7 +488,7 @@ function ClutchScorePage() {
                 >
                   {current.question}
                 </h1>
-                <p className="mt-2 text-sm text-muted-dark">{clutchScoreQuiz.subtitle}</p>
+                <p className="mt-2 text-sm text-muted-dark">{calculatorMessaging.fullProfileSub}</p>
 
                 <div
                   className="mt-8 space-y-3"
@@ -300,6 +513,9 @@ function ClutchScorePage() {
                     </button>
                   ))}
                 </div>
+
+                {isLast && <CaloriesField value={caloriesInput} onChange={setCaloriesInput} />}
+                {step === 0 && <DeviceConnectSection />}
 
                 <div className="mt-10 flex items-center justify-between gap-4">
                   <button
@@ -326,7 +542,7 @@ function ClutchScorePage() {
           </AnimatePresence>
 
           <p className="mt-8 text-center text-xs text-muted-dark">
-            Not medical advice. For training hydration guidance only.{" "}
+            Estimated performance-based hydration insights — not medical advice.{" "}
             <Link to="/privacy" className="underline hover:text-white">
               Privacy
             </Link>

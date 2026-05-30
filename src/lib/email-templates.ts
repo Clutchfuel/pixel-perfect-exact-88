@@ -18,9 +18,15 @@ export function userClutchScoreText(email: string, result: ClutchScoreResult): s
     ``,
     `Clutch Score: ${result.score}`,
     `Sweat Profile: ${result.profile}`,
+    `Estimated session intensity: ${result.sessionIntensity}/100`,
+    `Estimated sweat rate: ${result.estimatedSweatRateLhr} L/hr`,
+    `Estimated fluid loss: ${result.estimatedFluidLossOz} oz`,
+    ...(result.caloriesUsed ? [`Calories used in estimate: yes`] : []),
     ``,
     `Hydration guidance:`,
     tips,
+    ``,
+    result.hydrationRecommendation,
     ``,
     `Recommended product: ${productUrl}`,
     ``,
@@ -43,6 +49,10 @@ export function userClutchScoreHtml(email: string, result: ClutchScoreResult): s
   <p>Your Clutch Score results from <strong>${escapeHtml(SITE_NAME)}</strong>:</p>
   <p style="font-size:32px;font-weight:800;margin:16px 0">${result.score}</p>
   <p><strong>Sweat Profile:</strong> ${escapeHtml(result.profile)}</p>
+  <p><strong>Estimated intensity:</strong> ${result.sessionIntensity}/100</p>
+  <p><strong>Estimated sweat rate:</strong> ${result.estimatedSweatRateLhr} L/hr</p>
+  <p><strong>Estimated fluid loss:</strong> ${result.estimatedFluidLossOz} oz</p>
+  <p style="color:#71717A;font-size:13px">${escapeHtml(result.hydrationRecommendation)}</p>
   <p><strong>Hydration guidance:</strong></p>
   <ul>${tips}</ul>
   <p><a href="${productUrl}" style="display:inline-block;background:#C6F24E;color:#0A0A0A;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:600">View your match →</a></p>

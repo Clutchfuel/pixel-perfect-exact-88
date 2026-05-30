@@ -1,5 +1,15 @@
 import { profiles } from "@/data/home";
+import type { QuickEstimateAnswers } from "@/data/calculator";
 import type { QuizAnswers } from "@/data/clutch-score";
+import {
+  caloriesIntensityBoost,
+  estimateFluidLossOz,
+  estimateSessionIntensity,
+  estimateSweatRateLhr,
+  hydrationFeelingAdjustment,
+  quickEstimateDurationMinutes,
+  quickEstimateToQuizAnswers,
+} from "@/lib/calculator-metrics";
 
 export type SweatProfile =
   | "Balanced Sweater"
@@ -12,14 +22,22 @@ export type ClutchScoreResult = {
   profile: SweatProfile;
   hydrationGuidance: string[];
   recommendedProductSlug: string;
+  sessionIntensity: number;
+  estimatedSweatRateLhr: number;
+  estimatedFluidLossOz: number;
+  hydrationRecommendation: string;
+  caloriesUsed: boolean;
 };
+
+export type CalculatorInput =
+  | { mode: "full"; answers: QuizAnswers; caloriesBurned?: number }
+  | { mode: "quick"; quick: QuickEstimateAnswers; caloriesBurned?: number };
 
 const profileCopy = Object.fromEntries(profiles.cards.map((c) => [c.name, c.copy])) as Record<
   SweatProfile,
   string
 >;
 
-// Weights: sweat (40%), training load (25%), environment (20%), goal (10%), body (5%)
 const sweatScores = { light: 55, moderate: 72, heavy: 88 } as const;
 const loadScores = { light: 58, moderate: 74, heavy: 90 } as const;
 const envScores = { indoor: 60, mixed: 72, hot: 86 } as const;
@@ -91,15 +109,42 @@ function assertCompleteAnswers(answers: QuizAnswers): void {
   }
 }
 
-export function calculateClutchScore(answers: QuizAnswers): ClutchScoreResult {
-  assertCompleteAnswers(answers);
-
-  const raw =
+function coreHydrationScore(answers: QuizAnswers): number {
+  return (
     scoreLookup(sweatScores, answers.sweatLevel, 72) * 0.4 +
     scoreLookup(loadScores, answers.trainingLoad, 74) * 0.25 +
     scoreLookup(envScores, answers.environment, 72) * 0.2 +
     scoreLookup(goalScores, answers.goal, 78) * 0.1 +
-    scoreLookup(bodyScores, answers.bodyType, 74) * 0.05;
+    scoreLookup(bodyScores, answers.bodyType, 74) * 0.05
+  );
+}
+
+function buildHydrationRecommendation(profile: SweatProfile, fluidLossOz: number): string {
+  const replace = Math.round(fluidLossOz * 0.75);
+  return `Estimated ${fluidLossOz} oz fluid loss this session — aim to replace ~${replace} oz with electrolytes over the next few hours. Profile: ${profile}.`;
+}
+
+export function calculateClutchScore(input: CalculatorInput): ClutchScoreResult {
+  const answers =
+    input.mode === "quick" ? quickEstimateToQuizAnswers(input.quick) : input.answers;
+
+  assertCompleteAnswers(answers);
+
+  let raw = coreHydrationScore(answers);
+  const durationMinutes =
+    input.mode === "quick"
+      ? quickEstimateDurationMinutes(input.quick)
+      : input.mode === "full" && input.caloriesBurned
+        ? 60
+        : 60;
+
+  if (input.caloriesBurned) {
+    raw += caloriesIntensityBoost(input.caloriesBurned, durationMinutes);
+  }
+
+  if (input.mode === "quick") {
+    raw += hydrationFeelingAdjustment(input.quick.hydrationFeeling);
+  }
 
   const profile = resolveProfile(answers);
   const score = clamp(raw);
@@ -108,12 +153,46 @@ export function calculateClutchScore(answers: QuizAnswers): ClutchScoreResult {
     throw new Error("Invalid clutch score calculation");
   }
 
+  const sessionIntensity = estimateSessionIntensity({
+    sweatLevel: answers.sweatLevel,
+    trainingLoad: answers.trainingLoad,
+    intensity: input.mode === "quick" ? input.quick.intensity : undefined,
+    caloriesBurned: input.caloriesBurned,
+    durationMinutes,
+  });
+
+  const estimatedSweatRateLhr = estimateSweatRateLhr({
+    sweatLevel: answers.sweatLevel,
+    environment: answers.environment,
+    intensity: input.mode === "quick" ? input.quick.intensity : undefined,
+    caloriesBurned: input.caloriesBurned,
+    durationMinutes,
+  });
+
+  const estimatedFluidLossOz = estimateFluidLossOz({
+    sweatRateLhr: estimatedSweatRateLhr,
+    durationMinutes,
+  });
+
   return {
     score,
     profile,
     hydrationGuidance: guidanceByProfile[profile],
     recommendedProductSlug: productByProfile[profile],
+    sessionIntensity,
+    estimatedSweatRateLhr,
+    estimatedFluidLossOz,
+    hydrationRecommendation: buildHydrationRecommendation(profile, estimatedFluidLossOz),
+    caloriesUsed: Boolean(input.caloriesBurned && input.caloriesBurned > 0),
   };
+}
+
+/** @deprecated Use calculateClutchScore({ mode: 'full', answers }) */
+export function calculateClutchScoreFromQuiz(
+  answers: QuizAnswers,
+  caloriesBurned?: number,
+): ClutchScoreResult {
+  return calculateClutchScore({ mode: "full", answers, caloriesBurned });
 }
 
 export function getProfileCopy(profile: SweatProfile): string {

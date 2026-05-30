@@ -22,7 +22,7 @@ export const Route = createFileRoute("/api/leads/clutch-score")({
           return Response.json({ ok: false, error: "Invalid payload" }, { status: 400 });
         }
 
-        const { email, answers, turnstileToken } = parsed.data;
+        const { email, mode, answers, quick, caloriesBurned, turnstileToken } = parsed.data;
 
         if (turnstileEnabled()) {
           const valid = await verifyTurnstile(turnstileToken);
@@ -35,7 +35,10 @@ export const Route = createFileRoute("/api/leads/clutch-score")({
           return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
         }
 
-        const result = calculateClutchScore(answers);
+        const result =
+          mode === "quick" && quick
+            ? calculateClutchScore({ mode: "quick", quick, caloriesBurned })
+            : calculateClutchScore({ mode: "full", answers: answers!, caloriesBurned });
 
         try {
           await sendClutchScoreEmails(email, result);

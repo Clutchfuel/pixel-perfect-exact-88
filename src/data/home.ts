@@ -83,11 +83,11 @@ export const sweatSection = {
   card: {
     title: "Get your Clutch Score",
     stats: [
-      { value: "2 min", label: "to complete" },
-      { value: "5", label: "questions" },
+      { value: "<15 sec", label: "quick estimate" },
+      { value: "Optional", label: "calories & devices" },
       { value: "Results", label: "instantly" },
     ],
-    copy: "Answer a few quick questions and we'll estimate your hydration needs.",
+    copy: "Quick estimate for repeat use, or full profile — calories optional, wearables coming soon.",
     cta: "Unlock My Clutch Score",
   },
 };
@@ -121,11 +121,14 @@ export const howItWorks = {
 
 export const dashboard = {
   headline: "This is a real athlete performance platform.",
-  sub: "Your Clutch Score, sweat profile, and hydration trends — in one place.",
+  sub: "Your Clutch Score, sweat profile, session intensity, and hydration trends — in one place.",
   score: 87,
   scoreLabel: "Clutch Score",
   scoreDelta: "+4 this week",
   sweatProfile: { title: "Sweat Profile", value: "Heavy Sweater", sub: "1.6 L / hr avg" },
+  sessionIntensity: { label: "Session intensity", value: "78", sub: "estimated" },
+  caloriesBurned: { label: "Calories burned", value: "420", sub: "last session · from watch" },
+  fluidLoss: { label: "Est. fluid loss", value: "32 oz", sub: "personalized" },
   tiles: [
     { label: "Sessions", value: "14", sub: "last 30 days" },
     { label: "Consistency", value: "92%", sub: "hydration goals hit" },
@@ -139,12 +142,50 @@ export const dashboard = {
     { d: "Sat", v: 86 },
     { d: "Sun", v: 87 },
   ],
+  caloriesTrend: [
+    { d: "Mon", v: 310 },
+    { d: "Tue", v: 380 },
+    { d: "Wed", v: 290 },
+    { d: "Thu", v: 420 },
+    { d: "Fri", v: 360 },
+    { d: "Sat", v: 510 },
+    { d: "Sun", v: 420 },
+  ],
+  intensityTrend: [
+    { d: "Mon", v: 62 },
+    { d: "Tue", v: 68 },
+    { d: "Wed", v: 58 },
+    { d: "Thu", v: 74 },
+    { d: "Fri", v: 70 },
+    { d: "Sat", v: 82 },
+    { d: "Sun", v: 78 },
+  ],
+  sweatRateTrend: [
+    { d: "Mon", v: 1.2 },
+    { d: "Tue", v: 1.3 },
+    { d: "Wed", v: 1.1 },
+    { d: "Thu", v: 1.5 },
+    { d: "Fri", v: 1.4 },
+    { d: "Sat", v: 1.7 },
+    { d: "Sun", v: 1.6 },
+  ],
+  consistencyTrend: [
+    { d: "Mon", v: 78 },
+    { d: "Tue", v: 82 },
+    { d: "Wed", v: 80 },
+    { d: "Thu", v: 88 },
+    { d: "Fri", v: 85 },
+    { d: "Sat", v: 92 },
+    { d: "Sun", v: 92 },
+  ],
   history: [
     {
       name: "Court Session",
       time: "Today · 6:20 PM",
       score: 87,
       type: "Basketball",
+      calories: 420,
+      intensity: 78,
       href: "/athletes/basketball",
     },
     {
@@ -152,6 +193,8 @@ export const dashboard = {
       time: "Yesterday · 7:00 AM",
       score: 84,
       type: "Run",
+      calories: 510,
+      intensity: 82,
       href: "/athletes/running",
     },
     {
@@ -159,6 +202,8 @@ export const dashboard = {
       time: "Wed · 5:30 PM",
       score: 81,
       type: "Hyrox",
+      calories: 620,
+      intensity: 85,
       href: "/athletes/hyrox",
     },
     {
@@ -166,6 +211,7 @@ export const dashboard = {
       time: "Tue · 6:00 AM",
       score: 79,
       type: "Gym",
+      intensity: 68,
       href: "/athletes/gym",
     },
   ],

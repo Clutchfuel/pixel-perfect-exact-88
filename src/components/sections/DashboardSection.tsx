@@ -3,8 +3,53 @@ import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { ScoreRing } from "@/components/ScoreRing";
 import { dashboard } from "@/data/home";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from "recharts";
-import { TrendingUp, Droplets, ArrowRight } from "lucide-react";
+import { ResponsiveContainer, AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import { TrendingUp, Droplets, ArrowRight, Flame, Activity } from "lucide-react";
+
+const chartTooltipStyle = {
+  background: "oklch(0.19 0 0)",
+  border: "1px solid oklch(1 0 0 / 0.1)",
+  borderRadius: 12,
+  color: "white",
+  fontSize: 12,
+};
+
+function MiniTrendChart({
+  data,
+  dataKey,
+  label,
+  suffix = "",
+}: {
+  data: { d: string; v: number }[];
+  dataKey?: string;
+  label: string;
+  suffix?: string;
+}) {
+  return (
+    <div className="rounded-3xl glass-dark p-5">
+      <div className="text-xs uppercase tracking-eyebrow text-muted-dark">{label}</div>
+      <div className="mt-3 h-24">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+            <XAxis dataKey="d" stroke="oklch(1 0 0 / 0.25)" fontSize={9} tickLine={false} axisLine={false} />
+            <YAxis hide domain={["auto", "auto"]} />
+            <Tooltip
+              contentStyle={chartTooltipStyle}
+              formatter={(v: number) => [`${v}${suffix}`, label]}
+            />
+            <Line
+              type="monotone"
+              dataKey={dataKey ?? "v"}
+              stroke="oklch(0.92 0.18 130)"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
 
 export function DashboardSection() {
   return (
@@ -33,6 +78,36 @@ export function DashboardSection() {
               <ScoreRing value={dashboard.score} label={dashboard.scoreLabel} />
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                  <Activity className="h-3 w-3" />
+                  {dashboard.sessionIntensity.label}
+                </div>
+                <div className="mt-1 font-display text-2xl font-extrabold tracking-display text-white">
+                  {dashboard.sessionIntensity.value}
+                </div>
+                <div className="text-[11px] text-muted-dark">{dashboard.sessionIntensity.sub}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                  <Droplets className="h-3 w-3" />
+                  {dashboard.fluidLoss.label}
+                </div>
+                <div className="mt-1 font-display text-2xl font-extrabold tracking-display text-white">
+                  {dashboard.fluidLoss.value}
+                </div>
+                <div className="text-[11px] text-muted-dark">{dashboard.fluidLoss.sub}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-eyebrow text-muted-dark">
+                  <Flame className="h-3 w-3" />
+                  {dashboard.caloriesBurned.label}
+                </div>
+                <div className="mt-1 font-display text-2xl font-extrabold tracking-display text-white">
+                  {dashboard.caloriesBurned.value}
+                </div>
+                <div className="text-[11px] text-muted-dark">{dashboard.caloriesBurned.sub}</div>
+              </div>
               {dashboard.tiles.map((t) => (
                 <div key={t.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <div className="text-[11px] uppercase tracking-eyebrow text-muted-dark">
@@ -65,20 +140,11 @@ export function DashboardSection() {
                   {dashboard.sweatProfile.value}
                 </div>
                 <div className="mt-1 text-sm text-muted-dark">{dashboard.sweatProfile.sub}</div>
-                <div className="mt-5 flex h-16 items-end gap-1.5">
-                  {[35, 55, 48, 70, 62, 88, 80].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-sm bg-lime/70"
-                      style={{ height: `${h}%`, opacity: 0.3 + (i / 7) * 0.7 }}
-                    />
-                  ))}
-                </div>
               </Link>
 
               <div className="rounded-3xl glass-dark p-6 sm:col-span-3">
                 <div className="text-xs uppercase tracking-eyebrow text-muted-dark">
-                  Hydration trend · 7 days
+                  Clutch Score · 7 days
                 </div>
                 <div className="mt-1 font-display text-2xl font-extrabold tracking-display text-white">
                   +12% consistency
@@ -109,20 +175,7 @@ export function DashboardSection() {
                         axisLine={false}
                         width={28}
                       />
-                      <Tooltip
-                        contentStyle={{
-                          background: "oklch(0.19 0 0)",
-                          border: "1px solid oklch(1 0 0 / 0.1)",
-                          borderRadius: 12,
-                          color: "white",
-                          fontSize: 12,
-                        }}
-                        cursor={{
-                          stroke: "oklch(0.92 0.18 130)",
-                          strokeWidth: 1,
-                          strokeDasharray: "3 3",
-                        }}
-                      />
+                      <Tooltip contentStyle={chartTooltipStyle} />
                       <Area
                         type="monotone"
                         dataKey="v"
@@ -134,6 +187,17 @@ export function DashboardSection() {
                   </ResponsiveContainer>
                 </div>
               </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              <MiniTrendChart data={dashboard.caloriesTrend} label="Calories · 7 days" />
+              <MiniTrendChart data={dashboard.intensityTrend} label="Intensity · 7 days" />
+              <MiniTrendChart
+                data={dashboard.sweatRateTrend}
+                label="Sweat rate · 7 days"
+                suffix=" L/hr"
+              />
+              <MiniTrendChart data={dashboard.consistencyTrend} label="Hydration consistency" suffix="%" />
             </div>
 
             <div className="rounded-3xl glass-dark p-6">
@@ -156,6 +220,8 @@ export function DashboardSection() {
                         <div className="truncate font-medium text-white">{h.name}</div>
                         <div className="text-xs text-muted-dark">
                           {h.time} · {h.type}
+                          {"calories" in h && h.calories ? ` · ${h.calories} cal` : ""}
+                          {"intensity" in h && h.intensity ? ` · intensity ${h.intensity}` : ""}
                         </div>
                       </div>
                       <div className="font-display text-xl font-extrabold tracking-display text-lime">

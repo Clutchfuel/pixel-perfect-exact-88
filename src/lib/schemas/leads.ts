@@ -14,6 +14,16 @@ export const quizAnswersSchema = z.object({
   goal: goalSchema,
 });
 
+export const quickEstimateSchema = z.object({
+  sport: z.string().min(1),
+  duration: z.enum(["30", "45", "60", "90"]),
+  intensity: z.enum(["low", "moderate", "high"]),
+  sweatLevel: sweatLevelSchema,
+  hydrationFeeling: z.enum(["good", "okay", "depleted"]),
+});
+
+export const caloriesBurnedSchema = z.number().int().min(50).max(5000).optional();
+
 export const marketingConsentSchema = z.literal(true, {
   errorMap: () => ({ message: "Marketing consent is required" }),
 });
@@ -35,7 +45,14 @@ export const newsletterSchema = z.object({
 
 export const clutchScoreSubmitSchema = z.object({
   email: z.string().email().max(254),
-  answers: quizAnswersSchema,
+  mode: z.enum(["full", "quick"]).default("full"),
+  answers: quizAnswersSchema.optional(),
+  quick: quickEstimateSchema.optional(),
+  caloriesBurned: caloriesBurnedSchema,
   marketingConsent: marketingConsentSchema,
   turnstileToken: z.string().optional(),
-});
+}).refine(
+  (data) =>
+    (data.mode === "full" && data.answers) || (data.mode === "quick" && data.quick),
+  { message: "Invalid calculator payload" },
+);
