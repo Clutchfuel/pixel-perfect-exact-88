@@ -13,11 +13,8 @@ async function sendResend(opts: {
 }) {
   const apiKey = getEnv("RESEND_API_KEY");
   if (!apiKey) {
-    if (import.meta.env.DEV) {
-      console.info("[leads] RESEND_API_KEY not set — skipping email", opts);
-      return { ok: true as const, skipped: true };
-    }
-    throw new Error("Email service not configured");
+    console.info("[leads] RESEND_API_KEY not set — skipping email", opts);
+    return { ok: true as const, skipped: true };
   }
 
   const res = await fetch("https://api.resend.com/emails", {

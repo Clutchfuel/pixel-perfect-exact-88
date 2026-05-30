@@ -7,6 +7,7 @@
     "dev": "vite dev",
     "setup": "test -f .dev.vars || cp .dev.vars.example .dev.vars",
     "build": "vite build",
+    "postbuild": "node scripts/postbuild-server-entry.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
