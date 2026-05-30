@@ -1,19 +1,13 @@
 #!/usr/bin/env node
 /**
- * Download and trim elite endurance clutch hero videos from Mixkit.
- *
- * Mixkit CDN requires Referer header or downloads return 403.
- * License: https://mixkit.co/license/#videoFree
+ * Download and trim real clutch hero clips from YouTube (HYROX Worlds, parkrun, etc.).
  *
  * Usage: node scripts/fetch-clutch-videos.mjs
  *
- * Rubric (all four must pass):
- * - High stakes: outcome still in doubt (place, PR, finish, cutoff)
- * - Pressure/scarcity: final meters, last reps, visible clock
- * - Individual accountability: one athlete's action decides the result
- * - Elite intensity: max effort, race context, heavy implements — reject jogs/warm-ups
+ * Requires: yt-dlp, ffmpeg
  *
- * Backups if primary fails QA: 32809, 40742, 52088, 52104, 49046
+ * Rubric: clutch moment + elite intensity (see hero-slideshow.ts).
+ * Timestamps scrubbed from source videos — adjust start/end if a clip drifts.
  */
 
 import { execSync } from "node:child_process";
@@ -22,46 +16,46 @@ import { join } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..");
 const OUT_DIR = join(ROOT, "public/videos/clutch");
-const TMP = join(ROOT, ".tmp/clutch-dl");
+const TMP = join(ROOT, ".tmp/yt-clips");
 
 const VF = "scale=1280:-2,unsharp=3:3:0.6:3:3:0.0";
 
-/** @type {{ id: string; start: number; dur: number; out: string; note: string }[]} */
+/** @type {{ youtubeId: string; start: number; end: number; out: string; note: string }[]} */
 const CLIPS = [
   {
-    id: "587",
-    start: 4.0,
-    dur: 3.0,
+    youtubeId: "la8Ml7hg1Es",
+    start: 8,
+    end: 14,
     out: "photo-finish.mp4",
-    note: "PASS — Sprinter attacking hurdles on race track (elite heat)",
+    note: "Last-second parkrun pass — Tooting Common",
   },
   {
-    id: "32792",
-    start: 2.5,
-    dur: 3.0,
+    youtubeId: "5s_DDfNRo0c",
+    start: 840,
+    end: 846,
     out: "pr-attempt.mp4",
-    note: "PASS — Woman running fast on track, redline stride",
+    note: "Wenisch holds off McIntyre — HYROX 2025 Worlds Men",
   },
   {
-    id: "52108",
-    start: 5.0,
-    dur: 3.0,
+    youtubeId: "QLW6RcR-F6I",
+    start: 548,
+    end: 554,
     out: "last-station.mp4",
-    note: "PASS — Burpee broad jumps, Hyrox station max effort",
+    note: "Wall-ball will to win — Wenisch (end of 11-min clip)",
   },
   {
-    id: "7358",
-    start: 3.0,
-    dur: 3.0,
+    youtubeId: "GlENBVDgb2k",
+    start: 360,
+    end: 366,
     out: "finish-line.mp4",
-    note: "PASS — Heavy sled drive, grinding functional station",
+    note: "Linda Meier sled-pull surge — HYROX 2025 Worlds Women",
   },
   {
-    id: "33130",
-    start: 4.0,
-    dur: 3.0,
+    youtubeId: "nmM8NNlMDjc",
+    start: 25,
+    end: 31,
     out: "surge-pace.mp4",
-    note: "PASS — Athlete pushing hard in rain, gritty solo effort",
+    note: "Photo-finish lean — sprint finishes compilation",
   },
 ];
 
@@ -69,61 +63,34 @@ function run(cmd) {
   execSync(cmd, { stdio: "inherit" });
 }
 
-function ffmpeg() {
+function bin(name, fallback) {
   try {
-    execSync("which ffmpeg", { stdio: "ignore" });
-    return "ffmpeg";
+    execSync(`which ${name}`, { stdio: "ignore" });
+    return name;
   } catch {
-    return "/opt/homebrew/bin/ffmpeg";
-  }
-}
-
-function ffprobe() {
-  try {
-    execSync("which ffprobe", { stdio: "ignore" });
-    return "ffprobe";
-  } catch {
-    return "/opt/homebrew/bin/ffprobe";
+    return fallback;
   }
 }
 
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT_DIR, { recursive: true });
 
-const FF = ffmpeg();
-const PROBE = ffprobe();
+const FF = bin("ffmpeg", "/opt/homebrew/bin/ffmpeg");
 
 for (const clip of CLIPS) {
-  const src = join(TMP, `${clip.id}.mp4`);
-  const url = `https://assets.mixkit.co/videos/${clip.id}/${clip.id}-720.mp4`;
+  const raw = join(TMP, `${clip.youtubeId}-raw.mp4`);
+  const url = `https://www.youtube.com/watch?v=${clip.youtubeId}`;
 
   console.log(`\n→ ${clip.out} (${clip.note})`);
-  run(`curl -fsSL -H "Referer: https://mixkit.co/" -A "Mozilla/5.0" -o "${src}" "${url}"`);
-
-  const duration = execSync(
-    `"${PROBE}" -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${src}"`,
-    { encoding: "utf8" },
-  ).trim();
-  console.log(`  source ${clip.id}: ${duration}s`);
+  run(
+    `yt-dlp --no-playlist -f "bv*[height<=720]/bv*+ba/b" --download-sections "*${clip.start}-${clip.end}" --force-keyframes-at-cuts -o "${raw}" "${url}"`,
+  );
 
   const dest = join(OUT_DIR, clip.out);
   run(
-    `"${FF}" -y -ss ${clip.start} -i "${src}" -t ${clip.dur} -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
+    `"${FF}" -y -i "${raw}" -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
   );
+  rmSync(raw, { force: true });
 }
 
-for (const legacy of [
-  "hyrox-sled.mp4",
-  "hyrox-run.mp4",
-  "hyrox-station.mp4",
-  "run-club-pack.mp4",
-  "run-club-stride.mp4",
-]) {
-  try {
-    rmSync(join(OUT_DIR, legacy));
-  } catch {
-    /* already gone */
-  }
-}
-
-console.log("\n✓ Elite clutch hero videos ready in public/videos/clutch/");
+console.log("\n✓ Real clutch hero videos ready in public/videos/clutch/");
