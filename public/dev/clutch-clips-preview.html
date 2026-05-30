@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clutch Clips — hero trim preview</title>
+<style>
+  body { margin: 0; font: 15px/1.4 system-ui, sans-serif; background: #0a0a0a; color: #f5f5f5; padding: 24px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p.note { margin: 0 0 20px; color: #aaa; max-width: 720px; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  figure { margin: 0; }
+  .frame { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #111; box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+  .frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tag { position: absolute; left: 8px; top: 8px; z-index: 2; font-weight: 600; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: #0b0b0c; background: #e7fb6b; padding: 4px 7px; border-radius: 6px; }
+  .hero { position: absolute; right: 8px; top: 8px; z-index: 2; font-weight: 600; font-size: 11px; color: #fff; background: rgba(0,0,0,.65); padding: 4px 7px; border-radius: 6px; }
+  figcaption { margin-top: 10px; font-weight: 500; font-size: 14px; }
+  .trim { margin-top: 4px; font-family: ui-monospace, monospace; font-size: 12px; color: #e7fb6b; }
+  .scrub { margin-top: 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .scrub input[type=number] { width: 64px; font: inherit; padding: 4px 6px; border-radius: 6px; border: 1px solid #333; background: #1a1a1a; color: #fff; }
+  .scrub button { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; cursor: pointer; }
+  .scrub button:hover { background: #333; }
+  section { margin-bottom: 32px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 0 0 12px; }
+</style>
+</head>
+<body>
+  <h1>Clutch Clips — hero trim preview</h1>
+  <p class="note">
+    Scrub start/end for each hero clip. Trim windows mirror <code>src/data/clutch-clips.ts</code>.
+    Serve locally: <code>bun run dev</code> then open
+    <code>/dev/clutch-clips-preview.html</code>.
+  </p>
+
+  <section>
+    <h2>Hero rotation (best 5)</h2>
+    <div class="grid" id="heroGrid"></div>
+  </section>
+
+  <section>
+    <h2>Full catalog</h2>
+    <div class="grid" id="allGrid"></div>
+  </section>
+
+<script>
+/** Keep in sync with src/data/clutch-clips.ts */
+const CLIPS = [
+  { id:"Nat2v24yvMU", title:"Tommy Fury's viral parkrun sprint finish", tag:"Run Club", mode:"whole", heroFile:"photo-finish.mp4" },
+  { id:"Hvmhfqt0P9M", title:"Upton Court parkrun sprint finish", tag:"Run Club", mode:"whole", heroStart:19, heroEnd:25 },
+  { id:"la8Ml7hg1Es", title:"Charlotte's last-second pass at the line — Tooting", tag:"Run Club", mode:"whole", heroStart:198, heroEnd:204, heroFile:"surge-pace.mp4" },
+  { id:"PYTjfSUscT0", title:"HYROX photo-finish at the line", tag:"HYROX", mode:"whole", heroStart:20, heroEnd:26, heroFile:"last-station.mp4" },
+  { id:"CRR5R7b6Kn0", title:"The closest finish ever — photo finish", tag:"Endurance", mode:"whole", heroStart:26, heroEnd:32 },
+  { id:"5s_DDfNRo0c", title:"Wenisch holds off McIntyre — HYROX 2025 Worlds (Men)", tag:"HYROX", mode:"slice", start:840, end:846, heroFile:"pr-attempt.mp4" },
+  { id:"GlENBVDgb2k", title:"Linda Meier takes the title — HYROX 2025 Worlds (Women)", tag:"HYROX", mode:"slice", start:360, end:366, heroFile:"finish-line.mp4" },
+  { id:"vW77ak0aoj0", title:"Founder vs. founder — 5K showdown finish", tag:"Run Club", mode:"slice", start:540, end:546 },
+  { id:"QH4KJ-z-KqY", title:"Frantic 1500m kick — Karlsruhe", tag:"Track", mode:"slice", start:150, end:156 },
+  { id:"J_HRZcZvKWk", title:"Jakob's closing kick — 5000m, Roma 2024", tag:"Track", mode:"slice", start:720, end:726 },
+];
+
+const HERO_IDS = new Set(["5s_DDfNRo0c","GlENBVDgb2k","PYTjfSUscT0","Nat2v24yvMU","la8Ml7hg1Es"]);
+
+function trimWindow(clip) {
+  if (clip.mode === "slice") return { start: clip.start, end: clip.end };
+  if (clip.heroStart != null && clip.heroEnd != null) return { start: clip.heroStart, end: clip.heroEnd };
+  return { start: 0, end: 6 };
+}
+
+function card(clip, opts = {}) {
+  const { start, end } = trimWindow(clip);
+  const isHero = HERO_IDS.has(clip.id);
+  const mp4 = clip.heroFile ? `/videos/clutch/${clip.heroFile}` : null;
+  const fig = document.createElement("figure");
+  fig.innerHTML = `
+    <div class="frame">
+      ${mp4
+        ? `<video src="${mp4}" muted loop playsinline autoplay></video>`
+        : `<iframe src="https://www.youtube-nocookie.com/embed/${clip.id}?start=${start}&end=${end}&autoplay=0&mute=1&controls=1&rel=0" allow="autoplay"></iframe>`}
+      <span class="tag">${clip.tag}</span>
+      ${isHero ? '<span class="hero">HERO</span>' : ""}
+    </div>
+    <figcaption>${clip.title}</figcaption>
+    <div class="trim">${clip.id} · ${start}s–${end}s${clip.heroFile ? " · " + clip.heroFile : ""}</div>
+    <div class="scrub">
+      <label>start <input type="number" step="1" value="${start}" data-k="start"></label>
+      <label>end <input type="number" step="1" value="${end}" data-k="end"></label>
+      <button type="button">Preview on YouTube</button>
+    </div>`;
+  const btn = fig.querySelector("button");
+  const sIn = fig.querySelector('[data-k="start"]');
+  const eIn = fig.querySelector('[data-k="end"]');
+  btn.addEventListener("click", () => {
+    const s = Number(sIn.value), e = Number(eIn.value);
+    window.open(`https://www.youtube.com/watch?v=${clip.id}&t=${s}s`, "_blank");
+    fig.querySelector(".trim").textContent = `${clip.id} · ${s}s–${e}s (scrubbing)`;
+  });
+  return fig;
+}
+
+const heroGrid = document.getElementById("heroGrid");
+const allGrid = document.getElementById("allGrid");
+CLIPS.filter(c => HERO_IDS.has(c.id)).forEach(c => heroGrid.appendChild(card(c)));
+CLIPS.forEach(c => allGrid.appendChild(card(c, { full: true })));
+</script>
+</body>
+</html>

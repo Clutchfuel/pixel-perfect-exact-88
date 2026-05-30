@@ -1,5 +1,6 @@
 ﻿import type { ImageSet } from "@/assets/image-sets";
 import { imageSets } from "@/assets/image-sets";
+import { getHeroClips, type ClutchClipTag } from "@/data/clutch-clips";
 
 export type ClutchMoment = {
   id: string;
@@ -14,59 +15,72 @@ export type ClutchMoment = {
   sourceIds?: string;
 };
 
-/**
- * Homepage hero — real high-intensity clutch moments (~6s each).
- * Segments sourced via scripts/fetch-clutch-videos.mjs (yt-dlp).
- */
-export const heroClutchMoments: ClutchMoment[] = [
-  {
-    id: "photo-finish",
-    label: "Last-second pass",
-    stakes: "Final stride · place on the line",
-    sport: "Run club",
-    video: "/videos/clutch/photo-finish.mp4",
-    poster: imageSets.sportRunning,
-    alt: "Runner sprinting past a rival in the final meters at a parkrun finish line",
-    sourceIds: "la8Ml7hg1Es",
-  },
-  {
-    id: "pr-attempt",
+const TAG_SPORT: Record<ClutchClipTag, string> = {
+  HYROX: "Hyrox",
+  "Run Club": "Run club",
+  Endurance: "Endurance",
+  Track: "Track",
+};
+
+const TAG_POSTER: Record<ClutchClipTag, ImageSet> = {
+  HYROX: imageSets.sportHyrox,
+  "Run Club": imageSets.sportRunning,
+  Endurance: imageSets.sportRunning,
+  Track: imageSets.sportRunning,
+};
+
+/** Hero copy keyed by YouTube ID — derived from ClutchClips titles. */
+const HERO_COPY: Record<string, { label: string; stakes: string; alt: string }> = {
+  "5s_DDfNRo0c": {
     label: "Holds off rival",
     stakes: "Worlds podium · one move left",
-    sport: "Hyrox",
-    video: "/videos/clutch/pr-attempt.mp4",
-    poster: imageSets.sportHyrox,
-    alt: "HYROX elite athlete holding off a charging rival at Chicago Worlds",
-    sourceIds: "5s_DDfNRo0c",
+    alt: "Wenisch holding off McIntyre at HYROX 2025 Worlds Men",
   },
-  {
-    id: "last-station",
+  GlENBVDgb2k: {
+    label: "Title on the line",
+    stakes: "World champion · on the line",
+    alt: "Linda Meier taking the HYROX 2025 Worlds Women title",
+  },
+  PYTjfSUscT0: {
     label: "HYROX photo finish",
     stakes: "Finish line · result locked in",
-    sport: "Hyrox",
-    video: "/videos/clutch/last-station.mp4",
-    poster: imageSets.sportHyrox,
     alt: "Athletes lunging across the HYROX finish line in a dead-heat photo finish",
-    sourceIds: "PYTjfSUscT0",
   },
-  {
-    id: "finish-line",
-    label: "Title on the line",
-    stakes: "World champion · heavy station",
-    sport: "Hyrox",
-    video: "/videos/clutch/finish-line.mp4",
-    poster: imageSets.sportHyrox,
-    alt: "Linda Meier surging through a decisive station moment at HYROX Chicago Worlds",
-    sourceIds: "GlENBVDgb2k",
+  Nat2v24yvMU: {
+    label: "Viral sprint finish",
+    stakes: "Final meters · all-out kick",
+    alt: "Tommy Fury's viral parkrun sprint to the line",
   },
-  {
-    id: "surge-pace",
-    label: "Closest finish ever",
-    stakes: "Dead heat · lean decides it",
-    sport: "Run club",
-    video: "/videos/clutch/surge-pace.mp4",
-    poster: imageSets.sportRunning,
-    alt: "Two runners dipping at the line in the closest sprint finish imaginable",
-    sourceIds: "CRR5R7b6Kn0",
+  la8Ml7hg1Es: {
+    label: "Last-second pass",
+    stakes: "Final stride · place on the line",
+    alt: "Charlotte passing a rival in the final stride at Tooting parkrun",
   },
-];
+};
+
+function heroMomentFromClip(clip: ReturnType<typeof getHeroClips>[number]): ClutchMoment {
+  const copy = HERO_COPY[clip.id] ?? {
+    label: clip.title,
+    stakes: "On the line",
+    alt: clip.title,
+  };
+  const file = clip.heroFile!.replace(/\.mp4$/, "");
+
+  return {
+    id: file,
+    label: copy.label,
+    stakes: copy.stakes,
+    sport: TAG_SPORT[clip.tag],
+    video: `/videos/clutch/${clip.heroFile}`,
+    poster: TAG_POSTER[clip.tag],
+    alt: copy.alt,
+    sourceIds: clip.id,
+  };
+}
+
+/**
+ * Homepage hero — best 5 clutch moments (~4–6s each).
+ * Config + trim windows: src/data/clutch-clips.ts
+ * Mp4s: node scripts/fetch-clutch-videos.mjs
+ */
+export const heroClutchMoments: ClutchMoment[] = getHeroClips().map(heroMomentFromClip);

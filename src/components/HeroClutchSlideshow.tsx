@@ -180,7 +180,7 @@ export function HeroClutchSlideshow() {
           >
             <video
               ref={videoRefs[slot]}
-              className="h-full w-full object-cover grayscale contrast-[1.22] saturate-[1.08] brightness-[0.92]"
+              className="h-full w-full object-cover grayscale contrast-[1.12] saturate-[1.08] brightness-[0.96]"
               src={slot === 0 ? moment.video : undefined}
               poster={moment.poster.webp}
               muted
