@@ -33,8 +33,8 @@ function SweatRatePage() {
           heroImage={imageSets.sweatRateHero}
           bgImageAlt="Macro close-up of sweat on an athlete's shoulder"
         >
-          <CFButton to="/calculator" variant="primary" size="lg">
-            Open Hydration Lab →
+          <CFButton to="/clutch-score" variant="primary" size="lg">
+            Unlock My Clutch Score
           </CFButton>
         </PageHero>
 
@@ -88,8 +88,8 @@ function SweatRatePage() {
               heat — then translates it into a per-hour hydration target.
             </p>
             <div className="mt-8">
-              <CFButton to="/calculator" variant="dark" size="lg">
-                Open Hydration Lab →
+              <CFButton to="/clutch-score" variant="dark" size="lg">
+                Unlock My Clutch Score
               </CFButton>
             </div>
           </Reveal>

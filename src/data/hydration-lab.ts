@@ -1,24 +1,76 @@
 export const hydrationLabBrand = {
-  background: "#000000",
-  accent: "#C6FF00",
+  background: "#0A0A0A",
+  surface: "#171717",
+  surfaceSecondary: "#121212",
+  border: "#242424",
+  accent: "#B7FF00",
+  textSecondary: "#A1A1A1",
 } as const;
 
 export const hydrationLabCopy = {
-  title: "ClutchFuel Hydration Lab",
+  badge: "PERFORMANCE INSIGHTS",
+  title: "Performance Starts With Preparation.",
   subtitle:
-    "An elite athlete performance tool to estimate sweat rate, fluid loss, and hydration needs for peak training outcomes.",
+    "Most athletes hydrate based on guesswork. Discover your personalized hydration profile and understand what your body needs to perform at its best.",
+  introHeadline: "Let's Build Your Hydration Profile",
+  introBody:
+    "Answer a few questions about your training habits and we'll generate your personalized Clutch Score, hydration profile, and performance insights.",
   modePrecision: {
-    label: "Precision Mode",
+    label: "Precision profile",
     hint: "I have a scale",
-    description: "Weight before and after training for the most accurate sweat rate.",
+    description: "Use pre- and post-training weight for your most accurate hydration profile.",
   },
   modeQuick: {
-    label: "Quick Mode",
+    label: "Quick profile",
     hint: "I have wearable data",
-    description: "Use calories from your watch or fitness app for a fast estimate.",
+    description: "Use calories from your watch or fitness app for a fast performance snapshot.",
   },
+  resultsHeadline: "Your Hydration Profile",
+  resultsSupporting:
+    "Your profile reflects your estimated hydration readiness based on your training data.",
+  resultsCta: "Track My Next Session",
+  resultsRetake: "Build a new profile",
   resultsDisclaimer:
-    "Important Note: Sweat rate results are estimates for educational and hydration-planning purposes only. Individual hydration needs vary based on environment, intensity, and physiology.",
+    "Performance insights are estimates for educational and hydration-planning purposes only. Individual needs vary based on environment, intensity, and physiology.",
+} as const;
+
+export const stepCopy = {
+  calories: {
+    headline: "What was your training load?",
+    subheadline: "Optional — check your Apple Watch, Garmin, WHOOP, or fitness app.",
+  },
+  duration: {
+    headline: "How Long Was Your Workout?",
+    subheadline: "Duration is one of the biggest factors affecting hydration demand.",
+  },
+  conditions: {
+    headline: "Where did you train?",
+    subheadline: "Environment shapes how much hydration support your body may need.",
+  },
+  intensity: {
+    headline: "How Hard Did You Train?",
+    subheadline: "The harder you push, the more hydration support your body may need.",
+  },
+  fluids: {
+    headline: "How did you hydrate during training?",
+    subheadline: "This helps us understand your preparation and in-session habits.",
+  },
+  training: {
+    headline: "What's Your Primary Sport?",
+    subheadline: "Your hydration needs are unique to how you train.",
+  },
+  pre: {
+    headline: "Pre-training weight",
+    subheadline: "Weigh yourself before your session for the most accurate profile.",
+  },
+  post: {
+    headline: "Post-training weight",
+    subheadline: "Weigh yourself immediately after training, before rehydrating.",
+  },
+  bathroom: {
+    headline: "Any bathroom breaks?",
+    subheadline: "This helps refine your fluid loss estimate.",
+  },
 } as const;
 
 export const durationOptions = [
@@ -69,20 +121,20 @@ export const zoneResults: Record<
   SweatRateZone,
   {
     badge: string;
-    emoji: string;
     color: string;
-    whatThisMeans: string;
+    insightTitle: string;
+    insightBody: string;
     gamePlan: string[];
     hydrationNote: string;
     keyInsight: string;
   }
 > = {
   low: {
-    badge: "LOW SWEAT RATE",
-    emoji: "🟢",
-    color: "#22c55e",
-    whatThisMeans:
-      "You lose fluid at a lower rate than most athletes. While dehydration risk is generally lower, consistency still matters — especially during longer sessions, warmer conditions, or consecutive training days.",
+    badge: "STEADY PROFILE",
+    color: "#B7FF00",
+    insightTitle: "Hydration Insight",
+    insightBody:
+      "Your hydration demand appears moderate compared to most athletes. Consistency still matters — especially during longer sessions, warmer conditions, or consecutive training days.",
     gamePlan: [
       "Prepare: Start sessions hydrated, particularly if training longer than 45 minutes",
       "Perform: Drink to thirst, increasing intake in heat or higher intensity sessions",
@@ -91,14 +143,14 @@ export const zoneResults: Record<
     hydrationNote:
       "Most of your fluid loss comes from water. Electrolytes may be helpful during longer sessions, hot conditions, or back-to-back training days.",
     keyInsight:
-      "Low sweat rate doesn't mean \"no strategy.\" Performance still drops when hydration is inconsistent across the week.",
+      "A steady profile doesn't mean no strategy. Performance still drops when hydration is inconsistent across the week.",
   },
   moderate: {
-    badge: "MODERATE SWEAT RATE",
-    emoji: "🟡",
-    color: "#eab308",
-    whatThisMeans:
-      "You lose a noticeable amount of fluid during training. Without intentional hydration, fatigue, cramping, or performance drop-offs may appear late in sessions or the following day.",
+    badge: "ELEVATED DEMAND",
+    color: "#B7FF00",
+    insightTitle: "Hydration Insight",
+    insightBody:
+      "Based on your profile, your hydration demand appears elevated compared to the average athlete. Consistent hydration before, during, and after activity may improve performance and recovery.",
     gamePlan: [
       "Prepare: Prioritize hydration 30–60 minutes before training",
       "Perform: Sip fluids consistently during sessions lasting over 60 minutes",
@@ -110,20 +162,20 @@ export const zoneResults: Record<
       "Consistency before and after training is critical to maintaining output and speeding recovery.",
   },
   high: {
-    badge: "HIGH SWEAT RATE",
-    emoji: "🔴",
-    color: "#ef4444",
-    whatThisMeans:
-      "You lose fluid rapidly during training. Dehydration and electrolyte loss can directly impact endurance, strength output, focus, and recovery if hydration isn't intentional.",
+    badge: "HIGH DEMAND",
+    color: "#B7FF00",
+    insightTitle: "Hydration Insight",
+    insightBody:
+      "Your body may need aggressive hydration support during and after training. Dehydration and electrolyte loss can directly impact endurance, strength output, focus, and recovery if preparation isn't intentional.",
     gamePlan: [
       "Prepare: Begin training hydrated and consider electrolyte support before longer or intense sessions",
       "Perform: Hydrate consistently — don't wait until thirst sets in",
       "Recover: Rehydrate promptly after training to replace both fluid and electrolyte losses",
     ],
     hydrationNote:
-      "Electrolyte replacement is critical at your sweat rate. Water alone may not be enough to sustain performance or support proper recovery.",
+      "Electrolyte replacement is critical at your demand level. Water alone may not be enough to sustain performance or support proper recovery.",
     keyInsight:
-      "Heavy sweaters perform best with a structured hydration strategy — not guesswork.",
+      "Athletes with high demand perform best with a structured hydration strategy — not guesswork.",
   },
 };
 

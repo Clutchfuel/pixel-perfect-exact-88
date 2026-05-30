@@ -1,6 +1,7 @@
 export const clutchScoreQuiz = {
-  title: "Unlock your Clutch Score",
-  subtitle: "Five quick questions. A personalized hydration profile in under 60 seconds.",
+  title: "Let's Build Your Hydration Profile",
+  subtitle:
+    "Answer a few questions about your training habits and we'll generate your personalized Clutch Score, hydration profile, and performance insights.",
   steps: [
     {
       id: "bodyType",

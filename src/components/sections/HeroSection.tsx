@@ -26,7 +26,7 @@ export function HeroSection() {
           <Reveal delay={0.22}>
             <div className="mt-8">
               <CFButton to="/clutch-score" variant="primary" size="lg">
-                {hero.cta} →
+                {hero.cta}
               </CFButton>
               <p className="mt-3 max-w-md text-sm text-white/60">{hero.supporting}</p>
             </div>

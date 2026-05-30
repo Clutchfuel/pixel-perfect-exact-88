@@ -1,10 +1,9 @@
 export const hero = {
-  badge: "Performance Insights",
-  headline: "Hydration built for the big moment.",
-  sub: "For the athletes who perform under pressure.",
+  badge: "PERFORMANCE INSIGHTS",
+  headline: "Performance Starts With Preparation.",
+  sub: "Most athletes hydrate based on guesswork. Discover your personalized hydration profile and understand what your body needs to perform at its best.",
   cta: "Unlock My Clutch Score",
-  supporting:
-    "Takes less than 60 seconds · Built for everyday athletes · Personalized hydration insights",
+  supporting: "Built for everyday athletes. Takes less than 60 seconds.",
 };
 
 export const systemSection = {
@@ -57,13 +56,13 @@ export const systemSection = {
 };
 
 export const sweatSection = {
-  eyebrow: "KNOW YOUR SWEAT RATE",
-  headline: "HYDRATION ISN'T ONE-SIZE-FITS-ALL.",
-  sub: "Your sweat rate determines how much fluid and electrolytes you actually need to perform at your best.",
+  eyebrow: "PERFORMANCE INSIGHTS",
+  headline: "PREPARATION BEATS GUESSWORK.",
+  sub: "Understand what your body needs before, during, and after training — so you show up confident and ready.",
   rows: [
     {
-      title: "Personalized Results",
-      copy: "Get hydration targets based on your body, training, and goals.",
+      title: "Personalized Profile",
+      copy: "Your hydration readiness, built from how you actually train.",
       icon: "user",
       href: "/clutch-score",
     },
@@ -81,14 +80,14 @@ export const sweatSection = {
     },
   ],
   card: {
-    title: "ClutchFuel Hydration Lab",
+    title: "Your Hydration Profile",
     stats: [
-      { value: "<60 sec", label: "quick mode" },
-      { value: "Scale or", label: "wearable data" },
-      { value: "Results", label: "instantly" },
+      { value: "<60 sec", label: "to start" },
+      { value: "Personal", label: "insights" },
+      { value: "Ready", label: "for your next session" },
     ],
-    copy: "Precision Mode with pre/post weight, or Quick Mode using calories from your watch or fitness app.",
-    cta: "Open Hydration Lab",
+    copy: "Build a profile from your training habits — confidence, preparation, and performance insights in one place.",
+    cta: "Unlock My Clutch Score",
   },
 };
 
@@ -120,8 +119,9 @@ export const howItWorks = {
 };
 
 export const dashboard = {
-  headline: "This is a real athlete performance platform.",
-  sub: "Your Clutch Score, sweat profile, session intensity, and hydration trends — in one place.",
+  headline: "Performance Starts With Preparation.",
+  sub: "Track your hydration habits, monitor trends, and improve your Clutch Score over time.",
+  welcome: "Welcome back, Jay.",
   score: 87,
   scoreLabel: "Clutch Score",
   scoreDelta: "+4 this week",

@@ -109,7 +109,7 @@ export function calculatePrecision(input: PrecisionInput): HydrationLabResult {
       zone,
       trainingType: input.trainingType,
     }),
-    modeLabel: "Calculated using Precision Mode",
+    modeLabel: "Built from your training data",
   };
 }
 
@@ -140,6 +140,6 @@ export function calculateQuick(input: QuickInput): HydrationLabResult {
       trainingType: input.trainingType,
       conditionKey: input.conditionKey,
     }),
-    modeLabel: "Estimated using Quick Mode (calorie-based)",
+    modeLabel: "Estimated from your wearable data",
   };
 }

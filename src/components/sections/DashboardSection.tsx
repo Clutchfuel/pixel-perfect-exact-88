@@ -55,7 +55,10 @@ export function DashboardSection() {
   return (
     <Section theme="dark" id="platform">
       <Reveal>
-        <h2 className="max-w-4xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-dark">
+          {dashboard.welcome}
+        </p>
+        <h2 className="mt-3 max-w-4xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
           {dashboard.headline}
         </h2>
         <p className="mt-6 max-w-2xl text-lg text-muted-dark">{dashboard.sub}</p>
@@ -121,7 +124,7 @@ export function DashboardSection() {
               ))}
             </div>
             <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-lime">
-              Unlock your score{" "}
+              View your profile{" "}
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
             </span>
           </Link>
