@@ -194,9 +194,9 @@ function HeroFrame({
     >
       {children}
 
-      {/* Readability scrims for overlaid copy */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/60 to-ink/20" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
+      {/* Readability scrims for overlaid copy + header */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/65 to-ink/25" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/20 to-ink/85" />
       <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
 
       <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex justify-end p-6 md:p-10">
