@@ -185,35 +185,40 @@ function HeroFrame({
 }) {
   return (
     <div
-      className="group relative aspect-[4/5] w-full max-h-[min(72vh,640px)] overflow-hidden rounded-2xl bg-ink md:max-h-[min(68vh,600px)] lg:aspect-[5/6] lg:max-h-[620px] lg:rounded-3xl"
+      className="absolute inset-0 bg-ink"
       onMouseEnter={() => onPause?.(true)}
       onMouseLeave={() => onPause?.(false)}
       onFocus={() => onPause?.(true)}
       onBlur={() => onPause?.(false)}
+      aria-hidden
     >
       {children}
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-ink/20" />
-      <div className="pointer-events-none absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-lime/20 blur-3xl md:h-32 md:w-32" />
+      {/* Readability scrims for overlaid copy */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/60 to-ink/20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
+      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
 
-      <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
-        <div className="mb-3 h-0.5 overflow-hidden rounded-full bg-white/15">
-          <div
-            className="h-full rounded-full bg-lime transition-[width] duration-150 ease-linear"
-            style={{ width: `${Math.min(100, progress * 100)}%` }}
-          />
+      <div className="pointer-events-auto absolute inset-x-0 bottom-0 flex justify-end p-6 md:p-10">
+        <div className="w-full max-w-xs text-right sm:max-w-sm">
+          <div className="mb-3 h-0.5 overflow-hidden rounded-full bg-white/15">
+            <div
+              className="h-full rounded-full bg-lime transition-[width] duration-150 ease-linear"
+              style={{ width: `${Math.min(100, progress * 100)}%` }}
+            />
+          </div>
+          <p className="text-[10px] font-semibold uppercase tracking-eyebrow text-lime">
+            Clutch moments
+          </p>
+          <p className="mt-1 font-display text-lg font-extrabold tracking-display text-white md:text-xl">
+            {current.label}
+          </p>
+          <p className="text-xs text-white/60">{current.sport}</p>
         </div>
-        <p className="text-[10px] font-semibold uppercase tracking-eyebrow text-lime">
-          Clutch moments
-        </p>
-        <p className="mt-1 font-display text-lg font-extrabold tracking-display text-white md:text-xl">
-          {current.label}
-        </p>
-        <p className="text-xs text-white/60">{current.sport}</p>
       </div>
 
       <div
-        className="absolute right-3 top-3 flex gap-1.5 md:right-4 md:top-4"
+        className="pointer-events-auto absolute right-6 top-28 flex gap-1.5 md:right-10 md:top-32"
         role="tablist"
         aria-label="Clutch moment videos"
       >

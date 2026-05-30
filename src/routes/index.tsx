@@ -58,7 +58,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <>
-      <Header />
+      <Header overDark />
       <main id="main">
         <HeroSection />
         <SystemSection />
