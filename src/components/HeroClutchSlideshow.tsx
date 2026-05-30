@@ -263,6 +263,9 @@ function HeroFrame({
           <p className="mt-1 font-display text-lg font-extrabold tracking-display text-white md:text-xl">
             {current.label}
           </p>
+          {current.stakes && (
+            <p className="mt-1 text-[11px] font-medium text-white/50">{current.stakes}</p>
+          )}
           <p className="text-xs text-white/60">{current.sport}</p>
         </div>
       </div>
