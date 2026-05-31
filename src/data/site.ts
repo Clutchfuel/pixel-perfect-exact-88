@@ -1,10 +1,20 @@
+/** Athlete profile app (calculator, dashboard, sessions) */
+export const ATHLETE_APP_URL =
+  (typeof import.meta !== "undefined" && import.meta.env.VITE_ATHLETE_APP_URL) ||
+  "https://clutch-athlete-insight.lovable.app";
+
 export const site = {
   name: "ClutchFuel",
   tagline: "Performance Starts With Preparation.",
-  primaryCta: "Unlock My Clutch Score",
-  ctaHref: "/clutch-score",
+  primaryCta: "Build My Athlete Profile",
+  secondaryCta: "Track A Session",
+  dashboardCta: "View My Dashboard",
+  ctaHref: `${ATHLETE_APP_URL}/calculator`,
+  sessionHref: `${ATHLETE_APP_URL}/session`,
+  dashboardHref: `${ATHLETE_APP_URL}/dashboard`,
+  loginHref: `${ATHLETE_APP_URL}/login`,
   description:
-    "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights.",
+    "ClutchFuel helps everyday athletes build a hydration profile, track sessions, and understand what their body needs to perform at its best.",
   social: {
     instagram: "https://instagram.com/clutchfuel",
     youtube: "https://youtube.com/@clutchfuel",
@@ -13,13 +23,19 @@ export const site = {
   },
 };
 
-export const navLinks = [
-  { label: "The System", to: "/system" },
-  { label: "Products", to: "/products" },
-  { label: "Athletes", to: "/athletes" },
-  { label: "Insights", to: "/insights" },
+export type NavLink = {
+  label: string;
+  to: string;
+  external?: boolean;
+};
+
+export const navLinks: NavLink[] = [
+  { label: "Home", to: "/" },
+  { label: "Build Profile", to: site.ctaHref, external: true },
+  { label: "Dashboard", to: site.dashboardHref, external: true },
   { label: "About", to: "/about" },
-] as const;
+  { label: "Login", to: site.loginHref, external: true },
+];
 
 export const footer = {
   emailPlaceholder: "you@example.com",
@@ -28,10 +44,10 @@ export const footer = {
     {
       title: "Platform",
       links: [
+        { label: "Build Profile", to: site.ctaHref },
+        { label: "Add Session", to: site.sessionHref },
+        { label: "Dashboard", to: site.dashboardHref },
         { label: "The System", to: "/system" },
-        { label: "Hydration Lab", to: "/calculator" },
-        { label: "Sweat Rate", to: "/sweat-rate" },
-        { label: "Clutch Score Platform", to: "/platform" },
         { label: "Clutch Score", to: "/clutch-score" },
       ],
     },

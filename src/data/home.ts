@@ -1,8 +1,8 @@
 export const hero = {
   badge: "PERFORMANCE INSIGHTS",
   headline: "Performance Starts With Preparation.",
-  sub: "Most athletes hydrate based on guesswork. Discover your personalized hydration profile and understand what your body needs to perform at its best.",
-  cta: "Unlock My Clutch Score",
+  sub: "Most athletes hydrate based on guesswork. ClutchFuel helps everyday athletes build a hydration profile, track sessions, and understand what their body needs to perform at its best.",
+  cta: "Build My Athlete Profile",
   supporting: "Built for everyday athletes. Takes less than 60 seconds.",
 };
 
@@ -308,6 +308,6 @@ export const testimonials = {
 
 export const finalCta = {
   headline: "Performance Starts With Preparation.",
-  sub: "Unlock your Clutch Score and train with an edge.",
-  cta: "Unlock My Clutch Score",
+  sub: "Build your athlete profile and train with hydration intelligence.",
+  cta: "Build My Athlete Profile",
 };

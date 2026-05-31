@@ -64,14 +64,36 @@ export function Header({ overDark = false }: HeaderProps) {
   }, [open]);
 
   const solid = scrolled || open;
-  const textCls = solid ? "text-ink" : overDark ? "text-white" : "text-ink";
+  const textCls = "text-white";
+
+  const NavItem = ({ l }: { l: (typeof navLinks)[number] }) =>
+    l.external ? (
+      <a
+        href={l.to}
+        className={cn("text-sm font-medium transition-colors hover:text-lime", textCls)}
+      >
+        {l.label}
+      </a>
+    ) : (
+      <Link
+        to={l.to}
+        className={cn("text-sm font-medium transition-colors hover:text-lime", textCls)}
+        activeProps={{
+          className: "text-lime underline underline-offset-8 decoration-lime decoration-2",
+        }}
+      >
+        {l.label}
+      </Link>
+    );
 
   return (
     <>
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          solid ? "bg-white/85 backdrop-blur-xl border-b border-ink/5" : "bg-transparent",
+          solid
+            ? "bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-white/10"
+            : "bg-transparent",
         )}
       >
         <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between px-6 md:h-[5.25rem] md:px-10">
@@ -81,31 +103,21 @@ export function Header({ overDark = false }: HeaderProps) {
             aria-label="ClutchFuel home"
           >
             <Logo
-              variant={solid || !overDark ? "dark" : "light"}
+              variant="light"
               size="lg"
               compact
               className="transition-opacity group-hover:opacity-90"
             />
           </Link>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">
+          <nav className="hidden items-center gap-6 lg:flex" aria-label="Main">
             {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={cn("text-sm font-medium transition-colors hover:opacity-70", textCls)}
-                activeProps={{
-                  className:
-                    "opacity-100 underline underline-offset-8 decoration-lime decoration-2",
-                }}
-              >
-                {l.label}
-              </Link>
+              <NavItem key={l.label} l={l} />
             ))}
           </nav>
 
           <div className="hidden lg:block">
-            <CFButton to={site.ctaHref} variant="primary" size="md">
+            <CFButton href={site.ctaHref} variant="primary" size="md">
               {site.primaryCta}
             </CFButton>
           </div>
@@ -119,11 +131,7 @@ export function Header({ overDark = false }: HeaderProps) {
             onClick={() => setOpen((v) => !v)}
             className={cn(
               "flex h-12 w-12 items-center justify-center rounded-full border lg:hidden",
-              solid
-                ? "border-ink/15 text-ink"
-                : overDark
-                  ? "border-white/30 text-white"
-                  : "border-ink/15 text-ink",
+              "border-white/30 text-white",
             )}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -138,22 +146,33 @@ export function Header({ overDark = false }: HeaderProps) {
         aria-modal="true"
         aria-label="Mobile navigation"
         className={cn(
-          "fixed inset-0 z-40 bg-white transition-opacity duration-300 lg:hidden",
+          "fixed inset-0 z-40 bg-[#0A0A0A] transition-opacity duration-300 lg:hidden",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       >
         <div className="flex h-full flex-col overflow-y-auto px-6 pt-24 pb-10">
           <nav className="flex flex-col gap-1" aria-label="Mobile">
-            {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="border-b border-ink/5 py-3 font-display text-3xl font-extrabold tracking-display text-ink"
-              >
-                {l.label}
-              </Link>
-            ))}
+            {navLinks.map((l) =>
+              l.external ? (
+                <a
+                  key={l.label}
+                  href={l.to}
+                  onClick={() => setOpen(false)}
+                  className="border-b border-white/10 py-3 text-2xl font-bold tracking-tight text-white"
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="border-b border-white/10 py-3 text-2xl font-bold tracking-tight text-white"
+                >
+                  {l.label}
+                </Link>
+              ),
+            )}
             <Link
               to="/insights"
               onClick={() => setOpen(false)}
@@ -163,7 +182,7 @@ export function Header({ overDark = false }: HeaderProps) {
             </Link>
           </nav>
           <div className="mt-10">
-            <CFButton to={site.ctaHref} variant="primary" size="lg" className="w-full">
+            <CFButton href={site.ctaHref} variant="primary" size="lg" className="w-full">
               {site.primaryCta}
             </CFButton>
           </div>

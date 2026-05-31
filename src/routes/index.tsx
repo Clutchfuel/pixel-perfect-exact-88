@@ -23,8 +23,7 @@ const DashboardSection = lazy(() =>
   import("@/components/sections/DashboardSection").then((m) => ({ default: m.DashboardSection })),
 );
 
-const homeDescription =
-  "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights in under 60 seconds.";
+const homeDescription = site.description;
 
 export const Route = createFileRoute("/")({
   head: () => ({
