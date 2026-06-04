@@ -11,7 +11,7 @@ type RateLimitEntry = { count: number; resetAt: number };
 async function isRateLimitedKv(kv: KVNamespace, key: string): Promise<boolean> {
   const kvKey = `rl:${key}`;
   const now = Date.now();
-  const existing = await kv.get<RateLimitEntry>(kvKey, "json");
+  const existing = await kv.get<RateLimitEntry>(kvKey, { type: "json" });
 
   if (!existing || now > existing.resetAt) {
     const entry: RateLimitEntry = { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
