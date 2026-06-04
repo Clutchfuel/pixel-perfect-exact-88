@@ -3,7 +3,7 @@ import { batch2Articles } from "./insights-batch2";
 
 export interface ArticleSection {
   heading?: string;
-  paragraphs: string[];
+  paragraphs?: string[];
   bullets?: string[];
 }
 
