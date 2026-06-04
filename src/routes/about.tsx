@@ -42,20 +42,6 @@ function AboutPage() {
           ))}
         </section>
 
-        <section className="mx-auto max-w-7xl px-6 pb-20 md:px-10">
-          <Reveal>
-            <div className="overflow-hidden rounded-3xl border border-ink/8">
-              <img
-                src={aboutTeam}
-                alt="ClutchFuel team working on hydration formulations in the lab"
-                loading="lazy"
-                width={1536}
-                height={1024}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </Reveal>
-        </section>
 
         <section className="bg-mist">
           <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
