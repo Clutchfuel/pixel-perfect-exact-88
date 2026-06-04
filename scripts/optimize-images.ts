@@ -1,8 +1,9 @@
 import { readdir } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-const assetsDir = path.join(import.meta.dir, "../src/assets");
+const assetsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "../src/assets");
 
 const files = (await readdir(assetsDir)).filter((f) => f.endsWith(".jpg"));
 
