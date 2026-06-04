@@ -21,7 +21,7 @@ const TMP = join(ROOT, ".tmp/yt-clips");
 const VF = "scale=1280:-2,unsharp=3:3:0.6:3:3:0.0";
 
 function run(cmd: string) {
-  execSync(cmd, { stdio: "inherit", shell: true });
+  execSync(cmd, { stdio: "inherit", shell: "/bin/sh" });
 }
 
 function bin(name: string, fallback: string) {
