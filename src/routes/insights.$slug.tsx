@@ -117,7 +117,7 @@ function ArticlePage() {
                       {section.heading}
                     </h2>
                   )}
-                  {section.paragraphs.map((p, pi) => (
+                  {section.paragraphs?.map((p, pi) => (
                     <p key={pi} className="mt-4 text-lg leading-relaxed text-ink/80">
                       {p}
                     </p>
