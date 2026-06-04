@@ -24,7 +24,7 @@ interface TurnstileWidgetProps {
 
 export function TurnstileWidget({ onToken, onExpire }: TurnstileWidgetProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<string>();
+  const widgetId = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     if (!turnstileEnabled() || !ref.current) return;
