@@ -15,7 +15,7 @@ import { NewsletterBrandSection } from "@/components/sections/brand/NewsletterBr
 import { makeMeta, canonical, organizationSchema, websiteSchema } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
 import { site } from "@/data/site";
-import { heroVideoPreload } from "@/components/sections/HeroSection";
+import { imageSets } from "@/assets/image-sets";
 
 const homeDescription = site.description;
 
@@ -29,16 +29,13 @@ export const Route = createFileRoute("/")({
     }),
     links: [
       ...canonical("/"),
-      ...(heroVideoPreload
-        ? [
-            {
-              rel: "preload" as const,
-              as: "video" as const,
-              href: heroVideoPreload,
-              type: "video/mp4",
-            },
-          ]
-        : []),
+      {
+        rel: "preload",
+        as: "image",
+        href: imageSets.heroDesktop.avif,
+        type: "image/avif",
+        fetchPriority: "high",
+      },
     ],
     scripts: [organizationSchema(Object.values(site.social)), websiteSchema()],
   }),
