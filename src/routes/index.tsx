@@ -6,7 +6,6 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { SystemSection } from "@/components/sections/SystemSection";
 import { SweatSection } from "@/components/sections/SweatSection";
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
-import { DashboardSectionSkeleton } from "@/components/DashboardSectionSkeleton";
 import { InsightsPreviewSection } from "@/components/sections/InsightsPreviewSection";
 import { ProfilesSection } from "@/components/sections/ProfilesSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -19,10 +18,6 @@ import { heroClutchMoments } from "@/data/hero-slideshow";
 const LongGameSection = lazy(() =>
   import("@/components/sections/LongGameSection").then((m) => ({ default: m.LongGameSection })),
 );
-const DashboardSection = lazy(() =>
-  import("@/components/sections/DashboardSection").then((m) => ({ default: m.DashboardSection })),
-);
-
 const homeDescription = site.description;
 
 export const Route = createFileRoute("/")({
@@ -63,9 +58,6 @@ function Index() {
         <SystemSection />
         <SweatSection />
         <HowItWorksSection />
-        <Suspense fallback={<DashboardSectionSkeleton />}>
-          <DashboardSection />
-        </Suspense>
         <ProfilesSection />
         <InsightsPreviewSection />
         <Suspense fallback={null}>

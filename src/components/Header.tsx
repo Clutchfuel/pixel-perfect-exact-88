@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { CFButton } from "./CFButton";
 import { Logo } from "./Logo";
 import { navLinks, site } from "@/data/site";
+import { useAthleteSession } from "@/hooks/use-athlete-session";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
@@ -13,6 +14,7 @@ interface HeaderProps {
 const MENU_ID = "mobile-nav-menu";
 
 export function Header({ overDark = false }: HeaderProps) {
+  const loggedIn = useAthleteSession();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -117,8 +119,12 @@ export function Header({ overDark = false }: HeaderProps) {
           </nav>
 
           <div className="hidden lg:block">
-            <CFButton href={site.ctaHref} variant="primary" size="md">
-              {site.primaryCta}
+            <CFButton
+              href={loggedIn ? site.sessionHref : site.ctaHref}
+              variant="primary"
+              size="md"
+            >
+              {loggedIn ? site.addSessionCta : site.primaryCta}
             </CFButton>
           </div>
 
@@ -182,8 +188,13 @@ export function Header({ overDark = false }: HeaderProps) {
             </Link>
           </nav>
           <div className="mt-10">
-            <CFButton href={site.ctaHref} variant="primary" size="lg" className="w-full">
-              {site.primaryCta}
+            <CFButton
+              href={loggedIn ? site.sessionHref : site.ctaHref}
+              variant="primary"
+              size="lg"
+              className="w-full"
+            >
+              {loggedIn ? site.addSessionCta : site.primaryCta}
             </CFButton>
           </div>
         </div>

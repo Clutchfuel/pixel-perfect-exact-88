@@ -7,14 +7,15 @@ export const site = {
   name: "ClutchFuel",
   tagline: "Performance Starts With Preparation.",
   primaryCta: "Build My Athlete Profile",
-  secondaryCta: "Track A Session",
-  dashboardCta: "View My Dashboard",
+  addSessionCta: "Add Session",
+  howItWorksHref: "/#how-it-works",
+  dashboardCta: "View Dashboard",
   ctaHref: `${ATHLETE_APP_URL}/calculator`,
   sessionHref: `${ATHLETE_APP_URL}/session`,
   dashboardHref: `${ATHLETE_APP_URL}/dashboard`,
   loginHref: `${ATHLETE_APP_URL}/login`,
   description:
-    "ClutchFuel helps everyday athletes build a hydration profile, track sessions, and understand what their body needs to perform at its best.",
+    "Hydration intelligence for everyday athletes. Know your body. Build better habits. Perform at your best.",
   social: {
     instagram: "https://instagram.com/clutchfuel",
     youtube: "https://youtube.com/@clutchfuel",

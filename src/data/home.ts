@@ -1,9 +1,22 @@
 export const hero = {
-  badge: "PERFORMANCE INSIGHTS",
   headline: "Performance Starts With Preparation.",
-  sub: "Most athletes hydrate based on guesswork. ClutchFuel helps everyday athletes build a hydration profile, track sessions, and understand what their body needs to perform at its best.",
+  tagline: "Hydration intelligence for everyday athletes.",
+  sub: "Know your body. Build better habits. Perform at your best.",
   cta: "Build My Athlete Profile",
-  supporting: "Built for everyday athletes. Takes less than 60 seconds.",
+  secondaryCta: "How It Works",
+  supporting: "Takes less than 60 seconds",
+};
+
+/** Full-width homepage dashboard mockup — no section title, product-first. */
+export const homeDashboardMockup = {
+  score: 87,
+  scoreLabel: "Clutch Score",
+  trendLabel: "↗ Improving · 7-day trend",
+  readiness: { label: "Hydration Readiness", value: "High" },
+  profile: { label: "Athlete Profile", value: "High Output Athlete", sub: "" },
+  consistency: { label: "Hydration Consistency", value: "83%" },
+  trend: { title: "7-Day Trend", value: "↗ Improving", sub: "Consistency up this week" },
+  footnote: "Build your profile to unlock your live dashboard and track every session.",
 };
 
 export const systemSection = {

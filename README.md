@@ -55,6 +55,10 @@ Copy [`.dev.vars.example`](./.dev.vars.example) via `bun run setup`. Never commi
 
 The GitHub repo is still named `pixel-perfect-exact-88` (Lovable default). To rename: GitHub → **Settings** → **General** → **Repository name** → `clutchfuel-website`, then update Lovable GitHub sync and `VITE_SITE_URL` if the published hostname changes.
 
+## Returning athletes (homepage CTAs)
+
+The marketing site and athlete app run on different origins. After login, redirect athletes back with `?athlete_session=1` (sets `cf-athlete-authenticated` in localStorage). The athlete app can also set that key when both apps share an origin in production.
+
 ## License
 
 [MIT](./LICENSE)
