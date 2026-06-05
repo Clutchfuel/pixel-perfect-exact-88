@@ -21,6 +21,9 @@ const TAG_SPORT: Record<ClutchClipTag, string> = {
   "Run Club": "Run club",
   Endurance: "Endurance",
   Track: "Track",
+  Basketball: "Basketball",
+  Football: "Football",
+  Combat: "UFC",
 };
 
 const TAG_POSTER: Record<ClutchClipTag, ImageSet> = {
@@ -28,6 +31,9 @@ const TAG_POSTER: Record<ClutchClipTag, ImageSet> = {
   "Run Club": imageSets.sportRunning,
   Endurance: imageSets.sportRunning,
   Track: imageSets.sportRunning,
+  Basketball: imageSets.sportBasketball,
+  Football: imageSets.heroClutchFootball,
+  Combat: imageSets.sportGym,
 };
 
 /** Hero copy keyed by YouTube ID — derived from ClutchClips titles. */
@@ -56,6 +62,31 @@ const HERO_COPY: Record<string, { label: string; stakes: string; alt: string }> 
     label: "Last-second pass",
     stakes: "Final stride · place on the line",
     alt: "Charlotte passing a rival in the final stride at Tooting parkrun",
+  },
+  "local-hyrox-station": {
+    label: "HYROX — last station",
+    stakes: "Final push · finish in sight",
+    alt: "Athletes pushing through the last HYROX station",
+  },
+  "local-hyrox-sled": {
+    label: "HYROX — sled drive",
+    stakes: "Power through · every meter counts",
+    alt: "Athlete driving the HYROX sled toward the line",
+  },
+  "dCLh-Ug8Fi0": {
+    label: "Game-winning shot",
+    stakes: "Buzzer · season on the line",
+    alt: "Basketball player hitting a game-winning basket",
+  },
+  pklKb7yYqHo: {
+    label: "Touchdown",
+    stakes: "End zone · game on the line",
+    alt: "Football player scoring a decisive touchdown",
+  },
+  "3pQ0AWFNdfk": {
+    label: "Championship finish",
+    stakes: "One moment · everything decided",
+    alt: "UFC fighter landing a fight-ending strike",
   },
 };
 

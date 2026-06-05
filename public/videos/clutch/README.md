@@ -12,6 +12,8 @@ bun run videos:fetch
 
 Clip list and trim windows: `src/data/clutch-clips.ts`.
 
+Homepage hero rotates **Hyrox finishes, game-winning basketball, touchdowns, UFC moments**, and more — see `HERO_CLIP_IDS` in that file.
+
 ## CDN / R2 (recommended for production)
 
 1. Upload this folder’s `*.mp4` to Cloudflare R2 (or any static host).

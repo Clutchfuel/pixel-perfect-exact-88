@@ -10,7 +10,13 @@ const TRANSITION_MS = 900;
 const PRE_END_SECONDS = 0.45;
 const TRANSITION_EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
 
-export function HeroClutchSlideshow() {
+type HeroClutchSlideshowProps = {
+  /** Full UI with moment labels; background = silent hero video only */
+  variant?: "full" | "background";
+};
+
+export function HeroClutchSlideshow({ variant = "full" }: HeroClutchSlideshowProps) {
+  const isBackground = variant === "background";
   const [visibleSlot, setVisibleSlot] = useState<0 | 1>(0);
   const [slotIndices, setSlotIndices] = useState<[number, number]>([0, 1]);
   const [paused, setPaused] = useState(false);
@@ -138,7 +144,13 @@ export function HeroClutchSlideshow() {
 
   if (reduceMotion) {
     return (
-      <HeroFrame current={current} progress={1} onSelect={goTo} activeIndex={currentIndex}>
+      <HeroFrame
+        current={current}
+        progress={1}
+        onSelect={goTo}
+        activeIndex={currentIndex}
+        isBackground={isBackground}
+      >
         <OptimizedImage
           avif={current.poster.avif}
           webp={current.poster.webp}
@@ -159,8 +171,9 @@ export function HeroClutchSlideshow() {
       progress={progress}
       onSelect={goTo}
       activeIndex={currentIndex}
-      onPause={setPaused}
+      onPause={isBackground ? undefined : setPaused}
       dipActive={dipActive}
+      isBackground={isBackground}
     >
       {([0, 1] as const).map((slot) => {
         const moment = heroClutchMoments[slotIndices[slot]]!;
@@ -185,7 +198,12 @@ export function HeroClutchSlideshow() {
               poster={moment.poster.webp}
               muted
               playsInline
+              autoPlay={slot === 0}
+              loop={false}
               preload={slot === 0 ? "auto" : "metadata"}
+              onError={() => {
+                if (isVisible) advance();
+              }}
             />
             {isVisible && (
               <motion.div
@@ -211,6 +229,7 @@ function HeroFrame({
   activeIndex,
   onPause,
   dipActive = false,
+  isBackground = false,
 }: {
   children: React.ReactNode;
   current: (typeof heroClutchMoments)[number];
@@ -219,15 +238,17 @@ function HeroFrame({
   activeIndex: number;
   onPause?: (paused: boolean) => void;
   dipActive?: boolean;
+  isBackground?: boolean;
 }) {
   return (
     <div
-      className="absolute inset-0 bg-ink"
+      className="absolute inset-0 bg-brand-base"
       onMouseEnter={() => onPause?.(true)}
       onMouseLeave={() => onPause?.(false)}
       onFocus={() => onPause?.(true)}
       onBlur={() => onPause?.(false)}
-      aria-hidden
+      aria-hidden={isBackground}
+      role={isBackground ? "presentation" : undefined}
     >
       {children}
 
@@ -244,11 +265,17 @@ function HeroFrame({
         )}
       </AnimatePresence>
 
-      {/* Readability scrims for overlaid copy + header */}
-      <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-r from-ink/95 via-ink/65 to-ink/25" />
-      <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-b from-ink/75 via-ink/20 to-ink/85" />
-      <div className="pointer-events-none absolute -bottom-20 -left-20 z-[3] h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
+      {!isBackground ? (
+        <>
+          <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-r from-ink/95 via-ink/65 to-ink/25" />
+          <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-b from-ink/75 via-ink/20 to-ink/85" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 z-[3] h-64 w-64 rounded-full bg-lime/15 blur-3xl" />
+        </>
+      ) : (
+        <div className="pointer-events-none absolute inset-0 z-[3] bg-brand-base/25" />
+      )}
 
+      {!isBackground ? (
       <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-[4] flex justify-end p-6 md:p-10">
         <div className="w-full max-w-xs text-right sm:max-w-sm">
           <div className="mb-3 h-0.5 overflow-hidden rounded-full bg-white/15">
@@ -269,7 +296,9 @@ function HeroFrame({
           <p className="mt-0.5 text-xs text-white/50">{current.sport}</p>
         </div>
       </div>
+      ) : null}
 
+      {!isBackground ? (
       <div
         className="pointer-events-auto absolute right-6 top-28 z-[4] flex gap-1.5 md:right-10 md:top-32"
         role="tablist"
@@ -290,6 +319,7 @@ function HeroFrame({
           />
         ))}
       </div>
+      ) : null}
     </div>
   );
 }

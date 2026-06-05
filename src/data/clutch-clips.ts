@@ -5,7 +5,14 @@
 
 export type ClutchClipMode = "whole" | "slice";
 
-export type ClutchClipTag = "HYROX" | "Run Club" | "Endurance" | "Track";
+export type ClutchClipTag =
+  | "HYROX"
+  | "Run Club"
+  | "Endurance"
+  | "Track"
+  | "Basketball"
+  | "Football"
+  | "Combat";
 
 export type ClutchClip = {
   id: string;
@@ -98,6 +105,7 @@ export const clutchClips: ClutchClip[] = [
     mode: "slice",
     start: 150,
     end: 156,
+    heroFile: "run-club-stride.mp4",
   },
   {
     id: "J_HRZcZvKWk",
@@ -106,16 +114,68 @@ export const clutchClips: ClutchClip[] = [
     mode: "slice",
     start: 720,
     end: 726,
+    heroFile: "hyrox-run.mp4",
+  },
+  {
+    id: "local-hyrox-station",
+    title: "HYROX — last station push",
+    tag: "HYROX",
+    mode: "whole",
+    heroFile: "hyrox-station.mp4",
+    heroStart: 0,
+    heroEnd: 6,
+  },
+  {
+    id: "local-hyrox-sled",
+    title: "HYROX — sled drive to the line",
+    tag: "HYROX",
+    mode: "whole",
+    heroFile: "hyrox-sled.mp4",
+    heroStart: 0,
+    heroEnd: 6,
+  },
+  /** Trim with scripts/fetch-clutch-videos.mjs — swap YouTube id if you prefer another clip */
+  {
+    id: "dCLh-Ug8Fi0",
+    title: "Game-winning basket — buzzer beater",
+    tag: "Basketball",
+    mode: "whole",
+    heroStart: 0,
+    heroEnd: 6,
+    heroFile: "game-winner-basketball.mp4",
+  },
+  {
+    id: "pklKb7yYqHo",
+    title: "Game-winning touchdown",
+    tag: "Football",
+    mode: "whole",
+    heroStart: 0,
+    heroEnd: 6,
+    heroFile: "touchdown-finish.mp4",
+  },
+  {
+    id: "3pQ0AWFNdfk",
+    title: "UFC — championship finish",
+    tag: "Combat",
+    mode: "whole",
+    heroStart: 4,
+    heroEnd: 10,
+    heroFile: "combat-finish.mp4",
   },
 ];
 
-/** YouTube IDs used in the homepage hero rotation (best 5). */
+/** Homepage hero rotation — big-moment clips across sports (needs hero mp4; see videos:fetch). */
 export const HERO_CLIP_IDS = [
-  "5s_DDfNRo0c",
   "GlENBVDgb2k",
+  "5s_DDfNRo0c",
   "PYTjfSUscT0",
+  "local-hyrox-station",
+  "dCLh-Ug8Fi0",
+  "pklKb7yYqHo",
+  "3pQ0AWFNdfk",
   "Nat2v24yvMU",
   "la8Ml7hg1Es",
+  "local-hyrox-sled",
 ] as const;
 
 export function getClutchClipById(id: string): ClutchClip | undefined {

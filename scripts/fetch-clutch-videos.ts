@@ -47,6 +47,10 @@ mkdirSync(OUT_DIR, { recursive: true });
 const FF = bin("ffmpeg", "/opt/homebrew/bin/ffmpeg");
 
 for (const clip of getHeroClips()) {
+  if (clip.id.startsWith("local-")) {
+    console.log(`\n→ ${clip.heroFile} (skip fetch — bundled/local trim)`);
+    continue;
+  }
   const outFile = clip.heroFile!;
   const url = `https://www.youtube.com/watch?v=${clip.id}`;
   const needsDuration = clip.mode === "whole" && clip.heroStart == null && clip.heroEnd == null;
