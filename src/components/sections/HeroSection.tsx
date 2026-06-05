@@ -1,10 +1,9 @@
 import { CFButton } from "@/components/CFButton";
-import { HeroClutchSlideshow } from "@/components/HeroClutchSlideshow";
+import { HeroClutchVideo } from "@/components/HeroClutchVideo";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { Reveal } from "@/components/Reveal";
 import { brand } from "@/data/brand-experience";
-import { imageSets } from "@/assets/image-sets";
-import { heroClutchMoments } from "@/data/hero-slideshow";
+import { HERO_REEL } from "@/data/hero-video";
 import { site } from "@/data/site";
 import { useAthleteSession } from "@/hooks/use-athlete-session";
 
@@ -15,34 +14,29 @@ export function HeroSection() {
   return (
     <section className="relative min-h-[88svh] w-full overflow-hidden bg-brand-base">
       <div className="absolute inset-0">
-        {/* Always-on fallback — bundled assets; visible when mp4s are missing on deploy */}
         <OptimizedImage
-          avif={imageSets.heroDesktop.avif}
-          webp={imageSets.heroDesktop.webp}
-          fallback={imageSets.heroDesktop.fallback}
+          avif={HERO_REEL.poster.avif}
+          webp={HERO_REEL.poster.webp}
+          fallback={HERO_REEL.poster.fallback}
           mobile={{
-            avif: imageSets.heroMobile.avif,
-            webp: imageSets.heroMobile.webp,
-            fallback: imageSets.heroMobile.fallback,
+            avif: HERO_REEL.mobilePoster.avif,
+            webp: HERO_REEL.mobilePoster.webp,
+            fallback: HERO_REEL.mobilePoster.fallback,
           }}
-          alt="Athlete preparing to perform"
+          alt={HERO_REEL.alt}
           width={1920}
           height={1080}
           priority
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-90"
         />
 
-        <div className="absolute inset-0">
-          <HeroClutchSlideshow variant="background" />
-        </div>
+        <HeroClutchVideo />
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-brand-base/95 via-brand-base/80 to-brand-base/50" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-brand-base/95 via-brand-base/78 to-brand-base/48" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-base/90 via-transparent to-brand-base/40" />
       </div>
 
-      <p className="sr-only">
-        Hero: rotating clutch moments from Hyrox, basketball, football, UFC, and endurance sport.
-      </p>
+      <p className="sr-only">{HERO_REEL.alt}</p>
 
       <div className="relative z-10 mx-auto flex min-h-[88svh] w-full max-w-7xl flex-col justify-center px-6 py-28 md:px-10 md:py-32">
         <div className="max-w-2xl">
@@ -89,5 +83,4 @@ export function HeroSection() {
   );
 }
 
-/** Preload first hero clip when mp4s exist on the host */
-export const heroVideoPreload = heroClutchMoments[0]?.video;
+export const heroVideoPreload = HERO_REEL.src;

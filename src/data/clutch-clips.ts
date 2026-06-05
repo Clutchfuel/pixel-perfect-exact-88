@@ -164,17 +164,25 @@ export const clutchClips: ClutchClip[] = [
   },
 ];
 
-/** Homepage hero rotation — big-moment clips across sports (needs hero mp4; see videos:fetch). */
-export const HERO_CLIP_IDS = [
+/** One continuous hero reel — diverse, younger everyday athletes (see videos:fetch). */
+export const HERO_REEL_FILENAME = "hero-reel.mp4";
+
+export const HERO_REEL_CLIP_IDS = [
+  "la8Ml7hg1Es",
   "GlENBVDgb2k",
-  "5s_DDfNRo0c",
+  "Nat2v24yvMU",
   "PYTjfSUscT0",
+  "5s_DDfNRo0c",
+  "QH4KJ-z-KqY",
   "local-hyrox-station",
+] as const;
+
+/** Optional individual clips (dev preview, legacy) */
+export const HERO_CLIP_IDS = [
+  ...HERO_REEL_CLIP_IDS,
   "dCLh-Ug8Fi0",
   "pklKb7yYqHo",
   "3pQ0AWFNdfk",
-  "Nat2v24yvMU",
-  "la8Ml7hg1Es",
   "local-hyrox-sled",
 ] as const;
 
@@ -182,10 +190,24 @@ export function getClutchClipById(id: string): ClutchClip | undefined {
   return clutchClips.find((c) => c.id === id);
 }
 
-export function getHeroClips(): ClutchClip[] {
-  return HERO_CLIP_IDS.map((id) => getClutchClipById(id)).filter(
+export function getHeroReelClips(): ClutchClip[] {
+  return HERO_REEL_CLIP_IDS.map((id) => getClutchClipById(id)).filter(
     (c): c is ClutchClip => c != null && c.heroFile != null,
   );
+}
+
+export function getHeroClips(): ClutchClip[] {
+  const ids = [...new Set([...HERO_CLIP_IDS, ...HERO_REEL_CLIP_IDS])];
+  return ids
+    .map((id) => getClutchClipById(id))
+    .filter((c): c is ClutchClip => c != null && c.heroFile != null);
+}
+
+export function getClipsToFetch(): ClutchClip[] {
+  const ids = [...new Set([...HERO_CLIP_IDS, ...HERO_REEL_CLIP_IDS])];
+  return ids
+    .map((id) => getClutchClipById(id))
+    .filter((c): c is ClutchClip => c != null && c.heroFile != null);
 }
 
 /** Resolved start/end seconds for hero mp4 download. */

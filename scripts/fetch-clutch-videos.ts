@@ -1,18 +1,24 @@
 #!/usr/bin/env node
 /**
- * Download and trim hero clutch clips from YouTube.
+ * Download hero segments and stitch one looping hero-reel.mp4.
  *
  * Usage: node scripts/run-ts.mjs scripts/fetch-clutch-videos.ts
  *
  * Requires: yt-dlp, ffmpeg
- * Clip list + trim windows: src/data/clutch-clips.ts
+ * Clip list: src/data/clutch-clips.ts (HERO_REEL_CLIP_IDS)
  */
 
 import { execSync } from "node:child_process";
-import { mkdirSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getHeroClips, heroTrimWindow } from "../src/data/clutch-clips.ts";
+import { platform } from "node:os";
+import {
+  getClipsToFetch,
+  getHeroReelClips,
+  heroTrimWindow,
+  HERO_REEL_FILENAME,
+} from "../src/data/clutch-clips.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = join(ROOT, "public/videos/clutch");
@@ -20,13 +26,18 @@ const TMP = join(ROOT, ".tmp/yt-clips");
 
 const VF = "scale=1280:-2,unsharp=3:3:0.6:3:3:0.0";
 
+const IS_WIN = platform() === "win32";
+
 function run(cmd: string) {
-  execSync(cmd, { stdio: "inherit", shell: "/bin/sh" });
+  execSync(cmd, {
+    stdio: "inherit",
+    shell: IS_WIN ? process.env.ComSpec ?? "cmd.exe" : "/bin/sh",
+  });
 }
 
 function bin(name: string, fallback: string) {
   try {
-    execSync(`which ${name}`, { stdio: "ignore" });
+    execSync(IS_WIN ? `where ${name}` : `which ${name}`, { stdio: "ignore" });
     return name;
   } catch {
     return fallback;
@@ -41,14 +52,41 @@ function ytDuration(id: string): number {
   return Number.parseFloat(out.trim());
 }
 
+function buildHeroReel(ff: string) {
+  const segments = getHeroReelClips()
+    .map((clip) => join(OUT_DIR, clip.heroFile!))
+    .filter((path) => existsSync(path));
+
+  if (segments.length < 2) {
+    console.warn("\n⚠ Need at least 2 segments to build hero reel. Run segment fetch first.");
+    return;
+  }
+
+  const listPath = join(TMP, "reel-concat.txt");
+  const listBody = segments
+    .map((p) => {
+      const normalized = p.replace(/\\/g, "/").replace(/'/g, "'\\''");
+      return `file '${normalized}'`;
+    })
+    .join("\n");
+  writeFileSync(listPath, listBody, { encoding: "utf8" });
+
+  const dest = join(OUT_DIR, HERO_REEL_FILENAME);
+  console.log(`\n→ Stitching ${segments.length} clips → ${HERO_REEL_FILENAME}`);
+
+  run(
+    `"${ff}" -y -f concat -safe 0 -i "${listPath}" -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
+  );
+}
+
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT_DIR, { recursive: true });
 
 const FF = bin("ffmpeg", "/opt/homebrew/bin/ffmpeg");
 
-for (const clip of getHeroClips()) {
+for (const clip of getClipsToFetch()) {
   if (clip.id.startsWith("local-")) {
-    console.log(`\n→ ${clip.heroFile} (skip fetch — bundled/local trim)`);
+    console.log(`\n→ ${clip.heroFile} (skip fetch — use existing file in public/videos/clutch/)`);
     continue;
   }
   const outFile = clip.heroFile!;
@@ -72,4 +110,6 @@ for (const clip of getHeroClips()) {
   rmSync(raw, { force: true });
 }
 
-console.log("\n✓ Hero clutch videos ready in public/videos/clutch/");
+buildHeroReel(FF);
+
+console.log(`\n✓ Hero reel ready: public/videos/clutch/${HERO_REEL_FILENAME}`);
