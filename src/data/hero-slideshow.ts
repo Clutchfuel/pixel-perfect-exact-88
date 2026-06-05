@@ -1,6 +1,7 @@
 ﻿import type { ImageSet } from "@/assets/image-sets";
 import { imageSets } from "@/assets/image-sets";
 import { getHeroClips, type ClutchClipTag } from "@/data/clutch-clips";
+import { heroVideoUrl } from "@/lib/media";
 
 export type ClutchMoment = {
   id: string;
@@ -71,7 +72,7 @@ function heroMomentFromClip(clip: ReturnType<typeof getHeroClips>[number]): Clut
     label: copy.label,
     stakes: copy.stakes,
     sport: TAG_SPORT[clip.tag],
-    video: `/videos/clutch/${clip.heroFile}`,
+    video: heroVideoUrl(clip.heroFile!),
     poster: TAG_POSTER[clip.tag],
     alt: copy.alt,
     sourceIds: clip.id,

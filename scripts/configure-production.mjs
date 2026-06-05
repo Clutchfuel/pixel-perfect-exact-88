@@ -3,7 +3,7 @@
  * Production deploy helper for Cloudflare Workers.
  * Prerequisites: `bunx wrangler login` and a populated `.dev.vars`.
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
 const DEV_VARS = ".dev.vars";
@@ -36,6 +36,18 @@ function parseDevVars(path) {
 
 function wrangler(args) {
   run("bunx", ["wrangler", ...args]);
+}
+
+function patchWranglerKvIds(prodId, previewId) {
+  const path = "wrangler.jsonc";
+  let text = readFileSync(path, "utf8");
+  const before = text;
+  text = text.replace(/"id": "[a-f0-9]{32}"/, `"id": "${prodId}"`);
+  text = text.replace(/"preview_id": "[a-f0-9]{32}"/, `"preview_id": "${previewId}"`);
+  if (text !== before) {
+    writeFileSync(path, text);
+    console.log("Updated wrangler.jsonc with RATE_LIMIT_KV namespace IDs.");
+  }
 }
 
 console.log("Checking Wrangler auth…");
@@ -74,7 +86,9 @@ if (!prodId) {
 }
 
 if (prodId && previewId) {
-  console.log(`\nUpdate wrangler.jsonc with:\n  id: "${prodId}"\n  preview_id: "${previewId}"`);
+  patchWranglerKvIds(prodId, previewId);
+} else {
+  console.warn("\nCould not resolve KV namespace IDs — update wrangler.jsonc manually.");
 }
 
 if (!existsSync(DEV_VARS)) {
@@ -106,5 +120,8 @@ for (const key of SECRET_KEYS) {
 
 console.log("\nDeploying Worker…");
 wrangler(["deploy"]);
+
+console.log("\nRunning production env verify…");
+run("node", ["scripts/verify-production-env.mjs"]);
 
 console.log("\nProduction configure complete.");

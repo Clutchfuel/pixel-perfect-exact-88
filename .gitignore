@@ -21,6 +21,9 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Hero clips — regenerate with: bun run videos:fetch (see public/videos/clutch/README.md)
+public/videos/clutch/*.mp4
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

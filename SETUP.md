@@ -46,13 +46,16 @@ bun run setup          # copies .dev.vars.example → .dev.vars
 bun run dev            # http://localhost:5173
 ```
 
-Optional env in `.dev.vars` (see `.dev.vars.example`): `RESEND_API_KEY`, Turnstile keys, `VITE_SITE_URL`.
+Optional env in `.dev.vars` (see `.dev.vars.example`): `RESEND_API_KEY`, Turnstile keys, `VITE_SITE_URL`, `ERROR_WEBHOOK_URL`, `VITE_HERO_VIDEO_CDN`.
+
+Hero videos are not in git. After clone: `bun run videos:fetch` (requires yt-dlp + ffmpeg) or set `VITE_HERO_VIDEO_CDN` — see `public/videos/clutch/README.md`.
 
 ```bash
 bun run build
 bun run preview        # postbuild creates dist/server/server.js for preview
 bun run test:e2e       # smoke tests (build + preview + curl checks)
 bun run lint
+bun run verify:production   # pre-deploy checklist
 ```
 
 ---
@@ -65,6 +68,20 @@ The TanStack Start build outputs `dist/server/index.js`; `postbuild` copies it t
 
 ---
 
+## Production secrets (Lovable)
+
+1. Copy env from `.dev.vars.example` into Lovable **Settings → Environment** (server keys without `VITE_` prefix).
+2. Enable **Turnstile** (site + secret) and **Resend** before accepting live leads.
+3. Set **`ERROR_WEBHOOK_URL`** for error monitoring (see [docs/PRODUCTION.md](./docs/PRODUCTION.md)).
+4. Run locally: `bun run verify:production --strict` before go-live.
+
 ## Cloudflare Workers (optional)
 
-Production on a custom domain (e.g. `clutchfuel.com`) uses Cloudflare Workers (`wrangler.jsonc`). That is separate from Lovable hosting and requires `wrangler deploy` plus Worker secrets (see `.dev.vars.example`).
+Production on a custom domain (e.g. `clutchfuel.com`) uses Cloudflare Workers (`wrangler.jsonc`). That is separate from Lovable hosting:
+
+```bash
+bun run verify:production
+bun run configure:production   # KV namespaces, secrets, wrangler deploy
+```
+
+See [docs/PRODUCTION.md](./docs/PRODUCTION.md) and [README.md](./README.md).

@@ -1,60 +1,31 @@
-## Goal
+# Lovable plan — status (June 2026)
 
-Fill in the missing visuals across the site, mark all product imagery as "Coming Soon", and verify every route renders cleanly.
+> **Source of truth:** GitHub `main` + Cursor. Do not re-run obsolete Lovable-only UI tasks that conflict with `SETUP.md`.
 
-## What's there today
+## Completed
 
-- Images already generated: `hero-desktop.jpg`, `hero-mobile.jpg`, `athlete-sweat.jpg` (used by home page only).
-- Every other route relies on solid color blocks / gradients with no photography.
-- Product cards (`ProductCard`, `SystemSection`, `products.$slug` hero) render an abstract "bottle silhouette" div — no label telling the user it's a placeholder.
+- **Page heroes:** `src/assets/*` (system, platform, sweat-rate, about, insights, sports, clutch-score) wired via `PageHero` / `imageSets`.
+- **Product placeholders:** `ComingSoonVisual` on product cards, system section, and PDP heroes.
+- **Clutch Score / Hydration Lab:** Full quiz UX, server-side scoring, lead APIs, email templates.
+- **Security:** CSP headers, Turnstile hooks, Zod lead schemas, rate limits, e2e smoke tests.
+- **Hero videos:** Config in `src/data/clutch-clips.ts`; MP4s generated via `bun run videos:fetch` (not stored in git). Optional `VITE_HERO_VIDEO_CDN`.
 
-## Plan
+## Ongoing / manual
 
-### 1. Generate new images (saved to `src/assets/`)
+| Item | Owner | Notes |
+|------|--------|--------|
+| Production secrets | You | Lovable env + `bun run verify:production` — see `docs/PRODUCTION.md` |
+| Turnstile + Resend | You | Required for live lead capture |
+| `ERROR_WEBHOOK_URL` | You | Monitoring webhook |
+| Hero MP4 hosting | You | `videos:fetch` locally or CDN via `VITE_HERO_VIDEO_CDN` |
+| Real product photography | Brand | UI shows "Coming Soon" until bottle assets exist |
+| Per-article insight covers | Content | Shared `insights-hero` fallback on `/insights/$slug` |
+| GitHub repo rename | Optional | `pixel-perfect-exact-88` → `clutchfuel-website` (see README) |
 
-Premium-quality photography, on-brand (athletic, clean, energetic, neutral palette + lime accent friendly):
+## Verify after changes
 
-- `system-hero.jpg` — athlete drinking from a bottle mid-training (for `/system` and `/`)
-- `platform-hero.jpg` — athlete checking phone post-workout (for `/platform`)
-- `sweat-rate-hero.jpg` — close-up sweat on skin / scale & bottle (for `/sweat-rate`)
-- `about-team.jpg` — team / lab / formulation shot (for `/about`)
-- `insights-hero.jpg` — flat-lay notebook + bottle (for `/insights` index + article fallback)
-- `sport-basketball.jpg`, `sport-running.jpg`, `sport-hyrox.jpg`, `sport-gym.jpg` — one action shot per sport (for `/athletes` cards and `/athletes/$sport` hero)
-- `clutch-score-hero.jpg` — athlete-on-phone or data overlay shot (for `/clutch-score`)
+```bash
+bun run lint && bun run test && bun run test:e2e
+```
 
-All `1536×1024` JPGs, `standard` quality. Total: 10 images.
-
-### 2. Product "Coming Soon" treatment
-
-Replace the abstract bottle div in three places with a clean badge layout:
-
-- `src/components/cards/ProductCard.tsx`
-- `src/components/sections/SystemSection.tsx`
-- `src/routes/products.$slug.tsx` (PDP hero block)
-
-Treatment: keep the existing gradient panel, center a small lime "Coming Soon" pill plus the product `name` and `stage` in display type. No fake bottle silhouette. Accent product keeps the lime glow.
-
-### 3. Wire images into pages
-
-- `PageHero` — extend to optionally accept a background image (`bgImage` prop) with a dark gradient overlay for legibility. Used by sport pages, system, platform, sweat-rate, insights, about, clutch-score.
-- `/athletes` index — show each sport's image inside `SportCard` (add `image` to `Sport` type via filename map; render as cover behind a gradient + sport name).
-- `/insights` index — hero image on top + article cards keep current clean look.
-- `/about` — split-screen with `about-team.jpg`.
-- Article fallback — show `insights-hero.jpg` at top of `/insights/$slug` until articles have their own covers.
-
-### 4. Light polish while wiring
-
-- Add a subtle `pt-32` adjustment on routes whose `PageHero` now has a bg image (so it reads as a banner not a card).
-- Ensure alt text is descriptive on every new `<img>`.
-
-### 5. Verify end-to-end
-
-- `curl` every route, confirm 200.
-- Tail dev-server log for SSR errors after navigation.
-- Spot-check `/`, `/products`, `/products/clutch-iso`, `/athletes/basketball`, `/insights`, `/about` for layout/visuals.
-
-## Out of scope
-
-- Real product photography (waiting on real bottles — that's why "Coming Soon").
-- Per-article cover images (uses shared insights hero for now).
-- Any backend/data changes.
+Published URL: https://pixel-perfect-exact-88.lovable.app (hard-refresh after GitHub push).

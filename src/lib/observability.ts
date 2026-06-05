@@ -11,6 +11,7 @@ function serializeError(error: unknown) {
 
 export function reportError(error: unknown, context?: ErrorContext): void {
   const payload = {
+    service: "clutchfuel-website",
     level: "error" as const,
     ts: new Date().toISOString(),
     ...serializeError(error),
