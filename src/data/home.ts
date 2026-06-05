@@ -1,9 +1,10 @@
+/** @deprecated Homepage uses brand.hero from brand-experience.ts */
 export const hero = {
   headline: "Performance Starts With Preparation.",
   tagline: "Hydration intelligence for everyday athletes.",
   sub: "Know your body. Build better habits. Perform at your best.",
   cta: "Build My Athlete Profile",
-  secondaryCta: "How It Works",
+  secondaryCta: "Learn How It Works",
   supporting: "Takes less than 60 seconds",
 };
 

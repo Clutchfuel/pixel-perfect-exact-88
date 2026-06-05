@@ -68,15 +68,19 @@ export function Header({ overDark = false }: HeaderProps) {
   const solid = scrolled || open;
   const textCls = "text-white";
 
-  const NavItem = ({ l }: { l: (typeof navLinks)[number] }) =>
-    l.external ? (
-      <a
-        href={l.to}
-        className={cn("text-sm font-medium transition-colors hover:text-lime", textCls)}
-      >
-        {l.label}
-      </a>
-    ) : (
+  const NavItem = ({ l }: { l: (typeof navLinks)[number] }) => {
+    const isHash = l.to.includes("#");
+    if (l.external || isHash) {
+      return (
+        <a
+          href={l.to}
+          className={cn("text-sm font-medium transition-colors hover:text-lime", textCls)}
+        >
+          {l.label}
+        </a>
+      );
+    }
+    return (
       <Link
         to={l.to}
         className={cn("text-sm font-medium transition-colors hover:text-lime", textCls)}
@@ -87,6 +91,7 @@ export function Header({ overDark = false }: HeaderProps) {
         {l.label}
       </Link>
     );
+  };
 
   return (
     <>
@@ -94,7 +99,7 @@ export function Header({ overDark = false }: HeaderProps) {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
           solid
-            ? "bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-white/10"
+            ? "bg-brand-base/90 backdrop-blur-xl border-b border-white/10"
             : "bg-transparent",
         )}
       >
@@ -118,7 +123,7 @@ export function Header({ overDark = false }: HeaderProps) {
             ))}
           </nav>
 
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-3 lg:flex">
             <CFButton
               href={loggedIn ? site.sessionHref : site.ctaHref}
               variant="primary"
@@ -156,10 +161,10 @@ export function Header({ overDark = false }: HeaderProps) {
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       >
-        <div className="flex h-full flex-col overflow-y-auto px-6 pt-24 pb-10">
+        <div className="flex h-full flex-col overflow-y-auto bg-brand-base px-6 pt-24 pb-10">
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {navLinks.map((l) =>
-              l.external ? (
+              l.external || l.to.includes("#") ? (
                 <a
                   key={l.label}
                   href={l.to}

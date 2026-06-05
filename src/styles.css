@@ -34,6 +34,11 @@
   --color-muted-dark: var(--muted-dark);
   --color-hairline: var(--hairline);
   --color-hairline-dark: var(--hairline-dark);
+  --color-brand-base: var(--brand-base);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-card: var(--brand-card);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-accent: var(--brand-accent);
 
   /* Shadcn semantic */
   --color-background: var(--background);
@@ -78,29 +83,35 @@
 :root {
   --radius: 1rem;
 
-  /* Brand — calculator-aligned dark tokens */
-  --ink: oklch(1 0 0);
-  --mist: oklch(0.7 0 0);
-  --dark: oklch(0.06 0 0);
-  --panel: oklch(0.16 0 0);
-  --surface: oklch(0.16 0 0);
-  --surface-secondary: oklch(0.14 0 0);
-  --lime: oklch(0.94 0.24 130);
-  --lime-dark: oklch(0.84 0.22 130);
-  --muted-ink: oklch(0.7 0 0);
-  --muted-dark: oklch(0.55 0 0);
+  /* Brand — performance preparation (WHOOP / Oura palette) */
+  --brand-base: #050505;
+  --brand-secondary: #0f0f10;
+  --brand-card: #141414;
+  --brand-muted: #b3b3b3;
+  --brand-accent: #c6ff4d;
+
+  --ink: #0a0a0a;
+  --mist: #e8e8e8;
+  --dark: #050505;
+  --panel: #141414;
+  --surface: #141414;
+  --surface-secondary: #0f0f10;
+  --lime: #c6ff4d;
+  --lime-dark: #b8f042;
+  --muted-ink: #b3b3b3;
+  --muted-dark: #b3b3b3;
   --hairline: oklch(0.22 0 0);
   --hairline-dark: oklch(1 0 0 / 0.08);
 
   /* Shadcn mapped to brand */
-  --background: oklch(0.06 0 0);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.16 0 0);
+  --background: #050505;
+  --foreground: #ffffff;
+  --card: #141414;
   --card-foreground: oklch(1 0 0);
   --popover: oklch(0.16 0 0);
   --popover-foreground: oklch(1 0 0);
   --primary: var(--lime);
-  --primary-foreground: oklch(0.06 0 0);
+  --primary-foreground: #050505;
   --secondary: oklch(0.14 0 0);
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.14 0 0);

@@ -1,33 +1,55 @@
 import { CFButton } from "@/components/CFButton";
-import { HomeDashboardMockup } from "@/components/HomeDashboardMockup";
-import { HeroClutchSlideshow } from "@/components/HeroClutchSlideshow";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Reveal } from "@/components/Reveal";
-import { hero } from "@/data/home";
+import { brand } from "@/data/brand-experience";
+import { imageSets } from "@/assets/image-sets";
 import { site } from "@/data/site";
 import { useAthleteSession } from "@/hooks/use-athlete-session";
 
 export function HeroSection() {
   const loggedIn = useAthleteSession();
+  const h = brand.hero;
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#0A0A0A]">
-      <div className="absolute inset-0 max-h-[520px] opacity-25 md:max-h-[560px]">
-        <HeroClutchSlideshow />
+    <section className="relative min-h-[88svh] w-full overflow-hidden bg-brand-base">
+      <div className="absolute inset-0">
+        <OptimizedImage
+          avif={imageSets.heroDesktop.avif}
+          webp={imageSets.heroDesktop.webp}
+          fallback={imageSets.heroDesktop.fallback}
+          mobile={{
+            avif: imageSets.heroMobile.avif,
+            webp: imageSets.heroMobile.webp,
+            fallback: imageSets.heroMobile.fallback,
+          }}
+          alt="Athlete in a quiet pre-workout preparation moment"
+          width={1920}
+          height={1080}
+          priority
+          className="h-full w-full object-cover object-center opacity-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-base via-brand-base/85 to-brand-base/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-base via-transparent to-brand-base/30" />
       </div>
-      <div className="pointer-events-none absolute inset-0 max-h-[520px] bg-gradient-to-b from-[#0A0A0A]/30 via-[#0A0A0A]/85 to-[#0A0A0A] md:max-h-[560px]" />
-      <div className="pointer-events-none absolute inset-x-0 top-[420px] h-48 bg-gradient-to-b from-transparent to-[#0A0A0A] md:top-[480px]" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-28 md:px-10 md:pt-32">
+      <div className="relative z-10 mx-auto flex min-h-[88svh] w-full max-w-7xl flex-col justify-center px-6 py-28 md:px-10 md:py-32">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[3.75rem]">
-            {hero.headline}
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-accent">
+            {h.tag}
+          </p>
+          <h1 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]">
+            {h.headline}
           </h1>
           <Reveal delay={0.06}>
-            <p className="mt-3 text-lg font-medium text-white/90 md:text-xl">{hero.tagline}</p>
-            <p className="mt-2 max-w-xl text-base text-muted-dark md:text-lg">{hero.sub}</p>
+            <p className="mt-4 text-lg font-medium text-white md:text-xl">{h.tagline}</p>
+            <div className="mt-4 max-w-lg space-y-1 text-base leading-relaxed text-brand-muted md:text-lg">
+              {h.supporting.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
           </Reveal>
           <Reveal delay={0.12}>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
               {loggedIn ? (
                 <>
                   <CFButton href={site.sessionHref} variant="primary" size="lg">
@@ -40,24 +62,17 @@ export function HeroSection() {
               ) : (
                 <>
                   <CFButton href={site.ctaHref} variant="primary" size="lg">
-                    {hero.cta}
+                    {h.primaryCta}
                   </CFButton>
-                  <CFButton href={site.howItWorksHref} variant="ghost-dark" size="lg">
-                    {hero.secondaryCta}
+                  <CFButton href="/#why-preparation" variant="ghost-dark" size="lg">
+                    {h.secondaryCta}
                   </CFButton>
                 </>
               )}
             </div>
-            <p className="mt-2.5 text-sm text-muted-dark">{hero.supporting}</p>
           </Reveal>
         </div>
-
-        <div className="mt-8 md:mt-10 lg:mt-12">
-          <HomeDashboardMockup />
-        </div>
       </div>
-
-      <div className="h-10 md:h-14" aria-hidden />
     </section>
   );
 }

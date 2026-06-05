@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, Youtube } from "lucide-react";
+import { Instagram, Youtube, Mic } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { footer, site } from "@/data/site";
@@ -46,7 +46,11 @@ export function Footer({ variant = "light" }: { variant?: "light" | "dark" }) {
   }
 
   return (
-    <footer className={isDark ? "bg-dark text-white" : "border-t border-ink/8 bg-white text-ink"}>
+    <footer
+      className={
+        isDark ? "border-t border-white/10 bg-brand-base text-white" : "border-t border-ink/8 bg-white text-ink"
+      }
+    >
       <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-4">
@@ -164,6 +168,17 @@ export function Footer({ variant = "light" }: { variant?: "light" | "dark" }) {
               }
             >
               <Youtube className="h-5 w-5" />
+            </a>
+            <a
+              href={site.social.podcast}
+              aria-label="Podcast"
+              className={
+                isDark
+                  ? "text-white/60 transition hover:text-lime"
+                  : "text-muted-ink transition hover:text-ink"
+              }
+            >
+              <Mic className="h-5 w-5" />
             </a>
             <a
               href={site.social.tiktok}

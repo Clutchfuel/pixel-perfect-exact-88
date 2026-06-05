@@ -15,7 +15,7 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-lime text-ink hover:bg-lime-dark hover:-translate-y-0.5 shadow-[0_8px_30px_-8px_oklch(0.92_0.18_130/0.6)] hover:shadow-[0_12px_40px_-8px_oklch(0.92_0.18_130/0.8)]",
+    "bg-lime text-primary-foreground hover:bg-lime-dark hover:-translate-y-0.5 shadow-[0_8px_30px_-8px_rgba(198,255,77,0.35)] hover:shadow-[0_12px_40px_-8px_rgba(198,255,77,0.45)]",
   dark: "bg-ink text-white hover:bg-ink/90 hover:-translate-y-0.5",
   ghost: "bg-transparent text-ink border border-ink/15 hover:border-ink/40 hover:bg-ink/[0.03]",
   "ghost-dark":

@@ -1,23 +1,22 @@
-import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { SystemSection } from "@/components/sections/SystemSection";
-import { SweatSection } from "@/components/sections/SweatSection";
-import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
-import { InsightsPreviewSection } from "@/components/sections/InsightsPreviewSection";
-import { ProfilesSection } from "@/components/sections/ProfilesSection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
-import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
+import { PreparationWhySection } from "@/components/sections/brand/PreparationWhySection";
+import { EverydayAthletesSection } from "@/components/sections/brand/EverydayAthletesSection";
+import { FeaturedAthletesSection } from "@/components/sections/brand/FeaturedAthletesSection";
+import { CoachesCornerSection } from "@/components/sections/brand/CoachesCornerSection";
+import { LearnHubSection } from "@/components/sections/brand/LearnHubSection";
+import { ClutchScoreTeaserSection } from "@/components/sections/brand/ClutchScoreTeaserSection";
+import { SystemExperienceSection } from "@/components/sections/brand/SystemExperienceSection";
+import { CommunitySection } from "@/components/sections/brand/CommunitySection";
+import { FounderStorySection } from "@/components/sections/brand/FounderStorySection";
+import { NewsletterBrandSection } from "@/components/sections/brand/NewsletterBrandSection";
 import { makeMeta, canonical, organizationSchema, websiteSchema } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
 import { site } from "@/data/site";
-import { heroClutchMoments } from "@/data/hero-slideshow";
+import { imageSets } from "@/assets/image-sets";
 
-const LongGameSection = lazy(() =>
-  import("@/components/sections/LongGameSection").then((m) => ({ default: m.LongGameSection })),
-);
 const homeDescription = site.description;
 
 export const Route = createFileRoute("/")({
@@ -33,15 +32,9 @@ export const Route = createFileRoute("/")({
       {
         rel: "preload",
         as: "image",
-        href: heroClutchMoments[0]!.poster.avif,
+        href: imageSets.heroDesktop.avif,
         type: "image/avif",
         fetchPriority: "high",
-      },
-      {
-        rel: "preload",
-        as: "video",
-        href: heroClutchMoments[0]!.video,
-        type: "video/mp4",
       },
     ],
     scripts: [organizationSchema(Object.values(site.social)), websiteSchema()],
@@ -53,20 +46,20 @@ function Index() {
   return (
     <>
       <Header />
-      <main id="main" className="bg-white">
+      <main id="main" className="bg-brand-base">
         <HeroSection />
-        <SystemSection />
-        <SweatSection />
-        <HowItWorksSection />
-        <ProfilesSection />
-        <InsightsPreviewSection />
-        <Suspense fallback={null}>
-          <LongGameSection />
-        </Suspense>
-        <TestimonialsSection />
-        <FinalCtaSection />
+        <PreparationWhySection />
+        <EverydayAthletesSection />
+        <FeaturedAthletesSection />
+        <CoachesCornerSection />
+        <LearnHubSection />
+        <ClutchScoreTeaserSection />
+        <SystemExperienceSection />
+        <CommunitySection />
+        <FounderStorySection />
+        <NewsletterBrandSection />
       </main>
-      <Footer variant="light" />
+      <Footer variant="dark" />
     </>
   );
 }
