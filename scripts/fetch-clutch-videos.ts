@@ -84,7 +84,10 @@ mkdirSync(OUT_DIR, { recursive: true });
 
 const FF = bin("ffmpeg", "/opt/homebrew/bin/ffmpeg");
 
-for (const clip of getClipsToFetch()) {
+const reelOnly = process.argv.includes("--reel-only");
+const clipsToDownload = reelOnly ? getHeroReelClips() : getClipsToFetch();
+
+for (const clip of clipsToDownload) {
   if (clip.id.startsWith("local-")) {
     console.log(`\n→ ${clip.heroFile} (skip fetch — use existing file in public/videos/clutch/)`);
     continue;
@@ -100,14 +103,21 @@ for (const clip of getClipsToFetch()) {
   console.log(`\n→ ${outFile} (${clip.title})`);
   console.log(`  ${clip.id} ${start}s–${end}s`);
 
-  run(
-    `yt-dlp --no-playlist -f "bv*[height<=720]/bv*+ba/b" --download-sections "*${start}-${end}" --force-keyframes-at-cuts -o "${raw}" "${url}"`,
-  );
-
-  run(
-    `"${FF}" -y -i "${raw}" -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
-  );
-  rmSync(raw, { force: true });
+  try {
+    run(
+      `yt-dlp --no-playlist -f "bv*[height<=720]/bv*+ba/b" --download-sections "*${start}-${end}" --force-keyframes-at-cuts -o "${raw}" "${url}"`,
+    );
+    run(
+      `"${FF}" -y -i "${raw}" -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
+    );
+  } catch (err) {
+    console.warn(`\n⚠ Skipped ${outFile} — download failed (${clip.id}).`);
+    if (!existsSync(dest)) {
+      console.warn(`  Add ${outFile} manually or swap the clip id in clutch-clips.ts.`);
+    }
+  } finally {
+    rmSync(raw, { force: true });
+  }
 }
 
 buildHeroReel(FF);

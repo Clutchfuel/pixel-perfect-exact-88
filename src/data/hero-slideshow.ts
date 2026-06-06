@@ -88,6 +88,36 @@ const HERO_COPY: Record<string, { label: string; stakes: string; alt: string }> 
     stakes: "One moment · everything decided",
     alt: "UFC fighter landing a fight-ending strike",
   },
+  J_HRZcZvKWk: {
+    label: "Closing kick",
+    stakes: "Final lap · place on the line",
+    alt: "Jakob Ingebrigtsen closing kick in the 5000m at Roma 2024",
+  },
+  "QH4KJ-z-KqY": {
+    label: "1500m kick",
+    stakes: "Final bend · all-out sprint",
+    alt: "Frantic 1500m kick at Karlsruhe",
+  },
+  CRR5R7b6Kn0: {
+    label: "Photo finish",
+    stakes: "Dead heat · result in doubt",
+    alt: "The closest endurance photo finish ever recorded",
+  },
+  Hvmhfqt0P9M: {
+    label: "Parkrun sprint",
+    stakes: "Final meters · place on the line",
+    alt: "Upton Court parkrun sprint to the line",
+  },
+  "local-run-club-pack": {
+    label: "Pack finish",
+    stakes: "Final meters · hold the line",
+    alt: "Run club athletes pushing together through the finish",
+  },
+  vW77ak0aoj0: {
+    label: "5K showdown",
+    stakes: "Founder vs founder · one stride left",
+    alt: "Founder versus founder 5K showdown at the line",
+  },
 };
 
 function heroMomentFromClip(clip: ReturnType<typeof getHeroClips>[number]): ClutchMoment {

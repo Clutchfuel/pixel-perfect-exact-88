@@ -7,5 +7,5 @@ export const HERO_REEL = {
   src: heroVideoUrl(HERO_REEL_FILENAME),
   poster: imageSets.platformHero,
   mobilePoster: imageSets.sportRunning,
-  alt: "Young, diverse everyday athletes in clutch moments — Hyrox, running, basketball, and track",
+  alt: "Clutch performance moments — track kick, endurance photo finish, HYROX worlds, sled push, and run club finishes",
 };

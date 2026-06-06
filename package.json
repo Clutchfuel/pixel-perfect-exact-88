@@ -19,6 +19,7 @@
     "configure:production": "node scripts/configure-production.mjs",
     "verify:production": "node scripts/verify-production-env.mjs",
     "videos:fetch": "node scripts/fetch-clutch-videos.mjs",
+    "videos:fetch:reel": "node scripts/fetch-clutch-videos.mjs --reel-only",
     "optimize:images": "node scripts/run-ts.mjs scripts/optimize-images.ts"
   },
   "dependencies": {
