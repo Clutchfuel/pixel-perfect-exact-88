@@ -31,7 +31,7 @@ const IS_WIN = platform() === "win32";
 function run(cmd: string) {
   execSync(cmd, {
     stdio: "inherit",
-    shell: IS_WIN ? process.env.ComSpec ?? "cmd.exe" : "/bin/sh",
+    shell: IS_WIN ? (process.env.ComSpec ?? "cmd.exe") : "/bin/sh",
   });
 }
 
@@ -115,7 +115,7 @@ for (const clip of clipsToDownload) {
     run(
       `"${FF}" -y -i "${raw}" -vf "${VF}" -an -movflags +faststart -c:v libx264 -preset fast -crf 21 "${dest}"`,
     );
-  } catch (err) {
+  } catch {
     console.warn(`\n⚠ Skipped ${outFile} — download failed (${clip.id}).`);
     if (!existsSync(dest)) {
       console.warn(`  Add ${outFile} manually or swap the clip id in clutch-clips.ts.`);
