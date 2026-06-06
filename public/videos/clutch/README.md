@@ -1,29 +1,42 @@
 # Hero clutch videos
 
-Trimmed MP4s for the homepage hero slideshow (~4–6s each). **Not stored in git** (see root `.gitignore`).
+Trimmed MP4 segments (~4–6s each) for the homepage hero. Config lives in `src/data/clutch-clips.ts`.
 
-## Local / Lovable build
+## What ships in git
+
+| File | In git? |
+|------|---------|
+| `hero-reel.mp4` | **Yes** — one looping culture reel for Lovable/production |
+| Other `*.mp4` segments | **No** — gitignored; regenerate locally (see below) |
+
+Root `.gitignore` ignores `public/videos/clutch/*.mp4` except `hero-reel.mp4`.
+
+## Homepage hero
+
+Single muted loop: **`hero-reel.mp4`** — HYROX, run club, basketball, and football (two beats each). Clip order: `HERO_REEL_CLIP_IDS` in `src/data/clutch-clips.ts`.
+
+## Regenerate locally
 
 Requires [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](https://ffmpeg.org/):
 
 ```bash
+# Hero reel only (faster; skips segments already on disk with --reel-only)
+bun run videos:fetch:reel
+
+# Full catalog (all hero segments + reel stitch)
 bun run videos:fetch
 ```
 
-Clip list and trim windows: `src/data/clutch-clips.ts`.
+After changing `HERO_REEL_CLIP_IDS`, re-run `videos:fetch:reel` and commit the updated `hero-reel.mp4`.
 
-Homepage hero is **one looping video**: `hero-reel.mp4` — a culture-first reel alternating **HYROX, run club, basketball, and football** (two beats each). See `HERO_REEL_CLIP_IDS` in `src/data/clutch-clips.ts`.
+## CDN / R2 (optional for production)
 
-`hero-reel.mp4` is committed to git so Lovable/production always has video. Re-run `bun run videos:fetch` after changing clip IDs.
-
-## CDN / R2 (recommended for production)
-
-1. Upload this folder’s `*.mp4` to Cloudflare R2 (or any static host).
+1. Upload `*.mp4` to Cloudflare R2 (or any static host).
 2. Set `VITE_HERO_VIDEO_CDN` to the public origin (no trailing slash), e.g. `https://media.clutchfuel.com`.
 3. Rebuild and deploy.
 
-The app resolves URLs via `src/lib/media.ts` (`heroVideoUrl`).
+URLs resolve via `src/lib/media.ts` (`heroVideoUrl`).
 
-## Lovable published site
+## Lovable
 
-After cloning on a new machine, run `bun run videos:fetch` before publishing, **or** point `VITE_HERO_VIDEO_CDN` at hosted assets so CI/Lovable builds do not need binaries in the repo.
+Clones already include `hero-reel.mp4`, so publish works without yt-dlp/ffmpeg. To refresh the reel after clip changes, regenerate locally and push `hero-reel.mp4`, or point `VITE_HERO_VIDEO_CDN` at hosted assets.
