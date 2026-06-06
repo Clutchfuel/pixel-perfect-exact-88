@@ -12,7 +12,7 @@ bun run videos:fetch
 
 Clip list and trim windows: `src/data/clutch-clips.ts`.
 
-Homepage hero is **one looping video**: `hero-reel.mp4` — a stitched reel of mixed performance clips (track, endurance, HYROX, run club). See `HERO_REEL_CLIP_IDS` in `src/data/clutch-clips.ts`.
+Homepage hero is **one looping video**: `hero-reel.mp4` — a culture-first reel alternating **HYROX, run club, basketball, and football** (two beats each). See `HERO_REEL_CLIP_IDS` in `src/data/clutch-clips.ts`.
 
 `hero-reel.mp4` is committed to git so Lovable/production always has video. Re-run `bun run videos:fetch` after changing clip IDs.
 

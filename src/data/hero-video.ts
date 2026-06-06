@@ -5,7 +5,7 @@ import { heroVideoUrl } from "@/lib/media";
 /** Single looping homepage hero — built by `bun run videos:fetch` → hero-reel.mp4 */
 export const HERO_REEL = {
   src: heroVideoUrl(HERO_REEL_FILENAME),
-  poster: imageSets.platformHero,
-  mobilePoster: imageSets.sportRunning,
-  alt: "Clutch performance moments — track kick, endurance photo finish, HYROX worlds, sled push, and run club finishes",
+  poster: imageSets.sportHyrox,
+  mobilePoster: imageSets.sportBasketball,
+  alt: "Everyday athlete culture — HYROX, run club, basketball, and football clutch moments",
 };

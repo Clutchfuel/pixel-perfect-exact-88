@@ -73,15 +73,25 @@ const HERO_COPY: Record<string, { label: string; stakes: string; alt: string }> 
     stakes: "Power through · every meter counts",
     alt: "Athlete driving the HYROX sled toward the line",
   },
-  "dCLh-Ug8Fi0": {
-    label: "Game-winning shot",
-    stakes: "Buzzer · season on the line",
-    alt: "Basketball player hitting a game-winning basket",
+  "26W4Ptu2gBI": {
+    label: "Buzzer beater",
+    stakes: "Final horn · season on the line",
+    alt: "High school basketball player hitting a playoff buzzer beater",
   },
-  pklKb7yYqHo: {
-    label: "Touchdown",
-    stakes: "End zone · game on the line",
-    alt: "Football player scoring a decisive touchdown",
+  pqA8qGvo8Co: {
+    label: "Full-court winner",
+    stakes: "One shot · everything decided",
+    alt: "Illinois 8th grader hitting a game-winning full-court shot",
+  },
+  dzRRi2QcSEM: {
+    label: "Game-winning TD",
+    stakes: "End zone · playoffs on the line",
+    alt: "Stefon Diggs game-winning touchdown in the NFL playoffs",
+  },
+  aOqpnPA2FW4: {
+    label: "Blocked FG TD",
+    stakes: "Final play · win or go home",
+    alt: "Eagles return a blocked field goal for a game-winning touchdown",
   },
   "3pQ0AWFNdfk": {
     label: "Championship finish",

@@ -100,6 +100,11 @@ for (const clip of clipsToDownload) {
   const raw = join(TMP, `${clip.id}-raw.mp4`);
   const dest = join(OUT_DIR, outFile);
 
+  if (existsSync(dest) && reelOnly) {
+    console.log(`\n→ ${outFile} (skip — already on disk)`);
+    continue;
+  }
+
   console.log(`\n→ ${outFile} (${clip.title})`);
   console.log(`  ${clip.id} ${start}s–${end}s`);
 
