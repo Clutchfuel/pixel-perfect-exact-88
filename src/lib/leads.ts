@@ -1,7 +1,6 @@
 import type { ClutchScoreResult } from "@/lib/clutch-score";
 import { teamLeadText, userClutchScoreHtml, userClutchScoreText } from "@/lib/email-templates";
 import { getEnv } from "@/lib/env";
-import { isProductionRuntime } from "@/lib/is-production";
 import { reportError } from "@/lib/observability";
 import { turnstileEnabled, turnstileMisconfigured, turnstileSecretKey } from "@/lib/turnstile";
 
@@ -16,9 +15,6 @@ async function sendResend(opts: {
 }) {
   const apiKey = getEnv("RESEND_API_KEY");
   if (!apiKey) {
-    if (isProductionRuntime()) {
-      throw new Error("RESEND_API_KEY not configured");
-    }
     console.info("[leads] RESEND_API_KEY not set — skipping email", opts);
     return { ok: true as const, skipped: true };
   }

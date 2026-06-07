@@ -64,7 +64,7 @@ for path in / /clutch-score /products /contact; do
 done
 
 CLUTCH=$(curl -sf "$BASE/clutch-score" || true)
-echo "$CLUTCH" | grep -q 'Which best describes your build?' && pass "clutch-score quiz UI (SSR)" || fail "clutch-score quiz UI"
+echo "$CLUTCH" | grep -q "Let's Build Your Hydration Profile" && pass "clutch-score quiz UI (SSR)" || fail "clutch-score quiz UI"
 echo
 
 if [[ "$FAIL" -eq 0 ]]; then
