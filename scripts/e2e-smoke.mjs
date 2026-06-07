@@ -179,7 +179,7 @@ for (const path of ["/", "/clutch-score", "/products", "/contact"]) {
 
 try {
   const { text: clutch } = await fetchText(`${BASE}/clutch-score`);
-  if (clutch.includes("Which best describes your build?")) pass("clutch-score quiz UI (SSR)");
+  if (clutch.includes("Build Your Hydration Profile")) pass("clutch-score quiz UI (SSR)");
   else failMsg("clutch-score quiz UI");
 } catch (err) {
   failMsg(`clutch-score page — ${err instanceof Error ? err.message : err}`);
