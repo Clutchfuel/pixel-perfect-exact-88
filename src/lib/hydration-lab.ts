@@ -92,10 +92,7 @@ export function calculatePrecision(input: PrecisionInput): HydrationLabResult {
   const durationHr = lookupHours(input.durationKey);
   const fluidIntakeL = lookupFluidLiters(input.fluidKey);
   const urineLossL = lookupBathroomLiters(input.bathroomKey);
-  const weightLossL = weightDeltaToLiters(
-    input.preWeight - input.postWeight,
-    input.weightUnit,
-  );
+  const weightLossL = weightDeltaToLiters(input.preWeight - input.postWeight, input.weightUnit);
   const totalSweatLossL = weightLossL + fluidIntakeL - urineLossL;
   const sweatRateLph = durationHr > 0 ? totalSweatLossL / durationHr : 0;
   const roundedLph = Math.round(sweatRateLph * 100) / 100;
@@ -121,10 +118,8 @@ export function calculatePrecision(input: PrecisionInput): HydrationLabResult {
 export function calculateQuick(input: QuickInput): HydrationLabResult {
   const durationHr = lookupHours(input.durationKey);
   const fluidIntakeL = lookupFluidLiters(input.fluidKey);
-  const conditionMod =
-    conditionOptions.find((c) => c.value === input.conditionKey)?.modifier ?? 1;
-  const intensityMod =
-    intensityOptions.find((i) => i.value === input.intensityKey)?.modifier ?? 1;
+  const conditionMod = conditionOptions.find((c) => c.value === input.conditionKey)?.modifier ?? 1;
+  const intensityMod = intensityOptions.find((i) => i.value === input.intensityKey)?.modifier ?? 1;
 
   const baseSweatLoss = (input.calories * 0.75) / 580;
   const adjustedSweatLoss = baseSweatLoss * conditionMod * intensityMod;

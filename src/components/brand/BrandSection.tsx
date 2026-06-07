@@ -33,7 +33,9 @@ export function BrandSection({
 
 export function BrandEyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-muted">{children}</p>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-muted">
+      {children}
+    </p>
   );
 }
 

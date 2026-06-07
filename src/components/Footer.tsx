@@ -48,7 +48,9 @@ export function Footer({ variant = "light" }: { variant?: "light" | "dark" }) {
   return (
     <footer
       className={
-        isDark ? "border-t border-white/10 bg-brand-base text-white" : "border-t border-ink/8 bg-white text-ink"
+        isDark
+          ? "border-t border-white/10 bg-brand-base text-white"
+          : "border-t border-ink/8 bg-white text-ink"
       }
     >
       <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
@@ -97,15 +99,15 @@ export function Footer({ variant = "light" }: { variant?: "light" | "dark" }) {
                 {submitting ? "…" : footer.emailCta}
               </button>
             </form>
-            <div className={isDark ? "mt-3 max-w-md text-white/50" : "mt-3 max-w-md text-muted-ink"}>
+            <div
+              className={isDark ? "mt-3 max-w-md text-white/50" : "mt-3 max-w-md text-muted-ink"}
+            >
               <FormConsent
                 id="footer-marketing-consent"
                 checked={marketingConsent}
                 onChange={setMarketingConsent}
                 className={
-                  isDark
-                    ? "text-white/70 [&_a]:text-white/90"
-                    : "text-muted-ink [&_a]:text-ink"
+                  isDark ? "text-white/70 [&_a]:text-white/90" : "text-muted-ink [&_a]:text-ink"
                 }
               />
             </div>

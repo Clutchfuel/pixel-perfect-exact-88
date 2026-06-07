@@ -77,11 +77,7 @@ export function HomeDashboardMockup() {
 
               <div className="grid gap-4 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-2 lg:gap-5">
                 <MetricCard label={d.readiness.label} value={d.readiness.value} />
-                <MetricCard
-                  label={d.profile.label}
-                  value={d.profile.value}
-                  sub={d.profile.sub}
-                />
+                <MetricCard label={d.profile.label} value={d.profile.value} sub={d.profile.sub} />
                 <MetricCard
                   label={d.consistency.label}
                   value={d.consistency.value}
@@ -98,9 +94,7 @@ export function HomeDashboardMockup() {
 
             {!loggedIn ? (
               <div className="border-t border-white/8 bg-black/20 px-6 py-4 md:px-12">
-                <p className="text-center text-xs text-muted-dark md:text-sm">
-                  {d.footnote}
-                </p>
+                <p className="text-center text-xs text-muted-dark md:text-sm">{d.footnote}</p>
               </div>
             ) : null}
           </div>

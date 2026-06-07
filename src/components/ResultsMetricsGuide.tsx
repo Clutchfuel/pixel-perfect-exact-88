@@ -35,14 +35,16 @@ export function ResultsMetricsGuide({
       </div>
       <dl className="divide-y" style={{ borderColor: isDark ? "#242424" : undefined }}>
         {items.map((item) => (
-          <div
-            key={item.id}
-            className={cn("px-5 py-4", !isDark && "border-ink/5")}
-          >
+          <div key={item.id} className={cn("px-5 py-4", !isDark && "border-ink/5")}>
             <dt className={cn("text-sm font-semibold", isDark ? "text-white" : "text-ink")}>
               {item.term}
             </dt>
-            <dd className={cn("mt-1.5 text-sm leading-relaxed", isDark ? "text-[#A1A1A1]" : "text-muted-ink")}>
+            <dd
+              className={cn(
+                "mt-1.5 text-sm leading-relaxed",
+                isDark ? "text-[#A1A1A1]" : "text-muted-ink",
+              )}
+            >
               {item.definition}
             </dd>
           </div>

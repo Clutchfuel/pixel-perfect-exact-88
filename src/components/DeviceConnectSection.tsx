@@ -21,9 +21,7 @@ export function DeviceConnectSection() {
 
       <div className="mt-5 grid gap-2 sm:grid-cols-2">
         {deviceIntegrations
-          .filter((d) =>
-            ["apple-health", "garmin", "whoop", "strava", "fitbit"].includes(d.id),
-          )
+          .filter((d) => ["apple-health", "garmin", "whoop", "strava", "fitbit"].includes(d.id))
           .map((device) => (
             <button
               key={device.id}

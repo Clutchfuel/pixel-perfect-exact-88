@@ -12,15 +12,15 @@
 
 ## Ongoing / manual
 
-| Item | Owner | Notes |
-|------|--------|--------|
-| Production secrets | You | Lovable env + `bun run verify:production` — see `docs/PRODUCTION.md` |
-| Turnstile + Resend | You | Required for live lead capture |
-| `ERROR_WEBHOOK_URL` | You | Monitoring webhook |
-| Hero MP4 hosting | You | `videos:fetch` locally or CDN via `VITE_HERO_VIDEO_CDN` |
-| Real product photography | Brand | UI shows "Coming Soon" until bottle assets exist |
-| Per-article insight covers | Content | Shared `insights-hero` fallback on `/insights/$slug` |
-| GitHub repo rename | Optional | `pixel-perfect-exact-88` → `clutchfuel-website` (see README) |
+| Item                       | Owner    | Notes                                                                |
+| -------------------------- | -------- | -------------------------------------------------------------------- |
+| Production secrets         | You      | Lovable env + `bun run verify:production` — see `docs/PRODUCTION.md` |
+| Turnstile + Resend         | You      | Required for live lead capture                                       |
+| `ERROR_WEBHOOK_URL`        | You      | Monitoring webhook                                                   |
+| Hero MP4 hosting           | You      | `videos:fetch` locally or CDN via `VITE_HERO_VIDEO_CDN`              |
+| Real product photography   | Brand    | UI shows "Coming Soon" until bottle assets exist                     |
+| Per-article insight covers | Content  | Shared `insights-hero` fallback on `/insights/$slug`                 |
+| GitHub repo rename         | Optional | `pixel-perfect-exact-88` → `clutchfuel-website` (see README)         |
 
 ## Verify after changes
 

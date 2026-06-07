@@ -3,7 +3,16 @@ import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { ScoreRing } from "@/components/ScoreRing";
 import { dashboard } from "@/data/home";
-import { ResponsiveContainer, AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
 import { TrendingUp, Droplets, ArrowRight, Flame, Activity } from "lucide-react";
 
 const chartTooltipStyle = {
@@ -31,7 +40,13 @@ function MiniTrendChart({
       <div className="mt-3 h-24">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-            <XAxis dataKey="d" stroke="oklch(1 0 0 / 0.25)" fontSize={9} tickLine={false} axisLine={false} />
+            <XAxis
+              dataKey="d"
+              stroke="oklch(1 0 0 / 0.25)"
+              fontSize={9}
+              tickLine={false}
+              axisLine={false}
+            />
             <YAxis hide domain={["auto", "auto"]} />
             <Tooltip
               contentStyle={chartTooltipStyle}
@@ -200,7 +215,11 @@ export function DashboardSection() {
                 label="Sweat rate · 7 days"
                 suffix=" L/hr"
               />
-              <MiniTrendChart data={dashboard.consistencyTrend} label="Hydration consistency" suffix="%" />
+              <MiniTrendChart
+                data={dashboard.consistencyTrend}
+                label="Hydration consistency"
+                suffix="%"
+              />
             </div>
 
             <div className="rounded-3xl glass-dark p-6">

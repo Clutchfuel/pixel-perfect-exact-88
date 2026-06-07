@@ -127,8 +127,7 @@ function buildHydrationRecommendation(profile: SweatProfile, fluidLossOz: number
 }
 
 export function calculateClutchScore(input: CalculatorInput): ClutchScoreResult {
-  const answers =
-    input.mode === "quick" ? quickEstimateToQuizAnswers(input.quick) : input.answers;
+  const answers = input.mode === "quick" ? quickEstimateToQuizAnswers(input.quick) : input.answers;
 
   assertCompleteAnswers(answers);
 

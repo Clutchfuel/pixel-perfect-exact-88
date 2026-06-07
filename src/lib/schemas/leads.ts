@@ -43,16 +43,17 @@ export const newsletterSchema = z.object({
   turnstileToken: z.string().optional(),
 });
 
-export const clutchScoreSubmitSchema = z.object({
-  email: z.string().email().max(254),
-  mode: z.enum(["full", "quick"]).default("full"),
-  answers: quizAnswersSchema.optional(),
-  quick: quickEstimateSchema.optional(),
-  caloriesBurned: caloriesBurnedSchema,
-  marketingConsent: marketingConsentSchema,
-  turnstileToken: z.string().optional(),
-}).refine(
-  (data) =>
-    (data.mode === "full" && data.answers) || (data.mode === "quick" && data.quick),
-  { message: "Invalid calculator payload" },
-);
+export const clutchScoreSubmitSchema = z
+  .object({
+    email: z.string().email().max(254),
+    mode: z.enum(["full", "quick"]).default("full"),
+    answers: quizAnswersSchema.optional(),
+    quick: quickEstimateSchema.optional(),
+    caloriesBurned: caloriesBurnedSchema,
+    marketingConsent: marketingConsentSchema,
+    turnstileToken: z.string().optional(),
+  })
+  .refine(
+    (data) => (data.mode === "full" && data.answers) || (data.mode === "quick" && data.quick),
+    { message: "Invalid calculator payload" },
+  );

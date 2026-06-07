@@ -18,7 +18,6 @@ const EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
 export function HeroPreparationReel() {
   const [index, setIndex] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
-  const scene = HERO_PREPARATION_SCENES[index]!;
   const total = HERO_PREPARATION_SCENES.length;
 
   useEffect(() => {

@@ -98,9 +98,7 @@ export function Header({ overDark = false }: HeaderProps) {
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          solid
-            ? "bg-brand-base/90 backdrop-blur-xl border-b border-white/10"
-            : "bg-transparent",
+          solid ? "bg-brand-base/90 backdrop-blur-xl border-b border-white/10" : "bg-transparent",
         )}
       >
         <div className="mx-auto flex h-[4.5rem] w-full max-w-7xl items-center justify-between px-6 md:h-[5.25rem] md:px-10">
@@ -124,11 +122,7 @@ export function Header({ overDark = false }: HeaderProps) {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <CFButton
-              href={loggedIn ? site.sessionHref : site.ctaHref}
-              variant="primary"
-              size="md"
-            >
+            <CFButton href={loggedIn ? site.sessionHref : site.ctaHref} variant="primary" size="md">
               {loggedIn ? site.addSessionCta : site.primaryCta}
             </CFButton>
           </div>

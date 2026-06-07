@@ -68,7 +68,10 @@ function parseCalories(value: string): number | undefined {
 function CaloriesField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
     <div className="mt-8 rounded-2xl border border-ink/10 bg-mist/40 p-4">
-      <label htmlFor="calories-burned" className="flex items-center gap-2 text-sm font-medium text-ink">
+      <label
+        htmlFor="calories-burned"
+        className="flex items-center gap-2 text-sm font-medium text-ink"
+      >
         <Flame className="h-4 w-4 text-lime" aria-hidden />
         {calculatorMessaging.caloriesLabel}
       </label>
@@ -137,8 +140,7 @@ function ClutchScorePage() {
   const quickSelected = quick[quickFieldKey];
   const isLastQuick = quickStep === quickStepOrder.length - 1;
 
-  const quickReady =
-    quick.sport && quick.duration && quick.intensity && quick.sweatLevel;
+  const quickReady = quick.sport && quick.duration && quick.intensity && quick.sweatLevel;
 
   function selectOption(value: string) {
     if (!field) return;
@@ -270,11 +272,7 @@ function ClutchScorePage() {
   }
 
   const totalSteps = mode === "quick" ? quickStepOrder.length : clutchScoreQuiz.steps.length;
-  const currentStepIndex = showIntro
-    ? 0
-    : mode === "quick"
-      ? quickStep + 1
-      : step + 1;
+  const currentStepIndex = showIntro ? 0 : mode === "quick" ? quickStep + 1 : step + 1;
   const progress = result ? 100 : Math.round((currentStepIndex / (totalSteps + 1)) * 100);
   const isReport = Boolean(result);
   const stepTheme = isReport ? "dark" : "light";
@@ -342,7 +340,12 @@ function ClutchScorePage() {
                 transition={{ duration: 0.25 }}
                 className={cn(quizCardClass(stepTheme))}
               >
-                <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass(stepTheme))}>
+                <p
+                  className={cn(
+                    "text-xs font-semibold uppercase tracking-[0.12em]",
+                    quizMutedClass(stepTheme),
+                  )}
+                >
                   {experienceCopy.badge}
                 </p>
                 <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
@@ -359,7 +362,12 @@ function ClutchScorePage() {
                 <p className="mt-4 text-center font-display text-lg font-bold text-white">
                   {result.profile}
                 </p>
-                <p className={cn("mx-auto mt-2 max-w-md text-center text-sm", quizMutedClass("dark"))}>
+                <p
+                  className={cn(
+                    "mx-auto mt-2 max-w-md text-center text-sm",
+                    quizMutedClass("dark"),
+                  )}
+                >
                   {getProfileCopy(result.profile)}
                 </p>
 
@@ -381,7 +389,12 @@ function ClutchScorePage() {
                         background: quizSurface.dark.optionBg,
                       }}
                     >
-                      <div className={cn("text-[11px] uppercase tracking-wider", quizMutedClass("dark"))}>
+                      <div
+                        className={cn(
+                          "text-[11px] uppercase tracking-wider",
+                          quizMutedClass("dark"),
+                        )}
+                      >
                         {metric.label}
                       </div>
                       <div className="mt-1 font-display text-2xl font-bold text-white">
@@ -430,10 +443,7 @@ function ClutchScorePage() {
                 </div>
 
                 {!saved ? (
-                  <form
-                    onSubmit={saveResults}
-                    className="mt-10 border-t border-[#242424] pt-10"
-                  >
+                  <form onSubmit={saveResults} className="mt-10 border-t border-[#242424] pt-10">
                     <p className={cn("text-center text-sm", quizMutedClass("dark"))}>
                       {clutchScoreQuiz.result.emailHint}
                     </p>
@@ -625,7 +635,12 @@ function ClutchScorePage() {
             )}
           </AnimatePresence>
 
-          <p className={cn("mt-8 text-center text-xs", isReport ? quizMutedClass("dark") : "text-muted-ink")}>
+          <p
+            className={cn(
+              "mt-8 text-center text-xs",
+              isReport ? quizMutedClass("dark") : "text-muted-ink",
+            )}
+          >
             Performance insights for educational and training purposes — not medical advice.{" "}
             <Link to="/privacy" className="underline hover:text-white">
               Privacy

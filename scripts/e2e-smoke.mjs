@@ -31,7 +31,11 @@ if (process.env.SKIP_BUILD !== "1") {
   const build = spawnSync("bun", ["run", "build"], { stdio: "pipe", encoding: "utf8" });
   if (build.status === 0) pass("bun run build");
   else {
-    const nodeBuild = spawnSync("npm", ["run", "build"], { stdio: "pipe", encoding: "utf8", shell: true });
+    const nodeBuild = spawnSync("npm", ["run", "build"], {
+      stdio: "pipe",
+      encoding: "utf8",
+      shell: true,
+    });
     if (nodeBuild.status === 0) pass("npm run build");
     else failMsg("build failed");
   }
@@ -70,7 +74,8 @@ try {
   else failMsg("robots.txt AI crawlers");
 
   const { text: sitemap } = await fetchText(`${BASE}/sitemap.xml`);
-  if (sitemap.includes("<loc>") && sitemap.includes("clutch-score")) pass("sitemap includes clutch-score");
+  if (sitemap.includes("<loc>") && sitemap.includes("clutch-score"))
+    pass("sitemap includes clutch-score");
   else failMsg("sitemap clutch-score");
 } catch (err) {
   failMsg(`SEO checks — ${err instanceof Error ? err.message : err}`);
@@ -123,7 +128,8 @@ try {
   });
   if (score.includes('"ok":true')) pass("POST /api/leads/clutch-score");
   else failMsg(`POST /api/leads/clutch-score — ${score}`);
-  if (score.includes('"profile":"Heavy Sweater"')) pass("clutch-score server recompute (Heavy Sweater)");
+  if (score.includes('"profile":"Heavy Sweater"'))
+    pass("clutch-score server recompute (Heavy Sweater)");
   else failMsg(`clutch-score profile mismatch — ${score}`);
 
   const invalidDir = mkdtempSync(join(tmpdir(), "cf-e2e-"));

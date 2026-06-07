@@ -42,7 +42,6 @@ function AboutPage() {
           ))}
         </section>
 
-
         <section className="bg-mist">
           <div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
             <h2 className="font-display text-3xl font-extrabold tracking-display text-ink md:text-5xl">

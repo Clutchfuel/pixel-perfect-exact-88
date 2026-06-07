@@ -15,17 +15,17 @@ bun run verify:production --strict   # fail on warnings too
 
 In the Lovable project: **Settings** → **Environment**, set the same values as `.dev.vars`:
 
-| Key | Notes |
-|-----|--------|
-| `VITE_SITE_URL` | Published URL (canonical + OG tags) |
-| `VITE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile widget |
-| `TURNSTILE_SECRET_KEY` | Server verification (must pair with site key) |
-| `RESEND_API_KEY` | Lead + Clutch Score emails |
-| `RESEND_FROM_EMAIL` | Verified domain in Resend |
-| `LEADS_TO_EMAIL` | Internal inbox |
-| `ERROR_WEBHOOK_URL` | JSON POST webhook for `reportError` payloads |
-| `VITE_HERO_VIDEO_CDN` | Optional CDN origin for hero MP4s |
-| `VITE_GA_MEASUREMENT_ID` | Optional GA4 |
+| Key                       | Notes                                         |
+| ------------------------- | --------------------------------------------- |
+| `VITE_SITE_URL`           | Published URL (canonical + OG tags)           |
+| `VITE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile widget                   |
+| `TURNSTILE_SECRET_KEY`    | Server verification (must pair with site key) |
+| `RESEND_API_KEY`          | Lead + Clutch Score emails                    |
+| `RESEND_FROM_EMAIL`       | Verified domain in Resend                     |
+| `LEADS_TO_EMAIL`          | Internal inbox                                |
+| `ERROR_WEBHOOK_URL`       | JSON POST webhook for `reportError` payloads  |
+| `VITE_HERO_VIDEO_CDN`     | Optional CDN origin for hero MP4s             |
+| `VITE_GA_MEASUREMENT_ID`  | Optional GA4                                  |
 
 Redeploy / sync from GitHub after changing env.
 
@@ -55,12 +55,12 @@ Distributed rate limiting applies when `RATE_LIMIT_KV` IDs are real (not placeho
 
 ## 5. Monitoring
 
-| Signal | How |
-|--------|-----|
-| SSR / worker errors | `ERROR_WEBHOOK_URL` — JSON body from `src/lib/observability.ts` |
-| Resend deliverability | Resend dashboard — bounces, spam complaints |
-| Form abuse | Turnstile analytics + 429 rate on `/api/leads/*` |
-| Uptime | External ping on published URL + `/api/leads/contact` health (POST with invalid body → 400) |
+| Signal                | How                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| SSR / worker errors   | `ERROR_WEBHOOK_URL` — JSON body from `src/lib/observability.ts`                             |
+| Resend deliverability | Resend dashboard — bounces, spam complaints                                                 |
+| Form abuse            | Turnstile analytics + 429 rate on `/api/leads/*`                                            |
+| Uptime                | External ping on published URL + `/api/leads/contact` health (POST with invalid body → 400) |
 
 Example webhook payload:
 

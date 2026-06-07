@@ -40,7 +40,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/server.ts", "src/start.ts", "src/lib/**/*.ts", "src/routes/api/**/*.ts", "scripts/**/*.{ts,mjs}"],
+    files: [
+      "src/server.ts",
+      "src/start.ts",
+      "src/lib/**/*.ts",
+      "src/routes/api/**/*.ts",
+      "scripts/**/*.{ts,mjs}",
+    ],
     languageOptions: {
       globals: globals.node,
     },

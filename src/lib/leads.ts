@@ -3,11 +3,7 @@ import { teamLeadText, userClutchScoreHtml, userClutchScoreText } from "@/lib/em
 import { getEnv } from "@/lib/env";
 import { isProductionRuntime } from "@/lib/is-production";
 import { reportError } from "@/lib/observability";
-import {
-  turnstileEnabled,
-  turnstileMisconfigured,
-  turnstileSecretKey,
-} from "@/lib/turnstile";
+import { turnstileEnabled, turnstileMisconfigured, turnstileSecretKey } from "@/lib/turnstile";
 
 type LeadType = "contact" | "newsletter" | "clutch-score";
 

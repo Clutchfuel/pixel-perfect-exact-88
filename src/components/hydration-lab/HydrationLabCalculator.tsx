@@ -45,7 +45,9 @@ function OptionButton({
 }) {
   return (
     <button type="button" onClick={onClick} className={optionButtonClass(theme, selected)}>
-      <div className={cn("font-medium", theme === "light" ? "text-ink" : "text-white")}>{label}</div>
+      <div className={cn("font-medium", theme === "light" ? "text-ink" : "text-white")}>
+        {label}
+      </div>
     </button>
   );
 }
@@ -63,28 +65,24 @@ function PerformanceCard({
     return <div className={cn(quizCardClass("light"), className)}>{children}</div>;
   }
   return (
-    <div
-      className={cn(quizCardClass("dark"), className)}
-      style={DARK.cardInline}
-    >
+    <div className={cn(quizCardClass("dark"), className)} style={DARK.cardInline}>
       {children}
     </div>
   );
 }
 
-function ResultsView({
-  result,
-  onRestart,
-}: {
-  result: HydrationLabResult;
-  onRestart: () => void;
-}) {
+function ResultsView({ result, onRestart }: { result: HydrationLabResult; onRestart: () => void }) {
   const zone = zoneResults[result.zone];
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <PerformanceCard theme="dark">
-        <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass("dark"))}>
+        <p
+          className={cn(
+            "text-xs font-semibold uppercase tracking-[0.12em]",
+            quizMutedClass("dark"),
+          )}
+        >
           {hydrationLabCopy.badge}
         </p>
         <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
@@ -338,7 +336,12 @@ export function HydrationLabCalculator({
   if (phase === "intro") {
     return (
       <PerformanceCard theme={stepTheme}>
-        <p className={cn("text-xs font-semibold uppercase tracking-[0.12em]", quizMutedClass(stepTheme))}>
+        <p
+          className={cn(
+            "text-xs font-semibold uppercase tracking-[0.12em]",
+            quizMutedClass(stepTheme),
+          )}
+        >
           {hydrationLabCopy.badge}
         </p>
         <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
@@ -388,7 +391,10 @@ export function HydrationLabCalculator({
         <button
           type="button"
           onClick={() => setPhase("intro")}
-          className={cn("mx-auto mt-4 flex items-center gap-2 text-sm transition hover:text-ink", quizMutedClass(stepTheme))}
+          className={cn(
+            "mx-auto mt-4 flex items-center gap-2 text-sm transition hover:text-ink",
+            quizMutedClass(stepTheme),
+          )}
         >
           <ArrowLeft className="h-4 w-4" />
           Back
@@ -453,9 +459,7 @@ export function HydrationLabCalculator({
                       onClick={() => setPrecision((p) => ({ ...p, weightUnit: u }))}
                       className={cn(
                         "rounded-full px-4 py-1.5 text-xs font-semibold uppercase",
-                        precision.weightUnit === u
-                          ? "bg-lime text-ink"
-                          : "bg-mist/50 text-ink",
+                        precision.weightUnit === u ? "bg-lime text-ink" : "bg-mist/50 text-ink",
                       )}
                     >
                       {u}
@@ -533,7 +537,9 @@ export function HydrationLabCalculator({
                   key={opt.value}
                   theme={stepTheme}
                   selected={
-                    mode === "quick" ? quick.fluidKey === opt.value : precision.fluidKey === opt.value
+                    mode === "quick"
+                      ? quick.fluidKey === opt.value
+                      : precision.fluidKey === opt.value
                   }
                   onClick={() =>
                     mode === "quick"
@@ -580,7 +586,10 @@ export function HydrationLabCalculator({
             <button
               type="button"
               onClick={goBack}
-              className={cn("inline-flex items-center gap-2 text-sm transition hover:text-ink", quizMutedClass(stepTheme))}
+              className={cn(
+                "inline-flex items-center gap-2 text-sm transition hover:text-ink",
+                quizMutedClass(stepTheme),
+              )}
             >
               <ArrowLeft className="h-4 w-4" />
               Back

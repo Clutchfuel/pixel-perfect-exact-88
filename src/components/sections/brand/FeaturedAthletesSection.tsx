@@ -31,7 +31,9 @@ export function FeaturedAthletesSection() {
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-accent">
                     {story.role}
                   </p>
-                  <h3 className="mt-2 font-display text-2xl font-extrabold text-white">{story.name}</h3>
+                  <h3 className="mt-2 font-display text-2xl font-extrabold text-white">
+                    {story.name}
+                  </h3>
                   <p className="mt-4 text-base leading-relaxed text-brand-muted">{story.story}</p>
                 </div>
               </div>

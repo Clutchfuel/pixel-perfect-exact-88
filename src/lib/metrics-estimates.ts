@@ -6,10 +6,7 @@ export function estimateSodiumLossMg(fluidLossLiters: number, zone: SweatRateZon
   return Math.round(Math.max(0, fluidLossLiters) * mgPerLiter);
 }
 
-export function estimateSodiumLossMgFromProfile(
-  fluidLossOz: number,
-  sweatLevel: string,
-): number {
+export function estimateSodiumLossMgFromProfile(fluidLossOz: number, sweatLevel: string): number {
   const liters = (fluidLossOz / 33.814) * 0.85;
   const zone: SweatRateZone =
     sweatLevel === "heavy" ? "high" : sweatLevel === "light" ? "low" : "moderate";

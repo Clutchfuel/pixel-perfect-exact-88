@@ -14,10 +14,10 @@ No yt-dlp/ffmpeg required for Lovable publish.
 
 ## Optional MP4 segments
 
-| File | In git? |
-|------|---------|
-| `hero-reel.mp4` | Optional legacy loop (not used by homepage) |
-| Other `*.mp4` segments | **No** — gitignored |
+| File                   | In git?                                     |
+| ---------------------- | ------------------------------------------- |
+| `hero-reel.mp4`        | Optional legacy loop (not used by homepage) |
+| Other `*.mp4` segments | **No** — gitignored                         |
 
 ```bash
 bun run videos:fetch:reel   # hero segments + stitch (dev only)

@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  getCookieConsent,
-  setCookieConsent,
-  type CookieConsentValue,
-} from "@/lib/cookie-consent";
+import { getCookieConsent, setCookieConsent, type CookieConsentValue } from "@/lib/cookie-consent";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);

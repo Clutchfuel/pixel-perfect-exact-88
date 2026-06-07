@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  applyAthleteSessionQueryFlag,
-  isAthleteSessionActive,
-} from "@/lib/athlete-session";
+import { applyAthleteSessionQueryFlag, isAthleteSessionActive } from "@/lib/athlete-session";
 
 export function useAthleteSession() {
   const [loggedIn, setLoggedIn] = useState(false);

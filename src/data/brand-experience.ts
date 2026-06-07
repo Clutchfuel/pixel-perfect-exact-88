@@ -77,25 +77,29 @@ export const brand = {
       {
         name: "Maya T.",
         role: "College basketball",
-        story: "I stopped guessing on game days. My prep routine is the same whether it's practice or playoffs.",
+        story:
+          "I stopped guessing on game days. My prep routine is the same whether it's practice or playoffs.",
         image: imageSets.sportBasketball,
       },
       {
         name: "Jordan K.",
         role: "High school track",
-        story: "Hydration used to be an afterthought. Now it's how I show up for myself before the gun goes off.",
+        story:
+          "Hydration used to be an afterthought. Now it's how I show up for myself before the gun goes off.",
         image: imageSets.sportRunning,
       },
       {
         name: "Alex R.",
         role: "Weekend runner",
-        story: "I'm not pro. I'm consistent. Understanding my sweat profile changed how I train on Saturdays.",
+        story:
+          "I'm not pro. I'm consistent. Understanding my sweat profile changed how I train on Saturdays.",
         image: imageSets.platformHero,
       },
       {
         name: "Sam L.",
         role: "Competitive Hyrox",
-        story: "Stations don't wait. Neither does my body — I prepare hydration like I prepare pacing.",
+        story:
+          "Stations don't wait. Neither does my body — I prepare hydration like I prepare pacing.",
         image: imageSets.sportHyrox,
       },
     ],
@@ -137,7 +141,10 @@ export const brand = {
     sub: "Performance education — not a blog. A media hub for everyday athletes.",
     articles: [
       { title: "Hydration 101", href: "/insights/hydration-101-for-everyday-athletes" },
-      { title: "How Much Water Do Athletes Need?", href: "/insights/how-much-water-should-athletes-drink" },
+      {
+        title: "How Much Water Do Athletes Need?",
+        href: "/insights/how-much-water-should-athletes-drink",
+      },
       { title: "Pre-Workout Hydration", href: "/products/clutch-iso" },
       { title: "Recovery Strategies", href: "/insights/sleep-recovery-and-hydration" },
       { title: "Signs Of Dehydration", href: "/insights/signs-of-dehydration-during-exercise" },
@@ -187,7 +194,10 @@ export const brand = {
     sub: "Belonging is part of preparation.",
     pillars: [
       { title: "Run clubs", copy: "Pace groups that prepare together, finish stronger." },
-      { title: "Basketball communities", copy: "Leagues and crews who treat hydration as culture." },
+      {
+        title: "Basketball communities",
+        copy: "Leagues and crews who treat hydration as culture.",
+      },
       { title: "Training groups", copy: "Gym floors and Hyrox boxes building shared discipline." },
       { title: "Local events", copy: "Pop-ups, clinics, and meetups — show up prepared." },
       { title: "Athlete stories", copy: "Real journeys from everyday athletes like you." },
