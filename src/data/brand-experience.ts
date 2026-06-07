@@ -2,13 +2,13 @@ import { imageSets } from "@/assets/image-sets";
 
 export const brand = {
   hero: {
-    tag: "PERFORMANCE PREPARATION",
+    tag: "HYROX · COMMUNITY · PREPARATION",
     headline: "Performance Starts With Preparation.",
-    tagline: "Hydration intelligence for everyday athletes.",
+    tagline: "Hydration intelligence for Hyrox boxes, run clubs, and training crews.",
     supporting: [
       "Most athletes train with intention.",
       "Few hydrate with intention.",
-      "ClutchFuel helps athletes understand their body, build better hydration habits, and prepare to perform at their best.",
+      "ClutchFuel helps crews and everyday athletes understand their body, build better hydration habits, and prepare to perform at their best.",
     ],
     primaryCta: "Build My Athlete Profile",
     secondaryCta: "Learn How It Works",

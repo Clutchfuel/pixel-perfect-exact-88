@@ -5,7 +5,7 @@ import { HERO_PREPARATION_ALT, HERO_PREPARATION_SCENES } from "@/data/hero-prepa
 export const HERO_REEL = {
   /** Legacy mp4 path unused; hero is CSS/motion image reel. */
   src: null as string | null,
-  poster: imageSets.heroDesktop,
+  poster: imageSets.sportHyrox,
   mobilePoster: imageSets.heroMobile,
   alt: HERO_PREPARATION_ALT,
   scenes: HERO_PREPARATION_SCENES,

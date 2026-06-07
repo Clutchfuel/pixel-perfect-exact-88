@@ -8,57 +8,57 @@ export type PreparationScene = {
   alt: string;
 };
 
-/** Sports mix target: ~40% HYROX, 25% basketball, 20% combat, 15% running + community. */
+/** Scene mix: ~40% HYROX, ~40% community, ~20% hybrid endurance prep — no clutch finishes. */
 export const HERO_PREPARATION_SCENES: PreparationScene[] = [
-  {
-    id: "run-ritual",
-    image: imageSets.heroDesktop,
-    alt: "Early morning runner tying shoes before sunrise — quiet ritual before the run",
-  },
   {
     id: "hyrox-prep",
     image: imageSets.sportHyrox,
-    alt: "HYROX athlete chalking hands and adjusting gear before training",
-  },
-  {
-    id: "basketball-gym",
-    image: imageSets.sportBasketball,
-    alt: "Basketball player alone in the gym, lacing sneakers before practice",
-  },
-  {
-    id: "hydration",
-    image: imageSets.athleteSweat,
-    alt: "Athlete filling a water bottle — hydration as part of preparation",
-  },
-  {
-    id: "combat-wraps",
-    image: imageSets.sportGym,
-    alt: "Combat athlete wrapping hands before training, coach nearby",
-  },
-  {
-    id: "hyrox-sled-train",
-    image: imageSets.systemHero,
-    alt: "HYROX sled push in training — power and discipline, not race day",
-  },
-  {
-    id: "basketball-practice",
-    image: imageSets.platformHero,
-    alt: "Basketball player taking a final free throw after practice",
-  },
-  {
-    id: "run-finish-subtle",
-    image: imageSets.sportRunning,
-    alt: "Everyday runner crossing a finish line — earned, not dramatic",
-  },
-  {
-    id: "coach-connection",
-    image: imageSets.aboutTeam,
-    alt: "Coach talking with an athlete — community and guidance before performance",
+    alt: "HYROX athlete chalking hands and adjusting gear before stations — quiet focus before the work",
   },
   {
     id: "group-run",
     image: imageSets.insightsHero,
-    alt: "Mixed group run — diverse everyday athletes, sweaty, smiling, human",
+    alt: "Mixed group run — diverse everyday athletes warming up together before the set",
+  },
+  {
+    id: "hyrox-sled-train",
+    image: imageSets.systemHero,
+    alt: "HYROX sled push in the training box — power and discipline, not race day",
+  },
+  {
+    id: "coach-huddle",
+    image: imageSets.aboutTeam,
+    alt: "Coach briefing athletes — Hyrox crew and run club guidance before training",
+  },
+  {
+    id: "hyrox-box-prep",
+    image: imageSets.sportGym,
+    alt: "Functional athletes wrapping up before group Hyrox training — shared floor, shared standards",
+  },
+  {
+    id: "run-club-dawn",
+    image: imageSets.heroDesktop,
+    alt: "Run club at dawn — athletes tying in together before the group sets off",
+  },
+  {
+    id: "sweat-profile-prep",
+    image: imageSets.sweatRateHero,
+    alt: "Hybrid athlete reviewing sweat readiness before a long Hyrox-style session",
+  },
+  {
+    id: "hydrate-together",
+    image: imageSets.athleteSweat,
+    alt: "Training partners filling bottles together — hydration as a shared pre-session ritual",
+  },
+  {
+    id: "pace-groups",
+    image: imageSets.sportRunning,
+    alt: "Runners in pace groups stretching and warming up — preparation, not the finish line",
+  },
+  {
+    id: "crew-check-in",
+    image: imageSets.heroMobile,
+    alt: "Athletes checking in before community training — laces tight, crew ready to prepare",
   },
 ];
 
@@ -66,4 +66,4 @@ export const HERO_SCENE_DURATION_MS = 3000;
 export const HERO_SCENE_CROSSFADE_MS = 900;
 
 export const HERO_PREPARATION_ALT =
-  "Everyday athletes preparing — ritual, training, hydration, coach connection, and community. Performance starts with preparation.";
+  "Hyrox athletes, run clubs, and training crews preparing together — stations, sled work, coach huddles, and shared hydration. Performance starts with preparation.";
