@@ -1,6 +1,5 @@
 import { CFButton } from "@/components/CFButton";
-import { HeroClutchVideo } from "@/components/HeroClutchVideo";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { HeroPreparationReel } from "@/components/HeroPreparationReel";
 import { Reveal } from "@/components/Reveal";
 import { brand } from "@/data/brand-experience";
 import { HERO_REEL } from "@/data/hero-video";
@@ -14,23 +13,7 @@ export function HeroSection() {
   return (
     <section className="relative min-h-[88svh] w-full overflow-hidden bg-brand-base">
       <div className="absolute inset-0">
-        <OptimizedImage
-          avif={HERO_REEL.poster.avif}
-          webp={HERO_REEL.poster.webp}
-          fallback={HERO_REEL.poster.fallback}
-          mobile={{
-            avif: HERO_REEL.mobilePoster.avif,
-            webp: HERO_REEL.mobilePoster.webp,
-            fallback: HERO_REEL.mobilePoster.fallback,
-          }}
-          alt={HERO_REEL.alt}
-          width={1920}
-          height={1080}
-          priority
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-90"
-        />
-
-        <HeroClutchVideo />
+        <HeroPreparationReel />
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-brand-base/95 via-brand-base/78 to-brand-base/48" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-base/90 via-transparent to-brand-base/40" />
@@ -83,4 +66,4 @@ export function HeroSection() {
   );
 }
 
-export const heroVideoPreload = HERO_REEL.src;
+export const heroVideoPreload = HERO_REEL.poster.avif;

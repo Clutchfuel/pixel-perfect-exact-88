@@ -1,11 +1,12 @@
 import { imageSets } from "@/assets/image-sets";
-import { HERO_REEL_FILENAME } from "@/data/clutch-clips";
-import { heroVideoUrl } from "@/lib/media";
+import { HERO_PREPARATION_ALT, HERO_PREPARATION_SCENES } from "@/data/hero-preparation-reel";
 
-/** Single looping homepage hero — built by `bun run videos:fetch` → hero-reel.mp4 */
+/** Homepage hero — cinematic “moment before” image reel (no clutch-finish footage). */
 export const HERO_REEL = {
-  src: heroVideoUrl(HERO_REEL_FILENAME),
-  poster: imageSets.sportHyrox,
-  mobilePoster: imageSets.sportBasketball,
-  alt: "Everyday athlete culture — HYROX, run club, basketball, and football clutch moments",
+  /** Legacy mp4 path unused; hero is CSS/motion image reel. */
+  src: null as string | null,
+  poster: imageSets.heroDesktop,
+  mobilePoster: imageSets.heroMobile,
+  alt: HERO_PREPARATION_ALT,
+  scenes: HERO_PREPARATION_SCENES,
 };
