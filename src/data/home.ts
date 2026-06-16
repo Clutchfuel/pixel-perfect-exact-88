@@ -232,35 +232,42 @@ export const dashboard = {
 };
 
 export const profiles = {
-  headline: "Every athlete has a profile.",
-  sub: "Discover your performance identity.",
+  headline: "What's Your Athlete Profile?",
+  sub: "No two athletes sweat the same. No two athletes should hydrate the same.",
   cards: [
     {
-      name: "Balanced Sweater",
-      copy: "Steady output, steady losses. Your edge is consistency.",
-      icon: "balance",
-      href: "/clutch-score",
-    },
-    {
-      name: "High Output Athlete",
-      copy: "You push the redline. Fuel matches the intensity.",
+      name: "The Competitor",
+      copy: "You thrive under pressure. You want every edge when the game is on the line.",
       icon: "flame",
       href: "/clutch-score",
     },
     {
-      name: "Recovery Focused",
-      copy: "You play the long game. Bounce back stronger every session.",
+      name: "The Grinder",
+      copy: "You train constantly. Your challenge isn't effort — it's recovery.",
       icon: "heart",
       href: "/clutch-score",
     },
     {
-      name: "Heavy Sweater",
-      copy: "You leave it on the floor. Replace what you lose, precisely.",
+      name: "The Workhorse",
+      copy: "You sweat heavily, train in demanding conditions, and ask a lot from your body.",
       icon: "droplet",
+      href: "/clutch-score",
+    },
+    {
+      name: "The Closer",
+      copy: "Strong athletes finish strong. You want the strategy to perform deep into competition.",
+      icon: "balance",
+      href: "/clutch-score",
+    },
+    {
+      name: "The Optimizer",
+      copy: "You already do many things right. You're chasing marginal gains — and they matter.",
+      icon: "balance",
       href: "/clutch-score",
     },
   ],
 };
+
 
 export const featuredInsightSlugs = [
   "how-much-water-should-athletes-drink",
@@ -321,7 +328,8 @@ export const testimonials = {
 };
 
 export const finalCta = {
-  headline: "Performance Starts With Preparation.",
-  sub: "Build your athlete profile and train with hydration intelligence.",
-  cta: "Build My Athlete Profile",
+  headline: "Discover Your Clutch Score™.",
+  sub: "Understand your hydration. Improve your recovery. Perform with confidence. Take the Clutch Assessment™ today.",
+  cta: "Find My Clutch Score",
 };
+
