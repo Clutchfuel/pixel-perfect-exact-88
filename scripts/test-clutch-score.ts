@@ -3,7 +3,7 @@ import type { QuizAnswers } from "../src/data/clutch-score";
 
 const cases: { name: string; answers: QuizAnswers; expectedProfile: string }[] = [
   {
-    name: "balanced",
+    name: "closer (balanced endurance)",
     answers: {
       bodyType: "average",
       trainingLoad: "moderate",
@@ -11,10 +11,10 @@ const cases: { name: string; answers: QuizAnswers; expectedProfile: string }[] =
       environment: "indoor",
       goal: "endurance",
     },
-    expectedProfile: "Balanced Sweater",
+    expectedProfile: "The Closer",
   },
   {
-    name: "high output",
+    name: "grinder (heavy load)",
     answers: {
       bodyType: "heavier",
       trainingLoad: "heavy",
@@ -22,10 +22,10 @@ const cases: { name: string; answers: QuizAnswers; expectedProfile: string }[] =
       environment: "mixed",
       goal: "performance",
     },
-    expectedProfile: "High Output Athlete",
+    expectedProfile: "The Grinder",
   },
   {
-    name: "recovery",
+    name: "optimizer (light recovery)",
     answers: {
       bodyType: "average",
       trainingLoad: "light",
@@ -33,10 +33,10 @@ const cases: { name: string; answers: QuizAnswers; expectedProfile: string }[] =
       environment: "indoor",
       goal: "recovery",
     },
-    expectedProfile: "Recovery Focused",
+    expectedProfile: "The Optimizer",
   },
   {
-    name: "heavy sweater",
+    name: "workhorse (heavy sweat + hot)",
     answers: {
       bodyType: "heavier",
       trainingLoad: "heavy",
@@ -44,9 +44,10 @@ const cases: { name: string; answers: QuizAnswers; expectedProfile: string }[] =
       environment: "hot",
       goal: "endurance",
     },
-    expectedProfile: "Heavy Sweater",
+    expectedProfile: "The Workhorse",
   },
 ];
+
 
 let failed = 0;
 for (const c of cases) {
@@ -84,10 +85,11 @@ const quick = calculateClutchScore({
   },
   caloriesBurned: 520,
 });
-if (quick.profile !== "Heavy Sweater" || quick.score < 1) {
+if (quick.profile !== "The Workhorse" || quick.score < 1) {
   failed += 1;
   console.error("FAIL quick estimate", quick);
 }
+
 
 if (failed > 0) {
   process.exit(1);

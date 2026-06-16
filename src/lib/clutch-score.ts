@@ -13,10 +13,11 @@ import {
 import { estimateSodiumLossMgFromProfile } from "@/lib/metrics-estimates";
 
 export type SweatProfile =
-  | "Balanced Sweater"
-  | "High Output Athlete"
-  | "Recovery Focused"
-  | "Heavy Sweater";
+  | "The Competitor"
+  | "The Grinder"
+  | "The Workhorse"
+  | "The Closer"
+  | "The Optimizer";
 
 export type ClutchScoreResult = {
   score: number;
@@ -51,42 +52,49 @@ function clamp(n: number) {
 }
 
 function resolveProfile(answers: QuizAnswers): SweatProfile {
-  if (answers.goal === "recovery") return "Recovery Focused";
-  if (answers.sweatLevel === "heavy" || answers.environment === "hot") return "Heavy Sweater";
-  if (answers.trainingLoad === "heavy" || answers.goal === "performance")
-    return "High Output Athlete";
-  return "Balanced Sweater";
+  if (answers.sweatLevel === "heavy" || answers.environment === "hot") return "The Workhorse";
+  if (answers.trainingLoad === "heavy") return "The Grinder";
+  if (answers.goal === "performance") return "The Competitor";
+  if (answers.goal === "endurance") return "The Closer";
+  return "The Optimizer";
 }
 
 const productByProfile: Record<SweatProfile, string> = {
-  "Balanced Sweater": "clutch-iso",
-  "High Output Athlete": "clutch-flow",
-  "Recovery Focused": "clutch-recovery",
-  "Heavy Sweater": "clutch-flow",
+  "The Competitor": "clutch-flow",
+  "The Grinder": "clutch-recovery",
+  "The Workhorse": "clutch-flow",
+  "The Closer": "clutch-iso",
+  "The Optimizer": "clutch-iso",
 };
 
 const guidanceByProfile: Record<SweatProfile, string[]> = {
-  "Balanced Sweater": [
-    "Aim for 16–20 oz of fluid in the 2 hours before training.",
-    "Replace roughly 16 oz per hour of moderate-intensity work.",
-    "Prioritize sodium (300–500 mg) when sessions exceed 60 minutes.",
+  "The Competitor": [
+    "Front-load 20–24 oz of fluid 90 minutes before high-pressure sessions.",
+    "Target 20–28 oz per hour during competition and high-output training.",
+    "Add electrolytes early — don't wait until you feel the drop.",
   ],
-  "High Output Athlete": [
-    "Front-load 20–24 oz of fluid 90 minutes before hard sessions.",
-    "Target 20–28 oz per hour during high-output training.",
-    "Add electrolytes early — don't wait until you feel depleted.",
-  ],
-  "Recovery Focused": [
+  "The Grinder": [
     "Rehydrate within 30 minutes post-session with 20 oz + electrolytes.",
     "Keep daily fluid intake steady — recovery starts between sessions.",
     "Prioritize Clutch Recovery within 45 minutes of finishing.",
   ],
-  "Heavy Sweater": [
-    "Pre-hydrate with 24 oz and 400–600 mg sodium before hot sessions.",
-    "Plan for 24–32 oz per hour — weigh yourself to refine your number.",
+  "The Workhorse": [
+    "Pre-hydrate with 24 oz and 400–600 mg sodium before hot or demanding sessions.",
+    "Plan for 24–32 oz per hour — weigh in to refine your number.",
     "Clutch Flow during training; Recovery within 30 minutes after.",
   ],
+  "The Closer": [
+    "Aim for 16–20 oz of fluid in the 2 hours before training or competition.",
+    "Replace ~16–20 oz per hour during sustained efforts.",
+    "Add sodium (300–500 mg) when sessions exceed 60 minutes.",
+  ],
+  "The Optimizer": [
+    "Anchor hydration to daily habits — same cues, same times, every day.",
+    "Use sessions over 60 minutes as your electrolyte trigger.",
+    "Track consistency, not just volume — small gains compound.",
+  ],
 };
+
 
 function scoreLookup<T extends Record<string, number>>(
   map: T,

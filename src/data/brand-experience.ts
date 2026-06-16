@@ -2,46 +2,45 @@ import { imageSets } from "@/assets/image-sets";
 
 export const brand = {
   hero: {
-    tag: "HYROX · COMMUNITY · PREPARATION",
-    headline: "Performance Starts With Preparation.",
-    tagline: "Hydration intelligence for Hyrox boxes, run clubs, and training crews.",
+    tag: "BASKETBALL · HYROX · RUNNING · FOOTBALL · COMBAT · CROSSFIT",
+    headline: "Stay Clutch.",
+    tagline: "Hydration built for athletes who refuse to fade when it matters most.",
     supporting: [
-      "Most athletes train with intention.",
-      "Few hydrate with intention.",
-      "ClutchFuel helps crews and everyday athletes understand their body, build better hydration habits, and prepare to perform at their best.",
+      "Take the Clutch Assessment™ and discover your Clutch Score™.",
+      "Trusted by athletes, coaches, competitors, and everyday grinders.",
     ],
-    primaryCta: "Build My Athlete Profile",
-    secondaryCta: "Learn How It Works",
+    primaryCta: "Find My Clutch Score",
+    secondaryCta: "How It Works",
   },
   preparation: {
-    id: "why-preparation",
-    headline: "Why Preparation Matters",
+    id: "why-hydration",
+    headline: "Most Athletes Train Hard. Few Hydrate With Intention.",
     cards: [
       {
-        title: "Preparation",
-        copy: "The best performance starts long before competition.",
+        title: "Train Harder",
+        copy: "Strength, speed, skill, conditioning — you put in the work. Don't guess on hydration.",
         icon: "target" as const,
       },
       {
-        title: "Hydration",
-        copy: "Your body performs differently when properly hydrated.",
+        title: "Recover Smarter",
+        copy: "Replace what your body actually loses. Sodium, potassium, magnesium, fluids.",
         icon: "droplet" as const,
       },
       {
-        title: "Consistency",
-        copy: "Daily habits create long-term results.",
+        title: "Stay Clutch",
+        copy: "The difference between feeling great and fading late is often hydration.",
         icon: "calendar" as const,
       },
     ],
   },
   everydayAthletes: {
     id: "everyday-athletes",
-    headline: "Built For Everyday Athletes",
-    sub: "The athletes who perform best prepare differently.",
+    headline: "Built For Everyday Athletes.",
+    sub: "Not pros. Not influencers. People balancing work, family, training, and competition — who still show up when it matters.",
     sports: [
       {
         name: "Basketball",
-        quote: "Preparation gives me confidence.",
+        quote: "Fourth quarter is won in the first.",
         insight: "Court sessions demand rhythm — hydration is part of the warmup.",
         image: imageSets.sportBasketball,
         href: "/athletes/basketball",
@@ -61,7 +60,7 @@ export const brand = {
         href: "/athletes/hyrox",
       },
       {
-        name: "Strength Training",
+        name: "Strength & Combat",
         quote: "Recovery starts with what I drink.",
         insight: "Heavy sessions need intentional hydration between sets.",
         image: imageSets.sportGym,
@@ -71,7 +70,7 @@ export const brand = {
   },
   featuredAthletes: {
     id: "featured-athletes",
-    headline: "Featured Athletes",
+    headline: "Athletes Who Stay Clutch.",
     sub: "Journeys, not highlight reels.",
     stories: [
       {
@@ -106,30 +105,30 @@ export const brand = {
   },
   coachesCorner: {
     id: "coaches",
-    headline: "Coaches Corner",
-    sub: "Performance education from coaches who care about preparation.",
+    headline: "Performance Starts With Understanding.",
+    sub: "Real data. No bro science. No fear tactics. Practical education from coaches who've been there.",
     articles: [
       {
         title: "Hydration habits that stick",
-        topic: "Hydration habits",
+        topic: "Hydration science",
         excerpt: "Simple cues athletes actually follow between sessions.",
         href: "/insights/hydration-101-for-everyday-athletes",
       },
       {
         title: "Recovery routines that compound",
-        topic: "Recovery routines",
+        topic: "Recovery strategies",
         excerpt: "Why the hour after training sets up tomorrow's readiness.",
         href: "/insights/sleep-recovery-and-hydration",
       },
       {
         title: "Preparation rituals before competition",
-        topic: "Preparation rituals",
+        topic: "Athlete stories",
         excerpt: "What disciplined athletes do in the 24 hours before they perform.",
         href: "/insights/signs-of-dehydration-during-exercise",
       },
       {
         title: "Game-day readiness checklist",
-        topic: "Game-day readiness",
+        topic: "Coach perspectives",
         excerpt: "A calm, repeatable framework for coaches and captains.",
         href: "/insights/how-much-water-should-athletes-drink",
       },
@@ -137,8 +136,8 @@ export const brand = {
   },
   learn: {
     id: "learn",
-    headline: "Learn",
-    sub: "Performance education — not a blog. A media hub for everyday athletes.",
+    headline: "The Education Hub.",
+    sub: "Articles, science, athlete stories, and training insights for everyday athletes.",
     articles: [
       { title: "Hydration 101", href: "/insights/hydration-101-for-everyday-athletes" },
       {
@@ -153,75 +152,107 @@ export const brand = {
   },
   clutchScore: {
     id: "clutch-score",
-    headline: "Understand Your Hydration Readiness.",
-    sub: "The Clutch Score helps athletes better understand how their hydration habits, training demands, and consistency impact performance.",
+    headline: "Meet The Clutch Assessment™.",
+    sub: "In less than 60 seconds, discover the hydration habits, sweat patterns, and recovery gaps holding back your performance. You'll receive your Clutch Score™, Athlete Profile, Sweat Profile, personalized recommendations, and your Clutch Blueprint™.",
     sample: {
       score: 87,
-      profile: "High Output Athlete",
+      profile: "The Workhorse",
       readiness: "High",
     },
-    cta: "Build My Athlete Profile",
+    cta: "Start Assessment",
+  },
+  profiles: {
+    id: "profiles",
+    headline: "What's Your Athlete Profile?",
+    sub: "No two athletes sweat the same. No two athletes should hydrate the same.",
+    cards: [
+      {
+        name: "The Competitor",
+        copy: "You thrive under pressure. You want every edge when the game is on the line.",
+      },
+      {
+        name: "The Grinder",
+        copy: "You train constantly. Your challenge isn't effort — it's recovery.",
+      },
+      {
+        name: "The Workhorse",
+        copy: "You sweat heavily. You train in demanding conditions and ask a lot from your body.",
+      },
+      {
+        name: "The Closer",
+        copy: "Strong athletes finish strong. You want the strategy to perform deep into competition.",
+      },
+      {
+        name: "The Optimizer",
+        copy: "You already do many things right. You're chasing marginal gains — and those gains matter.",
+      },
+    ],
+    cta: "Find Your Profile",
   },
   system: {
     id: "system",
-    headline: "The ClutchFuel System",
-    sub: "Three stages. One preparation philosophy.",
+    headline: "Introducing ClutchFuel Core™.",
+    sub: "Daily performance hydration. The foundation of your strategy — built for training, competition, and recovery. Staying hydrated isn't a game-day decision. It's a daily habit.",
     products: [
       {
         name: "ISO",
         stage: "Prepare",
-        copy: "Hydrate before activity.",
+        copy: "Prime your body before activity.",
         href: "/products/clutch-iso",
+        accent: false,
       },
       {
-        name: "FLOW",
+        name: "CORE",
         stage: "Perform",
-        copy: "Hydrate during activity.",
+        copy: "Daily hydration that supports performance, endurance, and consistency.",
         href: "/products/clutch-flow",
         accent: true,
       },
       {
         name: "RECOVERY",
         stage: "Recover",
-        copy: "Replenish after activity.",
+        copy: "Replenish and rebuild after every session.",
         href: "/products/clutch-recovery",
+        accent: false,
       },
     ],
   },
+
   community: {
     id: "community",
-    headline: "Community",
-    sub: "Belonging is part of preparation.",
+    headline: "The Everyday Athlete Community.",
+    sub: "We're building more than a hydration brand. We're building a movement.",
     pillars: [
       { title: "Run clubs", copy: "Pace groups that prepare together, finish stronger." },
       {
         title: "Basketball communities",
         copy: "Leagues and crews who treat hydration as culture.",
       },
-      { title: "Training groups", copy: "Gym floors and Hyrox boxes building shared discipline." },
-      { title: "Local events", copy: "Pop-ups, clinics, and meetups — show up prepared." },
-      { title: "Athlete stories", copy: "Real journeys from everyday athletes like you." },
+      { title: "HYROX & CrossFit", copy: "Gym floors and boxes building shared discipline." },
+      { title: "Combat athletes", copy: "Camps and fight teams who train for the late rounds." },
+      { title: "Coaches & parents", copy: "The people behind every athlete showing up prepared." },
     ],
   },
   founder: {
     id: "founder",
     name: "Jamar Gopie",
-    headline: "Built for athletes who prepare differently.",
+    headline: "Why We Started ClutchFuel.",
     story: [
-      "Jamar Gopie is a lifelong athlete and coach obsessed with the gap between how hard people train and how intentionally they prepare.",
-      "He saw everyday athletes — students, parents, weekend warriors — doing the work in the gym but guessing on hydration. Not because they didn't care. Because nobody gave them a system that felt personal.",
-      "ClutchFuel exists to close that gap: hydration intelligence, athlete identity, and habits that compound. Not supplements. Preparation.",
+      "As athletes and coaches, we've seen the same thing happen over and over. Athletes train harder than ever — yet many still struggle with cramping, poor recovery, fatigue, and inconsistent performance.",
+      "Not because they aren't working hard. Because they don't understand what their body actually needs.",
+      "ClutchFuel exists to close that gap. To help athletes understand themselves, build better habits, and stay clutch when it matters most.",
     ],
     image: imageSets.aboutTeam,
-    closing: "Performance Starts With Preparation.",
+    closing: "Stay Clutch.",
   },
   newsletter: {
     id: "newsletter",
-    headline: "Stay Prepared.",
-    sub: "Get hydration insights, athlete stories, coaching tips, and performance education delivered weekly.",
+    headline: "Join The Movement.",
+    sub: "Hydration insights, athlete stories, coaching tips, and performance education — delivered weekly.",
     cta: "Join The Community",
   },
 } as const;
 
 export type BrandSport = (typeof brand.everydayAthletes.sports)[number];
 export type BrandStory = (typeof brand.featuredAthletes.stories)[number];
+export type BrandProfile = (typeof brand.profiles.cards)[number];

@@ -90,7 +90,7 @@ export function HeroClutchVideo() {
       <video
         ref={videoRef}
         className={cn(mediaClass, "absolute inset-0")}
-        src={HERO_REEL.src}
+        src={HERO_REEL.src ?? undefined}
         poster={HERO_REEL.poster.fallback}
         muted
         playsInline
