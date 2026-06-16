@@ -8,6 +8,8 @@ import { FeaturedAthletesSection } from "@/components/sections/brand/FeaturedAth
 import { CoachesCornerSection } from "@/components/sections/brand/CoachesCornerSection";
 import { LearnHubSection } from "@/components/sections/brand/LearnHubSection";
 import { ClutchScoreTeaserSection } from "@/components/sections/brand/ClutchScoreTeaserSection";
+import { AthleteProfilesSection } from "@/components/sections/brand/AthleteProfilesSection";
+
 import { SystemExperienceSection } from "@/components/sections/brand/SystemExperienceSection";
 import { CommunitySection } from "@/components/sections/brand/CommunitySection";
 import { FounderStorySection } from "@/components/sections/brand/FounderStorySection";
@@ -57,10 +59,12 @@ function Index() {
         <HeroSection />
         <PreparationWhySection />
         <EverydayAthletesSection />
+        <ClutchScoreTeaserSection />
+        <AthleteProfilesSection />
         <FeaturedAthletesSection />
         <CoachesCornerSection />
         <LearnHubSection />
-        <ClutchScoreTeaserSection />
+
         <SystemExperienceSection />
         <CommunitySection />
         <FounderStorySection />
