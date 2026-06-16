@@ -199,6 +199,7 @@ export const brand = {
         stage: "Prepare",
         copy: "Prime your body before activity.",
         href: "/products/clutch-iso",
+        accent: false,
       },
       {
         name: "CORE",
@@ -212,9 +213,11 @@ export const brand = {
         stage: "Recover",
         copy: "Replenish and rebuild after every session.",
         href: "/products/clutch-recovery",
+        accent: false,
       },
     ],
   },
+
   community: {
     id: "community",
     headline: "The Everyday Athlete Community.",
