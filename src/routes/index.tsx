@@ -92,9 +92,13 @@ function ClutchScoreApp() {
     <main id="main" className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
         <header className="mb-10 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">
-            ClutchFuel
-          </span>
+          <img
+            src={logoAsset.url}
+            alt="ClutchFuel"
+            width={132}
+            height={24}
+            className="h-6 w-auto object-contain"
+          />
           <span className="text-xs uppercase tracking-[0.22em] text-white/40">Clutch Score</span>
         </header>
 
