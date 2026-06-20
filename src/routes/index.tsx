@@ -1,8 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { submitFeedback } from "@/lib/feedback.functions";
 import { toast } from "sonner";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
+
+function generateSessionToken(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
+  }
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
