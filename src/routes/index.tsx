@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "What's your Clutch Score? Take the 60-second hydration assessment built for athletes and find your biggest opportunity.",
+          "What's your Clutch Score? Discover your biggest hydration opportunity in 60 seconds.",
       },
       { property: "og:title", content: "Clutch Score by ClutchFuel" },
       {
@@ -109,8 +109,8 @@ function ClutchScoreApp() {
 
   return (
     <main id="main" className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
-        <header className="mb-10 flex items-center gap-4">
+      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 pt-6 pb-10 sm:py-16">
+        <header className="mb-4 flex items-center gap-4 sm:mb-10">
           <Logo size="lg" />
         </header>
 
@@ -172,21 +172,46 @@ function ClutchScoreApp() {
 
 function Landing({ onStart }: { onStart: () => void }) {
   return (
-    <section className="flex flex-1 flex-col justify-center">
+    <section className="flex flex-1 flex-col justify-start pt-2 sm:justify-center sm:pt-0">
       <h1 className="text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
         What's your <span className="text-lime">Clutch Score?</span>
       </h1>
-      <p className="mt-6 text-lg text-white/70">
-        Take the 60-second hydration assessment built for athletes.
+      <p className="mt-4 text-lg text-white/70 sm:mt-6">
+        Discover your biggest hydration opportunity in 60 seconds.
       </p>
+
+      <div className="mt-6 sm:mt-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
+          What You'll Get
+        </p>
+        <ul className="mt-3 space-y-2">
+          <li className="flex items-center gap-2.5 text-sm text-white/80">
+            <span className="text-lime">•</span>
+            Your Clutch Score
+          </li>
+          <li className="flex items-center gap-2.5 text-sm text-white/80">
+            <span className="text-lime">•</span>
+            Your Biggest Hydration Opportunity
+          </li>
+          <li className="flex items-center gap-2.5 text-sm text-white/80">
+            <span className="text-lime">•</span>A Personalized Next Step
+          </li>
+        </ul>
+      </div>
+
       <button
         onClick={onStart}
-        className="mt-10 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark"
+        className="mt-8 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark sm:mt-10"
       >
         Start My Assessment
       </button>
-      <p className="mt-5 text-center text-xs uppercase tracking-[0.22em] text-white/30">
-        5 questions · 60 seconds
+
+      <p className="mt-3 text-center text-xs text-white/30">
+        No tracking. No wearables. No complicated calculations.
+      </p>
+
+      <p className="mt-4 text-center text-xs text-white/25">
+        Built for runners, HYROX athletes, basketball players, and everyday athletes.
       </p>
     </section>
   );
