@@ -90,7 +90,7 @@ type Step =
   | { kind: "landing" }
   | { kind: "quiz"; index: number }
   | { kind: "email" }
-  | { kind: "result"; id: string; score: number; opportunity: Opportunity; nextStep: string };
+  | { kind: "result"; id: string; sessionToken: string; score: number; opportunity: Opportunity; nextStep: string };
 
 function ClutchScoreApp() {
   const [step, setStep] = useState<Step>({ kind: "landing" });
