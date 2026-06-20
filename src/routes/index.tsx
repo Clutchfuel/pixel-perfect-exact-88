@@ -367,11 +367,13 @@ function EmailCapture({
 
 function Result({
   id,
+  sessionToken,
   score,
   opportunity,
   nextStep,
 }: {
   id: string;
+  sessionToken: string;
   score: number;
   opportunity: Opportunity;
   nextStep: string;
@@ -380,6 +382,7 @@ function Result({
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const submitFeedbackFn = useServerFn(submitFeedback);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -391,20 +394,22 @@ function Result({
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase
-      .from("assessment_responses")
-      .update({
-        helpful_result: helpful,
-        feedback_text: feedback.trim() || null,
-      })
-      .eq("id", id);
-    setSubmitting(false);
-    if (error) {
+    try {
+      await submitFeedbackFn({
+        data: {
+          id,
+          session_token: sessionToken,
+          helpful_result: helpful,
+          feedback_text: feedback.trim() || null,
+        },
+      });
+      setSubmitted(true);
+      toast.success("Thanks for the feedback.");
+    } catch {
       toast.error("Couldn't save feedback. Try again.");
-      return;
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
-    toast.success("Thanks for the feedback.");
   };
 
   return (
