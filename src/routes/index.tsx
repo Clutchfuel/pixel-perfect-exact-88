@@ -194,8 +194,7 @@ function Landing({ onStart }: { onStart: () => void }) {
             Your Biggest Hydration Opportunity
           </li>
           <li className="flex items-center gap-2.5 text-sm text-white/80">
-            <span className="text-lime">•</span>
-            A Personalized Next Step
+            <span className="text-lime">•</span>A Personalized Next Step
           </li>
         </ul>
       </div>
