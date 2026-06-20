@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_responses: {
+        Row: {
+          clutch_score: number | null
+          created_at: string
+          email: string
+          feedback_text: string | null
+          first_name: string | null
+          helpful_result: boolean | null
+          id: string
+          next_step: string | null
+          opportunity: string | null
+          q1: string
+          q2: string
+          q3: string
+          q4: string
+          q5: string
+          source: string | null
+        }
+        Insert: {
+          clutch_score?: number | null
+          created_at?: string
+          email: string
+          feedback_text?: string | null
+          first_name?: string | null
+          helpful_result?: boolean | null
+          id?: string
+          next_step?: string | null
+          opportunity?: string | null
+          q1: string
+          q2: string
+          q3: string
+          q4: string
+          q5: string
+          source?: string | null
+        }
+        Update: {
+          clutch_score?: number | null
+          created_at?: string
+          email?: string
+          feedback_text?: string | null
+          first_name?: string | null
+          helpful_result?: boolean | null
+          id?: string
+          next_step?: string | null
+          opportunity?: string | null
+          q1?: string
+          q2?: string
+          q3?: string
+          q4?: string
+          q5?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
