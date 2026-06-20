@@ -137,10 +137,11 @@ function ClutchScoreApp() {
           <EmailCapture
             answers={answers as Answer[]}
             onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
-            onComplete={(id, result) =>
+            onComplete={(id, token, result) =>
               setStep({
                 kind: "result",
                 id,
+                sessionToken: token,
                 score: result.clutch_score,
                 opportunity: result.opportunity,
                 nextStep: result.next_step,
@@ -152,6 +153,7 @@ function ClutchScoreApp() {
         {step.kind === "result" && (
           <Result
             id={step.id}
+            sessionToken={step.sessionToken}
             score={step.score}
             opportunity={step.opportunity}
             nextStep={step.nextStep}
