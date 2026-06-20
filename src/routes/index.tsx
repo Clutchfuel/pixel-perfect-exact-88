@@ -1,8 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { submitFeedback } from "@/lib/feedback.functions";
 import { toast } from "sonner";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
+
+function generateSessionToken(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
+  }
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -81,7 +90,7 @@ type Step =
   | { kind: "landing" }
   | { kind: "quiz"; index: number }
   | { kind: "email" }
-  | { kind: "result"; id: string; score: number; opportunity: Opportunity; nextStep: string };
+  | { kind: "result"; id: string; sessionToken: string; score: number; opportunity: Opportunity; nextStep: string };
 
 function ClutchScoreApp() {
   const [step, setStep] = useState<Step>({ kind: "landing" });
@@ -128,10 +137,11 @@ function ClutchScoreApp() {
           <EmailCapture
             answers={answers as Answer[]}
             onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
-            onComplete={(id, result) =>
+            onComplete={(id, token, result) =>
               setStep({
                 kind: "result",
                 id,
+                sessionToken: token,
                 score: result.clutch_score,
                 opportunity: result.opportunity,
                 nextStep: result.next_step,
@@ -143,6 +153,7 @@ function ClutchScoreApp() {
         {step.kind === "result" && (
           <Result
             id={step.id}
+            sessionToken={step.sessionToken}
             score={step.score}
             opportunity={step.opportunity}
             nextStep={step.nextStep}
@@ -254,6 +265,7 @@ function EmailCapture({
   onBack: () => void;
   onComplete: (
     id: string,
+    sessionToken: string,
     result: { clutch_score: number; opportunity: Opportunity; next_step: string },
   ) => void;
 }) {
@@ -270,6 +282,7 @@ function EmailCapture({
     }
     setSubmitting(true);
     const result = computeResult(answers);
+    const sessionToken = generateSessionToken();
     const { data, error } = await supabase
       .from("assessment_responses")
       .insert({
@@ -284,6 +297,7 @@ function EmailCapture({
         clutch_score: result.clutch_score,
         opportunity: result.opportunity,
         next_step: result.next_step,
+        session_token: sessionToken,
       })
       .select("id")
       .single();
@@ -292,7 +306,7 @@ function EmailCapture({
       toast.error("Something went wrong. Please try again.");
       return;
     }
-    onComplete(data.id, result);
+    onComplete(data.id, sessionToken, result);
   };
 
   return (
@@ -353,11 +367,13 @@ function EmailCapture({
 
 function Result({
   id,
+  sessionToken,
   score,
   opportunity,
   nextStep,
 }: {
   id: string;
+  sessionToken: string;
   score: number;
   opportunity: Opportunity;
   nextStep: string;
@@ -366,6 +382,7 @@ function Result({
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const submitFeedbackFn = useServerFn(submitFeedback);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -377,20 +394,22 @@ function Result({
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase
-      .from("assessment_responses")
-      .update({
-        helpful_result: helpful,
-        feedback_text: feedback.trim() || null,
-      })
-      .eq("id", id);
-    setSubmitting(false);
-    if (error) {
+    try {
+      await submitFeedbackFn({
+        data: {
+          id,
+          session_token: sessionToken,
+          helpful_result: helpful,
+          feedback_text: feedback.trim() || null,
+        },
+      });
+      setSubmitted(true);
+      toast.success("Thanks for the feedback.");
+    } catch {
       toast.error("Couldn't save feedback. Try again.");
-      return;
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
-    toast.success("Thanks for the feedback.");
   };
 
   return (
