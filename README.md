@@ -1,63 +1,51 @@
-# ClutchFuel Website
+# ClutchFuel — Clutch Score MVP
 
-Marketing site for [ClutchFuel](https://clutchfuel.com): hydration system, Clutch Score quiz, insights, and lead capture. Built with **TanStack Start**, **React 19**, and **Vite 7**, synced from [Lovable](https://lovable.dev) to GitHub.
+Public **Clutch Score** assessment: 60-second hydration quiz, email capture, personalized score, and feedback — backed by **Supabase** (Lovable Cloud).
 
-|                         |                                                      |
-| ----------------------- | ---------------------------------------------------- |
-| **Published (Lovable)** | https://pixel-perfect-exact-88.lovable.app           |
-| **GitHub**              | https://github.com/Clutchfuel/pixel-perfect-exact-88 |
-| **Package name**        | `clutchfuel-website`                                 |
+| | |
+|---|---|
+| **GitHub** | https://github.com/Clutchfuel/pixel-perfect-exact-88-b80bf162 |
+| **Published (Lovable)** | https://pixel-perfect-exact-88-b80bf162.lovable.app |
+| **Athlete app** | https://clutch-athlete-insight.lovable.app |
 
-Full deploy workflow, preview drift, and hosting notes: **[SETUP.md](./SETUP.md)**.  
-Production secrets, Turnstile, KV, and monitoring: **[docs/PRODUCTION.md](./docs/PRODUCTION.md)**.
+Built with **TanStack Start**, **React 19**, **Vite 7**, synced from [Lovable](https://lovable.dev).
+
+Deploy workflow: **[SETUP.md](./SETUP.md)**
 
 ## Quick start
 
 ```bash
 bun install
-bun run setup          # .dev.vars.example → .dev.vars
-bun run videos:fetch   # hero MP4s (yt-dlp + ffmpeg) — see public/videos/clutch/README.md
+cp .env.example .env   # add Supabase keys from Lovable Cloud
 bun run dev            # http://localhost:5173
 ```
 
 ## Scripts
 
-| Command                        | Purpose                                               |
-| ------------------------------ | ----------------------------------------------------- |
-| `bun run dev`                  | Local development                                     |
-| `bun run build`                | Production build                                      |
-| `bun run test`                 | Unit tests (score, security, hydration lab)           |
-| `bun run test:e2e`             | Smoke tests (SEO, APIs, key routes)                   |
-| `bun run lint`                 | ESLint + Prettier                                     |
-| `bun run videos:fetch`         | Download/trim hero clips into `public/videos/clutch/` |
-| `bun run verify:production`    | Pre-deploy env checklist (`.dev.vars`)                |
-| `bun run configure:production` | Cloudflare Worker: KV, secrets, deploy                |
+| Command | Purpose |
+|---------|---------|
+| `bun run dev` | Local development |
+| `bun run build` | Production build |
+| `bun run lint` | ESLint + Prettier |
+| `bun run format` | Format all files |
 
 ## Environment variables
 
-Copy [`.dev.vars.example`](./.dev.vars.example) via `bun run setup`. Never commit `.dev.vars`.
+Copy [`.env.example`](./.env.example) to `.env`. **Never commit `.env`.**
 
-| Variable                  | Scope  | Required in prod                           |
-| ------------------------- | ------ | ------------------------------------------ |
-| `VITE_SITE_URL`           | Client | Yes                                        |
-| `VITE_TURNSTILE_SITE_KEY` | Client | Recommended (pair with secret)             |
-| `VITE_GA_MEASUREMENT_ID`  | Client | Optional (cookie consent)                  |
-| `VITE_HERO_VIDEO_CDN`     | Client | Optional (R2/CDN base URL for hero MP4s)   |
-| `RESEND_API_KEY`          | Server | Yes                                        |
-| `RESEND_FROM_EMAIL`       | Server | Yes (verified sender)                      |
-| `LEADS_TO_EMAIL`          | Server | Yes                                        |
-| `TURNSTILE_SECRET_KEY`    | Server | When site key is set                       |
-| `ERROR_WEBHOOK_URL`       | Server | Recommended (Slack/PagerDuty JSON webhook) |
+| Variable | Required |
+|----------|----------|
+| `VITE_SUPABASE_URL` | Yes |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Yes |
+| `VITE_SITE_URL` | Optional (defaults to Lovable published URL) |
 
-**Lovable:** Project → **Settings** → **Environment** — add the same keys (server keys without `VITE_` prefix).
+In Lovable: **Project → Settings → Environment** (or connect Supabase in Lovable Cloud).
 
-## Repository name (optional)
+## Product scope
 
-The GitHub repo is still named `pixel-perfect-exact-88` (Lovable default). To rename: GitHub → **Settings** → **General** → **Repository name** → `clutchfuel-website`, then update Lovable GitHub sync and `VITE_SITE_URL` if the published hostname changes.
+Single route (`/`): landing → 5 questions → email → Clutch Score result → feedback.
 
-## Returning athletes (homepage CTAs)
-
-The marketing site and athlete app run on different origins. After login, redirect athletes back with `?athlete_session=1` (sets `cf-athlete-authenticated` in localStorage). The athlete app can also set that key when both apps share an origin in production.
+This repo is the **new build** — separate from legacy `pixel-perfect-exact-88` and the full athlete platform in `clutch-athlete-insight`.
 
 ## License
 

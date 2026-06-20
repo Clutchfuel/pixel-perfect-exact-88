@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
 
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -102,9 +101,7 @@ function ClutchScoreApp() {
           <span className="text-xs uppercase tracking-[0.22em] text-white/40">Clutch Score</span>
         </header>
 
-        {step.kind === "landing" && (
-          <Landing onStart={() => setStep({ kind: "quiz", index: 0 })} />
-        )}
+        {step.kind === "landing" && <Landing onStart={() => setStep({ kind: "quiz", index: 0 })} />}
 
         {step.kind === "quiz" && (
           <Quiz
@@ -422,9 +419,7 @@ function Result({
 
       <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
         {submitted ? (
-          <p className="text-center text-sm text-white/70">
-            Thanks — your feedback is recorded.
-          </p>
+          <p className="text-center text-sm text-white/70">Thanks — your feedback is recorded.</p>
         ) : (
           <>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">

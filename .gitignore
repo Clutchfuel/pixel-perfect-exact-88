@@ -17,6 +17,10 @@ dist-ssr
 *.local
 .tmp/
 
+# Environment (use .env.example — configure in Lovable Cloud)
+.env
+.env.local
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

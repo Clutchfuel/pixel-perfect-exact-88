@@ -1,87 +1,34 @@
-# ClutchFuel Website — Setup & Deploy Workflow
+# ClutchFuel Clutch Score MVP — Setup & Deploy
 
-## Lovable Preview vs Published URL
+## Repos
 
-This project is hosted on [Lovable](https://lovable.dev) and synced with [GitHub](https://github.com/Clutchfuel/pixel-perfect-exact-88).
+| Repo | Role |
+|------|------|
+| **`pixel-perfect-exact-88-b80bf162`** (this repo) | Clutch Score MVP — public assessment + Supabase leads |
+| **`clutch-athlete-insight`** | Full athlete platform — profile, dashboard, sessions |
+| **`pixel-perfect-exact-88`** | Legacy marketing site (archived for new work) |
 
-| Surface             | URL / location                             | Use for                                  |
-| ------------------- | ------------------------------------------ | ---------------------------------------- |
-| **Published**       | https://pixel-perfect-exact-88.lovable.app | **Verify changes after a GitHub push**   |
-| **Lovable Preview** | In-editor iframe                           | Dev sandbox only — can lag behind GitHub |
-| **Local dev**       | `bun run dev`                              | Active development in Cursor             |
+## Lovable
 
-**Important:** Pushing to GitHub updates the **Published** site (after Lovable rebuilds). The **Lovable editor Preview** often stays on an older build until you sync and refresh it.
-
----
-
-## After pushing from Cursor → GitHub
-
-1. Open the **Published URL**: https://pixel-perfect-exact-88.lovable.app  
-   Hard-refresh (Cmd+Shift+R) if needed.
-
-2. **Sync Lovable with GitHub** (if Preview still looks wrong):
-   - Lovable project → **Settings** → **GitHub**
-   - Confirm repo: `Clutchfuel/pixel-perfect-exact-88`, branch: `main`
-   - Click **Sync** / **Pull from GitHub**
-   - Hard-refresh the Preview pane (Cmd+Shift+R inside the iframe)
-
-3. **Publish** in Lovable when you want to promote the latest Preview build to Published (usually automatic after GitHub sync).
-
----
-
-## Avoid preview drift
-
-- **Single source of truth:** Edit in Cursor → push to `main` → verify on **Published URL**.
-- **Do not rely on Lovable Preview** as the source of truth for GitHub/Cursor work.
-- **Ignore or abandon Lovable-only chat tasks** that change layout/components already updated in Cursor (e.g. “Restore home header”, SSR fixes) unless you re-implement them in Cursor and push to GitHub. Those tasks update Preview only and do not appear on `main`.
-- **Do not click Preview** on old history entries in Lovable — each row is a snapshot of that commit.
-
----
+1. Open the Lovable project linked to **`Clutchfuel/pixel-perfect-exact-88-b80bf162`**
+2. **Settings → GitHub** — confirm branch `main`
+3. After GitHub push: **Pull from GitHub** if Preview lags, then **Publish**
+4. Verify: https://pixel-perfect-exact-88-b80bf162.lovable.app
 
 ## Local development
 
 ```bash
 bun install
-bun run setup          # copies .dev.vars.example → .dev.vars
-bun run dev            # http://localhost:5173
+cp .env.example .env
+bun run dev
 ```
 
-Optional env in `.dev.vars` (see `.dev.vars.example`): `RESEND_API_KEY`, Turnstile keys, `VITE_SITE_URL`, `ERROR_WEBHOOK_URL`, `VITE_HERO_VIDEO_CDN`.
-
-Hero videos are not in git. After clone: `bun run videos:fetch` (requires yt-dlp + ffmpeg) or set `VITE_HERO_VIDEO_CDN` — see `public/videos/clutch/README.md`.
-
-```bash
-bun run build
-bun run preview        # postbuild creates dist/server/server.js for preview
-bun run test:e2e       # smoke tests (build + preview + curl checks)
-bun run lint
-bun run verify:production   # pre-deploy checklist
-```
-
----
+Supabase keys come from Lovable Cloud / Supabase dashboard — not from git.
 
 ## GitHub CI
 
-Pushes to `main` run lint, build, unit tests, and e2e smoke via `.github/workflows/ci.yml`.
+Pushes to `main` run: `bun install --frozen-lockfile` → `lint` → `build`.
 
-The TanStack Start build outputs `dist/server/index.js`; `postbuild` copies it to `dist/server/server.js` so `vite preview` works in CI.
+## Supabase
 
----
-
-## Production secrets (Lovable)
-
-1. Copy env from `.dev.vars.example` into Lovable **Settings → Environment** (server keys without `VITE_` prefix).
-2. Enable **Turnstile** (site + secret) and **Resend** before accepting live leads.
-3. Set **`ERROR_WEBHOOK_URL`** for error monitoring (see [docs/PRODUCTION.md](./docs/PRODUCTION.md)).
-4. Run locally: `bun run verify:production --strict` before go-live.
-
-## Cloudflare Workers (optional)
-
-Production on a custom domain (e.g. `clutchfuel.com`) uses Cloudflare Workers (`wrangler.jsonc`). That is separate from Lovable hosting:
-
-```bash
-bun run verify:production
-bun run configure:production   # KV namespaces, secrets, wrangler deploy
-```
-
-See [docs/PRODUCTION.md](./docs/PRODUCTION.md) and [README.md](./README.md).
+Migrations live in `supabase/migrations/`. Table: `assessment_responses` (quiz answers, score, email, feedback).
