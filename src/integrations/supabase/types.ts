@@ -30,6 +30,7 @@ export type Database = {
           q3: string
           q4: string
           q5: string
+          session_token: string | null
           source: string | null
         }
         Insert: {
@@ -47,6 +48,7 @@ export type Database = {
           q3: string
           q4: string
           q5: string
+          session_token?: string | null
           source?: string | null
         }
         Update: {
@@ -64,6 +66,7 @@ export type Database = {
           q3?: string
           q4?: string
           q5?: string
+          session_token?: string | null
           source?: string | null
         }
         Relationships: []
