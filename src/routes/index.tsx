@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { Logo } from "@/components/Logo";
 import { submitFeedback } from "@/lib/feedback.functions";
 import { toast } from "sonner";
-import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
 
 function generateSessionToken(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -99,15 +99,11 @@ function ClutchScoreApp() {
   return (
     <main id="main" className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
-        <header className="mb-10 flex items-center justify-between">
-          <img
-            src={logoAsset.url}
-            alt="ClutchFuel"
-            width={132}
-            height={24}
-            className="h-6 w-auto object-contain"
-          />
-          <span className="text-xs uppercase tracking-[0.22em] text-white/40">Clutch Score</span>
+        <header className="mb-10 flex items-center justify-between gap-4">
+          <Logo size="md" />
+          <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-white/40">
+            Clutch Score
+          </span>
         </header>
 
         {step.kind === "landing" && <Landing onStart={() => setStep({ kind: "quiz", index: 0 })} />}
@@ -494,6 +490,3 @@ function Result({
     </section>
   );
 }
-
-// memoize-friendly export to satisfy fast refresh boundary expectations
-void useMemo;

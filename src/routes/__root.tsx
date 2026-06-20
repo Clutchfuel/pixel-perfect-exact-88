@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 
 import { Analytics } from "@/components/Analytics";
 import { CookieConsent } from "@/components/CookieConsent";
+import { Logo } from "@/components/Logo";
 import { Toaster } from "@/components/ui/sonner";
 
 function useNoindexMeta() {
@@ -33,19 +34,23 @@ function useNoindexMeta() {
 function NotFoundComponent() {
   useNoindexMeta();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
+    <div className="flex min-h-screen flex-col bg-background px-5 py-10">
+      <header className="mb-12">
+        <Logo size="md" />
+      </header>
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+          This app is the Clutch Score assessment. Start below — other ClutchFuel pages are coming
+          soon.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-full bg-lime px-6 py-3 text-sm font-semibold text-background transition hover:bg-lime-dark"
           >
-            Go home
+            Take the assessment
           </Link>
         </div>
       </div>
