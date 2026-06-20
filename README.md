@@ -4,8 +4,8 @@ Public **Clutch Score** assessment: 60-second hydration quiz, email capture, per
 
 | | |
 |---|---|
-| **GitHub** | https://github.com/Clutchfuel/pixel-perfect-exact-88-b80bf162 |
-| **Published (Lovable)** | https://pixel-perfect-exact-88-b80bf162.lovable.app |
+| **GitHub** | https://github.com/Clutchfuel/pixel-perfect-exact-88 |
+| **Published (Lovable)** | https://pixel-perfect-exact-88.lovable.app |
 | **Athlete app** | https://clutch-athlete-insight.lovable.app |
 
 Built with **TanStack Start**, **React 19**, **Vite 7**, synced from [Lovable](https://lovable.dev).

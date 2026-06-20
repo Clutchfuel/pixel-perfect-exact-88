@@ -1,5 +1,5 @@
 export const SITE_URL =
-  import.meta.env.VITE_SITE_URL ?? "https://pixel-perfect-exact-88-b80bf162.lovable.app";
+  import.meta.env.VITE_SITE_URL ?? "https://pixel-perfect-exact-88.lovable.app";
 
 export const SITE_NAME = "ClutchFuel";
 

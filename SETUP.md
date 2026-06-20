@@ -4,16 +4,16 @@
 
 | Repo | Role |
 |------|------|
-| **`pixel-perfect-exact-88-b80bf162`** (this repo) | Clutch Score MVP — public assessment + Supabase leads |
+| **`pixel-perfect-exact-88`** (this repo) | Clutch Score MVP — public assessment + Supabase leads |
 | **`clutch-athlete-insight`** | Full athlete platform — profile, dashboard, sessions |
-| **`pixel-perfect-exact-88`** | Legacy marketing site (archived for new work) |
+| **`pixel-perfect-exact-88-b80bf162`** | Alternate build fork (same MVP stack) |
 
 ## Lovable
 
-1. Open the Lovable project linked to **`Clutchfuel/pixel-perfect-exact-88-b80bf162`**
+1. Open the Lovable project linked to **`Clutchfuel/pixel-perfect-exact-88`**
 2. **Settings → GitHub** — confirm branch `main`
 3. After GitHub push: **Pull from GitHub** if Preview lags, then **Publish**
-4. Verify: https://pixel-perfect-exact-88-b80bf162.lovable.app
+4. Verify: https://pixel-perfect-exact-88.lovable.app
 
 ## Local development
 

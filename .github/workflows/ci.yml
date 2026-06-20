@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      VITE_SITE_URL: https://pixel-perfect-exact-88-b80bf162.lovable.app
+      VITE_SITE_URL: https://pixel-perfect-exact-88.lovable.app
       CI: true
     steps:
       - uses: actions/checkout@v6
