@@ -3,26 +3,30 @@ type LogoProps = {
   size?: "sm" | "md" | "lg";
 };
 
-/** Wordmark aspect ratio from public/logo-white.png (841×142) */
-const WORDMARK_WIDTH = 841;
-const WORDMARK_HEIGHT = 142;
-
+/**
+ * public/logo-white.png is a JPEG wordmark with large vertical padding.
+ * We crop to the center band via overflow + offset so header height maps to readable text.
+ */
 const sizeClass = {
-  sm: "h-5 sm:h-6",
-  md: "h-6 sm:h-7",
-  lg: "h-7 sm:h-8",
+  sm: { frame: "h-6 w-[112px]", image: "h-[4.5rem] -mt-6" },
+  md: { frame: "h-7 w-[130px]", image: "h-[5.25rem] -mt-7" },
+  lg: { frame: "h-8 w-[148px]", image: "h-24 -mt-8" },
 } as const;
 
 export function Logo({ className = "", size = "md" }: LogoProps) {
+  const s = sizeClass[size];
+
   return (
-    <img
-      src="/logo-white.png"
-      alt="ClutchFuel"
-      width={WORDMARK_WIDTH}
-      height={WORDMARK_HEIGHT}
-      className={`${sizeClass[size]} w-auto shrink-0 select-none ${className}`}
-      decoding="async"
-      draggable={false}
-    />
+    <span
+      className={`inline-flex shrink-0 items-start justify-start overflow-hidden ${s.frame} ${className}`}
+    >
+      <img
+        src="/logo-white.png"
+        alt="ClutchFuel"
+        className={`${s.image} w-auto max-w-none select-none`}
+        decoding="async"
+        draggable={false}
+      />
+    </span>
   );
 }

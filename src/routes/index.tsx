@@ -111,7 +111,7 @@ function ClutchScoreApp() {
     <main id="main" className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
         <header className="mb-10 flex items-center justify-between gap-4">
-          <Logo size="md" />
+          <Logo size="lg" />
           <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-white/40">
             Clutch Score
           </span>
