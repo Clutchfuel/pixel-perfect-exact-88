@@ -3,7 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { bindWorkerEnv } from "./lib/env";
-import { auditProductionConfigOnce } from "./lib/production-config";
+
 import { reportError } from "./lib/observability";
 import { withSecurityHeaders } from "./lib/security-headers";
 
@@ -86,7 +86,6 @@ function finalizeResponse(response: Response): Response {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     bindWorkerEnv(env);
-    auditProductionConfigOnce();
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
