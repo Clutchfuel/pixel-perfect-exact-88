@@ -8,9 +8,9 @@ type LogoProps = {
  * We crop to the center band via overflow + offset so header height maps to readable text.
  */
 const sizeClass = {
-  sm: { frame: "h-6 w-[112px]", image: "h-[4.5rem] -mt-6" },
-  md: { frame: "h-7 w-[130px]", image: "h-[5.25rem] -mt-7" },
-  lg: { frame: "h-8 w-[148px]", image: "h-24 -mt-8" },
+  sm: { frame: "h-8 w-[150px]", image: "h-[6rem] -mt-8" },
+  md: { frame: "h-10 w-[185px]", image: "h-[7.5rem] -mt-10" },
+  lg: { frame: "h-12 w-[222px]", image: "h-[9rem] -mt-12" },
 } as const;
 
 export function Logo({ className = "", size = "md" }: LogoProps) {
