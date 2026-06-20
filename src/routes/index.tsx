@@ -265,6 +265,7 @@ function EmailCapture({
   onBack: () => void;
   onComplete: (
     id: string,
+    sessionToken: string,
     result: { clutch_score: number; opportunity: Opportunity; next_step: string },
   ) => void;
 }) {
@@ -281,6 +282,7 @@ function EmailCapture({
     }
     setSubmitting(true);
     const result = computeResult(answers);
+    const sessionToken = generateSessionToken();
     const { data, error } = await supabase
       .from("assessment_responses")
       .insert({
@@ -295,6 +297,7 @@ function EmailCapture({
         clutch_score: result.clutch_score,
         opportunity: result.opportunity,
         next_step: result.next_step,
+        session_token: sessionToken,
       })
       .select("id")
       .single();
@@ -303,7 +306,7 @@ function EmailCapture({
       toast.error("Something went wrong. Please try again.");
       return;
     }
-    onComplete(data.id, result);
+    onComplete(data.id, sessionToken, result);
   };
 
   return (
