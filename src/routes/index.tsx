@@ -10,7 +10,11 @@ function generateSessionToken(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
   }
-  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  return (
+    Math.random().toString(36).slice(2) +
+    Math.random().toString(36).slice(2) +
+    Date.now().toString(36)
+  );
 }
 
 export const Route = createFileRoute("/")({
@@ -90,7 +94,14 @@ type Step =
   | { kind: "landing" }
   | { kind: "quiz"; index: number }
   | { kind: "email" }
-  | { kind: "result"; id: string; sessionToken: string; score: number; opportunity: Opportunity; nextStep: string };
+  | {
+      kind: "result";
+      id: string;
+      sessionToken: string;
+      score: number;
+      opportunity: Opportunity;
+      nextStep: string;
+    };
 
 function ClutchScoreApp() {
   const [step, setStep] = useState<Step>({ kind: "landing" });

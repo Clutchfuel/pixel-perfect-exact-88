@@ -13,13 +13,20 @@ function validate(input: unknown): Input {
   if (typeof o.id !== "string" || o.id.length < 8 || o.id.length > 64) {
     throw new Error("Invalid id");
   }
-  if (typeof o.session_token !== "string" || o.session_token.length < 16 || o.session_token.length > 128) {
+  if (
+    typeof o.session_token !== "string" ||
+    o.session_token.length < 16 ||
+    o.session_token.length > 128
+  ) {
     throw new Error("Invalid session_token");
   }
   if (o.helpful_result !== null && typeof o.helpful_result !== "boolean") {
     throw new Error("Invalid helpful_result");
   }
-  if (o.feedback_text !== null && (typeof o.feedback_text !== "string" || o.feedback_text.length > 2000)) {
+  if (
+    o.feedback_text !== null &&
+    (typeof o.feedback_text !== "string" || o.feedback_text.length > 2000)
+  ) {
     throw new Error("Invalid feedback_text");
   }
   return o as Input;
