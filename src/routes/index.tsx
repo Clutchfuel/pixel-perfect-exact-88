@@ -310,30 +310,28 @@ function EmailCapture({
     setSubmitting(true);
     const result = computeResult(answers);
     const sessionToken = generateSessionToken();
-    const { data, error } = await supabase
-      .from("assessment_responses")
-      .insert({
-        first_name: firstName.trim() || null,
-        email: email.trim(),
-        source: source || null,
-        q1: answers[0],
-        q2: answers[1],
-        q3: answers[2],
-        q4: answers[3],
-        q5: answers[4],
-        clutch_score: result.clutch_score,
-        opportunity: result.opportunity,
-        next_step: result.next_step,
-        session_token: sessionToken,
-      })
-      .select("id")
-      .single();
+    const id = crypto.randomUUID();
+    const { error } = await supabase.from("assessment_responses").insert({
+      id,
+      first_name: firstName.trim() || null,
+      email: email.trim(),
+      source: source || null,
+      q1: answers[0],
+      q2: answers[1],
+      q3: answers[2],
+      q4: answers[3],
+      q5: answers[4],
+      clutch_score: result.clutch_score,
+      opportunity: result.opportunity,
+      next_step: result.next_step,
+      session_token: sessionToken,
+    });
     setSubmitting(false);
-    if (error || !data) {
+    if (error) {
       toast.error("Something went wrong. Please try again.");
       return;
     }
-    onComplete(data.id, sessionToken, result);
+    onComplete(id, sessionToken, result);
   };
 
   return (
