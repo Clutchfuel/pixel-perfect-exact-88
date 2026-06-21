@@ -17,6 +17,13 @@ function generateSessionToken(): string {
   );
 }
 
+function generateId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return generateSessionToken().slice(0, 36);
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -310,26 +317,30 @@ function EmailCapture({
     setSubmitting(true);
     const result = computeResult(answers);
     const sessionToken = generateSessionToken();
-    const id = crypto.randomUUID();
-    const { error } = await supabase.from("assessment_responses").insert({
-      id,
-      first_name: firstName.trim() || null,
-      email: email.trim(),
-      source: source || null,
-      q1: answers[0],
-      q2: answers[1],
-      q3: answers[2],
-      q4: answers[3],
-      q5: answers[4],
-      clutch_score: result.clutch_score,
-      opportunity: result.opportunity,
-      next_step: result.next_step,
-      session_token: sessionToken,
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error("Something went wrong. Please try again.");
-      return;
+    const id = generateId();
+    try {
+      const { error } = await supabase.from("assessment_responses").insert({
+        id,
+        first_name: firstName.trim() || null,
+        email: email.trim(),
+        source: source || null,
+        q1: answers[0],
+        q2: answers[1],
+        q3: answers[2],
+        q4: answers[3],
+        q5: answers[4],
+        clutch_score: result.clutch_score,
+        opportunity: result.opportunity,
+        next_step: result.next_step,
+        session_token: sessionToken,
+      });
+      if (error) {
+        console.error("[Clutch Score] assessment save failed:", error.message);
+      }
+    } catch (err) {
+      console.error("[Clutch Score] assessment save error:", err);
+    } finally {
+      setSubmitting(false);
     }
     onComplete(id, sessionToken, result);
   };
