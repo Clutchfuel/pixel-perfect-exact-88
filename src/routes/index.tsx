@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "What's your Clutch Score? Take the 60-second hydration assessment built for athletes and find your biggest opportunity.",
+          "What's your Clutch Score? Discover your biggest hydration opportunity in 60 seconds.",
       },
       { property: "og:title", content: "Clutch Score by ClutchFuel" },
       {
@@ -109,12 +109,9 @@ function ClutchScoreApp() {
 
   return (
     <main id="main" className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
-        <header className="mb-10 flex items-center justify-between gap-4">
+      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 pt-6 pb-10 sm:py-16">
+        <header className="mb-4 flex items-center gap-4 sm:mb-10">
           <Logo size="lg" />
-          <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-white/40">
-            Clutch Score
-          </span>
         </header>
 
         {step.kind === "landing" && <Landing onStart={() => setStep({ kind: "quiz", index: 0 })} />}
@@ -182,6 +179,7 @@ function Landing({ onStart }: { onStart: () => void }) {
       <p className="mt-4 text-lg text-white/70 sm:mt-6">
         Discover your biggest hydration opportunity in 60 seconds.
       </p>
+
       <div className="mt-6 sm:mt-8">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
           What You'll Get
@@ -200,15 +198,18 @@ function Landing({ onStart }: { onStart: () => void }) {
           </li>
         </ul>
       </div>
+
       <button
         onClick={onStart}
         className="mt-8 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark sm:mt-10"
       >
         Start My Assessment
       </button>
+
       <p className="mt-3 text-center text-xs text-white/30">
         No tracking. No wearables. No complicated calculations.
       </p>
+
       <p className="mt-4 text-center text-xs text-white/25">Built for everyday athletes.</p>
     </section>
   );
