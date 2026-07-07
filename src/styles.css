@@ -2,6 +2,7 @@
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
+@import "@fontsource/inter/800.css";
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -9,7 +10,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * ClutchFuel design system — premium dark athletic (matches athlete app)
+ * ClutchFuel design system — premium navy + electric-blue.
+ * Legacy --lime token remains but now maps to the electric-blue accent,
+ * so existing utilities like bg-lime keep working with the new brand.
  */
 
 @theme inline {
@@ -28,17 +31,17 @@
   --color-mist: var(--mist);
   --color-dark: var(--dark);
   --color-panel: var(--panel);
-  --color-lime: var(--lime);
-  --color-lime-dark: var(--lime-dark);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-soft: var(--navy-soft);
+  --color-electric: var(--electric);
+  --color-electric-dark: var(--electric-dark);
+  --color-lime: var(--electric);
+  --color-lime-dark: var(--electric-dark);
   --color-muted-ink: var(--muted-ink);
   --color-muted-dark: var(--muted-dark);
   --color-hairline: var(--hairline);
   --color-hairline-dark: var(--hairline-dark);
-  --color-brand-base: var(--brand-base);
-  --color-brand-secondary: var(--brand-secondary);
-  --color-brand-card: var(--brand-card);
-  --color-brand-muted: var(--brand-muted);
-  --color-brand-accent: var(--brand-accent);
 
   /* Shadcn semantic */
   --color-background: var(--background);
@@ -61,82 +64,50 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
-  --shadow-lime-glow: 0 0 0 1px oklch(0.91 0.2 128 / 0.12), 0 4px 24px -8px oklch(0 0 0 / 0.4);
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.04), 0 8px 24px -12px oklch(0 0 0 / 0.08);
+  --shadow-electric-glow: 0 0 0 1px oklch(0.65 0.18 254 / 0.18), 0 12px 40px -14px oklch(0.55 0.22 254 / 0.55);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.24), 0 20px 40px -28px oklch(0 0 0 / 0.55);
 }
 
 :root {
   --radius: 1rem;
 
-  /* Brand — performance preparation (WHOOP / Oura palette) */
-  --brand-base: #050505;
-  --brand-secondary: #0f0f10;
-  --brand-card: #141414;
-  --brand-muted: #b3b3b3;
-  --brand-accent: #c6ff4d;
+  /* Navy performance-tech palette */
+  --navy-deep: #050b18;
+  --navy: #0a1628;
+  --navy-soft: #101f36;
+  --electric: #3d7bfe;
+  --electric-dark: #2f66db;
 
-  --ink: #0a0a0a;
-  --mist: #e8e8e8;
-  --dark: #050505;
-  --panel: #141414;
-  --surface: #141414;
-  --surface-secondary: #0f0f10;
-  --lime: #c6ff4d;
-  --lime-dark: #b8f042;
-  --muted-ink: #b3b3b3;
-  --muted-dark: #b3b3b3;
-  --hairline: oklch(0.22 0 0);
-  --hairline-dark: oklch(1 0 0 / 0.08);
+  --ink: #050b18;
+  --mist: #f4f6fb;
+  --dark: #050b18;
+  --panel: #101f36;
+  --muted-ink: rgba(255, 255, 255, 0.62);
+  --muted-dark: rgba(255, 255, 255, 0.62);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-dark: rgba(255, 255, 255, 0.08);
 
   /* Shadcn mapped to brand */
-  --background: #050505;
+  --background: #0a1628;
   --foreground: #ffffff;
-  --card: #141414;
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.16 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: var(--lime);
-  --primary-foreground: #050505;
-  --secondary: oklch(0.14 0 0);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.14 0 0);
-  --muted-foreground: var(--muted-ink);
-  --accent: oklch(0.14 0 0);
-  --accent-foreground: oklch(1 0 0);
+  --card: #101f36;
+  --card-foreground: #ffffff;
+  --popover: #101f36;
+  --popover-foreground: #ffffff;
+  --primary: var(--electric);
+  --primary-foreground: #ffffff;
+  --secondary: #142842;
+  --secondary-foreground: #ffffff;
+  --muted: #142842;
+  --muted-foreground: rgba(255, 255, 255, 0.62);
+  --accent: var(--electric);
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
   --border: var(--hairline);
   --input: var(--hairline);
-  --ring: var(--lime);
-
-  --chart-1: var(--lime);
-  --chart-2: oklch(0.6 0.01 270);
-  --chart-3: oklch(0.4 0.01 270);
-  --chart-4: oklch(0.84 0.19 130);
-  --chart-5: oklch(0.25 0 0);
-
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: var(--ink);
-  --sidebar-primary: var(--ink);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: var(--mist);
-  --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: var(--hairline);
-  --sidebar-ring: var(--lime);
+  --ring: var(--electric);
 }
 
 @layer base {
@@ -159,68 +130,45 @@
     line-height: 1.55;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
+  h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
     font-weight: 800;
     letter-spacing: -0.03em;
-    line-height: 1.02;
+    line-height: 1.04;
   }
 
   ::selection {
-    background: var(--lime);
-    color: var(--ink);
+    background: var(--electric);
+    color: #fff;
   }
 }
 
 @layer utilities {
-  .font-display {
-    font-family: var(--font-display);
-  }
-  .tracking-display {
-    letter-spacing: -0.03em;
-  }
-  .tracking-eyebrow {
-    letter-spacing: 0.18em;
-  }
+  .font-display { font-family: var(--font-display); }
+  .tracking-display { letter-spacing: -0.03em; }
+  .tracking-eyebrow { letter-spacing: 0.22em; }
 
-  .glass-light {
-    background: color-mix(in oklab, white 70%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid var(--hairline);
+  .glass-navy {
+    background: color-mix(in oklab, var(--navy) 78%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid var(--hairline);
   }
-  .glass-dark {
-    background: color-mix(in oklab, var(--panel) 70%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid var(--hairline-dark);
-  }
-  .lime-glow {
-    box-shadow: var(--shadow-lime-glow);
-  }
-  .performance-card {
+  .electric-glow { box-shadow: var(--shadow-electric-glow); }
+  .card-elevated {
     border-radius: 1.25rem;
-    border: 1px solid #242424;
-    background: #171717;
+    border: 1px solid var(--hairline);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
   }
-  .performance-surface {
-    background: #0a0a0a;
-  }
-  .hairline-dark {
-    border-color: var(--hairline-dark);
+  .grid-noise {
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(61,123,254,0.18), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(61,123,254,0.08), transparent 55%);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-    *,
-    *::before,
-    *::after {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
       animation-duration: 0.001ms !important;
       transition-duration: 0.001ms !important;
     }
