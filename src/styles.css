@@ -65,7 +65,7 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
 
-  --shadow-electric-glow: 0 0 0 1px rgba(200, 255, 0, 0.25), 0 12px 40px -14px rgba(200, 255, 0, 0.45);
+  --shadow-electric-glow: 0 0 0 1px rgba(163, 255, 18, 0.25), 0 12px 40px -14px rgba(163, 255, 18, 0.45);
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 20px 40px -28px rgba(0, 0, 0, 0.7);
 }
 
@@ -76,8 +76,8 @@
   --navy-deep: #000000;
   --navy: #0a0a0a;
   --navy-soft: #141414;
-  --electric: #c8ff00;
-  --electric-dark: #a8dc00;
+  --electric: #a3ff12;
+  --electric-dark: #7fd800;
 
   --ink: #000000;
   --mist: #f4f6fb;
@@ -139,7 +139,7 @@
 
   ::selection {
     background: var(--electric);
-    color: #fff;
+    color: #000;
   }
 }
 
@@ -162,8 +162,8 @@
   }
   .grid-noise {
     background-image:
-      radial-gradient(circle at 20% 0%, rgba(200,255,0,0.14), transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(200,255,0,0.06), transparent 55%);
+      radial-gradient(circle at 20% 0%, rgba(163, 255, 18, 0.14), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(163, 255, 18, 0.06), transparent 55%);
   }
 
   @media (prefers-reduced-motion: reduce) {
