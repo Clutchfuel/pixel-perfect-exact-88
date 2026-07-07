@@ -65,44 +65,44 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
 
-  --shadow-electric-glow: 0 0 0 1px oklch(0.65 0.18 254 / 0.18), 0 12px 40px -14px oklch(0.55 0.22 254 / 0.55);
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.24), 0 20px 40px -28px oklch(0 0 0 / 0.55);
+  --shadow-electric-glow: 0 0 0 1px rgba(200, 255, 0, 0.25), 0 12px 40px -14px rgba(200, 255, 0, 0.45);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 20px 40px -28px rgba(0, 0, 0, 0.7);
 }
 
 :root {
   --radius: 1rem;
 
-  /* Navy performance-tech palette */
-  --navy-deep: #050b18;
-  --navy: #0a1628;
-  --navy-soft: #101f36;
-  --electric: #3d7bfe;
-  --electric-dark: #2f66db;
+  /* Original ClutchFuel palette — dark + lime green */
+  --navy-deep: #000000;
+  --navy: #0a0a0a;
+  --navy-soft: #141414;
+  --electric: #c8ff00;
+  --electric-dark: #a8dc00;
 
-  --ink: #050b18;
+  --ink: #000000;
   --mist: #f4f6fb;
-  --dark: #050b18;
-  --panel: #101f36;
+  --dark: #000000;
+  --panel: #141414;
   --muted-ink: rgba(255, 255, 255, 0.62);
   --muted-dark: rgba(255, 255, 255, 0.62);
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-dark: rgba(255, 255, 255, 0.08);
 
   /* Shadcn mapped to brand */
-  --background: #0a1628;
+  --background: #0a0a0a;
   --foreground: #ffffff;
-  --card: #101f36;
+  --card: #141414;
   --card-foreground: #ffffff;
-  --popover: #101f36;
+  --popover: #141414;
   --popover-foreground: #ffffff;
   --primary: var(--electric);
-  --primary-foreground: #ffffff;
-  --secondary: #142842;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
   --secondary-foreground: #ffffff;
-  --muted: #142842;
+  --muted: #1a1a1a;
   --muted-foreground: rgba(255, 255, 255, 0.62);
   --accent: var(--electric);
-  --accent-foreground: #ffffff;
+  --accent-foreground: #000000;
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
   --border: var(--hairline);
@@ -149,7 +149,7 @@
   .tracking-eyebrow { letter-spacing: 0.22em; }
 
   .glass-navy {
-    background: color-mix(in oklab, var(--navy) 78%, transparent);
+    background: color-mix(in oklab, #0a0a0a 82%, transparent);
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
     border-bottom: 1px solid var(--hairline);
@@ -162,8 +162,8 @@
   }
   .grid-noise {
     background-image:
-      radial-gradient(circle at 20% 0%, rgba(61,123,254,0.18), transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(61,123,254,0.08), transparent 55%);
+      radial-gradient(circle at 20% 0%, rgba(200,255,0,0.14), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(200,255,0,0.06), transparent 55%);
   }
 
   @media (prefers-reduced-motion: reduce) {

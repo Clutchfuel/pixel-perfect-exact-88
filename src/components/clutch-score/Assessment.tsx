@@ -275,7 +275,7 @@ function EmailCapture({
         </select>
         <button
           type="submit" disabled={submitting}
-          className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-white transition hover:bg-electric-dark disabled:opacity-60"
+          className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
           {submitting ? "Calculating…" : "Show My Result"}
         </button>
