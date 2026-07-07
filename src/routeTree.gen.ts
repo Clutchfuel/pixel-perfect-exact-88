@@ -10,11 +10,42 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PerformanceHubRouteImport } from './routes/performance-hub'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub.$slug'
 
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerformanceHubRoute = PerformanceHubRouteImport.update({
+  id: '/performance-hub',
+  path: '/performance-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClutchScoreRoute = ClutchScoreRouteImport.update({
+  id: '/clutch-score',
+  path: '/clutch-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,30 +53,83 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerformanceHubSlugRoute = PerformanceHubSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PerformanceHubRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/clutch-score': typeof ClutchScoreRoute
+  '/community': typeof CommunityRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/clutch-score': typeof ClutchScoreRoute
+  '/community': typeof CommunityRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/clutch-score': typeof ClutchScoreRoute
+  '/community': typeof CommunityRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privacy'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/clutch-score'
+    | '/community'
+    | '/how-it-works'
+    | '/performance-hub'
+    | '/privacy'
+    | '/performance-hub/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy'
-  id: '__root__' | '/' | '/privacy'
+  to:
+    | '/'
+    | '/about'
+    | '/clutch-score'
+    | '/community'
+    | '/how-it-works'
+    | '/performance-hub'
+    | '/privacy'
+    | '/performance-hub/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/clutch-score'
+    | '/community'
+    | '/how-it-works'
+    | '/performance-hub'
+    | '/privacy'
+    | '/performance-hub/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ClutchScoreRoute: typeof ClutchScoreRoute
+  CommunityRoute: typeof CommunityRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  PerformanceHubRoute: typeof PerformanceHubRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
 }
 
@@ -58,6 +142,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/performance-hub': {
+      id: '/performance-hub'
+      path: '/performance-hub'
+      fullPath: '/performance-hub'
+      preLoaderRoute: typeof PerformanceHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clutch-score': {
+      id: '/clutch-score'
+      path: '/clutch-score'
+      fullPath: '/clutch-score'
+      preLoaderRoute: typeof ClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,11 +184,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/performance-hub/$slug': {
+      id: '/performance-hub/$slug'
+      path: '/$slug'
+      fullPath: '/performance-hub/$slug'
+      preLoaderRoute: typeof PerformanceHubSlugRouteImport
+      parentRoute: typeof PerformanceHubRoute
+    }
   }
 }
 
+interface PerformanceHubRouteChildren {
+  PerformanceHubSlugRoute: typeof PerformanceHubSlugRoute
+}
+
+const PerformanceHubRouteChildren: PerformanceHubRouteChildren = {
+  PerformanceHubSlugRoute: PerformanceHubSlugRoute,
+}
+
+const PerformanceHubRouteWithChildren = PerformanceHubRoute._addFileChildren(
+  PerformanceHubRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ClutchScoreRoute: ClutchScoreRoute,
+  CommunityRoute: CommunityRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  PerformanceHubRoute: PerformanceHubRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
 }
 export const routeTree = rootRouteImport
