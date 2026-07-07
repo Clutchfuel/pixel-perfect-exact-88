@@ -97,7 +97,7 @@ function CommunityPage() {
           <p className="mt-6 text-lg text-white/70">Then bring the crew.</p>
           <Link
             to="/clutch-score"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
           >
             Take the Clutch Score <ArrowRight className="h-4 w-4" />
           </Link>
