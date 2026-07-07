@@ -27,7 +27,7 @@ function ClutchScorePage() {
           <Reveal>
             <p className="text-xs uppercase tracking-eyebrow text-electric">Clutch Score™</p>
             <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-              Discover your biggest performance opportunity in 60 seconds.
+              What's Your Clutch Score?
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
               Personalized. Science-informed. No equipment. Immediate insight.
