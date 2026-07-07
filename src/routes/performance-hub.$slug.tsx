@@ -50,7 +50,7 @@ function ArticlePage() {
 
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
           <div className="prose prose-invert max-w-none space-y-6 text-lg leading-relaxed text-white/80">
-            {article.body.map((p, i) => (
+            {article.body.map((p: string, i: number) => (
               <p key={i}>{p}</p>
             ))}
           </div>
@@ -74,7 +74,7 @@ function ArticlePage() {
           <p className="text-xs uppercase tracking-eyebrow text-electric">Related reads</p>
           <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Keep exploring.</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {related.map((a) => (
+            {related.map((a: typeof related[number]) => (
               <Link
                 key={a.slug}
                 to="/performance-hub/$slug" params={{ slug: a.slug }}
