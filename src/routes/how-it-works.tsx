@@ -68,7 +68,7 @@ function HowItWorksPage() {
       <section className="relative overflow-hidden border-b border-black/5">
         <div className="absolute inset-0 grid-noise" aria-hidden />
         <div className="relative mx-auto w-full max-w-4xl px-5 pb-20 pt-16 text-center sm:px-8 sm:pb-28 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">How it works</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">How it works</p>
           <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Sixty seconds to your next performance breakthrough.
           </h1>
@@ -84,10 +84,10 @@ function HowItWorksPage() {
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated h-full p-8">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric/15 text-electric">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
                     <s.icon className="h-5 w-5" />
                   </div>
-                  <p className="mt-6 text-sm font-semibold text-electric">{s.n}</p>
+                  <p className="mt-6 text-sm font-semibold text-electric-dark">{s.n}</p>
                   <h2 className="mt-2 text-2xl font-bold">{s.title}</h2>
                   <p className="mt-4 text-base leading-relaxed text-muted-foreground">{s.copy}</p>
                 </div>
@@ -100,7 +100,7 @@ function HowItWorksPage() {
       <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Sample result</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Sample result</p>
             <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
               What you'll actually see.
             </h2>
@@ -110,7 +110,7 @@ function HowItWorksPage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className="card-elevated p-8">
-              <p className="text-xs uppercase tracking-eyebrow text-electric">Your biggest opportunity</p>
+              <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Your biggest opportunity</p>
               <p className="mt-3 text-3xl font-extrabold leading-tight">Recovery & Cramping</p>
               <p className="mt-6 text-xs uppercase tracking-eyebrow text-muted-foreground/80">What to do next</p>
               <p className="mt-2 text-lg leading-relaxed text-muted-foreground">
@@ -128,7 +128,7 @@ function HowItWorksPage() {
 
       <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">FAQ</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">FAQ</p>
           <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
             Common questions.
           </h2>
@@ -137,7 +137,7 @@ function HowItWorksPage() {
               <details key={f.q} className="group py-6">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-semibold">
                   {f.q}
-                  <span className="mt-1 text-electric transition group-open:rotate-45">+</span>
+                  <span className="mt-1 text-electric-dark transition group-open:rotate-45">+</span>
                 </summary>
                 <p className="mt-3 text-base leading-relaxed text-muted-foreground">{f.a}</p>
               </details>

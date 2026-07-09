@@ -25,7 +25,7 @@ function ClutchScorePage() {
       <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 pb-14 pt-14 text-center sm:px-8 sm:pb-20 sm:pt-24">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Clutch Score™</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Clutch Score™</p>
             <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
               What's Your Clutch Score?
             </h1>

@@ -58,7 +58,7 @@ function HomePage() {
         <div className="absolute inset-0 grid-noise" aria-hidden />
         <div className="relative mx-auto flex w-full max-w-6xl flex-col items-start px-5 pb-24 pt-16 sm:px-8 sm:pt-24 lg:pt-32">
           <span className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-black/[0.05] px-4 py-1.5 text-xs font-medium uppercase tracking-eyebrow text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-electric" /> Performance intelligence
+            <Sparkles className="h-3.5 w-3.5 text-electric-dark" /> Performance intelligence
           </span>
           <h1 className="mt-6 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
             Find what's really holding back your performance.
@@ -90,7 +90,7 @@ function HomePage() {
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">The performance gap</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">The performance gap</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
               You're training hard. But are you improving the right way?
             </h2>
@@ -103,7 +103,7 @@ function HomePage() {
             {PROBLEMS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/15 text-electric transition group-hover:bg-electric/15">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark transition group-hover:bg-electric/25">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -119,7 +119,7 @@ function HomePage() {
       <section className="border-t border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">How it works</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">How it works</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
               Three steps. Sixty seconds. One clear next move.
             </h2>
@@ -133,7 +133,7 @@ function HomePage() {
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated relative h-full overflow-hidden p-8">
-                  <span className="text-sm font-semibold text-electric">{s.n}</span>
+                  <span className="text-sm font-semibold text-electric-dark">{s.n}</span>
                   <h3 className="mt-4 text-2xl font-bold">{s.t}</h3>
                   <p className="mt-3 text-base leading-relaxed text-muted-foreground">{s.c}</p>
                 </div>
@@ -147,7 +147,7 @@ function HomePage() {
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Why Clutch Score exists</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Why Clutch Score exists</p>
             <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
               Stop guessing. Start understanding.
             </h2>
@@ -182,7 +182,7 @@ function HomePage() {
       <section className="border-t border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Performance pillars</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance pillars</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
               Six levers most athletes overlook.
             </h2>
@@ -191,7 +191,7 @@ function HomePage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/15 text-electric">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -207,7 +207,7 @@ function HomePage() {
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Community</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
               Built for everyday athletes.
             </h2>
@@ -229,7 +229,7 @@ function HomePage() {
             ))}
           </div>
           <div className="mt-10">
-            <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-electric hover:underline">
+            <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-electric-dark hover:underline">
               Meet the community <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -242,12 +242,12 @@ function HomePage() {
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="text-xs uppercase tracking-eyebrow text-electric">Performance Hub</p>
+                <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance Hub</p>
                 <h2 className="mt-4 max-w-2xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
                   Learn what your body is trying to tell you.
                 </h2>
               </div>
-              <Link to="/performance-hub" className="inline-flex items-center gap-2 text-sm font-semibold text-electric hover:underline">
+              <Link to="/performance-hub" className="inline-flex items-center gap-2 text-sm font-semibold text-electric-dark hover:underline">
                 Browse all <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -262,7 +262,7 @@ function HomePage() {
                 >
                   <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
                   <div className="p-6">
-                    <p className="text-xs uppercase tracking-eyebrow text-electric">{a.category}</p>
+                    <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
                       {a.title}
                     </h3>
@@ -279,7 +279,7 @@ function HomePage() {
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Early reactions</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Early reactions</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
               Athletes are calling the assessment scary-accurate.
             </h2>
@@ -305,7 +305,7 @@ function HomePage() {
       <section className="border-t border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 py-28 text-center sm:px-8 sm:py-36">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Ready?</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Ready?</p>
             <h2 className="mt-4 text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
               Ready to understand your performance?
             </h2>

@@ -40,7 +40,7 @@ function CommunityPage() {
       <section className="relative overflow-hidden border-b border-black/5">
         <div className="absolute inset-0 grid-noise" aria-hidden />
         <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">Community</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
           <h1 className="mt-4 max-w-3xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Built for everyday athletes.
           </h1>
@@ -71,14 +71,14 @@ function CommunityPage() {
 
       <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">What's coming</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">What's coming</p>
           <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
             Something bigger is building.
           </h2>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {HIGHLIGHTS.map((h) => (
               <div key={h.title} className="card-elevated p-8">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/15 text-electric">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
                   <h.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold">{h.title}</h3>

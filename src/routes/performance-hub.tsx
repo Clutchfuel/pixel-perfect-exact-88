@@ -35,7 +35,7 @@ function PerformanceHubPage() {
     <PageShell>
       <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 pb-14 pt-16 sm:px-8 sm:pb-20 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">Performance Hub</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance Hub</p>
           <h1 className="mt-4 max-w-3xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Learn what your body is trying to tell you.
           </h1>
@@ -49,7 +49,7 @@ function PerformanceHubPage() {
                 key={c}
                 onClick={() => setCat(c)}
                 className={`rounded-full border px-4 py-2 text-sm transition ${
-                  cat === c ? "border-electric bg-electric/15 text-electric" : "border-black/15 text-muted-foreground hover:border-black/40 hover:text-foreground"
+                  cat === c ? "border-electric bg-electric/25 text-electric-dark" : "border-black/15 text-muted-foreground hover:border-black/40 hover:text-foreground"
                 }`}
               >
                 {c}
@@ -69,7 +69,7 @@ function PerformanceHubPage() {
               >
                 <div className={`aspect-[16/10] bg-gradient-to-br ${featured.gradient} lg:aspect-auto`} aria-hidden />
                 <div className="flex flex-col justify-center p-8 sm:p-10">
-                  <p className="text-xs uppercase tracking-eyebrow text-electric">
+                  <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
                     Featured · {featured.category}
                   </p>
                   <h2 className="mt-4 text-balance text-3xl font-bold leading-tight sm:text-4xl transition group-hover:text-foreground">
@@ -95,7 +95,7 @@ function PerformanceHubPage() {
                 >
                   <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
                   <div className="p-6">
-                    <p className="text-xs uppercase tracking-eyebrow text-electric">{a.category}</p>
+                    <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
                       {a.title}
                     </h3>

@@ -38,7 +38,7 @@ function ArticlePage() {
             <Link to="/performance-hub" className="inline-flex items-center gap-2 text-xs uppercase tracking-eyebrow text-muted-foreground/80 hover:text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" /> Performance Hub
             </Link>
-            <p className="mt-6 text-xs uppercase tracking-eyebrow text-electric">{article.category}</p>
+            <p className="mt-6 text-xs uppercase tracking-eyebrow text-electric-dark">{article.category}</p>
             <h1 className="mt-4 text-balance text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               {article.title}
             </h1>
@@ -56,7 +56,7 @@ function ArticlePage() {
           </div>
 
           <div className="mt-16 rounded-2xl border border-black/10 bg-black/[0.03] p-8">
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Try it yourself</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Try it yourself</p>
             <h3 className="mt-3 text-2xl font-bold">Take the Clutch Score</h3>
             <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
             <Link
@@ -71,7 +71,7 @@ function ArticlePage() {
 
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">Related reads</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Related reads</p>
           <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Keep exploring.</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {related.map((a: typeof related[number]) => (
@@ -82,7 +82,7 @@ function ArticlePage() {
               >
                 <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
                 <div className="p-6">
-                  <p className="text-xs uppercase tracking-eyebrow text-electric">{a.category}</p>
+                  <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                   <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">{a.title}</h3>
                 </div>
               </Link>
