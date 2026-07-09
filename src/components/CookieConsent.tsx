@@ -36,7 +36,7 @@ export function CookieConsent() {
         <button
           type="button"
           onClick={() => choose("accepted")}
-          className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-ink transition hover:bg-lime-dark"
+          className="rounded-full bg-electric px-4 py-2 text-sm font-semibold text-ink transition hover:bg-electric-dark"
         >
           Accept analytics
         </button>

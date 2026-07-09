@@ -81,7 +81,7 @@ function HomePage() {
             </Link>
           </div>
           <div className="mt-16 flex items-center gap-3 text-xs uppercase tracking-eyebrow text-muted-foreground/70">
-            <span className="h-px w-8 bg-white/25" /> Scroll to explore
+            <span className="h-px w-8 bg-black/25" /> Scroll to explore
           </div>
         </div>
       </section>
