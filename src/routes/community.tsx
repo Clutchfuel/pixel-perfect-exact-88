@@ -26,8 +26,6 @@ export const Route = createFileRoute("/community")({
   component: CommunityPage,
 });
 
-void imageSets;
-
 const ATHLETES = [
   { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
   { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
