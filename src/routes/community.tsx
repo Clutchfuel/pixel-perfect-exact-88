@@ -3,6 +3,14 @@ import { ArrowRight, Calendar, Users } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 
+import athleteRunning from "@/assets/sport-running.jpg";
+import athleteBasketball from "@/assets/sport-basketball.jpg";
+import athleteHyrox from "@/assets/sport-hyrox.jpg";
+import athleteParent from "@/assets/community-parent.jpg";
+import athleteCollege from "@/assets/community-college.jpg";
+import athleteWeekend from "@/assets/community-weekend.jpg";
+import athleteCrossfit from "@/assets/community-crossfit.jpg";
+
 export const Route = createFileRoute("/community")({
   head: () => ({
     meta: [
@@ -19,13 +27,13 @@ export const Route = createFileRoute("/community")({
 });
 
 const ATHLETES = [
-  { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job." },
-  { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter." },
-  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery." },
-  { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him." },
-  { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again." },
-  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery — the missing piece for years." },
-  { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club." },
+  { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
+  { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
+  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery.", image: athleteParent },
+  { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him.", image: athleteCollege },
+  { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again.", image: athleteWeekend },
+  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery — the missing piece for years.", image: athleteCrossfit },
+  { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club.", image: athleteHyrox },
 ];
 
 const HIGHLIGHTS = [
@@ -55,12 +63,20 @@ function CommunityPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {ATHLETES.map((a, i) => (
               <Reveal key={a.name} delay={i * 0.04}>
-                <article className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-electric/15 via-background to-muted p-6">
-                  <div className="absolute inset-0 opacity-30 mix-blend-overlay grid-noise" aria-hidden />
-                  <div className="relative flex h-full flex-col justify-end">
-                    <p className="text-xs uppercase tracking-eyebrow text-muted-foreground">{a.tag}</p>
+                <article className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-foreground">
+                  <img
+                    src={a.image}
+                    alt={`${a.tag} — ${a.name}`}
+                    loading="lazy"
+                    width={1024}
+                    height={1280}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
+                  <div className="relative flex h-full flex-col justify-end p-6 text-background">
+                    <p className="text-xs uppercase tracking-eyebrow text-electric">{a.tag}</p>
                     <h3 className="mt-1 text-2xl font-bold">{a.name}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.copy}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-background/80">{a.copy}</p>
                   </div>
                 </article>
               </Reveal>
