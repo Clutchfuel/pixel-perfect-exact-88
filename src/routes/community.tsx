@@ -2,6 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Calendar, Users } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { imageSets } from "@/assets/image-sets";
+import athleteRunning from "@/assets/sport-running.jpg";
+import athleteBasketball from "@/assets/sport-basketball.jpg";
+import athleteHyrox from "@/assets/sport-hyrox.jpg";
+import athleteParent from "@/assets/community-parent.jpg";
+import athleteCollege from "@/assets/community-college.jpg";
+import athleteWeekend from "@/assets/community-weekend.jpg";
+import athleteCrossfit from "@/assets/community-crossfit.jpg";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
@@ -18,14 +26,16 @@ export const Route = createFileRoute("/community")({
   component: CommunityPage,
 });
 
+void imageSets;
+
 const ATHLETES = [
-  { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job." },
-  { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter." },
-  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery." },
-  { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him." },
-  { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again." },
-  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery — the missing piece for years." },
-  { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club." },
+  { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
+  { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
+  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery.", image: athleteParent },
+  { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him.", image: athleteCollege },
+  { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again.", image: athleteWeekend },
+  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery — the missing piece for years.", image: athleteCrossfit },
+  { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club.", image: athleteHyrox },
 ];
 
 const HIGHLIGHTS = [
