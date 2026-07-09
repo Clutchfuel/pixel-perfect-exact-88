@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Calendar, Users } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
-import { imageSets } from "@/assets/image-sets";
+
 import athleteRunning from "@/assets/sport-running.jpg";
 import athleteBasketball from "@/assets/sport-basketball.jpg";
 import athleteHyrox from "@/assets/sport-hyrox.jpg";
