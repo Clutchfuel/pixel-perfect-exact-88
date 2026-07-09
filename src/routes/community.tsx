@@ -65,12 +65,20 @@ function CommunityPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {ATHLETES.map((a, i) => (
               <Reveal key={a.name} delay={i * 0.04}>
-                <article className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-electric/15 via-background to-muted p-6">
-                  <div className="absolute inset-0 opacity-30 mix-blend-overlay grid-noise" aria-hidden />
-                  <div className="relative flex h-full flex-col justify-end">
-                    <p className="text-xs uppercase tracking-eyebrow text-muted-foreground">{a.tag}</p>
+                <article className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-foreground">
+                  <img
+                    src={a.image}
+                    alt={`${a.tag} — ${a.name}`}
+                    loading="lazy"
+                    width={1024}
+                    height={1280}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
+                  <div className="relative flex h-full flex-col justify-end p-6 text-background">
+                    <p className="text-xs uppercase tracking-eyebrow text-electric">{a.tag}</p>
                     <h3 className="mt-1 text-2xl font-bold">{a.name}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.copy}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-background/80">{a.copy}</p>
                   </div>
                 </article>
               </Reveal>
