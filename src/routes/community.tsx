@@ -37,30 +37,30 @@ const HIGHLIGHTS = [
 function CommunityPage() {
   return (
     <PageShell>
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-black/5">
         <div className="absolute inset-0 grid-noise" aria-hidden />
         <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">Community</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
           <h1 className="mt-4 max-w-3xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Built for everyday athletes.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-white/70">
+          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
             No professionals. No influencers. Real people chasing better between school runs, night shifts, and full weekends.
           </p>
         </div>
       </section>
 
-      <section className="border-b border-white/5">
+      <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {ATHLETES.map((a, i) => (
               <Reveal key={a.name} delay={i * 0.04}>
-                <article className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-electric/25 via-navy-soft to-navy p-6">
+                <article className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-electric/15 via-background to-muted p-6">
                   <div className="absolute inset-0 opacity-30 mix-blend-overlay grid-noise" aria-hidden />
                   <div className="relative flex h-full flex-col justify-end">
-                    <p className="text-xs uppercase tracking-eyebrow text-white/60">{a.tag}</p>
+                    <p className="text-xs uppercase tracking-eyebrow text-muted-foreground">{a.tag}</p>
                     <h3 className="mt-1 text-2xl font-bold">{a.name}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-white/75">{a.copy}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.copy}</p>
                   </div>
                 </article>
               </Reveal>
@@ -69,20 +69,20 @@ function CommunityPage() {
         </div>
       </section>
 
-      <section className="border-b border-white/5 bg-navy-deep">
+      <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">What's coming</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">What's coming</p>
           <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
             Something bigger is building.
           </h2>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {HIGHLIGHTS.map((h) => (
               <div key={h.title} className="card-elevated p-8">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/10 text-electric">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                   <h.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold">{h.title}</h3>
-                <p className="mt-2 text-sm text-white/60">{h.copy}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{h.copy}</p>
               </div>
             ))}
           </div>
@@ -94,7 +94,7 @@ function CommunityPage() {
           <h2 className="text-balance text-4xl font-bold leading-tight sm:text-5xl">
             Start with your own baseline.
           </h2>
-          <p className="mt-6 text-lg text-white/70">Then bring the crew.</p>
+          <p className="mt-6 text-lg text-muted-foreground">Then bring the crew.</p>
           <Link
             to="/clutch-score"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"

@@ -22,19 +22,19 @@ export const Route = createFileRoute("/clutch-score")({
 function ClutchScorePage() {
   return (
     <PageShell showStickyCta={false}>
-      <section className="border-b border-white/5">
+      <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 pb-14 pt-14 text-center sm:px-8 sm:pb-20 sm:pt-24">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Clutch Score™</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Clutch Score™</p>
             <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
               What's Your Clutch Score?
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               Personalized. Science-informed. No equipment. Immediate insight.
             </p>
-            <div className="mx-auto mt-8 grid max-w-xl grid-cols-2 gap-3 text-xs uppercase tracking-eyebrow text-white/55 sm:grid-cols-4">
+            <div className="mx-auto mt-8 grid max-w-xl grid-cols-2 gap-3 text-xs uppercase tracking-eyebrow text-muted-foreground sm:grid-cols-4">
               {["60 seconds", "Personalized", "Science-informed", "No equipment"].map((f) => (
-                <div key={f} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2">
+                <div key={f} className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
                   {f}
                 </div>
               ))}

@@ -30,7 +30,7 @@ export function SiteHeader() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open ? "glass-navy" : "bg-transparent"
+        scrolled || open ? "glass-header" : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:h-20 sm:px-8">
@@ -47,7 +47,7 @@ export function SiteHeader() {
                 key={item.to}
                 to={item.to}
                 className={`text-sm font-medium transition-colors ${
-                  active ? "text-white" : "text-white/60 hover:text-white"
+                  active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -66,7 +66,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/15 text-foreground lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
@@ -76,7 +76,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-navy-deep/95 backdrop-blur-xl lg:hidden">
+        <div className="border-t border-black/10 bg-background/95 backdrop-blur-xl lg:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6">
             {NAV.map((item) => {
               const active =
@@ -86,7 +86,7 @@ export function SiteHeader() {
                   key={item.to}
                   to={item.to}
                   className={`rounded-xl px-4 py-3 text-base font-medium transition ${
-                    active ? "bg-white/5 text-white" : "text-white/70 hover:bg-white/5 hover:text-white"
+                    active ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
                   {item.label}

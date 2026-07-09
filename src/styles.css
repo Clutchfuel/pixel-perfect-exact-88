@@ -10,9 +10,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * ClutchFuel design system — premium navy + electric-blue.
- * Legacy --lime token remains but now maps to the electric-blue accent,
- * so existing utilities like bg-lime keep working with the new brand.
+ * ClutchFuel design system — clean white base + electric lime.
+ * Legacy --lime token maps to the electric accent so existing
+ * utilities like bg-lime keep working.
  */
 
 @theme inline {
@@ -66,41 +66,41 @@
   --color-ring-offset-background: var(--background);
 
   --shadow-electric-glow: 0 0 0 1px rgba(193, 255, 0, 0.25), 0 12px 40px -14px rgba(193, 255, 0, 0.45);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 20px 40px -28px rgba(0, 0, 0, 0.7);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.08), 0 20px 40px -28px rgba(0, 0, 0, 0.18);
 }
 
 :root {
   --radius: 1rem;
 
-  /* Original ClutchFuel palette — dark + lime green */
-  --navy-deep: #000000;
-  --navy: #0a0a0a;
-  --navy-soft: #141414;
+  /* Light ClutchFuel palette — white base + electric lime */
+  --navy-deep: #f5f5f5;
+  --navy: #ffffff;
+  --navy-soft: #f2f2f2;
   --electric: #c1ff00;
   --electric-dark: #8ebc00;
 
-  --ink: #000000;
+  --ink: #0a0a0a;
   --mist: #f4f6fb;
-  --dark: #000000;
-  --panel: #141414;
-  --muted-ink: rgba(255, 255, 255, 0.62);
-  --muted-dark: rgba(255, 255, 255, 0.62);
-  --hairline: rgba(255, 255, 255, 0.08);
-  --hairline-dark: rgba(255, 255, 255, 0.08);
+  --dark: #0a0a0a;
+  --panel: #f2f2f2;
+  --muted-ink: rgba(10, 10, 10, 0.62);
+  --muted-dark: rgba(10, 10, 10, 0.62);
+  --hairline: rgba(10, 10, 10, 0.08);
+  --hairline-dark: rgba(10, 10, 10, 0.08);
 
-  /* Shadcn mapped to brand */
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --card: #141414;
-  --card-foreground: #ffffff;
-  --popover: #141414;
-  --popover-foreground: #ffffff;
+  /* Shadcn mapped to light brand */
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #f5f5f5;
+  --card-foreground: #0a0a0a;
+  --popover: #f5f5f5;
+  --popover-foreground: #0a0a0a;
   --primary: var(--electric);
   --primary-foreground: #000000;
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: rgba(255, 255, 255, 0.62);
+  --secondary: #f0f0f0;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f0f0f0;
+  --muted-foreground: rgba(10, 10, 10, 0.62);
   --accent: var(--electric);
   --accent-foreground: #000000;
   --destructive: oklch(0.6 0.22 27);
@@ -148,8 +148,8 @@
   .tracking-display { letter-spacing: -0.03em; }
   .tracking-eyebrow { letter-spacing: 0.22em; }
 
-  .glass-navy {
-    background: color-mix(in oklab, #0a0a0a 82%, transparent);
+  .glass-header {
+    background: color-mix(in oklab, #ffffff 88%, transparent);
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
     border-bottom: 1px solid var(--hairline);
@@ -158,12 +158,12 @@
   .card-elevated {
     border-radius: 1.25rem;
     border: 1px solid var(--hairline);
-    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01));
   }
   .grid-noise {
     background-image:
-      radial-gradient(circle at 20% 0%, rgba(193, 255, 0, 0.14), transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(193, 255, 0, 0.06), transparent 55%);
+      radial-gradient(circle at 20% 0%, rgba(193, 255, 0, 0.10), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(193, 255, 0, 0.05), transparent 55%);
   }
 
   @media (prefers-reduced-motion: reduce) {

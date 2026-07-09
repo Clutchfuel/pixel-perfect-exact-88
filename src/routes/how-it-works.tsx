@@ -65,31 +65,31 @@ const FAQ = [
 function HowItWorksPage() {
   return (
     <PageShell>
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-black/5">
         <div className="absolute inset-0 grid-noise" aria-hidden />
         <div className="relative mx-auto w-full max-w-4xl px-5 pb-20 pt-16 text-center sm:px-8 sm:pb-28 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">How it works</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">How it works</p>
           <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Sixty seconds to your next performance breakthrough.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-white/70">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
             Clutch Score turns five simple questions into one clear, personalized action. No wearables. No calculations. No overwhelm.
           </p>
         </div>
       </section>
 
-      <section className="border-b border-white/5">
+      <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <div className="grid gap-6 md:grid-cols-3">
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated h-full p-8">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric/10 text-electric">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric text-black">
                     <s.icon className="h-5 w-5" />
                   </div>
-                  <p className="mt-6 text-sm font-semibold text-electric">{s.n}</p>
+                  <p className="mt-6 text-sm font-semibold text-foreground">{s.n}</p>
                   <h2 className="mt-2 text-2xl font-bold">{s.title}</h2>
-                  <p className="mt-4 text-base leading-relaxed text-white/65">{s.copy}</p>
+                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">{s.copy}</p>
                 </div>
               </Reveal>
             ))}
@@ -97,49 +97,49 @@ function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="border-b border-white/5 bg-navy-deep">
+      <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric">Sample result</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Sample result</p>
             <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
               What you'll actually see.
             </h2>
-            <p className="mt-6 text-lg text-white/70">
+            <p className="mt-6 text-lg text-muted-foreground">
               You'll get your Clutch Score, your biggest performance opportunity, and one action to try before your next workout. That's it.
             </p>
           </Reveal>
           <Reveal delay={0.08}>
             <div className="card-elevated p-8">
-              <p className="text-xs uppercase tracking-eyebrow text-electric">Your biggest opportunity</p>
+              <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Your biggest opportunity</p>
               <p className="mt-3 text-3xl font-extrabold leading-tight">Recovery & Cramping</p>
-              <p className="mt-6 text-xs uppercase tracking-eyebrow text-white/45">What to do next</p>
-              <p className="mt-2 text-lg leading-relaxed text-white/85">
+              <p className="mt-6 text-xs uppercase tracking-eyebrow text-muted-foreground/80">What to do next</p>
+              <p className="mt-2 text-lg leading-relaxed text-muted-foreground">
                 Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.
               </p>
-              <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
-                <span className="text-xs uppercase tracking-eyebrow text-white/50">Clutch Score</span>
+              <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
+                <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
                 <span className="text-2xl font-bold">68</span>
-                <span className="text-sm text-white/40">/ 100</span>
+                <span className="text-sm text-muted-foreground/70">/ 100</span>
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <section className="border-b border-white/5">
+      <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric">FAQ</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">FAQ</p>
           <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
             Common questions.
           </h2>
-          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+          <div className="mt-10 divide-y divide-black/10 border-y border-black/10">
             {FAQ.map((f) => (
               <details key={f.q} className="group py-6">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-semibold">
                   {f.q}
-                  <span className="mt-1 text-electric transition group-open:rotate-45">+</span>
+                  <span className="mt-1 text-black transition group-open:rotate-45">+</span>
                 </summary>
-                <p className="mt-3 text-base leading-relaxed text-white/70">{f.a}</p>
+                <p className="mt-3 text-base leading-relaxed text-muted-foreground">{f.a}</p>
               </details>
             ))}
           </div>

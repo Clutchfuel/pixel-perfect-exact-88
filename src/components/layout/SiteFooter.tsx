@@ -44,12 +44,12 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="border-t border-white/10 bg-navy-deep">
+    <footer className="border-t border-black/10 bg-muted">
       <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Logo size="md" />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Helping everyday athletes stop guessing and start performing with confidence.
             </p>
             <form onSubmit={submit} className="mt-6 flex max-w-sm gap-2">
@@ -58,7 +58,7 @@ export function SiteFooter() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Join the Clutch Crew"
-                className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-electric focus:outline-none"
+                className="min-w-0 flex-1 rounded-full border border-black/15 bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-electric focus:outline-none"
               />
               <button
                 type="submit"
@@ -68,14 +68,14 @@ export function SiteFooter() {
                 {submitting ? "…" : "Join"}
               </button>
             </form>
-            <p className="mt-2 text-xs text-white/40">
+            <p className="mt-2 text-xs text-muted-foreground/70">
               Weekly science-backed performance tips. No spam.
             </p>
           </div>
 
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <p className="text-xs font-semibold uppercase tracking-eyebrow text-white/45">
+              <p className="text-xs font-semibold uppercase tracking-eyebrow text-muted-foreground/80">
                 {col.title}
               </p>
               <ul className="mt-4 space-y-3">
@@ -83,7 +83,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="text-sm text-white/75 transition hover:text-electric"
+                      className="text-sm text-muted-foreground transition hover:text-foreground"
                     >
                       {l.label}
                     </Link>
@@ -94,14 +94,14 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-14 flex flex-col-reverse items-start justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center">
-          <p className="text-xs text-white/40">
+        <div className="mt-14 flex flex-col-reverse items-start justify-between gap-4 border-t border-black/10 pt-6 sm:flex-row sm:items-center">
+          <p className="text-xs text-muted-foreground/70">
             © {new Date().getFullYear()} ClutchFuel. All rights reserved.
           </p>
-          <div className="flex items-center gap-5 text-xs text-white/60">
-            <a href="#" className="hover:text-white">Instagram</a>
-            <a href="#" className="hover:text-white">LinkedIn</a>
-            <a href="#" className="hover:text-white">YouTube</a>
+          <div className="flex items-center gap-5 text-xs text-muted-foreground">
+            <a href="#" className="hover:text-foreground">Instagram</a>
+            <a href="#" className="hover:text-foreground">LinkedIn</a>
+            <a href="#" className="hover:text-foreground">YouTube</a>
           </div>
         </div>
       </div>
