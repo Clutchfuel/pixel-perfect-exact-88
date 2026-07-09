@@ -1,10 +1,11 @@
 type LogoProps = {
   className?: string;
   size?: "sm" | "md" | "lg";
+  variant?: "light" | "dark";
 };
 
 /**
- * public/logo-white.png is a JPEG wordmark with large vertical padding.
+ * The logo image is a wordmark with large vertical padding.
  * We crop to the center band via overflow + offset so header height maps to readable text.
  */
 const sizeClass = {
@@ -13,15 +14,16 @@ const sizeClass = {
   lg: { frame: "h-10 w-[185px]", image: "h-[7.5rem] -mt-10" },
 } as const;
 
-export function Logo({ className = "", size = "md" }: LogoProps) {
+export function Logo({ className = "", size = "md", variant = "dark" }: LogoProps) {
   const s = sizeClass[size];
+  const src = variant === "dark" ? "/logo-dark.png" : "/logo-white.png";
 
   return (
     <span
       className={`inline-flex shrink-0 items-start justify-start overflow-hidden ${s.frame} ${className}`}
     >
       <img
-        src="/logo-white.png"
+        src={src}
         alt="ClutchFuel"
         className={`${s.image} w-auto max-w-none select-none`}
         decoding="async"
