@@ -21,23 +21,23 @@ function PrivacyPage() {
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
         <header className="mb-10 flex items-center justify-between gap-4">
           <Logo size="lg" />
-          <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-white/40">
+          <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-muted-foreground/70">
             Privacy Policy
           </span>
         </header>
 
         <section className="flex-1">
           <h1 className="text-3xl font-bold leading-tight sm:text-4xl">Privacy Policy</h1>
-          <p className="mt-3 text-sm text-white/50">Last updated June 20, 2026</p>
+          <p className="mt-3 text-sm text-muted-foreground/80">Last updated June 20, 2026</p>
 
-          <div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-white/80">
+          <div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-muted-foreground">
             <p>
               This page covers the Clutch Score assessment at this site. It does not cover other
               ClutchFuel products or sites.
             </p>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">What we collect</h2>
+              <h2 className="text-lg font-semibold text-foreground">What we collect</h2>
               <p className="mt-2">
                 When you complete the assessment, we store your email address, your answers to the
                 five hydration questions, your calculated Clutch Score and result, and any optional
@@ -47,7 +47,7 @@ function PrivacyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">Why we collect it</h2>
+              <h2 className="text-lg font-semibold text-foreground">Why we collect it</h2>
               <p className="mt-2">
                 We use this information to show you your result, to understand how the assessment is
                 performing during testing, and to follow up about your hydration strategy if you've
@@ -56,7 +56,7 @@ function PrivacyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">Analytics cookies</h2>
+              <h2 className="text-lg font-semibold text-foreground">Analytics cookies</h2>
               <p className="mt-2">
                 If you accept analytics cookies in the banner shown on this site, we load Google
                 Analytics to understand how people move through the assessment. This only happens
@@ -67,7 +67,7 @@ function PrivacyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">How we store it</h2>
+              <h2 className="text-lg font-semibold text-foreground">How we store it</h2>
               <p className="mt-2">
                 Your responses are stored in a Supabase database. Submissions are write-once for
                 feedback — once you submit a 👍/👎 or a note, that submission can't be modified
@@ -76,7 +76,7 @@ function PrivacyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">Your choices</h2>
+              <h2 className="text-lg font-semibold text-foreground">Your choices</h2>
               <p className="mt-2">
                 You can decline analytics cookies without affecting your ability to take the
                 assessment or see your result. To request that your data be deleted, contact us and
@@ -85,7 +85,7 @@ function PrivacyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-white">Questions</h2>
+              <h2 className="text-lg font-semibold text-foreground">Questions</h2>
               <p className="mt-2">
                 Reach out to ClutchFuel directly with any questions about this policy or your data.
               </p>
@@ -95,7 +95,7 @@ function PrivacyPage() {
           <div className="mt-10">
             <Link
               to="/"
-              className="inline-flex items-center justify-center rounded-full bg-lime px-6 py-3 text-sm font-semibold text-background transition hover:bg-lime-dark"
+              className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
             >
               Take the assessment
             </Link>

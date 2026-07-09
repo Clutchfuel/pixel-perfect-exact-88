@@ -148,17 +148,17 @@ function Quiz({
   return (
     <section>
       <div className="mb-8">
-        <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-eyebrow text-white/50">
+        <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-eyebrow text-muted-foreground/80">
           <span>
             Question {index + 1} of {QUESTIONS.length}
           </span>
           {index > 0 && (
-            <button onClick={onBack} className="hover:text-white" type="button">
+            <button onClick={onBack} className="hover:text-foreground" type="button">
               ← Back
             </button>
           )}
         </div>
-        <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+        <div className="h-1 w-full overflow-hidden rounded-full bg-black/[0.10]">
           <div
             className="h-full bg-electric transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -179,8 +179,8 @@ function Quiz({
               onClick={() => onAnswer(a)}
               className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
                 isSelected
-                  ? "border-electric bg-electric/10 text-electric"
-                  : "border-white/10 bg-white/[0.03] text-white hover:border-white/30 hover:bg-white/[0.06]"
+                  ? "border-electric bg-electric/15 text-electric"
+                  : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
               type="button"
             >
@@ -244,29 +244,29 @@ function EmailCapture({
       <button
         onClick={onBack}
         type="button"
-        className="mb-6 self-start text-xs uppercase tracking-eyebrow text-white/50 transition hover:text-white"
+        className="mb-6 self-start text-xs uppercase tracking-eyebrow text-muted-foreground/80 transition hover:text-foreground"
       >
         ← Back
       </button>
       <h2 className="text-balance text-4xl font-bold leading-tight sm:text-5xl">
         Your Clutch Score is ready
       </h2>
-      <p className="mt-4 text-lg text-white/70">Enter your email to see your result.</p>
+      <p className="mt-4 text-lg text-muted-foreground">Enter your email to see your result.</p>
 
       <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
         <input
           type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
           placeholder="Email *"
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-electric focus:outline-none"
+          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
         <input
           type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
           placeholder="First name (optional)"
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-electric focus:outline-none"
+          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
         <select
           value={source} onChange={(e) => setSource(e.target.value)}
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white focus:border-electric focus:outline-none"
+          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground focus:border-electric focus:outline-none"
         >
           <option value="">How did you hear about Clutch Score? (optional)</option>
           {SOURCES.map((s) => (
@@ -325,55 +325,55 @@ function Result({
       </h2>
 
       <div className="mt-10">
-        <p className="text-xs uppercase tracking-eyebrow text-white/40">What to do next</p>
-        <p className="mt-3 text-xl leading-relaxed text-white">{nextStep}</p>
+        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/70">What to do next</p>
+        <p className="mt-3 text-xl leading-relaxed text-foreground">{nextStep}</p>
       </div>
 
-      <div className="mt-10 inline-flex items-baseline gap-3 self-start rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4">
-        <span className="text-xs uppercase tracking-eyebrow text-white/50">Clutch Score</span>
-        <span className="text-2xl font-bold text-white">{score}</span>
-        <span className="text-sm text-white/40">/ 100</span>
+      <div className="mt-10 inline-flex items-baseline gap-3 self-start rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4">
+        <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
+        <span className="text-2xl font-bold text-foreground">{score}</span>
+        <span className="text-sm text-muted-foreground/70">/ 100</span>
       </div>
 
-      <p className="mt-10 text-sm leading-relaxed text-white/60">
+      <p className="mt-10 text-sm leading-relaxed text-muted-foreground">
         Try your Next Step for the next 2 weeks. We'll check back and see what changed.
       </p>
 
-      <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+      <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.02] p-6">
         {submitted ? (
-          <p className="text-center text-sm text-white/70">Thanks — your feedback is recorded.</p>
+          <p className="text-center text-sm text-muted-foreground">Thanks — your feedback is recorded.</p>
         ) : (
           <>
-            <p className="text-sm font-semibold uppercase tracking-eyebrow text-white/70">
+            <p className="text-sm font-semibold uppercase tracking-eyebrow text-muted-foreground">
               Was this result helpful?
             </p>
             <div className="mt-4 flex gap-3">
               <button
                 type="button" onClick={() => setHelpful(true)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true ? "border-electric bg-electric/10 text-electric" : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                  helpful === true ? "border-electric bg-electric/15 text-electric" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👍 Yes</button>
               <button
                 type="button" onClick={() => setHelpful(false)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false ? "border-electric bg-electric/10 text-electric" : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                  helpful === false ? "border-electric bg-electric/15 text-electric" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👎 No</button>
             </div>
 
-            <label className="mt-5 block text-sm text-white/70">
+            <label className="mt-5 block text-sm text-muted-foreground">
               What surprised you most about your result?
             </label>
             <textarea
               value={feedback} onChange={(e) => setFeedback(e.target.value)} rows={3}
               placeholder="Optional"
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-electric focus:outline-none"
+              className="mt-2 w-full rounded-xl border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
             />
 
             <button
               type="button" onClick={handleFeedback} disabled={submitting}
-              className="mt-4 w-full rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-electric hover:text-electric disabled:opacity-60"
+              className="mt-4 w-full rounded-full border border-black/15 px-6 py-3 text-sm font-semibold text-foreground transition hover:border-electric hover:text-foreground disabled:opacity-60"
             >
               {submitting ? "Saving…" : "Submit Feedback"}
             </button>
