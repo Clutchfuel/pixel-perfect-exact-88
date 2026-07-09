@@ -78,7 +78,7 @@ function CommunityPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {HIGHLIGHTS.map((h) => (
               <div key={h.title} className="card-elevated p-8">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                   <h.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold">{h.title}</h3>

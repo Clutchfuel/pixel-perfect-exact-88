@@ -84,10 +84,10 @@ function HowItWorksPage() {
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated h-full p-8">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric text-black">
                     <s.icon className="h-5 w-5" />
                   </div>
-                  <p className="mt-6 text-sm font-semibold text-electric-dark">{s.n}</p>
+                  <p className="mt-6 text-sm font-semibold text-foreground">{s.n}</p>
                   <h2 className="mt-2 text-2xl font-bold">{s.title}</h2>
                   <p className="mt-4 text-base leading-relaxed text-muted-foreground">{s.copy}</p>
                 </div>
@@ -137,7 +137,7 @@ function HowItWorksPage() {
               <details key={f.q} className="group py-6">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-semibold">
                   {f.q}
-                  <span className="mt-1 text-electric-dark transition group-open:rotate-45">+</span>
+                  <span className="mt-1 text-black transition group-open:rotate-45">+</span>
                 </summary>
                 <p className="mt-3 text-base leading-relaxed text-muted-foreground">{f.a}</p>
               </details>

@@ -179,7 +179,7 @@ function Quiz({
               onClick={() => onAnswer(a)}
               className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
                 isSelected
-                  ? "border-electric bg-electric/25 text-electric-dark"
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
               type="button"
@@ -351,13 +351,13 @@ function Result({
               <button
                 type="button" onClick={() => setHelpful(true)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true ? "border-electric bg-electric/25 text-electric-dark" : "border-black/10 bg-black/[0.03] hover:border-black/30"
+                  helpful === true ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👍 Yes</button>
               <button
                 type="button" onClick={() => setHelpful(false)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false ? "border-electric bg-electric/25 text-electric-dark" : "border-black/10 bg-black/[0.03] hover:border-black/30"
+                  helpful === false ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👎 No</button>
             </div>

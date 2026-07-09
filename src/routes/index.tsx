@@ -103,7 +103,7 @@ function HomePage() {
             {PROBLEMS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark transition group-hover:bg-electric/25">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black transition group-hover:bg-electric/25">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -133,7 +133,7 @@ function HomePage() {
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated relative h-full overflow-hidden p-8">
-                  <span className="text-sm font-semibold text-electric-dark">{s.n}</span>
+                  <span className="text-sm font-semibold text-foreground">{s.n}</span>
                   <h3 className="mt-4 text-2xl font-bold">{s.t}</h3>
                   <p className="mt-3 text-base leading-relaxed text-muted-foreground">{s.c}</p>
                 </div>
@@ -191,7 +191,7 @@ function HomePage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric/25 text-electric-dark">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -229,7 +229,7 @@ function HomePage() {
             ))}
           </div>
           <div className="mt-10">
-            <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-electric-dark hover:underline">
+            <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
               Meet the community <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -247,7 +247,7 @@ function HomePage() {
                   Learn what your body is trying to tell you.
                 </h2>
               </div>
-              <Link to="/performance-hub" className="inline-flex items-center gap-2 text-sm font-semibold text-electric-dark hover:underline">
+              <Link to="/performance-hub" className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
                 Browse all <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
