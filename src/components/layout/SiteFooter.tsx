@@ -9,14 +9,17 @@ const COLUMNS = [
     links: [
       { to: "/clutch-score", label: "Clutch Score" },
       { to: "/how-it-works", label: "How It Works" },
+      { to: "/performance-hub", label: "Insights" },
     ],
   },
   {
     title: "Company",
     links: [
-      { to: "/about", label: "About" },
+      { to: "/mission", label: "Mission" },
+      { to: "/promise", label: "Our Promise" },
+      { to: "/partnerships", label: "Partnerships" },
       { to: "/community", label: "Community" },
-      { to: "/performance-hub", label: "Performance Hub" },
+      { to: "/about", label: "About" },
     ],
   },
   {

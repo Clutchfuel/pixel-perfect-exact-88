@@ -4,11 +4,12 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/how-it-works", label: "How It Works" },
-  { to: "/performance-hub", label: "Performance Hub" },
+  { to: "/mission", label: "Mission" },
+  { to: "/clutch-score", label: "Clutch Score" },
   { to: "/community", label: "Community" },
-  { to: "/about", label: "About" },
+  { to: "/partnerships", label: "Partnerships" },
+  { to: "/promise", label: "Our Promise" },
+  { to: "/performance-hub", label: "Insights" },
 ] as const;
 
 export function SiteHeader() {
@@ -40,8 +41,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-8 lg:flex">
           {NAV.map((item) => {
-            const active =
-              item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+            const active = pathname.startsWith(item.to);
             return (
               <Link
                 key={item.to}
@@ -79,8 +79,7 @@ export function SiteHeader() {
         <div className="border-t border-white/10 bg-foreground lg:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6">
             {NAV.map((item) => {
-              const active =
-                item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+              const active = pathname.startsWith(item.to);
               return (
                 <Link
                   key={item.to}
