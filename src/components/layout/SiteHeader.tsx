@@ -4,11 +4,12 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/how-it-works", label: "How It Works" },
-  { to: "/performance-hub", label: "Performance Hub" },
+  { to: "/mission", label: "Mission" },
+  { to: "/clutch-score", label: "Clutch Score" },
   { to: "/community", label: "Community" },
-  { to: "/about", label: "About" },
+  { to: "/partnerships", label: "Partnerships" },
+  { to: "/promise", label: "Our Promise" },
+  { to: "/performance-hub", label: "Insights" },
 ] as const;
 
 export function SiteHeader() {
