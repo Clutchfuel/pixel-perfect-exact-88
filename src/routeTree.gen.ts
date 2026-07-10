@@ -9,8 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PerformanceHubRouteImport } from './routes/performance-hub'
+import { Route as PartnershipsRouteImport } from './routes/partnerships'
+import { Route as MissionRouteImport } from './routes/mission'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
@@ -18,6 +21,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub.$slug'
 
+const PromiseRoute = PromiseRouteImport.update({
+  id: '/promise',
+  path: '/promise',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -26,6 +34,16 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PerformanceHubRoute = PerformanceHubRouteImport.update({
   id: '/performance-hub',
   path: '/performance-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnershipsRoute = PartnershipsRouteImport.update({
+  id: '/partnerships',
+  path: '/partnerships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -65,8 +83,11 @@ export interface FileRoutesByFullPath {
   '/clutch-score': typeof ClutchScoreRoute
   '/community': typeof CommunityRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/mission': typeof MissionRoute
+  '/partnerships': typeof PartnershipsRoute
   '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesByTo {
@@ -75,8 +96,11 @@ export interface FileRoutesByTo {
   '/clutch-score': typeof ClutchScoreRoute
   '/community': typeof CommunityRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/mission': typeof MissionRoute
+  '/partnerships': typeof PartnershipsRoute
   '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesById {
@@ -86,8 +110,11 @@ export interface FileRoutesById {
   '/clutch-score': typeof ClutchScoreRoute
   '/community': typeof CommunityRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/mission': typeof MissionRoute
+  '/partnerships': typeof PartnershipsRoute
   '/performance-hub': typeof PerformanceHubRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/promise': typeof PromiseRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRouteTypes {
@@ -98,8 +125,11 @@ export interface FileRouteTypes {
     | '/clutch-score'
     | '/community'
     | '/how-it-works'
+    | '/mission'
+    | '/partnerships'
     | '/performance-hub'
     | '/privacy'
+    | '/promise'
     | '/performance-hub/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,8 +138,11 @@ export interface FileRouteTypes {
     | '/clutch-score'
     | '/community'
     | '/how-it-works'
+    | '/mission'
+    | '/partnerships'
     | '/performance-hub'
     | '/privacy'
+    | '/promise'
     | '/performance-hub/$slug'
   id:
     | '__root__'
@@ -118,8 +151,11 @@ export interface FileRouteTypes {
     | '/clutch-score'
     | '/community'
     | '/how-it-works'
+    | '/mission'
+    | '/partnerships'
     | '/performance-hub'
     | '/privacy'
+    | '/promise'
     | '/performance-hub/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -129,12 +165,22 @@ export interface RootRouteChildren {
   ClutchScoreRoute: typeof ClutchScoreRoute
   CommunityRoute: typeof CommunityRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  MissionRoute: typeof MissionRoute
+  PartnershipsRoute: typeof PartnershipsRoute
   PerformanceHubRoute: typeof PerformanceHubRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
+  PromiseRoute: typeof PromiseRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/promise': {
+      id: '/promise'
+      path: '/promise'
+      fullPath: '/promise'
+      preLoaderRoute: typeof PromiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -147,6 +193,20 @@ declare module '@tanstack/react-router' {
       path: '/performance-hub'
       fullPath: '/performance-hub'
       preLoaderRoute: typeof PerformanceHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partnerships': {
+      id: '/partnerships'
+      path: '/partnerships'
+      fullPath: '/partnerships'
+      preLoaderRoute: typeof PartnershipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -212,19 +272,12 @@ const rootRouteChildren: RootRouteChildren = {
   ClutchScoreRoute: ClutchScoreRoute,
   CommunityRoute: CommunityRoute,
   HowItWorksRoute: HowItWorksRoute,
+  MissionRoute: MissionRoute,
+  PartnershipsRoute: PartnershipsRoute,
   PerformanceHubRoute: PerformanceHubRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
+  PromiseRoute: PromiseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

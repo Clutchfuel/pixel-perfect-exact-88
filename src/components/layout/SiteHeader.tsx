@@ -41,8 +41,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-8 lg:flex">
           {NAV.map((item) => {
-            const active =
-              item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+            const active = pathname.startsWith(item.to);
             return (
               <Link
                 key={item.to}
@@ -80,8 +79,7 @@ export function SiteHeader() {
         <div className="border-t border-white/10 bg-foreground lg:hidden">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6">
             {NAV.map((item) => {
-              const active =
-                item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+              const active = pathname.startsWith(item.to);
               return (
                 <Link
                   key={item.to}
