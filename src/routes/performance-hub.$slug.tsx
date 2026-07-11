@@ -34,30 +34,101 @@ function ArticlePage() {
   return (
     <PageShell>
       <article>
-        <header className="relative overflow-hidden bg-foreground text-background">
-          <img
-            src={article.image}
-            alt=""
+        <header className="relative overflow-hidden bg-[#0a0a0a] text-white">
+          {/* Repeating category name pattern (left half) */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-full sm:w-3/5 overflow-hidden select-none"
             aria-hidden
-            className="absolute inset-0 h-full w-full object-cover opacity-60"
+          >
+            <div className="absolute inset-0 flex flex-col justify-center gap-2 -rotate-6 opacity-[0.18] leading-none">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="whitespace-nowrap font-extrabold uppercase tracking-tight text-[14vw] sm:text-[10vw]"
+                  style={{
+                    WebkitTextStroke: "1px #c1ff00",
+                    color: "transparent",
+                    transform: `translateX(${(i % 2) * -8}%)`,
+                  }}
+                >
+                  {`${article.category} ${article.category} ${article.category}`}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Big outlined clutchfuel wordmark (right half) */}
+          <div
+            className="pointer-events-none absolute inset-y-0 right-[-6%] hidden lg:flex w-1/2 items-center overflow-hidden select-none"
+            aria-hidden
+          >
+            <div className="flex flex-col leading-[0.82] font-extrabold lowercase tracking-tighter text-[20vw]"
+              style={{ WebkitTextStroke: "1.5px #c1ff00", color: "transparent" }}
+            >
+              <span>clutch</span>
+              <span>fuel</span>
+            </div>
+          </div>
+
+          {/* Radial glow */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden
+            style={{
+              background:
+                "radial-gradient(80% 60% at 85% 40%, rgba(255,255,255,0.06), transparent 60%)",
+            }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/85" aria-hidden />
-          <div className="relative mx-auto w-full max-w-3xl px-5 pb-20 pt-14 sm:px-8 sm:pb-28 sm:pt-24">
-            <Link to="/performance-hub" className="inline-flex items-center gap-2 text-xs uppercase tracking-eyebrow text-background/70 hover:text-background">
+
+          <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-14 sm:px-10 sm:pb-24 sm:pt-20">
+            <Link
+              to="/performance-hub"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-eyebrow text-white/60 hover:text-white"
+            >
               <ArrowLeft className="h-3.5 w-3.5" /> Insights
             </Link>
-            <p className="mt-8 text-xs uppercase tracking-eyebrow text-electric">{article.category}</p>
-            <h1 className="mt-4 text-balance text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              {article.title}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-background/80">{article.excerpt}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs uppercase tracking-eyebrow text-background/70">
-              <span>By ClutchFuel Team</span>
-              <span aria-hidden className="h-1 w-1 rounded-full bg-background/40" />
-              <span>{article.readingTime}</span>
+
+            <div className="mt-10 max-w-xl">
+              <div className="flex items-center gap-3">
+                <img src={logoAsset.url} alt="ClutchFuel" className="h-7 w-auto no-bw" />
+              </div>
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-electric">
+                Performance Insights
+              </p>
+
+              <div className="mt-10">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-electric">
+                  {article.category}
+                </p>
+                <div className="mt-2 h-px w-10 bg-electric" />
+              </div>
+
+              <h1 className="mt-6 text-balance font-extrabold uppercase leading-[0.92] tracking-tight text-5xl sm:text-6xl lg:text-7xl">
+                {article.title}
+              </h1>
+              <div className="mt-6 h-px w-10 bg-electric" />
+
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70">
+                {article.excerpt}
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-4 text-[11px] uppercase tracking-[0.24em] text-white/70">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-electric">
+                  <img src={logoAsset.url} alt="" aria-hidden className="h-4 w-auto no-bw" />
+                </span>
+                <span>By ClutchFuel Team</span>
+                <span aria-hidden className="h-4 w-px bg-white/25" />
+                <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/40">
+                    <Clock className="h-3 w-3" />
+                  </span>
+                  {article.readingTime}
+                </span>
+              </div>
             </div>
           </div>
         </header>
+
 
 
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
