@@ -70,8 +70,9 @@ function HomePage() {
           aria-hidden
           width={1600}
           height={1104}
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
+          className="no-bw absolute inset-0 h-full w-full object-cover object-center opacity-70"
         />
+
         <div
           className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"
           aria-hidden
