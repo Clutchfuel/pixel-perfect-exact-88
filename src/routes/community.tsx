@@ -28,7 +28,7 @@ export const Route = createFileRoute("/community")({
 
 const ATHLETES = [
   { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
-  { tag: "Basketball", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
+  { tag: "Hoopers", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
   { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery.", image: athleteParent },
   { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him.", image: athleteCollege },
   { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again.", image: athleteWeekend },
