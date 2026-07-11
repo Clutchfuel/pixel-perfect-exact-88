@@ -112,6 +112,9 @@ function HomePage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there — with your goal — and works backwards to the habits most likely holding it back.
             </p>
+          </Reveal>
+
+
 
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
