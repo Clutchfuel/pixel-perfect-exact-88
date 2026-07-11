@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/layout/PageShell";
 import { ARTICLES, type ArticleCategory } from "@/content/articles";
 import { Reveal } from "@/components/Reveal";
+import { ArticleCover } from "@/components/ArticleCover";
 
 const CATEGORIES: ("All" | ArticleCategory)[] = [
   "All", "Hydration", "Recovery", "Fueling", "Performance", "Training", "Mindset",
@@ -72,7 +73,7 @@ function PerformanceHubPage() {
                 to="/performance-hub/$slug" params={{ slug: featured.slug }}
                 className="group grid gap-8 overflow-hidden rounded-3xl border border-black/10 bg-background transition hover:border-black/25 lg:grid-cols-2"
               >
-                <img src={featured.image} alt={featured.title} loading="lazy" className="aspect-[16/10] w-full object-cover lg:aspect-auto lg:h-full" />
+                <ArticleCover category={featured.category} title={featured.title} className="aspect-[16/10] w-full lg:aspect-auto lg:h-full" variant="hero" />
                 <div className="flex flex-col justify-center p-8 sm:p-10">
                   <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
                     Featured · {featured.category}
@@ -98,7 +99,7 @@ function PerformanceHubPage() {
                   to="/performance-hub/$slug" params={{ slug: a.slug }}
                   className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
                 >
-                  <img src={a.image} alt={a.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                  <ArticleCover category={a.category} title={a.title} className="aspect-[16/10] w-full" />
                   <div className="p-6">
                     <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">

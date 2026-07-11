@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
 import athleteRunning from "@/assets/sport-running.jpg";
@@ -297,7 +298,7 @@ function HomePage() {
                   params={{ slug: a.slug }}
                   className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
                 >
-                  <img src={a.image} alt={a.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                  <ArticleCover category={a.category} title={a.title} className="aspect-[16/10] w-full" />
                   <div className="p-6">
                     <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
