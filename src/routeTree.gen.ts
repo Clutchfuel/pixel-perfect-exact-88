@@ -19,7 +19,7 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub.$slug'
+import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub_.$slug'
 
 const PromiseRoute = PromiseRouteImport.update({
   id: '/promise',
@@ -72,9 +72,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerformanceHubSlugRoute = PerformanceHubSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => PerformanceHubRoute,
+  id: '/performance-hub_/$slug',
+  path: '/performance-hub/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -85,7 +85,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/mission': typeof MissionRoute
   '/partnerships': typeof PartnershipsRoute
-  '/performance-hub': typeof PerformanceHubRouteWithChildren
+  '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
@@ -98,7 +98,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/mission': typeof MissionRoute
   '/partnerships': typeof PartnershipsRoute
-  '/performance-hub': typeof PerformanceHubRouteWithChildren
+  '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
@@ -112,10 +112,10 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/mission': typeof MissionRoute
   '/partnerships': typeof PartnershipsRoute
-  '/performance-hub': typeof PerformanceHubRouteWithChildren
+  '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
-  '/performance-hub/$slug': typeof PerformanceHubSlugRoute
+  '/performance-hub_/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -156,7 +156,7 @@ export interface FileRouteTypes {
     | '/performance-hub'
     | '/privacy'
     | '/promise'
-    | '/performance-hub/$slug'
+    | '/performance-hub_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -167,9 +167,10 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   MissionRoute: typeof MissionRoute
   PartnershipsRoute: typeof PartnershipsRoute
-  PerformanceHubRoute: typeof PerformanceHubRouteWithChildren
+  PerformanceHubRoute: typeof PerformanceHubRoute
   PrivacyRoute: typeof PrivacyRoute
   PromiseRoute: typeof PromiseRoute
+  PerformanceHubSlugRoute: typeof PerformanceHubSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -244,27 +245,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/performance-hub/$slug': {
-      id: '/performance-hub/$slug'
-      path: '/$slug'
+    '/performance-hub_/$slug': {
+      id: '/performance-hub_/$slug'
+      path: '/performance-hub/$slug'
       fullPath: '/performance-hub/$slug'
       preLoaderRoute: typeof PerformanceHubSlugRouteImport
-      parentRoute: typeof PerformanceHubRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface PerformanceHubRouteChildren {
-  PerformanceHubSlugRoute: typeof PerformanceHubSlugRoute
-}
-
-const PerformanceHubRouteChildren: PerformanceHubRouteChildren = {
-  PerformanceHubSlugRoute: PerformanceHubSlugRoute,
-}
-
-const PerformanceHubRouteWithChildren = PerformanceHubRoute._addFileChildren(
-  PerformanceHubRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -274,9 +263,10 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   MissionRoute: MissionRoute,
   PartnershipsRoute: PartnershipsRoute,
-  PerformanceHubRoute: PerformanceHubRouteWithChildren,
+  PerformanceHubRoute: PerformanceHubRoute,
   PrivacyRoute: PrivacyRoute,
   PromiseRoute: PromiseRoute,
+  PerformanceHubSlugRoute: PerformanceHubSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
