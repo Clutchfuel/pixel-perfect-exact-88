@@ -155,8 +155,9 @@
 
   ::selection {
     background: var(--electric);
-    color: #fff;
+    color: #000;
   }
+
 }
 
 
