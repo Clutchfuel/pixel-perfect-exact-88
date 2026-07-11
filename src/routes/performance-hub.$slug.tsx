@@ -45,7 +45,7 @@ function ArticlePage() {
             <p className="mt-6 text-lg text-muted-foreground">{article.excerpt}</p>
             <p className="mt-4 text-xs uppercase tracking-eyebrow text-muted-foreground/80">{article.readingTime}</p>
           </div>
-          <div className={`h-64 w-full bg-gradient-to-br ${article.gradient} sm:h-96`} aria-hidden />
+          <img src={article.image} alt={article.title} className="h-64 w-full object-cover sm:h-96" />
         </header>
 
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
@@ -55,7 +55,21 @@ function ArticlePage() {
             ))}
           </div>
 
-          <div className="mt-16 rounded-2xl border border-black/10 bg-black/[0.03] p-8">
+          {article.takeaways?.length ? (
+            <div className="mt-14 rounded-2xl border-l-4 border-electric bg-muted p-8">
+              <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Key takeaways</p>
+              <ul className="mt-5 space-y-3">
+                {article.takeaways.map((t: string, i: number) => (
+                  <li key={i} className="flex gap-3 text-base leading-relaxed text-foreground">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-electric-dark" aria-hidden />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.03] p-8">
             <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Try it yourself</p>
             <h3 className="mt-3 text-2xl font-bold">Take the Clutch Score</h3>
             <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
@@ -80,7 +94,7 @@ function ArticlePage() {
                 to="/performance-hub/$slug" params={{ slug: a.slug }}
                 className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
               >
-                <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
+                <img src={a.image} alt={a.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
                 <div className="p-6">
                   <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                   <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">{a.title}</h3>

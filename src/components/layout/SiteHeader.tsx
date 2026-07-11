@@ -6,7 +6,6 @@ import { Logo } from "@/components/Logo";
 const NAV = [
   { to: "/mission", label: "Mission" },
   { to: "/clutch-score", label: "Clutch Score" },
-  { to: "/community", label: "Community" },
   { to: "/partnerships", label: "Partnerships" },
   { to: "/promise", label: "Our Promise" },
   { to: "/performance-hub", label: "Insights" },

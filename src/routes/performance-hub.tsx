@@ -67,7 +67,7 @@ function PerformanceHubPage() {
                 to="/performance-hub/$slug" params={{ slug: featured.slug }}
                 className="group grid gap-8 overflow-hidden rounded-3xl border border-black/10 bg-background transition hover:border-black/25 lg:grid-cols-2"
               >
-                <div className={`aspect-[16/10] bg-gradient-to-br ${featured.gradient} lg:aspect-auto`} aria-hidden />
+                <img src={featured.image} alt={featured.title} loading="lazy" className="aspect-[16/10] w-full object-cover lg:aspect-auto lg:h-full" />
                 <div className="flex flex-col justify-center p-8 sm:p-10">
                   <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
                     Featured · {featured.category}
@@ -93,7 +93,7 @@ function PerformanceHubPage() {
                   to="/performance-hub/$slug" params={{ slug: a.slug }}
                   className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
                 >
-                  <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
+                  <img src={a.image} alt={a.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
                   <div className="p-6">
                     <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
