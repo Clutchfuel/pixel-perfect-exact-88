@@ -105,14 +105,14 @@ function HomePage() {
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">The performance gap</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">What matters to you</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              You're training hard. But are you improving the right way?
+              Goals drive behavior. Behavior drives performance.
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Athletes often blame motivation, fitness, or effort. In reality, the levers they're missing are the ones they've never measured.
+              You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there — with your goal — and works backwards to the habits most likely holding it back.
             </p>
-          </Reveal>
+
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PROBLEMS.map((p, i) => (
