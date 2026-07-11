@@ -4,6 +4,12 @@ import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
+import athleteRunning from "@/assets/sport-running.jpg";
+import athleteBasketball from "@/assets/sport-basketball.jpg";
+import athleteParent from "@/assets/community-parent.jpg";
+import athleteHyrox from "@/assets/sport-hyrox.jpg";
+
+
 
 
 export const Route = createFileRoute("/")({
