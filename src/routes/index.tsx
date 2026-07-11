@@ -238,13 +238,13 @@ function HomePage() {
               Built for everyday athletes.
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Runners. Basketball players. Busy parents. HYROX competitors. Anyone chasing better — not perfect.
+              Runners. Hoopers. Busy parents. HYROX competitors. Anyone chasing better — not perfect.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { label: "Runners", image: athleteRunning },
-              { label: "Basketball", image: athleteBasketball },
+              { label: "Hoopers", image: athleteBasketball },
               { label: "Busy parents", image: athleteParent },
               { label: "HYROX", image: athleteHyrox },
             ].map((item, i) => (
