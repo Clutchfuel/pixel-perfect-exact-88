@@ -73,7 +73,7 @@ function PerformanceHubPage() {
                 to="/performance-hub/$slug" params={{ slug: featured.slug }}
                 className="group grid gap-8 overflow-hidden rounded-3xl border border-black/10 bg-background transition hover:border-black/25 lg:grid-cols-2"
               >
-                <img src={featured.image} alt={featured.title} loading="lazy" className="aspect-[16/10] w-full object-cover lg:aspect-auto lg:h-full" />
+                <ArticleCover category={featured.category} title={featured.title} className="aspect-[16/10] w-full lg:aspect-auto lg:h-full" variant="hero" />
                 <div className="flex flex-col justify-center p-8 sm:p-10">
                   <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
                     Featured · {featured.category}
