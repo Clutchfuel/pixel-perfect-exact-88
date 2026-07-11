@@ -180,9 +180,10 @@
   }
   .grid-noise {
     background-image:
-      radial-gradient(circle at 20% 0%, rgba(29, 107, 232, 0.08), transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(29, 107, 232, 0.04), transparent 55%);
+      radial-gradient(circle at 20% 0%, rgba(193, 255, 0, 0.10), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(193, 255, 0, 0.05), transparent 55%);
   }
+
 
 
   @media (prefers-reduced-motion: reduce) {
