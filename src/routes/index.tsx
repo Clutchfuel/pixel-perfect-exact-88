@@ -56,7 +56,7 @@ const PILLARS = [
 const QUOTES = [
   { text: "That described me perfectly.", author: "Runner, 34" },
   { text: "I never realized hydration was affecting me.", author: "HYROX athlete, 29" },
-  { text: "I've never seen anything like this.", author: "Basketball player, 41" },
+  { text: "I've never seen anything like this.", author: "Hooper, 41" },
   { text: "My score actually made sense.", author: "Weekend warrior, 36" },
 ];
 
