@@ -16,11 +16,13 @@ export type Database = {
     Tables: {
       assessment_responses: {
         Row: {
+          athlete_type: string | null
           clutch_score: number | null
           created_at: string
           email: string
           feedback_text: string | null
           first_name: string | null
+          goal: string | null
           helpful_result: boolean | null
           id: string
           next_step: string | null
@@ -34,11 +36,13 @@ export type Database = {
           source: string | null
         }
         Insert: {
+          athlete_type?: string | null
           clutch_score?: number | null
           created_at?: string
           email: string
           feedback_text?: string | null
           first_name?: string | null
+          goal?: string | null
           helpful_result?: boolean | null
           id?: string
           next_step?: string | null
@@ -52,11 +56,13 @@ export type Database = {
           source?: string | null
         }
         Update: {
+          athlete_type?: string | null
           clutch_score?: number | null
           created_at?: string
           email?: string
           feedback_text?: string | null
           first_name?: string | null
+          goal?: string | null
           helpful_result?: boolean | null
           id?: string
           next_step?: string | null
