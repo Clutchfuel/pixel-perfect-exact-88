@@ -58,7 +58,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/clutch-score"
-            className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-electric-dark md:inline-flex"
+            className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
           >
             Take the Clutch Score
           </Link>
@@ -93,7 +93,7 @@ export function SiteHeader() {
             })}
             <Link
               to="/clutch-score"
-              className="mt-3 rounded-full bg-electric px-5 py-3 text-center text-sm font-semibold text-white"
+              className="mt-3 rounded-full bg-electric px-5 py-3 text-center text-sm font-semibold text-black"
             >
               Take the Clutch Score
             </Link>

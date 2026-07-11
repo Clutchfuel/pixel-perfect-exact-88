@@ -311,7 +311,7 @@ function GoalStep({
               onClick={() => onSelect(g.id)}
               className={`w-full rounded-2xl border px-5 py-4 text-left text-base font-semibold transition active:scale-[0.99] ${
                 active
-                  ? "border-electric bg-electric text-white"
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
             >
@@ -360,7 +360,7 @@ function AthleteStep({
               onClick={() => onSelect(t)}
               className={`w-full rounded-2xl border px-5 py-4 text-left text-base font-semibold transition active:scale-[0.99] ${
                 active
-                  ? "border-electric bg-electric text-white"
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
             >
@@ -419,7 +419,7 @@ function Quiz({
               onClick={() => onAnswer(a)}
               className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
                 isSelected
-                  ? "border-electric bg-electric text-white"
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
               type="button"
@@ -524,7 +524,7 @@ function EmailCapture({
         </select>
         <button
           type="submit" disabled={submitting}
-          className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-white transition hover:bg-electric-dark disabled:opacity-60"
+          className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
           {submitting ? "Calculating…" : "Show My Insight"}
         </button>
@@ -602,13 +602,13 @@ function Result({
               <button
                 type="button" onClick={() => setHelpful(true)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true ? "border-electric bg-electric text-white" : "border-black/10 bg-black/[0.03] hover:border-black/30"
+                  helpful === true ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👍 Yes</button>
               <button
                 type="button" onClick={() => setHelpful(false)}
                 className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false ? "border-electric bg-electric text-white" : "border-black/10 bg-black/[0.03] hover:border-black/30"
+                  helpful === false ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
                 }`}
               >👎 No</button>
             </div>

@@ -67,7 +67,7 @@ function MissionPage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.05}>
                 <div className="card-elevated h-full p-6">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-lg font-bold">{p.title}</h3>
@@ -104,7 +104,7 @@ function MissionPage() {
           </h2>
           <Link
             to="/clutch-score"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
           >
             Take the Clutch Score <ArrowRight className="h-4 w-4" />
           </Link>

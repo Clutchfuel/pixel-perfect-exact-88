@@ -82,7 +82,7 @@ function PromisePage() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               to="/clutch-score"
-              className="inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+              className="inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>

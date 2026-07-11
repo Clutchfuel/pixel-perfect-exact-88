@@ -70,8 +70,9 @@ function HomePage() {
           aria-hidden
           width={1600}
           height={1104}
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
+          className="no-bw absolute inset-0 h-full w-full object-cover object-center opacity-70"
         />
+
         <div
           className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"
           aria-hidden
@@ -89,7 +90,7 @@ function HomePage() {
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
               to="/clutch-score"
-              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -127,7 +128,7 @@ function HomePage() {
             {PROBLEMS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white transition group-hover:bg-electric/25">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black transition group-hover:bg-electric/25">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -180,7 +181,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -215,7 +216,7 @@ function HomePage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -350,7 +351,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>

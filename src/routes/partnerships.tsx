@@ -109,7 +109,7 @@ function PartnershipsPage() {
           </p>
           <a
             href="mailto:partners@clutchfuel.com?subject=ClutchFuel%20Partnership"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
           >
             Become a ClutchFuel Partner <ArrowRight className="h-4 w-4" />
           </a>
