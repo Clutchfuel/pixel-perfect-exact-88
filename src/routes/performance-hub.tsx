@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/layout/PageShell";
 import { ARTICLES, type ArticleCategory } from "@/content/articles";
 import { Reveal } from "@/components/Reveal";
+import { ArticleCover } from "@/components/ArticleCover";
 
 const CATEGORIES: ("All" | ArticleCategory)[] = [
   "All", "Hydration", "Recovery", "Fueling", "Performance", "Training", "Mindset",
