@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { getArticle, relatedArticles } from "@/content/articles";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
+import { ArticleCover } from "@/components/ArticleCover";
 
 export const Route = createFileRoute("/performance-hub_/$slug")({
   loader: ({ params }) => {
