@@ -3,6 +3,8 @@ import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles }
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { ARTICLES } from "@/content/articles";
+import heroImage from "@/assets/home-hero-cinematic.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
