@@ -71,6 +71,7 @@ function CommunityPage() {
                     width={1024}
                     height={1280}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    style={{ filter: "grayscale(1) contrast(1.05)" }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
                   <div className="relative flex h-full flex-col justify-end p-6 text-background">
