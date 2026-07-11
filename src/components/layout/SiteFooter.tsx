@@ -66,7 +66,7 @@ export function SiteFooter() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="shrink-0 rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
+                className="shrink-0 rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-electric-dark disabled:opacity-60"
               >
                 {submitting ? "…" : "Join"}
               </button>

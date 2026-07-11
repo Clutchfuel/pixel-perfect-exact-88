@@ -83,7 +83,7 @@ function HomePage() {
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
               to="/clutch-score"
-              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -121,7 +121,7 @@ function HomePage() {
             {PROBLEMS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black transition group-hover:bg-electric/25">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white transition group-hover:bg-electric/25">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -174,7 +174,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -209,7 +209,7 @@ function HomePage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -332,7 +332,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>

@@ -75,7 +75,7 @@ function ArticlePage() {
             <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
             <Link
               to="/clutch-score"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
             >
               Start assessment <ArrowRight className="h-4 w-4" />
             </Link>

@@ -49,7 +49,7 @@ function PerformanceHubPage() {
                 key={c}
                 onClick={() => setCat(c)}
                 className={`rounded-full border px-4 py-2 text-sm transition ${
-                  cat === c ? "border-electric bg-electric text-black" : "border-black/15 text-muted-foreground hover:border-black/40 hover:text-foreground"
+                  cat === c ? "border-electric bg-electric text-white" : "border-black/15 text-muted-foreground hover:border-black/40 hover:text-foreground"
                 }`}
               >
                 {c}
