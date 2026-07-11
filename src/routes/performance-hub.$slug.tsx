@@ -45,7 +45,7 @@ function ArticlePage() {
             <p className="mt-6 text-lg text-muted-foreground">{article.excerpt}</p>
             <p className="mt-4 text-xs uppercase tracking-eyebrow text-muted-foreground/80">{article.readingTime}</p>
           </div>
-          <div className={`h-64 w-full bg-gradient-to-br ${article.gradient} sm:h-96`} aria-hidden />
+          <img src={article.image} alt={article.title} className="h-64 w-full object-cover sm:h-96" />
         </header>
 
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">

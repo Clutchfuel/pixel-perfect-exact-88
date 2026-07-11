@@ -278,7 +278,7 @@ function HomePage() {
                   params={{ slug: a.slug }}
                   className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
                 >
-                  <div className={`aspect-[16/10] bg-gradient-to-br ${a.gradient}`} aria-hidden />
+                  <img src={a.image} alt={a.title} loading="lazy" className="aspect-[16/10] w-full object-cover" />
                   <div className="p-6">
                     <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
