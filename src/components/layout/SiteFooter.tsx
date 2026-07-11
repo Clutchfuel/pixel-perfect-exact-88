@@ -18,8 +18,8 @@ const COLUMNS = [
       { to: "/mission", label: "Mission" },
       { to: "/promise", label: "Our Promise" },
       { to: "/partnerships", label: "Partnerships" },
-      { to: "/community", label: "Community" },
       { to: "/about", label: "About" },
+      { to: "/community", label: "Community" },
     ],
   },
   {
@@ -103,7 +103,6 @@ export function SiteFooter() {
           </p>
           <div className="flex items-center gap-5 text-xs text-background/70">
             <a href="#" className="hover:text-background">Instagram</a>
-            <a href="#" className="hover:text-background">LinkedIn</a>
             <a href="#" className="hover:text-background">YouTube</a>
           </div>
         </div>
