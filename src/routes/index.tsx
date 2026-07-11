@@ -3,23 +3,26 @@ import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles }
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { ARTICLES } from "@/content/articles";
+import heroImage from "@/assets/home-hero-cinematic.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ClutchFuel — Performance intelligence for everyday athletes" },
+      { title: "ClutchFuel — Helping Everyday Athletes Perform Better" },
       {
         name: "description",
         content:
-          "Discover what's really holding back your performance. Take the 60-second Clutch Score assessment and get one personalized action before your next workout.",
+          "Personalized insights and better habits — starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
       },
-      { property: "og:title", content: "ClutchFuel — Performance intelligence for everyday athletes" },
+      { property: "og:title", content: "ClutchFuel — Helping Everyday Athletes Perform Better" },
       {
         property: "og:description",
         content:
-          "Take the 60-second Clutch Score to find your biggest performance opportunity and one personalized next step.",
+          "Every goal starts with better performance. Take the 60-second Clutch Score and find what's holding you back.",
       },
       { property: "og:type", content: "website" },
+
     ],
   }),
   component: HomePage,
@@ -54,17 +57,28 @@ function HomePage() {
   return (
     <PageShell>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 grid-noise" aria-hidden />
-        <div className="relative mx-auto flex w-full max-w-6xl flex-col items-start px-5 pb-24 pt-16 sm:px-8 sm:pt-24 lg:pt-32">
-          <span className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-black/[0.05] px-4 py-1.5 text-xs font-medium uppercase tracking-eyebrow text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-electric-dark" /> Performance intelligence
+      <section className="relative overflow-hidden bg-foreground text-background">
+        <img
+          src={heroImage}
+          alt=""
+          aria-hidden
+          width={1600}
+          height={1104}
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"
+          aria-hidden
+        />
+        <div className="relative mx-auto flex w-full max-w-6xl flex-col items-start px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-28 lg:pt-36">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-eyebrow text-background/90 backdrop-blur">
+            <Sparkles className="h-3.5 w-3.5 text-electric" /> Every goal starts with better performance
           </span>
           <h1 className="mt-6 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-            Find what's really holding back your performance.
+            Helping Everyday Athletes Perform Better.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            Take the 60-second Clutch Score™ to discover your biggest performance opportunity and get one personalized action before your next workout.
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-background/80 sm:text-xl">
+            Personalized insights and better habits — starting with your Clutch Score™. Tell us your goal. We'll show you the one thing most likely holding you back.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
@@ -75,29 +89,33 @@ function HomePage() {
             </Link>
             <Link
               to="/how-it-works"
-              className="inline-flex items-center gap-2 rounded-full border border-black/15 px-7 py-4 text-base font-semibold text-foreground transition hover:border-black/40"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-4 text-base font-semibold text-background transition hover:border-white/60 hover:bg-white/10"
             >
-              How It Works
+              See how it works
             </Link>
           </div>
-          <div className="mt-16 flex items-center gap-3 text-xs uppercase tracking-eyebrow text-muted-foreground/70">
-            <span className="h-px w-8 bg-black/25" /> Scroll to explore
+          <div className="mt-16 flex items-center gap-3 text-xs uppercase tracking-eyebrow text-background/60">
+            <span className="h-px w-8 bg-white/40" /> A conversation, not a questionnaire
           </div>
         </div>
       </section>
+
 
       {/* Problem */}
       <section className="border-t border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">The performance gap</p>
+            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">What matters to you</p>
             <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              You're training hard. But are you improving the right way?
+              Goals drive behavior. Behavior drives performance.
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Athletes often blame motivation, fitness, or effort. In reality, the levers they're missing are the ones they've never measured.
+              You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there — with your goal — and works backwards to the habits most likely holding it back.
             </p>
           </Reveal>
+
+
+
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PROBLEMS.map((p, i) => (
