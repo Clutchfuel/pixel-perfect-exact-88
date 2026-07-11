@@ -4,7 +4,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { getArticle, relatedArticles } from "@/content/articles";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
 
-export const Route = createFileRoute("/performance-hub/$slug")({
+export const Route = createFileRoute("/performance-hub_/$slug")({
   loader: ({ params }) => {
     const article = getArticle(params.slug);
     if (!article) throw notFound();
