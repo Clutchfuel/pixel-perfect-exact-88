@@ -9,19 +9,20 @@ import heroImage from "@/assets/home-hero-cinematic.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ClutchFuel — Performance intelligence for everyday athletes" },
+      { title: "ClutchFuel — Helping Everyday Athletes Perform Better" },
       {
         name: "description",
         content:
-          "Discover what's really holding back your performance. Take the 60-second Clutch Score assessment and get one personalized action before your next workout.",
+          "Personalized insights and better habits — starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
       },
-      { property: "og:title", content: "ClutchFuel — Performance intelligence for everyday athletes" },
+      { property: "og:title", content: "ClutchFuel — Helping Everyday Athletes Perform Better" },
       {
         property: "og:description",
         content:
-          "Take the 60-second Clutch Score to find your biggest performance opportunity and one personalized next step.",
+          "Every goal starts with better performance. Take the 60-second Clutch Score and find what's holding you back.",
       },
       { property: "og:type", content: "website" },
+
     ],
   }),
   component: HomePage,
