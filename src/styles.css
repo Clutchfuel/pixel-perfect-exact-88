@@ -76,8 +76,10 @@
   --navy-deep: #f5f5f5;
   --navy: #ffffff;
   --navy-soft: #f2f2f2;
-  --electric: #c1ff00;
-  --electric-dark: #8ebc00;
+  /* Primary blue accent — used sparingly for buttons, links, active states */
+  --electric: #1d6be8;
+  --electric-dark: #154bb0;
+
 
   --ink: #0a0a0a;
   --mist: #f4f6fb;
@@ -96,13 +98,14 @@
   --popover: #f5f5f5;
   --popover-foreground: #0a0a0a;
   --primary: var(--electric);
-  --primary-foreground: #000000;
+  --primary-foreground: #ffffff;
   --secondary: #f0f0f0;
   --secondary-foreground: #0a0a0a;
   --muted: #f0f0f0;
   --muted-foreground: rgba(10, 10, 10, 0.62);
   --accent: var(--electric);
-  --accent-foreground: #000000;
+  --accent-foreground: #ffffff;
+
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
   --border: var(--hairline);
@@ -137,11 +140,24 @@
     line-height: 1.04;
   }
 
+  /* Cinematic B&W photography — global editorial treatment.
+     Header/footer sit outside <main>, so their logos stay untouched. */
+  main img,
+  article img {
+    filter: grayscale(1) contrast(1.06);
+  }
+  /* Escape hatch for any image that must render in color */
+  main img.no-bw,
+  article img.no-bw {
+    filter: none;
+  }
+
   ::selection {
     background: var(--electric);
-    color: #000;
+    color: #fff;
   }
 }
+
 
 @layer utilities {
   .font-display { font-family: var(--font-display); }
@@ -162,9 +178,10 @@
   }
   .grid-noise {
     background-image:
-      radial-gradient(circle at 20% 0%, rgba(193, 255, 0, 0.10), transparent 55%),
-      radial-gradient(circle at 80% 20%, rgba(193, 255, 0, 0.05), transparent 55%);
+      radial-gradient(circle at 20% 0%, rgba(29, 107, 232, 0.08), transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(29, 107, 232, 0.04), transparent 55%);
   }
+
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }

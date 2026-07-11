@@ -33,15 +33,17 @@ function PerformanceHubPage() {
 
   return (
     <PageShell>
-      <section className="border-b border-black/5">
-        <div className="mx-auto w-full max-w-6xl px-5 pb-14 pt-16 sm:px-8 sm:pb-20 sm:pt-24">
-          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance Hub</p>
+      <section className="relative overflow-hidden border-b border-black/5 bg-foreground text-background">
+        <div className="absolute inset-0 grid-noise opacity-40" aria-hidden />
+        <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-20 sm:px-8 sm:pb-28 sm:pt-28">
+          <p className="text-xs uppercase tracking-eyebrow text-electric">Insights</p>
           <h1 className="mt-4 max-w-3xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
             Learn what your body is trying to tell you.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
+          <p className="mt-6 max-w-2xl text-lg text-background/75">
             Editorial, science-informed guides on hydration, recovery, fueling, training habits, and the small things that quietly change results.
           </p>
+
 
           <div className="mt-10 flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
@@ -49,7 +51,9 @@ function PerformanceHubPage() {
                 key={c}
                 onClick={() => setCat(c)}
                 className={`rounded-full border px-4 py-2 text-sm transition ${
-                  cat === c ? "border-electric bg-electric text-black" : "border-black/15 text-muted-foreground hover:border-black/40 hover:text-foreground"
+                  cat === c
+                    ? "border-electric bg-electric text-white"
+                    : "border-white/20 text-background/70 hover:border-white/60 hover:text-background"
                 }`}
               >
                 {c}
@@ -58,6 +62,7 @@ function PerformanceHubPage() {
           </div>
         </div>
       </section>
+
 
       {featured && (
         <section className="border-b border-black/5 bg-muted">

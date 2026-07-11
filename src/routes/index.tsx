@@ -4,6 +4,12 @@ import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
+import athleteRunning from "@/assets/sport-running.jpg";
+import athleteBasketball from "@/assets/sport-basketball.jpg";
+import athleteParent from "@/assets/community-parent.jpg";
+import athleteHyrox from "@/assets/sport-hyrox.jpg";
+
+
 
 
 export const Route = createFileRoute("/")({
@@ -83,7 +89,7 @@ function HomePage() {
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
               to="/clutch-score"
-              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -121,7 +127,7 @@ function HomePage() {
             {PROBLEMS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black transition group-hover:bg-electric/25">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white transition group-hover:bg-electric/25">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -174,7 +180,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
@@ -209,7 +215,7 @@ function HomePage() {
             {PILLARS.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.04}>
                 <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white">
                     <p.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
@@ -234,18 +240,30 @@ function HomePage() {
             </p>
           </Reveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {["Runners", "Basketball", "Busy parents", "HYROX"].map((label, i) => (
-              <Reveal key={label} delay={i * 0.05}>
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-electric/15 via-background to-muted p-6">
-                  <div className="absolute inset-0 opacity-40 mix-blend-overlay grid-noise" aria-hidden />
-                  <div className="relative flex h-full flex-col justify-end">
-                    <p className="text-xs uppercase tracking-eyebrow text-muted-foreground">Athlete</p>
-                    <p className="mt-1 text-2xl font-bold">{label}</p>
+            {[
+              { label: "Runners", image: athleteRunning },
+              { label: "Basketball", image: athleteBasketball },
+              { label: "Busy parents", image: athleteParent },
+              { label: "HYROX", image: athleteHyrox },
+            ].map((item, i) => (
+              <Reveal key={item.label} delay={i * 0.05}>
+                <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-foreground">
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
+                  <div className="relative flex h-full flex-col justify-end p-6 text-background">
+                    <p className="text-xs uppercase tracking-eyebrow text-background/70">Athlete</p>
+                    <p className="mt-1 text-2xl font-bold">{item.label}</p>
                   </div>
                 </div>
               </Reveal>
             ))}
           </div>
+
           <div className="mt-10">
             <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
               Meet the community <ArrowRight className="h-4 w-4" />
@@ -332,7 +350,7 @@ function HomePage() {
             </p>
             <Link
               to="/clutch-score"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>

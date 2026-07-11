@@ -84,7 +84,7 @@ function HowItWorksPage() {
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated h-full p-8">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric text-black">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-electric text-white">
                     <s.icon className="h-5 w-5" />
                   </div>
                   <p className="mt-6 text-sm font-semibold text-foreground">{s.n}</p>
@@ -153,7 +153,7 @@ function HowItWorksPage() {
           </h2>
           <Link
             to="/clutch-score"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
           >
             Take the Clutch Score <ArrowRight className="h-4 w-4" />
           </Link>

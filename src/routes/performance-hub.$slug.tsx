@@ -33,20 +33,31 @@ function ArticlePage() {
   return (
     <PageShell>
       <article>
-        <header className="border-b border-black/5">
-          <div className="mx-auto w-full max-w-3xl px-5 pt-14 pb-10 sm:px-8 sm:pt-24">
-            <Link to="/performance-hub" className="inline-flex items-center gap-2 text-xs uppercase tracking-eyebrow text-muted-foreground/80 hover:text-foreground">
-              <ArrowLeft className="h-3.5 w-3.5" /> Performance Hub
+        <header className="relative overflow-hidden bg-foreground text-background">
+          <img
+            src={article.image}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/85" aria-hidden />
+          <div className="relative mx-auto w-full max-w-3xl px-5 pb-20 pt-14 sm:px-8 sm:pb-28 sm:pt-24">
+            <Link to="/performance-hub" className="inline-flex items-center gap-2 text-xs uppercase tracking-eyebrow text-background/70 hover:text-background">
+              <ArrowLeft className="h-3.5 w-3.5" /> Insights
             </Link>
-            <p className="mt-6 text-xs uppercase tracking-eyebrow text-electric-dark">{article.category}</p>
-            <h1 className="mt-4 text-balance text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+            <p className="mt-8 text-xs uppercase tracking-eyebrow text-electric">{article.category}</p>
+            <h1 className="mt-4 text-balance text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
               {article.title}
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground">{article.excerpt}</p>
-            <p className="mt-4 text-xs uppercase tracking-eyebrow text-muted-foreground/80">{article.readingTime}</p>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-background/80">{article.excerpt}</p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs uppercase tracking-eyebrow text-background/70">
+              <span>By ClutchFuel Team</span>
+              <span aria-hidden className="h-1 w-1 rounded-full bg-background/40" />
+              <span>{article.readingTime}</span>
+            </div>
           </div>
-          <img src={article.image} alt={article.title} className="h-64 w-full object-cover sm:h-96" />
         </header>
+
 
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
           <div className="prose prose max-w-none space-y-6 text-lg leading-relaxed text-muted-foreground">
@@ -75,7 +86,7 @@ function ArticlePage() {
             <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
             <Link
               to="/clutch-score"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
             >
               Start assessment <ArrowRight className="h-4 w-4" />
             </Link>

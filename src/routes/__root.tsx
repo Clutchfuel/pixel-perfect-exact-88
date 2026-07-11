@@ -53,7 +53,7 @@ function NotFoundComponent() {
           </Link>
           <Link
             to="/clutch-score"
-            className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+            className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
           >
             Take the Clutch Score
           </Link>

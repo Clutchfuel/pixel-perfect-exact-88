@@ -95,7 +95,7 @@ function PrivacyPage() {
           <div className="mt-10">
             <Link
               to="/"
-              className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+              className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-white transition hover:bg-electric-dark"
             >
               Take the assessment
             </Link>
