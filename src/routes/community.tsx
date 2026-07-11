@@ -94,7 +94,7 @@ function CommunityPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {HIGHLIGHTS.map((h) => (
               <div key={h.title} className="card-elevated p-8">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-white">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
                   <h.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold">{h.title}</h3>
@@ -113,7 +113,7 @@ function CommunityPage() {
           <p className="mt-6 text-lg text-muted-foreground">Then bring the crew.</p>
           <Link
             to="/clutch-score"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-white transition hover:bg-electric-dark"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
           >
             Take the Clutch Score <ArrowRight className="h-4 w-4" />
           </Link>
