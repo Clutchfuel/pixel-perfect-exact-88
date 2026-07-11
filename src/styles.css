@@ -145,7 +145,7 @@
      Header/footer sit outside <main>, so their logos stay untouched. */
   main img,
   article img {
-    filter: grayscale(1) contrast(1.06);
+    filter: grayscale(0.65) contrast(1.03);
   }
   /* Escape hatch for any image that must render in color */
   main img.no-bw,
