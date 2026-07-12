@@ -1,107 +1,118 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Logo } from "@/components/Logo";
+import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { PageHero } from "@/components/PageHero";
+import { makeMeta, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
-    meta: [
-      { title: "Privacy Policy — Clutch Score by ClutchFuel" },
-      {
-        name: "description",
-        content: "How ClutchFuel collects, stores, and uses data from the Clutch Score assessment.",
-      },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: makeMeta({
+      title: "Privacy Policy | ClutchFuel",
+      description: "How ClutchFuel collects, uses, and protects your information.",
+      path: "/privacy",
+    }),
+    links: canonical("/privacy"),
   }),
   component: PrivacyPage,
 });
 
 function PrivacyPage() {
   return (
-    <main id="main" className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 py-10 sm:py-16">
-        <header className="mb-10 flex items-center justify-between gap-4">
-          <Logo size="lg" />
-          <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-white/40">
-            Privacy Policy
-          </span>
-        </header>
+    <>
+      <Header />
+      <main>
+        <PageHero
+          eyebrow="LEGAL"
+          title="Privacy Policy"
+          sub="A plain-English summary of how we handle your information."
+        />
 
-        <section className="flex-1">
-          <h1 className="text-3xl font-bold leading-tight sm:text-4xl">Privacy Policy</h1>
-          <p className="mt-3 text-sm text-white/50">Last updated June 20, 2026</p>
-
-          <div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-white/80">
-            <p>
-              This page covers the Clutch Score assessment at this site. It does not cover other
-              ClutchFuel products or sites.
+        <section className="mx-auto max-w-3xl px-6 pb-20 md:px-10 md:pb-28">
+          <div className="prose-like space-y-8 text-ink/80">
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                What we collect
+              </h2>
+              <p className="mt-3">
+                When you take the Clutch Score, we collect your assessment answers (how you feel in
+                training, recovery, training frequency, and goals), your resulting score,
+                opportunity, and First Clutch Move. If you choose to save results or join our list,
+                we collect your email address. Optional feedback you submit (accuracy ratings and
+                free-text comments) is also stored. Contact form messages include your name, email,
+                and message.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                How we use it
+              </h2>
+              <p className="mt-3">
+                We use this information to generate your Clutch Score, email you your results (when
+                you ask), improve the assessment, and — only with your consent — send performance
+                insights and product updates. We may use aggregated, non-identifying patterns to
+                improve ClutchFuel.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                Where it is stored
+              </h2>
+              <p className="mt-3">
+                Score responses and leads are stored in our application database (Cloudflare D1).
+                Transactional emails are sent through our email provider (Resend). Optional
+                analytics run only after cookie consent.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                What we don&apos;t do
+              </h2>
+              <p className="mt-3">
+                We do not sell your personal information. We do not share it with advertisers for
+                their marketing.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                Cookies & analytics
+              </h2>
+              <p className="mt-3">
+                Optional analytics cookies (Google Analytics) load only if you accept them in the
+                cookie banner. Declining does not affect core site features or form submissions.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                Retention & your choices
+              </h2>
+              <p className="mt-3">
+                You can unsubscribe from marketing emails using the link in any message. To request
+                access or deletion of your Clutch Score data, email privacy@clutchfuel.com.
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-extrabold tracking-display text-ink">
+                Contact
+              </h2>
+              <p className="mt-3">
+                Questions about privacy? Email{" "}
+                <a
+                  href="mailto:privacy@clutchfuel.com"
+                  className="text-ink underline underline-offset-4"
+                >
+                  privacy@clutchfuel.com
+                </a>
+                .
+              </p>
+            </div>
+            <p className="pt-4 text-sm text-muted-ink">
+              Last updated: July 12, 2026. Have counsel review this policy before public launch if
+              you need jurisdiction-specific disclosures.
             </p>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">What we collect</h2>
-              <p className="mt-2">
-                When you complete the assessment, we store your email address, your answers to the
-                five hydration questions, your calculated Clutch Score and result, and any optional
-                details you provide — first name and how you heard about Clutch Score. If you submit
-                feedback on your result, we store that too.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">Why we collect it</h2>
-              <p className="mt-2">
-                We use this information to show you your result, to understand how the assessment is
-                performing during testing, and to follow up about your hydration strategy if you've
-                opted in to hear from us. We do not sell this information.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">Analytics cookies</h2>
-              <p className="mt-2">
-                If you accept analytics cookies in the banner shown on this site, we load Google
-                Analytics to understand how people move through the assessment. This only happens
-                after you accept — declining means no analytics script loads. Your choice is
-                remembered on this device and you can change your mind by clearing your browser's
-                local storage for this site.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">How we store it</h2>
-              <p className="mt-2">
-                Your responses are stored in a Supabase database. Submissions are write-once for
-                feedback — once you submit a 👍/👎 or a note, that submission can't be modified
-                again. We don't make your individual responses publicly readable.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">Your choices</h2>
-              <p className="mt-2">
-                You can decline analytics cookies without affecting your ability to take the
-                assessment or see your result. To request that your data be deleted, contact us and
-                we'll remove it.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-lg font-semibold text-white">Questions</h2>
-              <p className="mt-2">
-                Reach out to ClutchFuel directly with any questions about this policy or your data.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center rounded-full bg-lime px-6 py-3 text-sm font-semibold text-background transition hover:bg-lime-dark"
-            >
-              Take the assessment
-            </Link>
           </div>
         </section>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

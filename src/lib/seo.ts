@@ -97,3 +97,40 @@ export function collectionPageSchema(opts: { name: string; description: string; 
     isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
   });
 }
+
+export function howToSchema(opts: {
+  name: string;
+  description: string;
+  path: string;
+  steps: string[];
+}) {
+  return jsonLd({
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: opts.name,
+    description: opts.description,
+    url: `${SITE_URL}${opts.path}`,
+    step: opts.steps.map((text, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      text,
+    })),
+  });
+}
+
+export function webApplicationSchema(opts: { name: string; description: string; path: string }) {
+  return jsonLd({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: opts.name,
+    description: opts.description,
+    url: `${SITE_URL}${opts.path}`,
+    applicationCategory: "HealthApplication",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    operatingSystem: "Any",
+  });
+}

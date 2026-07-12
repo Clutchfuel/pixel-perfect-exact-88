@@ -4,13 +4,23 @@
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
-  // Distributed rate limits for /api/leads/* — run: bun run configure:production
-  // (creates RATE_LIMIT_KV and patches id/preview_id below automatically)
+  // Create with: wrangler kv namespace create RATE_LIMIT_KV
+  // Replace id/preview_id with your namespace IDs before deploy.
   "kv_namespaces": [
     {
       "binding": "RATE_LIMIT_KV",
       "id": "00000000000000000000000000000000",
-      "preview_id": "00000000000000000000000000000000",
-    },
+      "preview_id": "00000000000000000000000000000000"
+    }
   ],
+  // Create with: wrangler d1 create clutchfuel-leads
+  // Then: wrangler d1 migrations apply LEADS_DB --remote
+  "d1_databases": [
+    {
+      "binding": "LEADS_DB",
+      "database_name": "clutchfuel-leads",
+      "database_id": "00000000000000000000000000000000",
+      "migrations_dir": "migrations"
+    }
+  ]
 }

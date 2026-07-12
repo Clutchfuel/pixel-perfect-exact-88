@@ -6,7 +6,7 @@
 
 # --- Client (Vite — exposed to browser, must be VITE_ prefixed) ---
 # Required in CI builds; optional locally (falls back to Lovable preview URL)
-VITE_SITE_URL=https://pixel-perfect-exact-88.lovable.app
+VITE_SITE_URL=https://clutchfuel.com
 # Optional GA4 measurement ID (e.g. G-XXXXXXXXXX) — loads only after cookie consent
 VITE_GA_MEASUREMENT_ID=
 # Turnstile site key — must be paired with TURNSTILE_SECRET_KEY (both or neither)
@@ -27,8 +27,12 @@ TURNSTILE_SECRET_KEY=
 # Recommended: Slack/Discord/PagerDuty webhook for JSON error reports (see docs/PRODUCTION.md)
 ERROR_WEBHOOK_URL=
 
+# Optional token for GET /api/admin/export-leads?token=...
+LEADS_EXPORT_TOKEN=
+
 # Clutch Score submit sends TWO emails when RESEND_API_KEY is set:
-#   1. User — formatted quiz results (score, profile, tips, product link)
+#   1. User — formatted results (score, opportunity, First Clutch Move, product link)
 #   2. Team — internal lead notification to LEADS_TO_EMAIL
 #
+# Persistence: bind D1 as LEADS_DB in wrangler.jsonc and run migrations in /migrations
 # Distributed rate limiting: create a KV namespace and bind as RATE_LIMIT_KV in wrangler.jsonc
