@@ -1,5 +1,6 @@
 import { extraArticles } from "./insights-extra";
 import { batch2Articles } from "./insights-batch2";
+import { pillarArticles } from "./insights-pillars";
 
 export interface ArticleSection {
   heading?: string;
@@ -67,7 +68,7 @@ export const baseArticles: Article[] = [
       {
         heading: "Make it personal",
         paragraphs: [
-          "Generic rules get you 80% of the way. The other 20% comes from knowing your own sweat rate and electrolyte losses — which is exactly what the Clutch Score is built to figure out.",
+          "Generic rules get you 80% of the way. The other 20% comes from knowing your priority — which gap to close first. That’s what the Clutch Score is built to surface: your Biggest Opportunity and a First Clutch Move.",
         ],
       },
     ],
@@ -346,7 +347,12 @@ export const baseArticles: Article[] = [
   },
 ];
 
-export const articles: Article[] = [...baseArticles, ...extraArticles, ...batch2Articles];
+export const articles: Article[] = [
+  ...pillarArticles,
+  ...baseArticles,
+  ...extraArticles,
+  ...batch2Articles,
+];
 
 export function getArticle(slug: string): Article | undefined {
   return articles.find((a) => a.slug === slug);

@@ -185,7 +185,7 @@ export function HeroClutchSlideshow() {
               poster={moment.poster.webp}
               muted
               playsInline
-              preload={slot === 0 ? "auto" : "metadata"}
+              preload="metadata"
             />
             {isVisible && (
               <motion.div

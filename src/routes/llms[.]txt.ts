@@ -17,6 +17,8 @@ export const Route = createFileRoute("/llms.txt")({
           ``,
           `- Homepage: ${SITE_URL}/`,
           `- Clutch Score (free assessment): ${SITE_URL}/clutch-score`,
+          `- What is Clutch Score: ${SITE_URL}/insights/what-is-clutch-score`,
+          `- Biggest Opportunity guide: ${SITE_URL}/insights/biggest-opportunity-performance-gaps`,
           `- The System (Prepare / Perform / Recover): ${SITE_URL}/system`,
           `- Products: ${SITE_URL}/products`,
           `- Sweat rate education: ${SITE_URL}/sweat-rate`,

@@ -1,16 +1,19 @@
 # ClutchFuel Website — Setup & Deploy Workflow
 
+> **Canonical product branch:** `feat/unified-marketing-clutch-score`  
+> See [docs/CANONICAL.md](docs/CANONICAL.md). Do not assume `origin/main` is the full marketing site.
+
 ## Lovable Preview vs Published URL
 
 This project is hosted on [Lovable](https://lovable.dev) and synced with [GitHub](https://github.com/Clutchfuel/pixel-perfect-exact-88).
 
 | Surface | URL / location | Use for |
 |---------|----------------|---------|
-| **Published** | https://pixel-perfect-exact-88.lovable.app | **Verify changes after a GitHub push** |
+| **Published** | https://pixel-perfect-exact-88.lovable.app | **Verify changes after a GitHub push** (confirm which branch Lovable tracks) |
 | **Lovable Preview** | In-editor iframe | Dev sandbox only — can lag behind GitHub |
 | **Local dev** | `bun run dev` | Active development in Cursor |
 
-**Important:** Pushing to GitHub updates the **Published** site (after Lovable rebuilds). The **Lovable editor Preview** often stays on an older build until you sync and refresh it.
+**Important:** Pushing to GitHub updates the **Published** site (after Lovable rebuilds) **only if Lovable is tracking that branch**. Point Lovable at `feat/unified-marketing-clutch-score` until it is merged to `main`.
 
 ---
 

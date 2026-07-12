@@ -120,8 +120,9 @@ export const howItWorks = {
 };
 
 export const dashboard = {
-  headline: "This is a real athlete performance platform.",
-  sub: "Your Clutch Score, biggest opportunity, and the moves that compound — in one place.",
+  eyebrow: "Product vision",
+  headline: "This is where ClutchFuel is headed.",
+  sub: "Score, opportunity, and long-game habits in one place. The mock below is a preview — today, start with the free Clutch Score.",
   score: 87,
   scoreLabel: "Clutch Score",
   scoreDelta: "+4 this week",
@@ -209,17 +210,18 @@ export const profiles = {
 };
 
 export const featuredInsightSlugs = [
-  "how-much-water-should-athletes-drink",
+  "what-is-clutch-score",
+  "biggest-opportunity-performance-gaps",
+  "pre-workout-hydration-for-everyday-athletes",
+  "electrolytes-vs-water-for-training",
+  "first-clutch-move-how-to-use-your-results",
   "how-to-calculate-your-sweat-rate",
-  "hydration-myths-debunked",
-  "sweat-sodium-testing-guide",
-  "triathlon-hydration-guide",
-  "strength-training-hydration-guide",
 ] as const;
 
 export const longGame = {
+  eyebrow: "Coming soon",
   headline: "Built for the long game.",
-  sub: "Score. Opportunity. Consistency. Progress compounds when you keep showing up prepared.",
+  sub: "Tracking and trends are on the roadmap. Today, lock in your Clutch Score and First Clutch Move — consistency starts there.",
   trend: Array.from({ length: 12 }, (_, i) => ({
     w: `W${i + 1}`,
     v: 62 + Math.round(Math.sin(i / 2) * 6 + i * 2),

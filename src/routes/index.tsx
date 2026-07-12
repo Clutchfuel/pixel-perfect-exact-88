@@ -42,12 +42,6 @@ export const Route = createFileRoute("/")({
         type: "image/avif",
         fetchPriority: "high",
       },
-      {
-        rel: "preload",
-        as: "video",
-        href: heroClutchMoments[0]!.video,
-        type: "video/mp4",
-      },
     ],
     scripts: [organizationSchema(Object.values(site.social)), websiteSchema()],
   }),

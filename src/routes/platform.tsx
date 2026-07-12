@@ -12,9 +12,9 @@ import { imageSets } from "@/assets/image-sets";
 export const Route = createFileRoute("/platform")({
   head: () => ({
     meta: makeMeta({
-      title: "The Clutch Score Platform — Performance Intelligence | ClutchFuel",
+      title: "The Clutch Score Platform — Product Vision | ClutchFuel",
       description:
-        "See how Clutch Score, opportunities, and long-game habits fit together. Start free with the 2-minute assessment.",
+        "See where ClutchFuel is headed: score, opportunity, and long-game habits. Start today with the free 2-minute Clutch Score.",
       path: "/platform",
     }),
     links: canonical("/platform"),
@@ -29,9 +29,9 @@ function PlatformPage() {
       <main>
         <PageHero
           theme="dark"
-          eyebrow="THE PLATFORM"
-          title="A real athlete performance platform."
-          sub="Your Clutch Score, biggest opportunity, and the habits that compound — in one place. Start with the free assessment today."
+          eyebrow="PRODUCT VISION"
+          title="Where ClutchFuel is headed."
+          sub="Score, opportunity, and long-game habits in one place. The screens below are a preview — what’s live today is the free Clutch Score assessment."
           align="center"
           heroImage={imageSets.platformHero}
           bgImageAlt="Athlete checking the ClutchFuel app on a phone"
@@ -39,6 +39,9 @@ function PlatformPage() {
           <CFButton to="/clutch-score" variant="primary" size="lg">
             Unlock My Clutch Score →
           </CFButton>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-eyebrow text-white/55">
+            Preview UI · tracking dashboard coming later
+          </p>
         </PageHero>
 
         <DashboardSection />

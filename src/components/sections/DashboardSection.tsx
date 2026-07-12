@@ -10,10 +10,16 @@ export function DashboardSection() {
   return (
     <Section theme="dark" id="platform">
       <Reveal>
-        <h2 className="max-w-4xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
+        <p className="text-xs font-semibold uppercase tracking-eyebrow text-lime">
+          {dashboard.eyebrow}
+        </p>
+        <h2 className="mt-3 max-w-4xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
           {dashboard.headline}
         </h2>
         <p className="mt-6 max-w-2xl text-lg text-muted-dark">{dashboard.sub}</p>
+        <p className="mt-3 inline-flex rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-eyebrow text-white/70">
+          Preview UI · not a live account dashboard
+        </p>
       </Reveal>
 
       <Reveal delay={0.12}>

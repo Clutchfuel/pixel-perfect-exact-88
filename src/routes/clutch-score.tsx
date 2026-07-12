@@ -62,6 +62,7 @@ function ClutchScorePage() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [marketingConsent, setMarketingConsent] = useState(false);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   const current = questions[step];
   const total = questions.length;
@@ -73,6 +74,10 @@ function ClutchScorePage() {
       trackEvent("clutch_score_start");
     }
   }, [phase]);
+
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, [phase, step]);
 
   function choose(index: AnswerIndex) {
     if (!current) return;
@@ -225,7 +230,11 @@ function ClutchScorePage() {
                   <Zap className="h-3.5 w-3.5" />
                   Clutch Score
                 </Badge>
-                <h1 className="mt-6 font-display text-3xl font-extrabold tracking-display text-white md:text-4xl">
+                <h1
+                  ref={headingRef}
+                  tabIndex={-1}
+                  className="mt-6 font-display text-3xl font-extrabold tracking-display text-white outline-none md:text-4xl"
+                >
                   What&apos;s your Clutch Score?
                 </h1>
                 <p className="mt-4 text-muted-dark">
@@ -263,11 +272,14 @@ function ClutchScorePage() {
                 exit={{ opacity: 0, y: -16 }}
                 className="rounded-3xl glass-dark p-8 md:p-12 lime-glow"
               >
-                <div className="text-center">
+                <div className="text-center" aria-live="polite">
                   <Badge variant="lime">
                     <Target className="h-3.5 w-3.5" />
                     Your Clutch Score
                   </Badge>
+                  <h1 ref={headingRef} tabIndex={-1} className="sr-only outline-none">
+                    Your Clutch Score results
+                  </h1>
                   <CountUp target={result.score} />
                 </div>
 
@@ -382,8 +394,10 @@ function ClutchScorePage() {
                   Question {step + 1} of {total}
                 </p>
                 <h1
+                  ref={headingRef}
                   id={`quiz-q-${step}`}
-                  className="mt-4 font-display text-3xl font-extrabold tracking-display text-white md:text-4xl"
+                  tabIndex={-1}
+                  className="mt-4 font-display text-3xl font-extrabold tracking-display text-white outline-none md:text-4xl"
                 >
                   {current.prompt}
                 </h1>

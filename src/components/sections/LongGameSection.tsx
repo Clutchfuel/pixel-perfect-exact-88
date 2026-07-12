@@ -9,7 +9,10 @@ export function LongGameSection() {
   return (
     <Section theme="dark">
       <Reveal>
-        <h2 className="max-w-3xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
+        <p className="text-xs font-semibold uppercase tracking-eyebrow text-lime">
+          {longGame.eyebrow}
+        </p>
+        <h2 className="mt-3 max-w-3xl font-display text-4xl font-extrabold tracking-display text-white sm:text-5xl lg:text-[64px]">
           {longGame.headline}
         </h2>
         <p className="mt-4 max-w-xl text-lg text-muted-dark">{longGame.sub}</p>
