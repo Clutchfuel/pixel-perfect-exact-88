@@ -16,6 +16,7 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PlatformRouteImport } from './routes/platform'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -65,6 +66,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PlatformRoute = PlatformRouteImport.update({
   id: '/platform',
   path: '/platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/platform': typeof PlatformRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRouteWithChildren
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/insights'
+    | '/llms.txt'
     | '/platform'
     | '/privacy'
     | '/products'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/insights'
+    | '/llms.txt'
     | '/platform'
     | '/privacy'
     | '/products'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/insights'
+    | '/llms.txt'
     | '/platform'
     | '/privacy'
     | '/products'
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   InsightsRoute: typeof InsightsRouteWithChildren
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   PlatformRoute: typeof PlatformRoute
   PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRouteWithChildren
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       path: '/platform'
       fullPath: '/platform'
       preLoaderRoute: typeof PlatformRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -516,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   InsightsRoute: InsightsRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   PlatformRoute: PlatformRoute,
   PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRouteWithChildren,

@@ -12,13 +12,14 @@ import { TurnstileWidget } from "@/components/TurnstileWidget";
 import { type AnswerIndex, type Answers, questions } from "@/lib/diagnostic-config";
 import { buildDiagnosticResult, type DiagnosticResult } from "@/lib/diagnostic-result";
 import { leadErrorMessage } from "@/lib/form-errors";
-import { makeMeta, canonical } from "@/lib/seo";
+import { makeMeta, canonical, webApplicationSchema, breadcrumbSchema } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
 import { trackEvent } from "@/lib/analytics";
 import clutchHeroAvif from "@/assets/clutch-score-hero.avif";
 import clutchHeroWebp from "@/assets/clutch-score-hero.webp";
 import clutchHero from "@/assets/clutch-score-hero.jpg";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { RelatedLinks } from "@/components/RelatedLinks";
 
 export const Route = createFileRoute("/clutch-score")({
   head: () => ({
@@ -30,6 +31,18 @@ export const Route = createFileRoute("/clutch-score")({
       image: DEFAULT_OG_IMAGE,
     }),
     links: canonical("/clutch-score"),
+    scripts: [
+      webApplicationSchema({
+        name: "Clutch Score",
+        description:
+          "Free 5-question performance diagnostic for everyday athletes. Returns a Clutch Score, Biggest Opportunity, and First Clutch Move.",
+        path: "/clutch-score",
+      }),
+      breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Clutch Score", path: "/clutch-score" },
+      ]),
+    ],
   }),
   component: ClutchScorePage,
 });
@@ -436,6 +449,32 @@ function ClutchScorePage() {
           </p>
         </div>
       </main>
+      <RelatedLinks
+        theme="dark"
+        title="Go deeper"
+        items={[
+          {
+            label: "The System",
+            to: "/system",
+            description: "Prepare, perform, recover.",
+          },
+          {
+            label: "Sweat rate guide",
+            to: "/sweat-rate",
+            description: "Measure fluid loss precisely.",
+          },
+          {
+            label: "FAQ",
+            to: "/faq",
+            description: "How Clutch Score works.",
+          },
+          {
+            label: "Products",
+            to: "/products",
+            description: "ISO, Flow, and Recovery.",
+          },
+        ]}
+      />
       <Footer />
     </>
   );

@@ -12,9 +12,9 @@ import { imageSets } from "@/assets/image-sets";
 export const Route = createFileRoute("/platform")({
   head: () => ({
     meta: makeMeta({
-      title: "The Clutch Score Platform — Track Your Hydration & Performance | ClutchFuel",
+      title: "The Clutch Score Platform — Performance Intelligence | ClutchFuel",
       description:
-        "Your Clutch Score, sweat profile, and hydration trends — in one place. Built for the long game.",
+        "See how Clutch Score, opportunities, and long-game habits fit together. Start free with the 2-minute assessment.",
       path: "/platform",
     }),
     links: canonical("/platform"),
@@ -31,7 +31,7 @@ function PlatformPage() {
           theme="dark"
           eyebrow="THE PLATFORM"
           title="A real athlete performance platform."
-          sub="Your Clutch Score, sweat profile, and hydration trends — in one place. Track your work, watch the line move."
+          sub="Your Clutch Score, biggest opportunity, and the habits that compound — in one place. Start with the free assessment today."
           align="center"
           heroImage={imageSets.platformHero}
           bgImageAlt="Athlete checking the ClutchFuel app on a phone"

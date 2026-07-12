@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VITE_SITE_URL: https://pixel-perfect-exact-88.lovable.app
+      VITE_SITE_URL: https://clutchfuel.com
       CI: true
     steps:
       - uses: actions/checkout@v4

@@ -20,6 +20,9 @@ export const Route = createFileRoute("/robots.txt")({
           "Allow: /",
           "",
           `Sitemap: ${SITE_URL}/sitemap.xml`,
+          ``,
+          `# Optional AI / LLM site summary`,
+          `# ${SITE_URL}/llms.txt`,
         ].join("\n");
 
         return new Response(body, {

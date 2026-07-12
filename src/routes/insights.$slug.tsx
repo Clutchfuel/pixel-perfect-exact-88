@@ -142,7 +142,8 @@ function ArticlePage() {
               Make this personal.
             </h3>
             <p className="mx-auto mt-3 max-w-md text-muted-ink">
-              The Clutch Score turns general advice into your number — in 60 seconds.
+              The Clutch Score turns general advice into your Biggest Opportunity — and a First
+              Clutch Move you can use before your next session.
             </p>
             <div className="mt-6">
               <CFButton to="/clutch-score" variant="primary" size="md">

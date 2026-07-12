@@ -1,7 +1,7 @@
 {
   "name": "ClutchFuel",
   "short_name": "ClutchFuel",
-  "description": "Hydration intelligence for everyday athletes.",
+  "description": "Performance intelligence for everyday athletes. Unlock your Clutch Score.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0A",

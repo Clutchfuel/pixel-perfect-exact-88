@@ -68,7 +68,7 @@ function AthletesPage() {
             {
               label: "Unlock your Clutch Score",
               to: "/clutch-score",
-              description: "Personalized in 60 seconds.",
+              description: "Score, opportunity, and First Clutch Move in about 2 minutes.",
             },
           ]}
         />

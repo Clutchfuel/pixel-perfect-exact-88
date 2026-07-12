@@ -12,7 +12,7 @@ function siteUrlGuard() {
     buildStart() {
       if (process.env.CI === "true" && !process.env.VITE_SITE_URL) {
         throw new Error(
-          "VITE_SITE_URL must be set in CI (e.g. https://pixel-perfect-exact-88.lovable.app)",
+          "VITE_SITE_URL must be set in CI (e.g. https://clutchfuel.com)",
         );
       }
     },

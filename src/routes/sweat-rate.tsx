@@ -5,8 +5,15 @@ import { PageHero } from "@/components/PageHero";
 import { CFButton } from "@/components/CFButton";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
-import { makeMeta, canonical } from "@/lib/seo";
+import { makeMeta, canonical, howToSchema, breadcrumbSchema } from "@/lib/seo";
 import { imageSets } from "@/assets/image-sets";
+
+const sweatTestSteps = [
+  "Weigh yourself naked and dry, right before training.",
+  "Train normally for 60 minutes. Note exactly how much fluid you drink.",
+  "Towel off completely and weigh yourself naked again.",
+  "Sweat rate (L/hr) = (start weight − end weight in kg) + fluid intake in liters.",
+];
 
 export const Route = createFileRoute("/sweat-rate")({
   head: () => ({
@@ -17,6 +24,19 @@ export const Route = createFileRoute("/sweat-rate")({
       path: "/sweat-rate",
     }),
     links: canonical("/sweat-rate"),
+    scripts: [
+      howToSchema({
+        name: "How to calculate your sweat rate",
+        description:
+          "A simple at-home protocol to measure fluid loss per hour of training in one session.",
+        path: "/sweat-rate",
+        steps: sweatTestSteps,
+      }),
+      breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Sweat Rate", path: "/sweat-rate" },
+      ]),
+    ],
   }),
   component: SweatRatePage,
 });
@@ -34,7 +54,7 @@ function SweatRatePage() {
           bgImageAlt="Macro close-up of sweat on an athlete's shoulder"
         >
           <CFButton to="/clutch-score" variant="primary" size="lg">
-            Estimate mine in 60 seconds →
+            Unlock My Clutch Score →
           </CFButton>
         </PageHero>
 
@@ -59,12 +79,7 @@ function SweatRatePage() {
               You need a scale, a stopwatch, and one training session.
             </p>
             <ol className="mt-6 space-y-4">
-              {[
-                "Weigh yourself naked and dry, right before training.",
-                "Train normally for 60 minutes. Note exactly how much fluid you drink.",
-                "Towel off completely and weigh yourself naked again.",
-                "Sweat rate (L/hr) = (start weight − end weight in kg) + fluid intake in liters.",
-              ].map((step, i) => (
+              {sweatTestSteps.map((step, i) => (
                 <li
                   key={i}
                   className="flex items-start gap-4 rounded-2xl border border-ink/8 bg-white p-5"
@@ -80,12 +95,12 @@ function SweatRatePage() {
 
           <Reveal>
             <h2 className="mt-12 font-display text-3xl font-extrabold tracking-display text-ink md:text-4xl">
-              The faster way
+              Pair it with your Clutch Score
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-ink">
-              If you don't want to weigh yourself naked twice, the Clutch Score estimates your sweat
-              profile from five quick questions about your body, training, and how you respond to
-              heat — then translates it into a per-hour hydration target.
+              A sweat-rate test tells you fluid loss. The Clutch Score tells you where to focus
+              first — your Biggest Opportunity and a First Clutch Move™ you can use before your next
+              session. Use both: Score for priority, sweat test for precision.
             </p>
             <div className="mt-8">
               <CFButton to="/clutch-score" variant="dark" size="lg">

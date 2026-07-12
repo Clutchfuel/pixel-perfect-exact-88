@@ -6,16 +6,16 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { Reveal } from "@/components/Reveal";
 import { faqGroups } from "@/data/faq";
-import { makeMeta, canonical } from "@/lib/seo";
+import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/faq")({
   head: () => {
     const all = faqGroups.flatMap((g) => g.items);
     return {
       meta: makeMeta({
-        title: "FAQ — Hydration, Products, the Clutch Score | ClutchFuel",
+        title: "FAQ — Clutch Score, Hydration & Products | ClutchFuel",
         description:
-          "Common questions about ClutchFuel, hydration science, sweat rate, and the three-stage product system.",
+          "Common questions about the Clutch Score diagnostic, hydration for everyday athletes, and the Prepare / Perform / Recover system.",
         path: "/faq",
       }),
       links: canonical("/faq"),
@@ -32,6 +32,10 @@ export const Route = createFileRoute("/faq")({
             })),
           }),
         },
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "FAQ", path: "/faq" },
+        ]),
       ],
     };
   },

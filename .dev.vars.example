@@ -6,7 +6,7 @@
 
 # --- Client (Vite — exposed to browser, must be VITE_ prefixed) ---
 # Required in CI builds; optional locally (falls back to Lovable preview URL)
-VITE_SITE_URL=https://pixel-perfect-exact-88.lovable.app
+VITE_SITE_URL=https://clutchfuel.com
 # Optional GA4 measurement ID (e.g. G-XXXXXXXXXX) — loads only after cookie consent
 VITE_GA_MEASUREMENT_ID=
 # Turnstile site key — must be paired with TURNSTILE_SECRET_KEY (both or neither)

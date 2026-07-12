@@ -127,14 +127,14 @@ function SportPage() {
 
         <section className="bg-dark">
           <div className="mx-auto max-w-3xl px-6 py-20 text-center md:px-10 md:py-24">
-            <Quote className="mx-auto h-8 w-8 text-lime" />
+            <p className="text-[10px] font-semibold uppercase tracking-eyebrow text-lime">
+              What athletes tell us
+            </p>
+            <Quote className="mx-auto mt-4 h-8 w-8 text-lime" />
             <p className="mt-6 font-display text-2xl font-extrabold tracking-display text-white md:text-3xl">
               "{sport.testimonial.quote}"
             </p>
-            <div className="mt-6 text-sm text-muted-dark">
-              <div className="font-semibold text-white">{sport.testimonial.name}</div>
-              <div>{sport.testimonial.role}</div>
-            </div>
+            <div className="mt-6 text-sm text-muted-dark">{sport.testimonial.role}</div>
           </div>
         </section>
 

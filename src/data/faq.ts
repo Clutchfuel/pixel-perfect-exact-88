@@ -9,7 +9,7 @@ export const faqGroups: { title: string; items: FaqItem[] }[] = [
     items: [
       {
         q: "What is ClutchFuel?",
-        a: "ClutchFuel is a hydration intelligence platform for everyday athletes. We combine a personalized performance score (the Clutch Score), sport-specific hydration guidance, and a three-stage product system designed for how athletes actually train and compete.",
+        a: "ClutchFuel is a performance intelligence brand for everyday athletes. We combine a free Clutch Score assessment, sport-specific hydration guidance, and a three-stage product system designed for how athletes actually train and compete.",
       },
       {
         q: "Who is this built for?",
@@ -17,7 +17,7 @@ export const faqGroups: { title: string; items: FaqItem[] }[] = [
       },
       {
         q: "Is this a supplement company?",
-        a: "No. Products are part of a system, not the point of the system. The point is performance — hydration intelligence that helps you train smarter and recover faster.",
+        a: "No. Products are part of a system, not the point of the system. The point is performance — clearer insight into how you train, recover, and hydrate so you show up ready.",
       },
     ],
   },
@@ -26,19 +26,19 @@ export const faqGroups: { title: string; items: FaqItem[] }[] = [
     items: [
       {
         q: "What is the Clutch Score?",
-        a: "A personalized hydration and performance profile generated from a 5-question intake about your body, training, and goals. It estimates your sweat rate, sodium needs, and gives you a per-session hydration target.",
+        a: "A free 5-question performance diagnostic. You get a score, your Biggest Opportunity (where you're leaving the most on the table), and a First Clutch Move™ — one concrete action for your next session.",
       },
       {
         q: "How long does it take?",
-        a: "Under 60 seconds.",
+        a: "About two minutes.",
       },
       {
         q: "Is it really free?",
-        a: "Yes. The Clutch Score and your ongoing dashboard are free.",
+        a: "Yes. Taking the Clutch Score and emailing yourself the results is free.",
       },
       {
-        q: "How accurate is the estimate vs. measuring my actual sweat rate?",
-        a: "The Clutch Score uses validated correlations between body composition, training intensity, and sweat losses. It's a strong starting point. For the most precise number, you can run a manual sweat test alongside it and we'll calibrate.",
+        q: "Is this the same as measuring my sweat rate?",
+        a: "No. The Clutch Score is a performance diagnostic based on how you feel, recover, and train. A manual sweat-rate test is still the gold standard for fluid loss per hour — we teach that separately on our Sweat Rate page. Use both: Score for your priority, sweat test for precision fluid targets.",
       },
     ],
   },
@@ -51,11 +51,11 @@ export const faqGroups: { title: string; items: FaqItem[] }[] = [
       },
       {
         q: "How much should I drink during training?",
-        a: "Most athletes need to replace 60-80% of their sweat losses in real time. Your Clutch Score gives you a per-hour target based on your profile.",
+        a: "Most athletes need to replace 60-80% of their sweat losses in real time. Run a simple sweat-rate test (or start with a conservative 0.5–1.0 L/hr plan) and adjust from how you feel in the second half of sessions.",
       },
       {
         q: "Why do I cramp even though I drink during workouts?",
-        a: "Cramping is almost always a sodium problem, not a fluid problem. Drinking plain water without sodium can actually make it worse.",
+        a: "Cramping is often a sodium problem, not only a fluid problem. Drinking plain water without sodium can make it worse. If cramping is your main issue, the Clutch Score often surfaces Electrolyte Replacement or Recovery as your Biggest Opportunity.",
       },
     ],
   },

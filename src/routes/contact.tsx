@@ -7,7 +7,8 @@ import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { FormConsent } from "@/components/FormConsent";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
-import { makeMeta, canonical } from "@/lib/seo";
+import { RelatedLinks } from "@/components/RelatedLinks";
+import { makeMeta, canonical, breadcrumbSchema } from "@/lib/seo";
 import { leadErrorMessage } from "@/lib/form-errors";
 import { trackEvent } from "@/lib/analytics";
 import { Mail, MessageCircle } from "lucide-react";
@@ -21,6 +22,12 @@ export const Route = createFileRoute("/contact")({
       path: "/contact",
     }),
     links: canonical("/contact"),
+    scripts: [
+      breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Contact", path: "/contact" },
+      ]),
+    ],
   }),
   component: ContactPage,
 });
@@ -169,6 +176,26 @@ function ContactPage() {
             </form>
           </Reveal>
         </section>
+
+        <RelatedLinks
+          items={[
+            {
+              label: "FAQ",
+              to: "/faq",
+              description: "Common questions about Clutch Score and products.",
+            },
+            {
+              label: "About ClutchFuel",
+              to: "/about",
+              description: "Why we built this for everyday athletes.",
+            },
+            {
+              label: "Unlock your Clutch Score",
+              to: "/clutch-score",
+              description: "Free 2-minute performance diagnostic.",
+            },
+          ]}
+        />
       </main>
       <Footer />
     </>

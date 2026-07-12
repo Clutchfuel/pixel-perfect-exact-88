@@ -6,7 +6,7 @@ export const about = {
   story: [
     "Most athletes are told to 'drink more water,' handed a sports drink built around sugar delivery, and left to figure out the rest. That's not a plan — that's a guess.",
     "We started with a question: what if hydration could be personal, intelligent, and built around the way real athletes train? Not pros with full-time staff. Real people who train before work, play in city leagues, run weekend races, and try to get better.",
-    "ClutchFuel exists to give that athlete a real edge — a personalized score, a sweat profile they understand, and a system built for the way they actually move. Performance, finally, starts with preparation.",
+    "ClutchFuel exists to give that athlete a real edge — a personalized Clutch Score, a clear Biggest Opportunity, and a system built for the way they actually move. Performance, finally, starts with preparation.",
   ],
   values: [
     {

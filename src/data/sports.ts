@@ -45,8 +45,8 @@ export const sports: Sport[] = [
     testimonial: {
       quote:
         "I used to fade by the third quarter. Locking in my hydration changed how I close games — my legs are there in the fourth.",
-      name: "DeShawn M.",
-      role: "Collegiate Guard",
+      name: "",
+      role: "Common feedback from court athletes",
     },
     relatedArticleSlug: "hydration-for-basketball-performance",
   },
@@ -79,8 +79,8 @@ export const sports: Sport[] = [
     testimonial: {
       quote:
         "My splits used to fall off at mile 16. Now I'm negative-splitting marathons. The hydration plan is half the reason.",
-      name: "Imani R.",
-      role: "Marathon Runner",
+      name: "",
+      role: "Common feedback from distance runners",
     },
     relatedArticleSlug: "marathon-hydration-strategy",
   },
@@ -113,8 +113,8 @@ export const sports: Sport[] = [
     testimonial: {
       quote:
         "The sled push used to wreck me. Once I dialed in sodium, my legs stopped quitting. Three minutes off my PR.",
-      name: "Marcus W.",
-      role: "Hyrox Doubles Athlete",
+      name: "",
+      role: "Common feedback from Hyrox athletes",
     },
     relatedArticleSlug: "hydration-strategy-for-hyrox-athletes",
   },
@@ -147,8 +147,8 @@ export const sports: Sport[] = [
     testimonial: {
       quote:
         "Sounds basic, but I just feel different. Better workouts, way less of that wiped-out feeling at 3 PM.",
-      name: "Jenna T.",
-      role: "Functional Fitness Athlete",
+      name: "",
+      role: "Common feedback from gym athletes",
     },
     relatedArticleSlug: "strength-training-hydration-guide",
   },

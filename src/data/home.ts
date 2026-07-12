@@ -4,7 +4,7 @@ export const hero = {
   sub: "For the athletes who perform under pressure.",
   cta: "Unlock My Clutch Score",
   supporting:
-    "Takes less than 60 seconds · Built for everyday athletes · Personalized hydration insights",
+    "Takes about 2 minutes · Built for everyday athletes · Score, opportunity, and First Clutch Move",
 };
 
 export const systemSection = {
@@ -63,7 +63,7 @@ export const sweatSection = {
   rows: [
     {
       title: "Personalized Results",
-      copy: "Get hydration targets based on your body, training, and goals.",
+      copy: "Get your Biggest Opportunity and a First Clutch Move based on how you actually train.",
       icon: "user",
       href: "/clutch-score",
     },
@@ -77,7 +77,7 @@ export const sweatSection = {
       title: "Data You Can Use",
       copy: "Simple insights to help you train, compete, and win.",
       icon: "chart",
-      href: "/platform",
+      href: "/insights",
     },
   ],
   card: {
@@ -87,7 +87,7 @@ export const sweatSection = {
       { value: "5", label: "questions" },
       { value: "Results", label: "instantly" },
     ],
-    copy: "Answer a few quick questions and we'll estimate your hydration needs.",
+    copy: "Answer a few quick questions to unlock your score, biggest opportunity, and First Clutch Move™.",
     cta: "Unlock My Clutch Score",
   },
 };
@@ -121,14 +121,18 @@ export const howItWorks = {
 
 export const dashboard = {
   headline: "This is a real athlete performance platform.",
-  sub: "Your Clutch Score, sweat profile, and hydration trends — in one place.",
+  sub: "Your Clutch Score, biggest opportunity, and the moves that compound — in one place.",
   score: 87,
   scoreLabel: "Clutch Score",
   scoreDelta: "+4 this week",
-  sweatProfile: { title: "Sweat Profile", value: "Heavy Sweater", sub: "1.6 L / hr avg" },
+  sweatProfile: {
+    title: "Biggest Opportunity",
+    value: "Pre-Workout Hydration",
+    sub: "Front-load before your next session",
+  },
   tiles: [
     { label: "Sessions", value: "14", sub: "last 30 days" },
-    { label: "Consistency", value: "92%", sub: "hydration goals hit" },
+    { label: "Consistency", value: "92%", sub: "goals hit" },
   ],
   trend: [
     { d: "Mon", v: 72 },
@@ -181,25 +185,25 @@ export const profiles = {
       name: "Gym & Strength",
       copy: "Heavy sessions, short rest, crowded boxes. Hydration still decides your last sets.",
       icon: "flame",
-      href: "/clutch-score",
+      href: "/athletes/gym",
     },
     {
       name: "Court & League",
       copy: "Pickup, rec leagues, tournament weekends. Stay locked in through the fourth quarter.",
       icon: "balance",
-      href: "/clutch-score",
+      href: "/athletes/basketball",
     },
     {
       name: "Road & Race",
       copy: "5Ks, long runs, Hyrox, endurance days. Hold output when the back half gets hard.",
       icon: "droplet",
-      href: "/clutch-score",
+      href: "/athletes/running",
     },
     {
       name: "Weekend Warriors",
       copy: "Inconsistent weeks, real jobs, real life. Consistency beats intensity — start here.",
       icon: "heart",
-      href: "/clutch-score",
+      href: "/athletes",
     },
   ],
 };
@@ -215,7 +219,7 @@ export const featuredInsightSlugs = [
 
 export const longGame = {
   headline: "Built for the long game.",
-  sub: "Track your score, your consistency, and your progress over time.",
+  sub: "Score. Opportunity. Consistency. Progress compounds when you keep showing up prepared.",
   trend: Array.from({ length: 12 }, (_, i) => ({
     w: `W${i + 1}`,
     v: 62 + Math.round(Math.sin(i / 2) * 6 + i * 2),
@@ -234,31 +238,6 @@ export const longGame = {
     { label: "Court Session", score: 87, href: "/athletes/basketball" },
     { label: "Threshold Run", score: 84, href: "/athletes/running" },
     { label: "Hyrox Sim", score: 81, href: "/athletes/hyrox" },
-  ],
-};
-
-export const testimonials = {
-  headline: "Trusted by athletes and coaches.",
-  items: [
-    {
-      name: "Coach Marcus W.",
-      role: "Strength & Conditioning Coach",
-      quote:
-        "The sweat profile gave me a real number to coach to. My athletes feel the difference in the fourth quarter.",
-      href: "/insights/hydration-for-basketball-performance",
-    },
-    {
-      name: "Imani R.",
-      role: "Hyrox Athlete",
-      quote: "I used to bonk in the back half. Dialing in my hydration changed how I close races.",
-      href: "/insights/hydration-strategy-for-hyrox-athletes",
-    },
-    {
-      name: "Eastside Performance",
-      role: "Training Facility",
-      quote: "Our members finally have a simple read on hydration. Less guesswork, more progress.",
-      href: "/platform",
-    },
   ],
 };
 

@@ -120,7 +120,7 @@ export const baseArticles: Article[] = [
       {
         heading: "The faster way",
         paragraphs: [
-          "If you don't want to run the manual test, the Clutch Score estimates your sweat profile from five quick questions about your body, training, and how you respond to heat — then translates it into a per-hour target.",
+          "Want a faster starting point before the scale test? Take the Clutch Score — a 5-question diagnostic that surfaces your Biggest Opportunity and a First Clutch Move™. Pair it with a sweat-rate test later when you want precise fluid targets.",
         ],
       },
     ],

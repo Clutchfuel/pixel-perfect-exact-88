@@ -152,9 +152,9 @@ function SystemPage() {
               description: "Why hydration isn't one-size-fits-all.",
             },
             {
-              label: "The Clutch Score platform",
-              to: "/platform",
-              description: "Track your score, sweat profile, and trends.",
+              label: "Unlock your Clutch Score",
+              to: "/clutch-score",
+              description: "Score, opportunity, and First Clutch Move.",
             },
             {
               label: "All products",
