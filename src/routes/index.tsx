@@ -16,13 +16,13 @@ import athleteHyrox from "@/assets/sport-hyrox.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ClutchFuel — Helping Everyday Athletes Perform Better" },
+      { title: "ClutchFuel: Helping Everyday Athletes Perform Better" },
       {
         name: "description",
         content:
-          "Personalized insights and better habits — starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
+          "Personalized insights and better habits, starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
       },
-      { property: "og:title", content: "ClutchFuel — Helping Everyday Athletes Perform Better" },
+      { property: "og:title", content: "ClutchFuel: Helping Everyday Athletes Perform Better" },
       {
         property: "og:description",
         content:
@@ -47,7 +47,7 @@ const PROBLEMS = [
 const PILLARS = [
   { icon: Zap, title: "Hydration", copy: "Understand your fluid and sodium strategy end to end." },
   { icon: HeartPulse, title: "Recovery", copy: "Use the first hour after training deliberately." },
-  { icon: Utensils, title: "Fueling", copy: "Match intake to demand — not to habit." },
+  { icon: Utensils, title: "Fueling", copy: "Match intake to demand, not to habit." },
   { icon: Repeat, title: "Training Habits", copy: "The small rituals that compound over months." },
   { icon: Timer, title: "Consistency", copy: "Show up in the details, not just the big sessions." },
   { icon: Brain, title: "Self Awareness", copy: "Learn to read your own performance signals." },
@@ -83,7 +83,7 @@ function HomePage() {
             Helping Everyday Athletes Perform Better.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-background/80 sm:text-xl">
-            Personalized insights and better habits — starting with your Clutch Score™. Tell us your goal. We'll show you the one thing most likely holding you back.
+            Personalized insights and better habits, starting with your Clutch Score™. Tell us your goal. We'll show you the one thing most likely holding you back.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
@@ -115,7 +115,7 @@ function HomePage() {
               Goals drive behavior. Behavior drives performance.
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there — with your goal — and works backwards to the habits most likely holding it back.
+              You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there, with your goal, and works backwards to the habits most likely holding it back.
             </p>
           </Reveal>
 
@@ -189,7 +189,7 @@ function HomePage() {
               <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Sample insight</p>
               <p className="mt-3 text-2xl font-bold leading-snug">Your biggest opportunity: Hydration Timing</p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Drink electrolytes 15–30 minutes before training, not just during. Try it for your next 3 sessions.
+                Drink electrolytes 15 to 30 minutes before training, not just during. Try it for your next 3 sessions.
               </p>
               <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
                 <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
@@ -235,7 +235,7 @@ function HomePage() {
               Built for everyday athletes.
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Runners. Hoopers. Busy parents. HYROX competitors. Anyone chasing better — not perfect.
+              Runners. Hoopers. Busy parents. HYROX competitors. Anyone chasing better, not perfect.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

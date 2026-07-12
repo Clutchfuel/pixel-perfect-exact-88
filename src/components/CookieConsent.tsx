@@ -27,7 +27,7 @@ export function CookieConsent() {
     >
       <p className="text-sm text-ink/80">
         We use optional analytics cookies to understand how the site is used. You can accept or
-        decline — core features work either way.{" "}
+        decline, core features work either way.{" "}
         <Link to="/privacy" className="underline hover:text-ink">
           Privacy policy
         </Link>

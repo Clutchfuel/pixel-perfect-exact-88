@@ -14,10 +14,10 @@ import athleteCrossfit from "@/assets/community-crossfit.jpg";
 export const Route = createFileRoute("/community")({
   head: () => ({
     meta: [
-      { title: "Community — ClutchFuel" },
+      { title: "Community: ClutchFuel" },
       {
         name: "description",
-        content: "Everyday athletes chasing better. Runners, HYROX competitors, hoopers, busy parents — real stories from the ClutchFuel community.",
+        content: "Everyday athletes chasing better. Runners, HYROX competitors, hoopers, busy parents, real stories from the ClutchFuel community.",
       },
       { property: "og:title", content: "The ClutchFuel Community" },
       { property: "og:description", content: "Real stories from everyday athletes." },
@@ -29,10 +29,10 @@ export const Route = createFileRoute("/community")({
 const ATHLETES = [
   { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
   { tag: "Hoopers", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
-  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am — and refuses to sacrifice recovery.", image: athleteParent },
+  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am, and refuses to sacrifice recovery.", image: athleteParent },
   { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him.", image: athleteCollege },
   { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again.", image: athleteWeekend },
-  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery — the missing piece for years.", image: athleteCrossfit },
+  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery, the missing piece for years.", image: athleteCrossfit },
   { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club.", image: athleteHyrox },
 ];
 
@@ -66,7 +66,7 @@ function CommunityPage() {
                 <article className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-foreground">
                   <img
                     src={a.image}
-                    alt={`${a.tag} — ${a.name}`}
+                    alt={`${a.tag}: ${a.name}`}
                     loading="lazy"
                     width={1024}
                     height={1280}

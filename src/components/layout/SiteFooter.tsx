@@ -39,7 +39,7 @@ export function SiteFooter() {
       return;
     }
     setSubmitting(true);
-    // Lightweight signup — no backend yet. We show success and log locally.
+    // Lightweight signup, no backend yet. We show success and log locally.
     await new Promise((r) => setTimeout(r, 400));
     setSubmitting(false);
     setEmail("");

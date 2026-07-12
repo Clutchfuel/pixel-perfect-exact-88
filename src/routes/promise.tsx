@@ -6,13 +6,13 @@ import { Reveal } from "@/components/Reveal";
 export const Route = createFileRoute("/promise")({
   head: () => ({
     meta: [
-      { title: "Our Promise — ClutchFuel" },
+      { title: "Our Promise: ClutchFuel" },
       {
         name: "description",
         content:
           "As ClutchFuel grows, we give back. Supporting youth sports, community events, and removing barriers that keep athletes from participating.",
       },
-      { property: "og:title", content: "Our Promise — ClutchFuel" },
+      { property: "og:title", content: "Our Promise: ClutchFuel" },
       {
         property: "og:description",
         content: "As we grow, we invest back into the communities that helped build us.",

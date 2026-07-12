@@ -6,13 +6,13 @@ import { Reveal } from "@/components/Reveal";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
-      { title: "How It Works — ClutchFuel" },
+      { title: "How It Works: ClutchFuel" },
       {
         name: "description",
         content:
           "How the 60-second Clutch Score assessment turns five questions into one clear, personalized action for your next workout.",
       },
-      { property: "og:title", content: "How It Works — ClutchFuel" },
+      { property: "og:title", content: "How It Works: ClutchFuel" },
       {
         property: "og:description",
         content: "Take a 60-second assessment. Get a personalized performance insight and one action to try this week.",
@@ -33,7 +33,7 @@ const STEPS = [
     n: "02",
     icon: ListChecks,
     title: "Get your personalized insight",
-    copy: "We identify your biggest performance opportunity from four core categories — the lever most likely to hold you back today.",
+    copy: "We identify your biggest performance opportunity from four core categories, the lever most likely to hold you back today.",
   },
   {
     n: "03",
@@ -50,7 +50,7 @@ const FAQ = [
   },
   {
     q: "Do I need a wearable or lab data?",
-    a: "No. Clutch Score works from your lived experience — how you feel during and after training. No devices, no calculations.",
+    a: "No. Clutch Score works from your lived experience, how you feel during and after training. No devices, no calculations.",
   },
   {
     q: "Is this a supplement funnel?",

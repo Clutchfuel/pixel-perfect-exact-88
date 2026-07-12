@@ -75,15 +75,15 @@ type Opportunity = "Hydration Timing" | "Electrolyte Use" | "Recovery & Cramping
 const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default: string }> = {
   "Hydration Timing": {
     default:
-      "Drink electrolytes 15–30 minutes before training, not just during. Try it for your next 3 sessions.",
+      "Drink electrolytes 15 to 30 minutes before training, not just during. Try it for your next 3 sessions.",
     endurance:
-      "If you want to build endurance, pre-hydrate 20–30 minutes before your long sessions — sodium in, then start. Small change, big change in the back half.",
+      "If you want to build endurance, pre-hydrate 20 to 30 minutes before your long sessions, sodium in, then start. Small change, big change in the back half.",
     hyrox:
       "For HYROX prep, front-load electrolytes 20 minutes before your metcons. Fatigue in the final stations is usually a timing problem, not a fitness one.",
     "5k":
-      "For a faster 5K, take electrolytes 15–20 minutes before hard efforts. You'll hold pace deeper into the effort.",
+      "For a faster 5K, take electrolytes 15 to 20 minutes before hard efforts. You'll hold pace deeper into the effort.",
     gameday:
-      "On game day, pre-hydrate 30 minutes before tip-off / kickoff — not while you're already warming up.",
+      "On game day, pre-hydrate 30 minutes before tip-off / kickoff, not while you're already warming up.",
     energy:
       "If you want more energy in workouts, hydrate 20 minutes before you train. Most 'low energy' sessions start under-fueled on fluid.",
   },
@@ -91,7 +91,7 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
     default:
       "Add electrolytes to your next 3 workouts, even short ones. Consistency matters more than amount.",
     cramping:
-      "If the goal is to stop cramping, add electrolytes to every session for the next 2 weeks — even the short ones. This is the single highest-leverage change for you.",
+      "If the goal is to stop cramping, add electrolytes to every session for the next 2 weeks, even the short ones. This is the single highest-leverage change for you.",
     gameday:
       "For game-day performance, don't wait until you're depleted. Sip electrolytes through warm-up and the first quarter/half.",
     endurance:
@@ -102,13 +102,13 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
   "Recovery & Cramping": {
     default: "Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.",
     recover:
-      "To recover faster, rehydrate with sodium within 60 minutes of finishing. Water alone isn't recovery — it's dilution.",
+      "To recover faster, rehydrate with sodium within 60 minutes of finishing. Water alone isn't recovery, it's dilution.",
     cramping:
       "To stop cramping, rebuild sodium within an hour of training. Cramps tomorrow are usually a recovery problem from today.",
     basketball:
       "For a basketball season, treat post-practice recovery as part of the practice. Fluids + sodium inside 60 minutes.",
     strength:
-      "For strength gains, don't skip the post-lift refuel window. Fluid, sodium, protein — in that order, inside an hour.",
+      "For strength gains, don't skip the post-lift refuel window. Fluid, sodium, protein, in that order, inside an hour.",
   },
   Consistency: {
     default:
@@ -116,9 +116,9 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
     consistency:
       "You're already consistent with training. Now make hydration equally boring: same routine, before every session, for 2 weeks.",
     feel:
-      "You want to feel better after workouts. That comes from doing the small stuff every time — pre-hydrate, then train. Two weeks.",
+      "You want to feel better after workouts. That comes from doing the small stuff every time, pre-hydrate, then train. Two weeks.",
     energy:
-      "You're close. Make pre-workout hydration a non-negotiable habit for 2 weeks — that's usually where the energy shows up.",
+      "You're close. Make pre-workout hydration a non-negotiable habit for 2 weeks, that's usually where the energy shows up.",
   },
 };
 
@@ -569,7 +569,7 @@ function Result({
   return (
     <section>
       <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
-        {goalText ? `Based on your goal — ${goalText.toLowerCase()}` : "Your biggest opportunity"}
+        {goalText ? `Based on your goal, ${goalText.toLowerCase()}` : "Your biggest opportunity"}
       </p>
       <h2 className="mt-3 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
         Your biggest opportunity is {opportunity}.
@@ -592,7 +592,7 @@ function Result({
 
       <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.02] p-6">
         {submitted ? (
-          <p className="text-center text-sm text-muted-foreground">Thanks — your feedback is recorded.</p>
+          <p className="text-center text-sm text-muted-foreground">Thanks, your feedback is recorded.</p>
         ) : (
           <>
             <p className="text-sm font-semibold uppercase tracking-eyebrow text-muted-foreground">
