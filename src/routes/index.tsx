@@ -79,9 +79,6 @@ function HomePage() {
           aria-hidden
         />
         <div className="relative mx-auto flex w-full max-w-6xl flex-col items-start px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-28 lg:pt-36">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-eyebrow text-background/90 backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5 text-electric" /> Every goal starts with better performance
-          </span>
           <h1 className="mt-6 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
             Helping Everyday Athletes Perform Better.
           </h1>
