@@ -313,31 +313,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Social proof */}
-      <section className="border-t border-black/5 bg-muted">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Early reactions</p>
-            <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Athletes are calling the assessment scary-accurate.
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-4 sm:grid-cols-2">
-            {QUOTES.map((q, i) => (
-              <Reveal key={q.text} delay={i * 0.05}>
-                <figure className="card-elevated h-full p-8">
-                  <blockquote className="text-2xl font-semibold leading-snug tracking-tight">
-                    "{q.text}"
-                  </blockquote>
-                  <figcaption className="mt-5 text-xs uppercase tracking-eyebrow text-muted-foreground/80">
-                    — {q.author}
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Final CTA */}
       <section className="border-t border-black/5">
