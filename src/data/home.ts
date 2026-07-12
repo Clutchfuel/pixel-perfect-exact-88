@@ -98,23 +98,23 @@ export const howItWorks = {
     {
       n: "01",
       title: "Answer Questions",
-      copy: "Tell us about your body, training, and goals.",
+      copy: "Tell us how you feel, recover, and train.",
       icon: "list",
       href: "/clutch-score",
     },
     {
       n: "02",
       title: "Unlock Your Clutch Score",
-      copy: "Get your personalized hydration and performance profile.",
+      copy: "Get your score, biggest opportunity, and First Clutch Move™.",
       icon: "score",
       href: "/clutch-score",
     },
     {
       n: "03",
-      title: "Track Your Performance",
-      copy: "Watch your trends improve every time you train.",
+      title: "Take Your First Move",
+      copy: "Apply one concrete action before your next hard session.",
       icon: "trend",
-      href: "/platform",
+      href: "/clutch-score",
     },
   ],
 };
@@ -172,31 +172,33 @@ export const dashboard = {
 };
 
 export const profiles = {
-  headline: "Every athlete has a profile.",
-  sub: "Discover your performance identity.",
+  eyebrow: "Everyday athletes",
+  headline: "Built for how you actually train.",
+  sub: "League night, race day, gym floors, and everything in between — same Clutch Score, same edge.",
+  mission: "Performance Starts With Preparation — for athletes who train under real-life pressure.",
   cards: [
     {
-      name: "Balanced Sweater",
-      copy: "Steady output, steady losses. Your edge is consistency.",
-      icon: "balance",
-      href: "/clutch-score",
-    },
-    {
-      name: "High Output Athlete",
-      copy: "You push the redline. Fuel matches the intensity.",
+      name: "Gym & Strength",
+      copy: "Heavy sessions, short rest, crowded boxes. Hydration still decides your last sets.",
       icon: "flame",
       href: "/clutch-score",
     },
     {
-      name: "Recovery Focused",
-      copy: "You play the long game. Bounce back stronger every session.",
-      icon: "heart",
+      name: "Court & League",
+      copy: "Pickup, rec leagues, tournament weekends. Stay locked in through the fourth quarter.",
+      icon: "balance",
       href: "/clutch-score",
     },
     {
-      name: "Heavy Sweater",
-      copy: "You leave it on the floor. Replace what you lose, precisely.",
+      name: "Road & Race",
+      copy: "5Ks, long runs, Hyrox, endurance days. Hold output when the back half gets hard.",
       icon: "droplet",
+      href: "/clutch-score",
+    },
+    {
+      name: "Weekend Warriors",
+      copy: "Inconsistent weeks, real jobs, real life. Consistency beats intensity — start here.",
+      icon: "heart",
       href: "/clutch-score",
     },
   ],
@@ -262,6 +264,6 @@ export const testimonials = {
 
 export const finalCta = {
   headline: "Performance Starts With Preparation.",
-  sub: "Unlock your Clutch Score and train with an edge.",
+  sub: "Unlock your Clutch Score — your opportunity and First Clutch Move in under two minutes.",
   cta: "Unlock My Clutch Score",
 };

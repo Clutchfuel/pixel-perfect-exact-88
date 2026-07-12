@@ -1,13 +1,9 @@
-import type { ClutchScoreResult } from "@/lib/clutch-score";
+import type { DiagnosticResult } from "@/lib/diagnostic-result";
 import { teamLeadText, userClutchScoreHtml, userClutchScoreText } from "@/lib/email-templates";
 import { getEnv } from "@/lib/env";
 import { isProductionRuntime } from "@/lib/is-production";
 import { reportError } from "@/lib/observability";
-import {
-  turnstileEnabled,
-  turnstileMisconfigured,
-  turnstileSecretKey,
-} from "@/lib/turnstile";
+import { turnstileEnabled, turnstileMisconfigured, turnstileSecretKey } from "@/lib/turnstile";
 
 type LeadType = "contact" | "newsletter" | "clutch-score";
 
@@ -74,11 +70,13 @@ export async function sendLeadEmail(type: LeadType, payload: Record<string, unkn
   });
 }
 
-export async function sendClutchScoreEmails(email: string, result: ClutchScoreResult) {
+export async function sendClutchScoreEmails(email: string, result: DiagnosticResult) {
   const teamPayload = {
     email,
     score: result.score,
-    profile: result.profile,
+    opportunity: result.opportunityLabel,
+    goal: result.goalLabel,
+    firstClutchMove: result.firstClutchMove.title,
     recommendedProduct: result.recommendedProductSlug,
   };
 
@@ -92,7 +90,7 @@ export async function sendClutchScoreEmails(email: string, result: ClutchScoreRe
   await sendResend({
     from: mailFrom(),
     to: [email],
-    subject: `Your Clutch Score: ${result.score} — ${result.profile}`,
+    subject: `Your Clutch Score: ${result.score} — ${result.opportunityLabel}`,
     text: userClutchScoreText(email, result),
     html: userClutchScoreHtml(email, result),
   });

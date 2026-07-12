@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
-import { calculateClutchScore } from "@/lib/clutch-score";
+import { buildDiagnosticResult } from "@/lib/diagnostic-result";
 import { sendClutchScoreEmails, verifyTurnstile } from "@/lib/leads";
+import { persistClutchScoreLead } from "@/lib/leads-db";
 import { isRateLimited, rateLimitKey } from "@/lib/rate-limit";
 import { clutchScoreSubmitSchema } from "@/lib/schemas/leads";
 import { turnstileEnabled } from "@/lib/turnstile";
@@ -35,9 +36,20 @@ export const Route = createFileRoute("/api/leads/clutch-score")({
           return Response.json({ ok: false, error: "Too many requests" }, { status: 429 });
         }
 
-        const result = calculateClutchScore(answers);
+        const result = buildDiagnosticResult(answers);
 
         try {
+          await persistClutchScoreLead({
+            email,
+            answersJson: JSON.stringify(answers),
+            score: result.score,
+            opportunity: result.opportunity,
+            goal: result.goal,
+            firstClutchMove: result.firstClutchMove.title,
+            marketingConsent: true,
+            source: "clutch-score",
+            userAgent: request.headers.get("user-agent") ?? undefined,
+          });
           await sendClutchScoreEmails(email, result);
           return Response.json({ ok: true, result });
         } catch {

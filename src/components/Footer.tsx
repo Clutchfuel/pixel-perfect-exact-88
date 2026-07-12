@@ -17,7 +17,10 @@ export function Footer() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !marketingConsent) {
+      toast.error("Please enter your email and agree to receive emails.");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/leads/newsletter", {
@@ -26,7 +29,7 @@ export function Footer() {
         body: JSON.stringify({
           email,
           source: "footer",
-          marketingConsent: true,
+          marketingConsent,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -56,37 +59,36 @@ export function Footer() {
               {site.tagline}
             </p>
 
-            <form
-              onSubmit={onSubmit}
-              className="mt-8 flex w-full max-w-md items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur"
-            >
-              <input
-                type="email"
-                required
-                maxLength={254}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-label="Email"
-                placeholder={footer.emailPlaceholder}
-                className="flex-1 bg-transparent px-4 text-base text-white placeholder:text-white/40 focus:outline-none"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                className="rounded-full bg-lime px-5 py-3 text-sm font-semibold text-ink transition hover:bg-lime-dark disabled:opacity-60"
-              >
-                {submitting ? "…" : footer.emailCta}
-              </button>
+            <form onSubmit={onSubmit} className="mt-8 w-full max-w-md">
+              <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-1.5 backdrop-blur">
+                <input
+                  type="email"
+                  required
+                  maxLength={254}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-label="Email"
+                  placeholder={footer.emailPlaceholder}
+                  className="flex-1 bg-transparent px-4 text-base text-white placeholder:text-white/40 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting || !marketingConsent}
+                  className="rounded-full bg-lime px-5 py-3 text-sm font-semibold text-ink transition hover:bg-lime-dark disabled:opacity-60"
+                >
+                  {submitting ? "…" : footer.emailCta}
+                </button>
+              </div>
+              <div className="mt-3 text-white/50">
+                <FormConsent
+                  id="footer-marketing-consent"
+                  checked={marketingConsent}
+                  onChange={setMarketingConsent}
+                  className="text-white/70 [&_a]:text-white/90"
+                />
+              </div>
+              <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken("")} />
             </form>
-            <div className="mt-3 max-w-md text-white/50">
-              <FormConsent
-                id="footer-marketing-consent"
-                checked={marketingConsent}
-                onChange={setMarketingConsent}
-                className="text-white/70 [&_a]:text-white/90"
-              />
-            </div>
-            <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken("")} />
           </div>
 
           <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4 lg:col-span-8">

@@ -24,8 +24,12 @@ TURNSTILE_SECRET_KEY=
 # Optional webhook for structured error reports (JSON POST)
 ERROR_WEBHOOK_URL=
 
+# Optional token for GET /api/admin/export-leads?token=...
+LEADS_EXPORT_TOKEN=
+
 # Clutch Score submit sends TWO emails when RESEND_API_KEY is set:
-#   1. User — formatted quiz results (score, profile, tips, product link)
+#   1. User — formatted results (score, opportunity, First Clutch Move, product link)
 #   2. Team — internal lead notification to LEADS_TO_EMAIL
 #
+# Persistence: bind D1 as LEADS_DB in wrangler.jsonc and run migrations in /migrations
 # Distributed rate limiting: create a KV namespace and bind as RATE_LIMIT_KV in wrangler.jsonc

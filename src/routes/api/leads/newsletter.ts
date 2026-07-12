@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { sendLeadEmail, verifyTurnstile } from "@/lib/leads";
+import { persistSimpleLead } from "@/lib/leads-db";
 import { isRateLimited, rateLimitKey } from "@/lib/rate-limit";
 import { newsletterSchema } from "@/lib/schemas/leads";
 import { turnstileEnabled } from "@/lib/turnstile";
@@ -35,6 +36,13 @@ export const Route = createFileRoute("/api/leads/newsletter")({
         }
 
         try {
+          await persistSimpleLead({
+            type: "newsletter",
+            email,
+            payloadJson: JSON.stringify({ source }),
+            marketingConsent: true,
+            source,
+          });
           await sendLeadEmail("newsletter", { email, source });
           return Response.json({ ok: true });
         } catch {

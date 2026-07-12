@@ -65,6 +65,18 @@ The TanStack Start build outputs `dist/server/index.js`; `postbuild` copies it t
 
 ---
 
-## Cloudflare Workers (optional)
+## Cloudflare Workers (production — domain cutover separate)
 
 Production on a custom domain (e.g. `clutchfuel.com`) uses Cloudflare Workers (`wrangler.jsonc`). That is separate from Lovable hosting and requires `wrangler deploy` plus Worker secrets (see `.dev.vars.example`).
+
+### Before first production deploy (without domain yet)
+
+1. Create D1: `wrangler d1 create clutchfuel-leads` → paste `database_id` into `wrangler.jsonc`
+2. Apply migrations: `wrangler d1 migrations apply LEADS_DB --remote`
+3. Create KV namespace for `RATE_LIMIT_KV` and paste IDs
+4. Set Worker secrets: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEADS_TO_EMAIL`, Turnstile pair, optional `VITE_GA_MEASUREMENT_ID`, `LEADS_EXPORT_TOKEN`
+5. See [docs/DATA.md](docs/DATA.md) for export and data model
+
+### Clutch Score product
+
+The live `/clutch-score` experience is the **diagnostic** from `clutch-athlete-insight` (opportunity + First Clutch Move), branded inside this marketing site. Hydration quiz code is archived under `src/lib/_legacy/hydration-quiz/`.

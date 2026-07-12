@@ -35,6 +35,10 @@ function ContactPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!name || !email || !message || !marketingConsent) {
+      toast.error("Please complete the form and agree to receive emails.");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/leads/contact", {
@@ -44,7 +48,7 @@ function ContactPage() {
           name,
           email,
           message,
-          marketingConsent: true,
+          marketingConsent,
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       });
@@ -148,7 +152,7 @@ function ContactPage() {
               </label>
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !marketingConsent}
                 className="mt-6 h-12 rounded-full bg-lime px-8 text-sm font-semibold text-ink transition hover:bg-lime-dark disabled:opacity-60"
               >
                 {submitting ? "Sending…" : "Send message"}

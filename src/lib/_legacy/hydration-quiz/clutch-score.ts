@@ -1,5 +1,5 @@
 import { profiles } from "@/data/home";
-import type { QuizAnswers } from "@/data/clutch-score";
+import type { QuizAnswers } from "./clutch-score-data";
 
 export type SweatProfile =
   | "Balanced Sweater"

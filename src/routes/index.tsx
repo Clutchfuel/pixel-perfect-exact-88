@@ -9,7 +9,6 @@ import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { DashboardSectionSkeleton } from "@/components/DashboardSectionSkeleton";
 import { InsightsPreviewSection } from "@/components/sections/InsightsPreviewSection";
 import { ProfilesSection } from "@/components/sections/ProfilesSection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { makeMeta, canonical, organizationSchema, websiteSchema } from "@/lib/seo";
 import { DEFAULT_OG_IMAGE } from "@/config";
@@ -24,7 +23,7 @@ const DashboardSection = lazy(() =>
 );
 
 const homeDescription =
-  "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights in under 60 seconds.";
+  "Performance intelligence for everyday athletes. Unlock your Clutch Score, biggest opportunity, and First Clutch Move in under two minutes.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -72,7 +71,6 @@ function Index() {
         <Suspense fallback={null}>
           <LongGameSection />
         </Suspense>
-        <TestimonialsSection />
         <FinalCtaSection />
       </main>
       <Footer />

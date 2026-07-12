@@ -27,8 +27,10 @@ import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as AthletesSportRouteImport } from './routes/athletes.$sport'
 import { Route as ApiLeadsNewsletterRouteImport } from './routes/api/leads/newsletter'
+import { Route as ApiLeadsFeedbackRouteImport } from './routes/api/leads/feedback'
 import { Route as ApiLeadsContactRouteImport } from './routes/api/leads/contact'
 import { Route as ApiLeadsClutchScoreRouteImport } from './routes/api/leads/clutch-score'
+import { Route as ApiAdminExportLeadsRouteImport } from './routes/api/admin/export-leads'
 
 const SystemRoute = SystemRouteImport.update({
   id: '/system',
@@ -120,6 +122,11 @@ const ApiLeadsNewsletterRoute = ApiLeadsNewsletterRouteImport.update({
   path: '/api/leads/newsletter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLeadsFeedbackRoute = ApiLeadsFeedbackRouteImport.update({
+  id: '/api/leads/feedback',
+  path: '/api/leads/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiLeadsContactRoute = ApiLeadsContactRouteImport.update({
   id: '/api/leads/contact',
   path: '/api/leads/contact',
@@ -128,6 +135,11 @@ const ApiLeadsContactRoute = ApiLeadsContactRouteImport.update({
 const ApiLeadsClutchScoreRoute = ApiLeadsClutchScoreRouteImport.update({
   id: '/api/leads/clutch-score',
   path: '/api/leads/clutch-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminExportLeadsRoute = ApiAdminExportLeadsRouteImport.update({
+  id: '/api/admin/export-leads',
+  path: '/api/admin/export-leads',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -149,8 +161,10 @@ export interface FileRoutesByFullPath {
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/admin/export-leads': typeof ApiAdminExportLeadsRoute
   '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
   '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/feedback': typeof ApiLeadsFeedbackRoute
   '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRoutesByTo {
@@ -171,8 +185,10 @@ export interface FileRoutesByTo {
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/admin/export-leads': typeof ApiAdminExportLeadsRoute
   '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
   '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/feedback': typeof ApiLeadsFeedbackRoute
   '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRoutesById {
@@ -194,8 +210,10 @@ export interface FileRoutesById {
   '/athletes/$sport': typeof AthletesSportRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/api/admin/export-leads': typeof ApiAdminExportLeadsRoute
   '/api/leads/clutch-score': typeof ApiLeadsClutchScoreRoute
   '/api/leads/contact': typeof ApiLeadsContactRoute
+  '/api/leads/feedback': typeof ApiLeadsFeedbackRoute
   '/api/leads/newsletter': typeof ApiLeadsNewsletterRoute
 }
 export interface FileRouteTypes {
@@ -218,8 +236,10 @@ export interface FileRouteTypes {
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/admin/export-leads'
     | '/api/leads/clutch-score'
     | '/api/leads/contact'
+    | '/api/leads/feedback'
     | '/api/leads/newsletter'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -240,8 +260,10 @@ export interface FileRouteTypes {
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/admin/export-leads'
     | '/api/leads/clutch-score'
     | '/api/leads/contact'
+    | '/api/leads/feedback'
     | '/api/leads/newsletter'
   id:
     | '__root__'
@@ -262,8 +284,10 @@ export interface FileRouteTypes {
     | '/athletes/$sport'
     | '/insights/$slug'
     | '/products/$slug'
+    | '/api/admin/export-leads'
     | '/api/leads/clutch-score'
     | '/api/leads/contact'
+    | '/api/leads/feedback'
     | '/api/leads/newsletter'
   fileRoutesById: FileRoutesById
 }
@@ -282,8 +306,10 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SweatRateRoute: typeof SweatRateRoute
   SystemRoute: typeof SystemRoute
+  ApiAdminExportLeadsRoute: typeof ApiAdminExportLeadsRoute
   ApiLeadsClutchScoreRoute: typeof ApiLeadsClutchScoreRoute
   ApiLeadsContactRoute: typeof ApiLeadsContactRoute
+  ApiLeadsFeedbackRoute: typeof ApiLeadsFeedbackRoute
   ApiLeadsNewsletterRoute: typeof ApiLeadsNewsletterRoute
 }
 
@@ -415,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiLeadsNewsletterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/leads/feedback': {
+      id: '/api/leads/feedback'
+      path: '/api/leads/feedback'
+      fullPath: '/api/leads/feedback'
+      preLoaderRoute: typeof ApiLeadsFeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/leads/contact': {
       id: '/api/leads/contact'
       path: '/api/leads/contact'
@@ -427,6 +460,13 @@ declare module '@tanstack/react-router' {
       path: '/api/leads/clutch-score'
       fullPath: '/api/leads/clutch-score'
       preLoaderRoute: typeof ApiLeadsClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/export-leads': {
+      id: '/api/admin/export-leads'
+      path: '/api/admin/export-leads'
+      fullPath: '/api/admin/export-leads'
+      preLoaderRoute: typeof ApiAdminExportLeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -483,8 +523,10 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SweatRateRoute: SweatRateRoute,
   SystemRoute: SystemRoute,
+  ApiAdminExportLeadsRoute: ApiAdminExportLeadsRoute,
   ApiLeadsClutchScoreRoute: ApiLeadsClutchScoreRoute,
   ApiLeadsContactRoute: ApiLeadsContactRoute,
+  ApiLeadsFeedbackRoute: ApiLeadsFeedbackRoute,
   ApiLeadsNewsletterRoute: ApiLeadsNewsletterRoute,
 }
 export const routeTree = rootRouteImport

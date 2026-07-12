@@ -4,7 +4,7 @@ export const site = {
   primaryCta: "Unlock My Clutch Score",
   ctaHref: "/clutch-score",
   description:
-    "Hydration intelligence for everyday athletes. Unlock your Clutch Score, sweat profile, and personalized hydration insights.",
+    "Performance intelligence for everyday athletes. Unlock your Clutch Score, biggest opportunity, and First Clutch Move.",
   social: {
     instagram: "https://instagram.com/clutchfuel",
     youtube: "https://youtube.com/@clutchfuel",

@@ -13,19 +13,17 @@ export function ProfilesSection() {
       <Reveal>
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <Link
-              to="/athletes"
-              className="tracking-eyebrow text-xs font-semibold uppercase text-lime hover:underline"
-            >
-              Athlete profiles
-            </Link>
+            <p className="tracking-eyebrow text-xs font-semibold uppercase text-lime">
+              {profiles.eyebrow}
+            </p>
             <h2 className="mt-3 max-w-2xl font-display text-4xl font-extrabold tracking-display text-ink sm:text-5xl lg:text-[64px]">
               {profiles.headline}
             </h2>
             <p className="mt-4 max-w-xl text-lg text-muted-ink">{profiles.sub}</p>
+            <p className="mt-3 max-w-xl text-sm font-medium text-ink/70">{profiles.mission}</p>
           </div>
-          <CFButton to="/athletes" variant="ghost" size="md" className="shrink-0">
-            Explore sports <ArrowRight className="ml-1 h-4 w-4" />
+          <CFButton to="/clutch-score" variant="ghost" size="md" className="shrink-0">
+            Unlock My Clutch Score <ArrowRight className="ml-1 h-4 w-4" />
           </CFButton>
         </div>
       </Reveal>
@@ -48,7 +46,7 @@ export function ProfilesSection() {
                   </h3>
                   <p className="mt-3 text-sm text-muted-ink">{p.copy}</p>
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-lime">
-                    Get your profile{" "}
+                    Get your Clutch Score{" "}
                     <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                   </span>
                 </div>
@@ -57,6 +55,17 @@ export function ProfilesSection() {
           );
         })}
       </div>
+
+      <Reveal delay={0.2}>
+        <div className="mt-10 text-center">
+          <Link
+            to="/athletes"
+            className="text-sm font-semibold text-ink/60 underline-offset-4 hover:text-ink hover:underline"
+          >
+            Explore sport-specific guides →
+          </Link>
+        </div>
+      </Reveal>
     </Section>
   );
 }

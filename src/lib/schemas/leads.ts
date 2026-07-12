@@ -1,17 +1,19 @@
 import { z } from "zod";
 
-export const bodyTypeSchema = z.enum(["lighter", "average", "heavier"]);
-export const trainingLoadSchema = z.enum(["light", "moderate", "heavy"]);
-export const sweatLevelSchema = z.enum(["light", "moderate", "heavy"]);
-export const environmentSchema = z.enum(["indoor", "mixed", "hot"]);
-export const goalSchema = z.enum(["performance", "endurance", "recovery"]);
+export const answerIndexSchema = z.union([
+  z.literal(0),
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+]);
 
-export const quizAnswersSchema = z.object({
-  bodyType: bodyTypeSchema,
-  trainingLoad: trainingLoadSchema,
-  sweatLevel: sweatLevelSchema,
-  environment: environmentSchema,
-  goal: goalSchema,
+export const diagnosticAnswersSchema = z.object({
+  q1: answerIndexSchema,
+  q2: answerIndexSchema,
+  q3: answerIndexSchema,
+  q4: answerIndexSchema,
+  q5: answerIndexSchema,
 });
 
 export const marketingConsentSchema = z.literal(true, {
@@ -35,7 +37,18 @@ export const newsletterSchema = z.object({
 
 export const clutchScoreSubmitSchema = z.object({
   email: z.string().email().max(254),
-  answers: quizAnswersSchema,
+  answers: diagnosticAnswersSchema,
   marketingConsent: marketingConsentSchema,
   turnstileToken: z.string().optional(),
+});
+
+export const feedbackSchema = z.object({
+  accuracy: z.string().min(1).max(80),
+  resonated: z.string().max(2000).default(""),
+  missing: z.string().max(2000).default(""),
+  recommend: z.string().max(40).default(""),
+  score: z.number().int().min(0).max(100).optional(),
+  opportunity: z.string().max(80).optional(),
+  firstMove: z.string().max(500).optional(),
+  answers: diagnosticAnswersSchema.optional(),
 });
