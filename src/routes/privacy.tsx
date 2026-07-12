@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — Clutch Score by ClutchFuel" },
+      { title: "Privacy Policy, Clutch Score by ClutchFuel" },
       {
         name: "description",
         content: "How ClutchFuel collects, stores, and uses data from the Clutch Score assessment.",
@@ -41,7 +41,7 @@ function PrivacyPage() {
               <p className="mt-2">
                 When you complete the assessment, we store your email address, your answers to the
                 five hydration questions, your calculated Clutch Score and result, and any optional
-                details you provide — first name and how you heard about Clutch Score. If you submit
+                details you provide, first name and how you heard about Clutch Score. If you submit
                 feedback on your result, we store that too.
               </p>
             </div>
@@ -60,7 +60,7 @@ function PrivacyPage() {
               <p className="mt-2">
                 If you accept analytics cookies in the banner shown on this site, we load Google
                 Analytics to understand how people move through the assessment. This only happens
-                after you accept — declining means no analytics script loads. Your choice is
+                after you accept, declining means no analytics script loads. Your choice is
                 remembered on this device and you can change your mind by clearing your browser's
                 local storage for this site.
               </p>
@@ -70,7 +70,7 @@ function PrivacyPage() {
               <h2 className="text-lg font-semibold text-foreground">How we store it</h2>
               <p className="mt-2">
                 Your responses are stored in a Supabase database. Submissions are write-once for
-                feedback — once you submit a 👍/👎 or a note, that submission can't be modified
+                feedback, once you submit a 👍/👎 or a note, that submission can't be modified
                 again. We don't make your individual responses publicly readable.
               </p>
             </div>

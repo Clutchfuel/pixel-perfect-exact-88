@@ -20,7 +20,7 @@ export function ArticleCover({ category, title, className = "", variant = "compa
       className={`relative overflow-hidden bg-[#0a0a0a] text-white ${className}`}
       aria-hidden={title ? undefined : true}
       role={title ? "img" : undefined}
-      aria-label={title ? `${category} — ${title}` : undefined}
+      aria-label={title ? `${category}: ${title}` : undefined}
     >
       {/* Repeating category name */}
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-1 -rotate-6 opacity-[0.22] leading-none select-none">
