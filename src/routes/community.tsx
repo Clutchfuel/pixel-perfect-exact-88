@@ -14,7 +14,7 @@ import athleteCrossfit from "@/assets/community-crossfit.jpg";
 export const Route = createFileRoute("/community")({
   head: () => ({
     meta: [
-      { title: "Community, ClutchFuel" },
+      { title: "Community: ClutchFuel" },
       {
         name: "description",
         content: "Everyday athletes chasing better. Runners, HYROX competitors, hoopers, busy parents, real stories from the ClutchFuel community.",

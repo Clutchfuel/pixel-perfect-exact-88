@@ -16,7 +16,7 @@ import athleteHyrox from "@/assets/sport-hyrox.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ClutchFuel, Helping Everyday Athletes Perform Better" },
+      { title: "ClutchFuel: Helping Everyday Athletes Perform Better" },
       {
         name: "description",
         content:

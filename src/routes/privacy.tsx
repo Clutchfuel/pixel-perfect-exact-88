@@ -4,7 +4,7 @@ import { Logo } from "@/components/Logo";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy, Clutch Score by ClutchFuel" },
+      { title: "Privacy Policy: Clutch Score by ClutchFuel" },
       {
         name: "description",
         content: "How ClutchFuel collects, stores, and uses data from the Clutch Score assessment.",

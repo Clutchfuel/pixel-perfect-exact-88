@@ -6,7 +6,7 @@ import { Reveal } from "@/components/Reveal";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About, ClutchFuel" },
+      { title: "About: ClutchFuel" },
       {
         name: "description",
         content: "ClutchFuel is a performance intelligence company helping everyday athletes stop guessing and start performing with confidence.",

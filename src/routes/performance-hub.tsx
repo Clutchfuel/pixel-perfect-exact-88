@@ -12,7 +12,7 @@ const CATEGORIES: ("All" | ArticleCategory)[] = [
 export const Route = createFileRoute("/performance-hub")({
   head: () => ({
     meta: [
-      { title: "Performance Hub, ClutchFuel" },
+      { title: "Performance Hub: ClutchFuel" },
       {
         name: "description",
         content: "Science-backed articles on hydration, recovery, fueling, and the habits that quietly change your training.",

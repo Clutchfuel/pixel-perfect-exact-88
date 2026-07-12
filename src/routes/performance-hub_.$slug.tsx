@@ -13,7 +13,7 @@ export const Route = createFileRoute("/performance-hub_/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Article not found, ClutchFuel" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Article not found: ClutchFuel" }, { name: "robots", content: "noindex" }] };
     }
     const { article } = loaderData;
     return {
