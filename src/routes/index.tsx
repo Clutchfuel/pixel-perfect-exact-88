@@ -2,10 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
-import { RotatingWord } from "@/components/RotatingWord";
+import { CommunityAthletes } from "@/components/CommunityAthletes";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
-import { ATHLETE_TYPES } from "@/data/athlete-types";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
 
 export const Route = createFileRoute("/")({
@@ -224,29 +223,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Community preview */}
-      <section className="border-t border-black/5 bg-muted">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 text-center sm:px-8 sm:py-32">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
-            <h2 className="mx-auto mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
-              Built for everyday athletes.
-            </h2>
-            <p className="mx-auto mt-8 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
-              <RotatingWord words={ATHLETE_TYPES} className="text-electric-dark" />
-            </p>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-              Same assessment. Different sports. One habit worth fixing next.
-            </p>
-            <Link
-              to="/clutch-score"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
-            >
-              Take the Clutch Score <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
+      <CommunityAthletes />
 
       {/* Performance Hub preview */}
       <section className="border-t border-black/5">
