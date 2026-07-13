@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Clock, ListChecks, Target } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { ScoreRing } from "@/components/clutch-score/ScoreRing";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
@@ -109,18 +110,20 @@ function HowItWorksPage() {
             </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <div className="card-elevated p-8">
-              <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Your biggest opportunity</p>
-              <p className="mt-3 text-3xl font-extrabold leading-tight">Recovery & Cramping</p>
-              <p className="mt-6 text-xs uppercase tracking-eyebrow text-muted-foreground/80">What to do next</p>
-              <p className="mt-2 text-lg leading-relaxed text-muted-foreground">
+            <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] p-8 text-center sm:p-10">
+              <div className="mt-2">
+                <ScoreRing score={68} size={200} stroke={14} />
+              </div>
+              <p className="mt-8 text-xs uppercase tracking-eyebrow text-[#c1ff00]">
+                Your biggest opportunity
+              </p>
+              <p className="mt-3 text-2xl font-extrabold leading-tight text-white sm:text-3xl">
+                Recovery & Cramping
+              </p>
+              <p className="mt-6 text-xs uppercase tracking-eyebrow text-white/40">What to do next</p>
+              <p className="mt-2 text-base leading-relaxed text-white/60 sm:text-lg">
                 Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.
               </p>
-              <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
-                <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
-                <span className="text-2xl font-bold">68</span>
-                <span className="text-sm text-muted-foreground/70">/ 100</span>
-              </div>
             </div>
           </Reveal>
         </div>

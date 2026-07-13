@@ -3,6 +3,7 @@ import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles }
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { CommunityAthletes } from "@/components/CommunityAthletes";
+import { ScoreRing } from "@/components/clutch-score/ScoreRing";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
@@ -179,20 +180,20 @@ function HomePage() {
             </Link>
           </Reveal>
           <Reveal delay={0.08}>
-            <div className="card-elevated p-8">
-              <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Sample insight</p>
-              <p className="mt-3 text-2xl font-bold leading-snug">
+            <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] p-8 text-center sm:p-10">
+              <p className="text-xs uppercase tracking-eyebrow text-white/40">Sample insight</p>
+              <div className="mt-8">
+                <ScoreRing score={72} size={200} stroke={14} />
+              </div>
+              <p className="mt-8 text-sm font-semibold uppercase tracking-eyebrow text-[#c1ff00]">
+                High Performer
+              </p>
+              <p className="mt-4 text-xl font-bold leading-snug text-white">
                 Your recovery habits are limiting your performance more than your workouts.
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Rehydrate with sodium within 60 minutes after every hard session this week — even when you don't feel thirsty.
+              <p className="mt-4 text-sm leading-relaxed text-white/55">
+                Rehydrate with sodium within 60 minutes after every hard session this week, even when you don't feel thirsty.
               </p>
-              <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
-                <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
-                <span className="text-xl font-bold">72</span>
-                <span className="text-xs text-muted-foreground/70">/ 100</span>
-              </div>
-              <p className="mt-3 text-xs font-semibold uppercase tracking-eyebrow text-electric-dark">High Performer</p>
             </div>
           </Reveal>
         </div>

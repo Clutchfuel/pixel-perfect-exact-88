@@ -7,13 +7,13 @@ import { Reveal } from "@/components/Reveal";
 export const Route = createFileRoute("/clutch-score")({
   head: () => ({
     meta: [
-      { title: "Clutch Score — Discover what's holding your performance back | ClutchFuel" },
+      { title: "Clutch Score: Discover what's holding your performance back | ClutchFuel" },
       {
         name: "description",
         content:
           "Every athlete has one habit costing them performance. Discover yours in less than 60 seconds and get one personalized action to improve before your next workout.",
       },
-      { property: "og:title", content: "Clutch Score — Every athlete has one habit costing them performance" },
+      { property: "og:title", content: "Clutch Score: Every athlete has one habit costing them performance" },
       {
         property: "og:description",
         content: "Discover yours in less than 60 seconds and get one personalized action to improve.",
@@ -65,7 +65,7 @@ function ClutchScorePage() {
               ))}
             </ul>
             <p className="mx-auto mt-12 max-w-lg text-sm leading-relaxed text-muted-foreground/80">
-              Built around the everyday habits that influence athletic performance — designed to
+              Built around the everyday habits that influence athletic performance, designed to
               help you identify the next improvement, not overwhelm you with dozens of changes.
             </p>
           </Reveal>
