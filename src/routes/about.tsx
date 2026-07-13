@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
-import trainingImage from "@/assets/articles/recovery.jpg";
+import founderImage from "@/assets/founder-jamar.png";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -93,9 +93,9 @@ function AboutPage() {
           <Reveal>
             <div className="overflow-hidden">
               <img
-                src={trainingImage}
-                alt="An athlete in the quiet moments after training"
-                className="aspect-[4/5] w-full object-cover grayscale"
+                src={founderImage}
+                alt="Jamar, founder of ClutchFuel"
+                className="aspect-[4/5] w-full object-cover object-top"
               />
             </div>
           </Reveal>
