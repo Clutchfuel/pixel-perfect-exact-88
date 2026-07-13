@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { submitFeedback } from "@/lib/feedback.functions";
 import { ATHLETE_TYPES, type AthleteType } from "@/data/athlete-types";
 import { toast } from "sonner";
 
@@ -101,20 +99,18 @@ type ResultPayload = {
   opportunity: Opportunity;
   next_step: string;
   level: string;
-  why: string;
-  impact: string;
   opportunityLine: string;
 };
 
 const FIRST_MOVE: Record<Opportunity, Partial<Record<GoalId, string>> & { default: string }> = {
   Hydration: {
-    default: "Drink 20 oz of fluid with electrolytes 15–30 minutes before your next 3 sessions.",
+    default: "Drink 20 oz of water within 30 minutes after every workout.",
     energy: "Pre-hydrate with 20 oz and electrolytes 20 minutes before training — most low-energy sessions start under-fueled on fluid.",
     endurance: "For longer sessions, front-load sodium and fluid 20–30 minutes before you start.",
     hyrox: "Before your next metcon, electrolytes 20 minutes out. Late-station fade is often timing, not fitness.",
   },
   Recovery: {
-    default: "Rehydrate with sodium within 60 minutes after every hard session this week — even when you don't feel thirsty.",
+    default: "Drink 20 oz of water within 30 minutes after every workout.",
     recover: "Make the first hour after training non-negotiable: fluid + sodium before you leave the gym.",
     cramping: "Rebuild sodium within an hour of finishing. Tomorrow's cramps often start in today's recovery.",
   },
@@ -134,33 +130,12 @@ const FIRST_MOVE: Record<Opportunity, Partial<Record<GoalId, string>> & { defaul
   },
 };
 
-const WHY: Record<Opportunity, string> = {
-  Hydration:
-    "Fluid and sodium status shape how hard you can push in the back half of a session. When intake is late or inconsistent, perceived effort climbs and output drops — even if fitness is there.",
-  Recovery:
-    "Adaptation happens between sessions. Incomplete recovery stacks fatigue, raises injury risk, and quietly caps how hard you can train next time.",
-  Nutrition:
-    "Post-workout protein and fuel refill what training used. Skip the window often enough and progress stalls even when the workouts look good on paper.",
-  Consistency:
-    "The biggest gains come from showing up. Missed sessions compound faster than a perfect plan you only half-follow.",
-  Sleep:
-    "Sleep drives recovery hormones, reaction time, and next-day effort. Under-sleeping turns hard training into expensive stress.",
-};
-
-const IMPACT: Record<Opportunity, string> = {
-  Hydration: "Support better endurance, steadier energy, and less late-session fade.",
-  Recovery: "Improve recovery consistency and reduce next-day heaviness.",
-  Nutrition: "Support muscle repair and steadier training quality week to week.",
-  Consistency: "Build stronger daily habits and more reliable progress over months.",
-  Sleep: "Support better recovery, focus, and readiness for hard efforts.",
-};
-
 const OPPORTUNITY_LINE: Record<Opportunity, string> = {
-  Hydration: "Your hydration habits are limiting your performance more than your workouts.",
-  Recovery: "Your recovery habits are limiting your performance more than your workouts.",
-  Nutrition: "Your fueling habits are limiting your performance more than your training plan.",
-  Consistency: "Your consistency gaps are costing you more progress than intensity ever will.",
-  Sleep: "Your sleep habits are capping how well you can perform and recover.",
+  Hydration: "Your hydration habits have the greatest opportunity to improve your performance.",
+  Recovery: "Your recovery habits have the greatest opportunity to improve your performance.",
+  Nutrition: "Your fueling habits have the greatest opportunity to improve your performance.",
+  Consistency: "Your consistency habits have the greatest opportunity to improve your performance.",
+  Sleep: "Your sleep habits have the greatest opportunity to improve your performance.",
 };
 
 function goalLabel(id: GoalId | null): string {
@@ -201,8 +176,6 @@ function computeResult(answers: Answer[], goal: GoalId | null): ResultPayload {
     opportunity,
     next_step,
     level: performanceLevel(clutch_score),
-    why: WHY[opportunity],
-    impact: IMPACT[opportunity],
     opportunityLine: OPPORTUNITY_LINE[opportunity],
   };
 }
@@ -212,9 +185,8 @@ type Step =
   | { kind: "goal" }
   | { kind: "athlete" }
   | { kind: "quiz"; index: number }
-  | { kind: "analyze"; next: "quiz" | "email"; nextIndex?: number }
-  | { kind: "email" }
-  | { kind: "result"; id: string; sessionToken: string; payload: ResultPayload; goal: GoalId | null };
+  | { kind: "analyze"; next: "quiz" | "result"; nextIndex?: number }
+  | { kind: "result"; payload: ResultPayload; goal: GoalId | null; athleteType: AthleteType | null; answers: Answer[] };
 
 function useSelectThenAdvance<T>(onSelect: (value: T) => void, delayMs = 220) {
   const [pending, setPending] = useState<T | null>(null);
@@ -251,21 +223,21 @@ export function Assessment() {
       ? 1
       : step.kind === "athlete"
         ? 2
-        : step.kind === "quiz" || step.kind === "analyze" || step.kind === "email"
+        : step.kind === "quiz" || step.kind === "analyze"
           ? 3
           : 0;
 
   const fillWithin =
     step.kind === "quiz"
       ? (step.index + 1) / QUESTIONS.length
-      : step.kind === "email" || (step.kind === "analyze" && step.next === "email")
+      : step.kind === "analyze" && step.next === "result"
         ? 1
         : step.kind === "analyze" && step.next === "quiz"
           ? ((step.nextIndex ?? 0) + 0.5) / QUESTIONS.length
           : 1;
 
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div className={`mx-auto w-full ${step.kind === "result" ? "max-w-lg" : "max-w-xl"}`}>
       {phase > 0 && step.kind !== "result" && (
         <ProgressBar step={phase} total={3} fillWithinStep={fillWithin} />
       )}
@@ -332,7 +304,7 @@ export function Assessment() {
                 if (step.index < QUESTIONS.length - 1) {
                   setStep({ kind: "analyze", next: "quiz", nextIndex: step.index + 1 });
                 } else {
-                  setStep({ kind: "analyze", next: "email" });
+                  setStep({ kind: "analyze", next: "result" });
                 }
               }}
             />
@@ -343,23 +315,19 @@ export function Assessment() {
           <StepFrame key="analyze">
             <AnalyzeBeat
               onDone={() => {
-                if (step.next === "quiz") setStep({ kind: "quiz", index: step.nextIndex ?? 0 });
-                else setStep({ kind: "email" });
+                if (step.next === "quiz") {
+                  setStep({ kind: "quiz", index: step.nextIndex ?? 0 });
+                } else {
+                  const payload = computeResult(answers as Answer[], goal);
+                  setStep({
+                    kind: "result",
+                    payload,
+                    goal,
+                    athleteType,
+                    answers: answers as Answer[],
+                  });
+                }
               }}
-            />
-          </StepFrame>
-        )}
-
-        {step.kind === "email" && (
-          <StepFrame key="email">
-            <EmailCapture
-              answers={answers as Answer[]}
-              goal={goal}
-              athleteType={athleteType}
-              onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
-              onComplete={(id, token, payload) =>
-                setStep({ kind: "result", id, sessionToken: token, payload, goal })
-              }
             />
           </StepFrame>
         )}
@@ -367,10 +335,10 @@ export function Assessment() {
         {step.kind === "result" && (
           <StepFrame key="result">
             <Result
-              id={step.id}
-              sessionToken={step.sessionToken}
               payload={step.payload}
               goal={step.goal}
+              athleteType={step.athleteType}
+              answers={step.answers}
             />
           </StepFrame>
         )}
@@ -595,30 +563,124 @@ function AnalyzeBeat({ onDone }: { onDone: () => void }) {
   );
 }
 
-function EmailCapture({
-  answers,
+function ScoreRing({ score }: { score: number }) {
+  const reduce = useReducedMotion();
+  const size = 260;
+  const stroke = 18;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const [display, setDisplay] = useState(0);
+  const [offset, setOffset] = useState(c);
+  const [settled, setSettled] = useState(false);
+
+  useEffect(() => {
+    setSettled(false);
+    if (reduce) {
+      setDisplay(score);
+      setOffset(c - (score / 100) * c);
+      setSettled(true);
+      return;
+    }
+
+    const duration = 1000;
+    const start = performance.now();
+    let frame = 0;
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      // ease-out cubic — fills fast, settles soft
+      const eased = 1 - Math.pow(1 - t, 3);
+      const value = Math.round(score * eased);
+      setDisplay(value);
+      setOffset(c - (value / 100) * c);
+      if (t < 1) {
+        frame = window.requestAnimationFrame(tick);
+      } else {
+        setDisplay(score);
+        setOffset(c - (score / 100) * c);
+        setSettled(true);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [score, c, reduce]);
+
+  return (
+    <div className="relative mx-auto" style={{ width: size, height: size }}>
+      <div
+        className="pointer-events-none absolute inset-[-22%] rounded-full transition-opacity duration-700"
+        style={{
+          opacity: settled ? 1 : 0.45,
+          background:
+            "radial-gradient(circle, rgba(193,255,0,0.28) 0%, rgba(193,255,0,0.08) 38%, transparent 68%)",
+        }}
+        aria-hidden
+      />
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke="rgba(255,255,255,0.08)"
+          strokeWidth={stroke}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke="#c1ff00"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={c}
+          strokeDashoffset={offset}
+          style={{
+            filter: settled
+              ? "drop-shadow(0 0 14px rgba(193,255,0,0.7))"
+              : "drop-shadow(0 0 6px rgba(193,255,0,0.35))",
+            transition: "filter 0.6s ease",
+          }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-7xl font-extrabold tracking-tight text-white tabular-nums sm:text-8xl">
+          {display}
+        </span>
+        <span className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.28em] text-white/45">
+          Clutch Score
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function Result({
+  payload,
   goal,
   athleteType,
-  onBack,
-  onComplete,
+  answers,
 }: {
-  answers: Answer[];
+  payload: ResultPayload;
   goal: GoalId | null;
   athleteType: AthleteType | null;
-  onBack: () => void;
-  onComplete: (id: string, sessionToken: string, payload: ResultPayload) => void;
+  answers: Answer[];
 }) {
-  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [source, setSource] = useState("");
   const [sourceOther, setSourceOther] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return toast.error("Email is required");
+    if (!email.trim()) return toast.error("Enter your email to save your report.");
     setSubmitting(true);
-    const result = computeResult(answers, goal);
     const sessionToken = generateSessionToken();
     const id = generateId();
     const sourceValue =
@@ -626,7 +688,7 @@ function EmailCapture({
     try {
       const { error } = await supabase.from("assessment_responses").insert({
         id,
-        first_name: firstName.trim() || null,
+        first_name: null,
         email: email.trim(),
         source: sourceValue,
         goal: goal ?? null,
@@ -636,272 +698,122 @@ function EmailCapture({
         q3: answers[2],
         q4: answers[3],
         q5: answers[4],
-        clutch_score: result.clutch_score,
-        opportunity: result.opportunity,
-        next_step: result.next_step,
+        clutch_score: payload.clutch_score,
+        opportunity: payload.opportunity,
+        next_step: payload.next_step,
         session_token: sessionToken,
       });
-      if (error) console.error("[Clutch Score] save failed:", error.message);
+      if (error) {
+        console.error("[Clutch Score] save failed:", error.message);
+        toast.error("Couldn't save your report. Try again.");
+      } else {
+        setSaved(true);
+        toast.success("Report saved.");
+      }
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
+      toast.error("Couldn't save your report. Try again.");
     } finally {
       setSubmitting(false);
     }
-    onComplete(id, sessionToken, result);
   };
 
   return (
-    <section>
-      <button
-        type="button"
-        onClick={onBack}
-        className="mb-6 text-xs uppercase tracking-[0.18em] text-white/45 hover:text-white"
-      >
-        ← Back
-      </button>
-      <h2 className="text-balance text-3xl font-bold leading-tight sm:text-4xl">
-        Get Your Personalized Performance Report
-      </h2>
-      <p className="mt-4 text-base leading-relaxed text-white/55">
-        Enter your email to unlock your full Clutch Score, biggest opportunity, First Clutch Move,
-        and weekly recommendations — built for{" "}
-        <span className="text-white">{goalLabel(goal).toLowerCase() || "your next session"}</span>.
-      </p>
-      <ul className="mt-5 space-y-2 text-sm text-white/50">
-        <li>• Full Clutch Score + performance level</li>
-        <li>• Biggest opportunity + First Clutch Move</li>
-        <li>• Future check-ins and weekly Clutch Moves</li>
-      </ul>
-
-      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email *"
-          className="w-full rounded-2xl border border-white/12 bg-white/[0.04] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
-        />
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First name (optional)"
-          className="w-full rounded-2xl border border-white/12 bg-white/[0.04] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
-        />
-
-        <div className="pt-1">
-          <p className="text-sm text-white/70">
-            How did you hear about us? <span className="text-white/40">(optional)</span>
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {SOURCES.map((s) => {
-              const active = source === s;
-              return (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setSource((prev) => (prev === s ? "" : s))}
-                  className={`rounded-full border px-3.5 py-2 text-sm font-medium transition ${
-                    active
-                      ? "border-[#c1ff00] bg-[#c1ff00] text-black"
-                      : "border-white/12 bg-white/[0.04] text-white/80 hover:border-white/30"
-                  }`}
-                >
-                  {s}
-                </button>
-              );
-            })}
-          </div>
-          {source === "Other" && (
-            <input
-              type="text"
-              value={sourceOther}
-              onChange={(e) => setSourceOther(e.target.value)}
-              placeholder="Tell us where (optional)"
-              className="mt-3 w-full rounded-2xl border border-white/12 bg-white/[0.04] px-5 py-3 text-sm text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
-            />
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="mt-2 w-full rounded-full bg-[#c1ff00] px-8 py-5 text-base font-semibold text-black transition hover:bg-[#d6ff4d] disabled:opacity-60"
-        >
-          {submitting ? "Building your report…" : "Unlock My Report"}
-        </button>
-      </form>
-    </section>
-  );
-}
-
-function ScoreCircle({ score }: { score: number }) {
-  const reduce = useReducedMotion();
-  const r = 54;
-  const c = 2 * Math.PI * r;
-  const [offset, setOffset] = useState(c);
-
-  useEffect(() => {
-    const target = c - (score / 100) * c;
-    const id = window.requestAnimationFrame(() => setOffset(reduce ? target : target));
-    return () => window.cancelAnimationFrame(id);
-  }, [score, c, reduce]);
-
-  return (
-    <div className="relative mx-auto h-40 w-40">
-      <svg viewBox="0 0 128 128" className="h-full w-full -rotate-90">
-        <circle cx="64" cy="64" r={r} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
-        <circle
-          cx="64"
-          cy="64"
-          r={r}
-          fill="none"
-          stroke="#c1ff00"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={offset}
-          style={{ transition: reduce ? undefined : "stroke-dashoffset 1.1s cubic-bezier(0.22,1,0.36,1)" }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-extrabold tracking-tight text-white">{score}</span>
-        <span className="text-xs uppercase tracking-[0.18em] text-white/45">/ 100</span>
+    <section className="space-y-16 pb-10">
+      {/* 1. Hero Score — visual identity */}
+      <div className="pt-4 text-center">
+        <ScoreRing score={payload.clutch_score} />
+        <p className="mt-10 text-xl font-semibold tracking-wide text-[#c1ff00]">{payload.level}</p>
       </div>
-    </div>
-  );
-}
 
-function Result({
-  id,
-  sessionToken,
-  payload,
-  goal,
-}: {
-  id: string;
-  sessionToken: string;
-  payload: ResultPayload;
-  goal: GoalId | null;
-}) {
-  const [helpful, setHelpful] = useState<boolean | null>(null);
-  const [feedback, setFeedback] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const submitFeedbackFn = useServerFn(submitFeedback);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  const handleFeedback = async () => {
-    if (helpful === null && !feedback.trim()) {
-      return toast.error("Add a 👍/👎 or a quick note first.");
-    }
-    setSubmitting(true);
-    try {
-      await submitFeedbackFn({
-        data: {
-          id,
-          session_token: sessionToken,
-          helpful_result: helpful,
-          feedback_text: feedback.trim() || null,
-        },
-      });
-      setSubmitted(true);
-      toast.success("Thanks for the feedback.");
-    } catch {
-      toast.error("Couldn't save feedback. Try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <section className="space-y-8">
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 sm:p-10">
-        <p className="text-center text-xs uppercase tracking-[0.22em] text-white/45">Your Clutch Score</p>
-        <div className="mt-6">
-          <ScoreCircle score={payload.clutch_score} />
-        </div>
-        <p className="mt-5 text-center text-sm font-semibold uppercase tracking-[0.18em] text-[#c1ff00]">
-          {payload.level}
+      {/* 2. Biggest Opportunity */}
+      <div className="text-center">
+        <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/40">
+          Your Biggest Opportunity
         </p>
-        {goal && (
-          <p className="mt-2 text-center text-xs text-white/40">Based on · {goalLabel(goal)}</p>
-        )}
-
-        <div className="mt-10 space-y-8 border-t border-white/10 pt-8">
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/40">Biggest opportunity</p>
-            <p className="mt-3 text-2xl font-bold leading-snug text-white">{payload.opportunityLine}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-[#c1ff00]">First Clutch Move</p>
-            <p className="mt-3 text-lg leading-relaxed text-white/90">{payload.next_step}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/40">Why this matters</p>
-            <p className="mt-3 text-base leading-relaxed text-white/60">{payload.why}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-white/40">Potential impact</p>
-            <p className="mt-3 text-base leading-relaxed text-white/60">{payload.impact}</p>
-          </div>
-        </div>
+        <p className="mt-3 text-2xl font-bold text-white sm:text-3xl">{payload.opportunity}</p>
+        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/60 sm:text-lg">
+          {payload.opportunityLine}
+        </p>
       </div>
 
-      <p className="text-center text-sm text-white/45">
-        Try your First Clutch Move for two weeks — then come back and raise your score.
-      </p>
+      {/* 3. First Clutch Move */}
+      <div className="text-center">
+        <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#c1ff00]">
+          This week's Clutch Move
+        </p>
+        <p className="mx-auto mt-4 max-w-md text-xl font-semibold leading-snug text-white sm:text-2xl">
+          {payload.next_step}
+        </p>
+      </div>
 
-      <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6">
-        {submitted ? (
-          <p className="text-center text-sm text-white/55">Thanks — your feedback is recorded.</p>
+      {/* 4. Save Your Report */}
+      <div className="border-t border-white/10 pt-12">
+        {saved ? (
+          <div className="text-center">
+            <p className="text-lg font-semibold text-white">You're all set.</p>
+            <p className="mt-2 text-sm text-white/50">
+              Your Clutch Score and Clutch Move are saved.
+            </p>
+          </div>
         ) : (
           <>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/50">
-              Was this insight helpful?
+            <h3 className="text-center text-2xl font-bold text-white sm:text-3xl">
+              Want to keep your results?
+            </h3>
+            <p className="mx-auto mt-3 max-w-md text-center text-base text-white/55">
+              Get your Clutch Score and personalized recommendations sent to your inbox.
             </p>
-            <div className="mt-4 flex gap-3">
+            <form onSubmit={handleSave} className="mx-auto mt-8 flex max-w-md flex-col gap-3">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="w-full rounded-2xl border border-white/12 bg-white/[0.04] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
+              />
+              <div className="pt-1">
+                <p className="text-center text-xs text-white/40">
+                  How did you hear about us? (optional)
+                </p>
+                <div className="mt-3 flex flex-wrap justify-center gap-2">
+                  {SOURCES.map((s) => {
+                    const active = source === s;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSource((prev) => (prev === s ? "" : s))}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                          active
+                            ? "border-[#c1ff00] bg-[#c1ff00] text-black"
+                            : "border-white/12 bg-white/[0.04] text-white/70 hover:border-white/30"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+                {source === "Other" && (
+                  <input
+                    type="text"
+                    value={sourceOther}
+                    onChange={(e) => setSourceOther(e.target.value)}
+                    placeholder="Tell us where"
+                    className="mt-3 w-full rounded-2xl border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
+                  />
+                )}
+              </div>
               <button
-                type="button"
-                onClick={() => setHelpful(true)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true
-                    ? "border-[#c1ff00] bg-[#c1ff00] text-black"
-                    : "border-white/12 bg-white/[0.04] hover:border-white/30"
-                }`}
+                type="submit"
+                disabled={submitting}
+                className="mt-2 w-full rounded-full bg-[#c1ff00] px-8 py-4 text-base font-semibold text-black transition hover:bg-[#d6ff4d] disabled:opacity-60"
               >
-                👍 Yes
+                {submitting ? "Saving…" : "Get My Report"}
               </button>
-              <button
-                type="button"
-                onClick={() => setHelpful(false)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false
-                    ? "border-[#c1ff00] bg-[#c1ff00] text-black"
-                    : "border-white/12 bg-white/[0.04] hover:border-white/30"
-                }`}
-              >
-                👎 No
-              </button>
-            </div>
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              rows={3}
-              placeholder="Optional note"
-              className="mt-4 w-full rounded-xl border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-[#c1ff00] focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleFeedback}
-              disabled={submitting}
-              className="mt-4 w-full rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-[#c1ff00] disabled:opacity-60"
-            >
-              {submitting ? "Saving…" : "Submit Feedback"}
-            </button>
+            </form>
           </>
         )}
       </div>
