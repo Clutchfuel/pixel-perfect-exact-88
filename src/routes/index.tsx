@@ -3,7 +3,7 @@ import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles }
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { CommunityAthletes } from "@/components/CommunityAthletes";
-import { ScoreRing } from "@/components/clutch-score/ScoreRing";
+import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
@@ -37,6 +37,15 @@ const PROBLEMS = [
   { icon: Repeat, title: "Consistency", copy: "The unglamorous habit that quietly compounds results." },
   { icon: Timer, title: "Timing", copy: "When you fuel matters as much as what you fuel with." },
   { icon: Brain, title: "Body awareness", copy: "The signals you're ignoring are already telling you what to fix." },
+];
+
+/** Homepage sample — Recovery intentionally weakest so the ring tells the story. */
+const SAMPLE_SEGMENTS = [
+  { id: "Hydration", color: "#c1ff00", fill: 0.78 },
+  { id: "Recovery", color: "#f5c542", fill: 0.32 },
+  { id: "Training", color: "#4da3ff", fill: 0.82 },
+  { id: "Nutrition", color: "#a78bfa", fill: 0.7 },
+  { id: "Consistency", color: "#d4d4d4", fill: 0.64 },
 ];
 
 const PILLARS = [
@@ -183,16 +192,23 @@ function HomePage() {
             <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] p-8 text-center sm:p-10">
               <p className="text-xs uppercase tracking-eyebrow text-white/40">Sample insight</p>
               <div className="mt-8">
-                <ScoreRing score={72} size={200} stroke={14} />
+                <SegmentedClutchRing
+                  score={72}
+                  segments={SAMPLE_SEGMENTS}
+                  size={200}
+                  stroke={14}
+                />
               </div>
               <p className="mt-8 text-sm font-semibold uppercase tracking-eyebrow text-[#c1ff00]">
-                High Performer
+                Strong Alignment
               </p>
-              <p className="mt-4 text-xl font-bold leading-snug text-white">
-                Your recovery habits are limiting your performance more than your workouts.
+              <p className="mt-2 text-xs text-white/40">Goal · Recover Faster</p>
+              <p className="mt-5 text-xl font-bold leading-snug text-white">
+                Recovery is currently the biggest behavior limiting your progress.
               </p>
               <p className="mt-4 text-sm leading-relaxed text-white/55">
-                Rehydrate with sodium within 60 minutes after every hard session this week, even when you don't feel thirsty.
+                First Clutch Move: Rehydrate with sodium within 60 minutes after every hard session this
+                week, even when you don't feel thirsty.
               </p>
             </div>
           </Reveal>
