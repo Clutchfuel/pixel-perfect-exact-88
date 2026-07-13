@@ -5,18 +5,8 @@ import { Reveal } from "@/components/Reveal";
 import { RotatingWord } from "@/components/RotatingWord";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
+import { ATHLETE_TYPES } from "@/data/athlete-types";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
-import athleteRunning from "@/assets/sport-running.jpg";
-import athleteBasketball from "@/assets/sport-basketball.jpg";
-import athleteParent from "@/assets/community-parent.jpg";
-import athleteHyrox from "@/assets/sport-hyrox.jpg";
-
-const COMMUNITY_ROTATIONS = [
-  "Runners",
-  "Hoopers",
-  "Busy Parents",
-  "HYROX Competitors",
-] as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -192,15 +182,18 @@ function HomePage() {
           <Reveal delay={0.08}>
             <div className="card-elevated p-8">
               <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Sample insight</p>
-              <p className="mt-3 text-2xl font-bold leading-snug">Your biggest opportunity: Hydration Timing</p>
+              <p className="mt-3 text-2xl font-bold leading-snug">
+                Your recovery habits are limiting your performance more than your workouts.
+              </p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Drink electrolytes 15 to 30 minutes before training, not just during. Try it for your next 3 sessions.
+                Rehydrate with sodium within 60 minutes after every hard session this week — even when you don't feel thirsty.
               </p>
               <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
                 <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
                 <span className="text-xl font-bold">72</span>
                 <span className="text-xs text-muted-foreground/70">/ 100</span>
               </div>
+              <p className="mt-3 text-xs font-semibold uppercase tracking-eyebrow text-electric-dark">High Performer</p>
             </div>
           </Reveal>
         </div>
@@ -233,48 +226,25 @@ function HomePage() {
 
       {/* Community preview */}
       <section className="border-t border-black/5 bg-muted">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="mx-auto w-full max-w-6xl px-5 py-24 text-center sm:px-8 sm:py-32">
           <Reveal>
             <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
-            <h2 className="mt-4 max-w-4xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Built for{" "}
-              <RotatingWord words={COMMUNITY_ROTATIONS} />{" "}
-              athletes.
+            <h2 className="mx-auto mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
+              Built for everyday athletes.
             </h2>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Anyone chasing better, not perfect.
+            <p className="mx-auto mt-8 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+              <RotatingWord words={ATHLETE_TYPES} className="text-electric-dark" />
             </p>
-          </Reveal>
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { label: "Runners", image: athleteRunning },
-              { label: "Hoopers", image: athleteBasketball },
-              { label: "Busy parents", image: athleteParent },
-              { label: "HYROX", image: athleteHyrox },
-            ].map((item, i) => (
-              <Reveal key={item.label} delay={i * 0.05}>
-                <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/10 bg-foreground">
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
-                  <div className="relative flex h-full flex-col justify-end p-6 text-background">
-                    <p className="text-xs uppercase tracking-eyebrow text-background/70">Athlete</p>
-                    <p className="mt-1 text-2xl font-bold">{item.label}</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-10">
-            <Link to="/community" className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
-              Meet the community <ArrowRight className="h-4 w-4" />
+            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
+              Same assessment. Different sports. One habit worth fixing next.
+            </p>
+            <Link
+              to="/clutch-score"
+              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
+            >
+              Take the Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
