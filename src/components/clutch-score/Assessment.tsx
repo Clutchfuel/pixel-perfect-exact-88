@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { supabase } from "@/integrations/supabase/client";
-import { ScoreRing } from "@/components/clutch-score/ScoreRing";
+import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
 
 function generateSessionToken(): string {
@@ -134,57 +134,95 @@ function goalLabel(id: GoalId | null): string {
 }
 
 function scoreStatus(score: number): string {
-  if (score >= 85) return "Elite";
-  if (score >= 70) return "Strong Foundation";
+  if (score >= 85) return "Elite Alignment";
+  if (score >= 70) return "Strong Alignment";
   if (score >= 55) return "Building Momentum";
-  return "Opportunity to Improve";
+  return "Room to Align";
 }
 
-function personalizedHeadline(score: number, opportunity: Opportunity): string {
-  if (score >= 85) return "You're closer than you think.";
-  if (score >= 70) return "Your performance starts here.";
-  if (opportunity === "Consistency") return "You're closer than you think.";
-  if (opportunity === "Recovery & Cramping") return "Here's what's holding you back.";
-  return "Your biggest opportunity.";
+/** Maps scoring opportunity → the behavior pillar users see. */
+function limitingBehavior(opportunity: Opportunity): string {
+  if (opportunity === "Hydration Timing") return "Hydration";
+  if (opportunity === "Electrolyte Use") return "Nutrition";
+  if (opportunity === "Recovery & Cramping") return "Recovery";
+  return "Consistency";
 }
 
-const OPPORTUNITY_BLURB: Record<Opportunity, string> = {
-  "Hydration Timing":
-    "The window before you train is where small changes stack the fastest. Timing is the lever.",
-  "Electrolyte Use":
-    "Sodium and fluid during sessions are likely your highest-leverage habit right now.",
-  "Recovery & Cramping":
-    "What you do in the hour after training is shaping how tomorrow feels.",
-  Consistency:
-    "You do not need more intensity. You need the same smart habit, every session.",
+type BehaviorContribution = {
+  id: string;
+  color: string;
+  level: number;
+  fill: number;
 };
-
-const COMING_SOON = [
-  "Personalized Clutch Moves",
-  "Smarter Hydration Guidance",
-  "Performance Challenges",
-  "Everyday Athlete Community",
-  "Progress Tracking",
-] as const;
 
 function adjustedScores(answers: Answer[]): number[] {
   return answers.map((a, i) => (i < 2 ? 4 - pts(a) : pts(a)));
 }
 
-function toPercent(raw: number): number {
-  return Math.max(8, Math.min(100, Math.round((raw / 4) * 100)));
+function toLevel(raw: number): number {
+  return Math.max(0, Math.min(5, Math.round((raw / 4) * 5)));
 }
 
-function habitBreakdown(answers: Answer[]): { label: string; value: number }[] {
+/** Behavior contributions for the goal-alignment model (not health grades). */
+function behaviorContributions(
+  answers: Answer[],
+  opportunity?: Opportunity,
+): BehaviorContribution[] {
   const a = adjustedScores(answers);
   const mean = (...vals: number[]) => vals.reduce((s, v) => s + v, 0) / vals.length;
-  return [
-    { label: "Hydration", value: toPercent(mean(a[1], a[2], a[3])) },
-    { label: "Recovery", value: toPercent(mean(a[0], a[4])) },
-    { label: "Sleep", value: toPercent(mean(a[4], mean(...a))) },
-    { label: "Nutrition", value: toPercent(a[2]) },
-    { label: "Mindset", value: toPercent(mean(...a)) },
+
+  const hydration = mean(a[1], a[3]);
+  const recovery = mean(a[0], a[4]);
+  const training = mean(a[3], a[4]);
+  const nutrition = a[2];
+  const consistency = mean(...a);
+
+  const raw: BehaviorContribution[] = [
+    { id: "Hydration", color: "#c1ff00", level: toLevel(hydration), fill: hydration / 4 },
+    { id: "Recovery", color: "#f5c542", level: toLevel(recovery), fill: recovery / 4 },
+    { id: "Training", color: "#4da3ff", level: toLevel(training), fill: training / 4 },
+    { id: "Nutrition", color: "#a78bfa", level: toLevel(nutrition), fill: nutrition / 4 },
+    { id: "Consistency", color: "#d4d4d4", level: toLevel(consistency), fill: consistency / 4 },
   ];
+
+  // Keep the scored opportunity visually lowest so the ring matches the story.
+  if (opportunity) {
+    const focus = limitingBehavior(opportunity);
+    const focused = raw.find((b) => b.id === focus);
+    if (focused) {
+      const othersMin = Math.min(...raw.filter((b) => b.id !== focus).map((b) => b.fill));
+      if (focused.fill >= othersMin) {
+        focused.fill = Math.max(0.12, othersMin - 0.18);
+        focused.level = Math.max(1, Math.min(focused.level, Math.round(focused.fill * 5)));
+      }
+    }
+  }
+
+  return raw;
+}
+
+function ContributionDots({
+  level,
+  color,
+  empty = "rgba(255,255,255,0.15)",
+}: {
+  level: number;
+  color: string;
+  empty?: string;
+}) {
+  return (
+    <span className="inline-flex gap-1" aria-label={`${level} of 5`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <span
+          key={i}
+          className="h-2.5 w-2.5 rounded-full"
+          style={{
+            backgroundColor: i < level ? color : empty,
+          }}
+        />
+      ))}
+    </span>
+  );
 }
 
 function computeResult(answers: Answer[], goal: GoalId | null) {
@@ -554,35 +592,6 @@ function FadeIn({
   );
 }
 
-function HabitBar({ label, value, delay }: { label: string; value: number; delay: number }) {
-  const reduce = useReducedMotion();
-  const [width, setWidth] = useState(reduce ? value : 0);
-
-  useEffect(() => {
-    if (reduce) {
-      setWidth(value);
-      return;
-    }
-    const id = window.setTimeout(() => setWidth(value), 120 + delay * 1000);
-    return () => window.clearTimeout(id);
-  }, [value, delay, reduce]);
-
-  return (
-    <div>
-      <div className="mb-2 flex items-baseline justify-between gap-3">
-        <span className="text-sm font-medium text-foreground">{label}</span>
-        <span className="text-sm tabular-nums text-muted-foreground">{value}</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-black/[0.08]">
-        <div
-          className="h-full rounded-full bg-electric transition-[width] duration-700 ease-out"
-          style={{ width: `${width}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
 function Result({
   score,
   opportunity,
@@ -601,10 +610,9 @@ function Result({
   onRetake: () => void;
 }) {
   const status = scoreStatus(score);
-  const headline = personalizedHeadline(score, opportunity);
-  const habits = habitBreakdown(answers);
-  const target = Math.min(100, score + 11);
-  const gap = target - score;
+  const behaviors = behaviorContributions(answers, opportunity);
+  const limiting = limitingBehavior(opportunity);
+  const goalText = goalLabel(goal) || "your performance goal";
 
   useEffect(() => {
     scrollToAssessment();
@@ -612,109 +620,102 @@ function Result({
 
   return (
     <section className="space-y-10 pb-6 sm:space-y-12">
-      {/* 1. Score hero */}
+      {/* Score hero — segmented alignment ring */}
       <FadeIn>
         <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-16">
-          <ScoreRing score={score} size={260} stroke={18} />
+          <SegmentedClutchRing score={score} segments={behaviors} />
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-[#c1ff00]">
             {status}
           </p>
+          <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-white/45">
+            How well your current behaviors align with the goal you selected.
+          </p>
         </div>
       </FadeIn>
 
-      {/* 2. Personalized headline */}
+      {/* Your Goal */}
       <FadeIn delay={0.08}>
-        <h2 className="text-center text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-          {headline}
-        </h2>
+        <div className="text-center">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Your Goal
+          </p>
+          <h2 className="mt-3 text-balance text-2xl font-extrabold tracking-tight sm:text-3xl">
+            {goalText}
+          </h2>
+        </div>
       </FadeIn>
 
-      {/* 3. Biggest opportunity */}
+      {/* What's Holding You Back */}
       <FadeIn delay={0.12}>
-        <div className="rounded-[2rem] border border-black/10 bg-white p-8 shadow-card sm:p-10">
+        <div className="rounded-[2rem] border border-black/10 bg-white p-8 sm:p-10">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-electric-dark">
-            Your Biggest Opportunity
+            What's Holding You Back
           </p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">{opportunity}</h3>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {OPPORTUNITY_BLURB[opportunity]}
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">{limiting}</h3>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {limiting} is currently the biggest behavior limiting your progress toward{" "}
+            <span className="text-foreground">{goalText.toLowerCase()}</span>.
           </p>
         </div>
       </FadeIn>
 
-      {/* 4. Habit breakdown */}
+      {/* How Your Score Was Built */}
       <FadeIn delay={0.16}>
         <div className="rounded-[2rem] border border-black/10 bg-white p-8 sm:p-10">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Habit snapshot
+            How Your Score Was Built
           </p>
-          <div className="mt-8 space-y-5">
-            {habits.map((h, i) => (
-              <HabitBar key={h.label} label={h.label} value={h.value} delay={0.2 + i * 0.06} />
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
+            Your Clutch Score reflects how your current behaviors support the goal you selected.
+          </p>
+          <ul className="mt-8 space-y-4">
+            {behaviors.map((b) => (
+              <li key={b.id} className="flex items-center justify-between gap-4">
+                <span className="flex items-center gap-3 text-sm font-semibold text-foreground">
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: b.color }}
+                    aria-hidden
+                  />
+                  {b.id}
+                </span>
+                <ContributionDots
+                  level={b.level}
+                  color={b.color}
+                  empty="rgba(0,0,0,0.12)"
+                />
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </FadeIn>
 
-      {/* 5. First Clutch Move */}
+      {/* First Clutch Move */}
       <FadeIn delay={0.2}>
-        <div className="rounded-[2rem] border border-[#c1ff00]/40 bg-[#070707] p-8 text-white sm:p-10">
+        <div className="rounded-[2rem] border border-[#c1ff00]/35 bg-[#070707] p-8 text-white sm:p-10">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#c1ff00]">
-            Your First Clutch Move
+            First Clutch Move
           </p>
-          {goal && (
-            <p className="mt-3 text-sm text-white/45">
-              Built for · {goalLabel(goal)}
-            </p>
-          )}
           <p className="mt-5 text-xl font-semibold leading-snug sm:text-2xl">{nextStep}</p>
-          <p className="mt-6 inline-flex items-center rounded-full border border-[#c1ff00]/30 bg-[#c1ff00]/10 px-4 py-2 text-sm font-semibold text-[#c1ff00]">
-            +3 Clutch Score potential
-          </p>
-          <p className="mt-3 text-sm text-white/45">Try it in the next 24 hours.</p>
+          <p className="mt-4 text-sm text-white/45">One action for the next 24 hours.</p>
         </div>
       </FadeIn>
 
-      {/* 6. Explain the score */}
+      {/* Why This Matters */}
       <FadeIn delay={0.24}>
-        <p className="mx-auto max-w-xl text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
-          The Clutch Score is not a measure of talent. It is a snapshot of the daily habits that
-          influence your performance. Small improvements made consistently lead to better results.
-        </p>
-      </FadeIn>
-
-      {/* 7. Progress potential */}
-      <FadeIn delay={0.28}>
-        <div className="rounded-[2rem] border border-black/10 bg-muted/60 px-6 py-10 text-center sm:px-10">
-          <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Current</p>
-              <p className="mt-2 text-5xl font-extrabold tabular-nums tracking-tight">{score}</p>
-            </div>
-            <p className="pb-3 text-2xl text-muted-foreground/50" aria-hidden>
-              →
-            </p>
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-electric-dark">Target</p>
-              <p className="mt-2 text-5xl font-extrabold tabular-nums tracking-tight text-electric-dark">
-                {target}
-              </p>
-            </div>
-          </div>
-          <p className="mt-8 text-base font-medium text-foreground">
-            Only {gap} point{gap === 1 ? "" : "s"} away.
+        <div className="text-center">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Why This Matters
           </p>
-          <div className="mx-auto mt-6 h-2 max-w-xs overflow-hidden rounded-full bg-black/[0.08]">
-            <div
-              className="h-full rounded-full bg-electric"
-              style={{ width: `${Math.min(100, (score / target) * 100)}%` }}
-            />
-          </div>
+          <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Improving one behavior consistently often creates improvements across multiple areas of
+            performance.
+          </p>
         </div>
       </FadeIn>
 
-      {/* 8. Keep Improving CTA */}
-      <FadeIn delay={0.32}>
+      {/* Keep improving */}
+      <FadeIn delay={0.28}>
         <EmailCapture
           answers={answers}
           goal={goal}
@@ -725,42 +726,12 @@ function Result({
         />
       </FadeIn>
 
-      {/* 9. What's coming */}
-      <FadeIn delay={0.36}>
-        <div>
-          <p className="text-center text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Coming Soon
-          </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {COMING_SOON.map((item) => (
-              <div
-                key={item}
-                className="rounded-2xl border border-black/10 bg-white px-5 py-5 text-sm font-semibold tracking-tight text-foreground"
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeIn>
-
-      {/* 10. Brand close + retake */}
-      <FadeIn delay={0.4}>
-        <div className="border-t border-black/10 pt-12 text-center">
-          <h3 className="text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-            Your next Clutch Moment starts today.
-          </h3>
-          <p className="mx-auto mt-6 max-w-sm text-base leading-relaxed text-muted-foreground">
-            One small habit.
-            <br />
-            One better performance.
-            <br />
-            One step closer to your best.
-          </p>
+      <FadeIn delay={0.32}>
+        <div className="text-center">
           <button
             type="button"
             onClick={onRetake}
-            className="mt-10 text-sm font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
+            className="text-sm font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
           >
             Retake Assessment
           </button>

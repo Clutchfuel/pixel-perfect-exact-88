@@ -3,13 +3,11 @@ import { useReducedMotion } from "motion/react";
 
 type ScoreRingProps = {
   score: number;
-  /** Ring diameter in px. Default 240. */
   size?: number;
-  /** Ring stroke width in px. Default 16. */
   stroke?: number;
 };
 
-/** Animated neon Clutch Score ring — shared across assessment results and marketing samples. */
+/** Solid animated Clutch Score ring — used in marketing samples. */
 export function ScoreRing({ score, size = 240, stroke = 16 }: ScoreRingProps) {
   const reduce = useReducedMotion();
   const r = (size - stroke) / 2;
@@ -99,6 +97,134 @@ export function ScoreRing({ score, size = 240, stroke = 16 }: ScoreRingProps) {
           Clutch Score
         </span>
       </div>
+    </div>
+  );
+}
+
+export type BehaviorSegment = {
+  id: string;
+  color: string;
+  /** 0–1 how filled this segment should be */
+  fill: number;
+};
+
+type SegmentedRingProps = {
+  score: number;
+  segments: BehaviorSegment[];
+  size?: number;
+  stroke?: number;
+  /** When false, only the behavior segments animate (no center score). */
+  showScore?: boolean;
+};
+
+/** Five-behavior segmented ring for goal-alignment Clutch Score results. */
+export function SegmentedClutchRing({
+  score,
+  segments,
+  size = 260,
+  stroke = 18,
+  showScore = true,
+}: SegmentedRingProps) {
+  const reduce = useReducedMotion();
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const gap = c * 0.02;
+  const usable = c - gap * segments.length;
+  const segmentLen = usable / Math.max(1, segments.length);
+
+  const [display, setDisplay] = useState(0);
+  const [progress, setProgress] = useState(reduce ? 1 : 0);
+
+  useEffect(() => {
+    if (reduce) {
+      setDisplay(score);
+      setProgress(1);
+      return;
+    }
+
+    const duration = 1100;
+    const start = performance.now();
+    let frame = 0;
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplay(Math.round(score * eased));
+      setProgress(eased);
+      if (t < 1) frame = window.requestAnimationFrame(tick);
+      else {
+        setDisplay(score);
+        setProgress(1);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [score, reduce]);
+
+  let cursor = gap / 2;
+
+  return (
+    <div className="relative mx-auto" style={{ width: size, height: size }}>
+      <div
+        className="pointer-events-none absolute inset-[-18%] rounded-full opacity-60"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(193,255,0,0.16) 0%, transparent 65%)",
+        }}
+        aria-hidden
+      />
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+        {segments.map((seg) => {
+          const start = cursor;
+          cursor += segmentLen + gap;
+          const filled = Math.max(0.04, Math.min(1, seg.fill)) * progress * segmentLen;
+          const track = segmentLen;
+          return (
+            <g key={seg.id}>
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={r}
+                fill="none"
+                stroke="rgba(255,255,255,0.1)"
+                strokeWidth={stroke}
+                strokeLinecap="round"
+                strokeDasharray={`${track} ${c - track}`}
+                strokeDashoffset={-start}
+              />
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={r}
+                fill="none"
+                stroke={seg.color}
+                strokeWidth={stroke}
+                strokeLinecap="round"
+                strokeDasharray={`${filled} ${c - filled}`}
+                strokeDashoffset={-start}
+                style={{ filter: `drop-shadow(0 0 6px ${seg.color}66)` }}
+              />
+            </g>
+          );
+        })}
+      </svg>
+      {showScore ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-6xl font-extrabold tracking-tight text-white tabular-nums sm:text-7xl">
+            {display}
+          </span>
+          <span className="mt-1 text-[11px] font-medium uppercase tracking-[0.28em] text-white/45">
+            Clutch Score
+          </span>
+        </div>
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-white/50">
+            Behavior Mix
+          </span>
+        </div>
+      )}
     </div>
   );
 }
