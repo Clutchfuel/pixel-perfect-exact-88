@@ -102,8 +102,22 @@ export function SiteFooter() {
             © {new Date().getFullYear()} ClutchFuel. All rights reserved.
           </p>
           <div className="flex items-center gap-5 text-xs text-background/70">
-            <a href="#" className="hover:text-background">Instagram</a>
-            <a href="#" className="hover:text-background">YouTube</a>
+            <a
+              href="https://www.instagram.com/drinkclutchfuel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-background"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://www.tiktok.com/@drinkclutchfuel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-background"
+            >
+              TikTok
+            </a>
           </div>
         </div>
       </div>

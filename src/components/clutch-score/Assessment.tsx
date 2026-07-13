@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { submitFeedback } from "@/lib/feedback.functions";
@@ -63,7 +63,15 @@ const QUESTIONS = [
   "How often do you recover well after intense sessions?",
 ] as const;
 
-const SOURCES = ["Run Club", "Basketball", "HYROX", "Instagram", "Friend", "Other"];
+const SOURCES = [
+  "Run Club",
+  "Event",
+  "Instagram",
+  "TikTok",
+  "Google",
+  "Friend / Word of Mouth",
+  "Other",
+] as const;
 
 const pts = (a: Answer) => ANSWERS.indexOf(a);
 const isOftenOrAlways = (a: Answer) => a === "Often" || a === "Always";
@@ -248,37 +256,75 @@ export function Assessment() {
 /* ---------- Steps ---------- */
 
 function StepHeader({
-  eyebrow,
   step,
   total,
   onBack,
+  fillWithinStep = 1,
 }: {
-  eyebrow: string;
   step: number;
   total: number;
   onBack?: () => void;
+  /** 0–1 fill of the current segment (e.g. habit progress inside step 3). */
+  fillWithinStep?: number;
 }) {
-  const progress = (step / total) * 100;
   return (
     <div className="mb-8">
-      <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-eyebrow text-muted-foreground/80">
-        <span>
-          {eyebrow} · Step {step} of {total}
-        </span>
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <div
+          className="flex flex-1 gap-1.5"
+          role="progressbar"
+          aria-valuemin={1}
+          aria-valuemax={total}
+          aria-valuenow={step}
+          aria-label={`Step ${step} of ${total}`}
+        >
+          {Array.from({ length: total }, (_, i) => {
+            const n = i + 1;
+            const complete = n < step;
+            const current = n === step;
+            const width = complete ? "100%" : current ? `${Math.max(8, fillWithinStep * 100)}%` : "0%";
+            return (
+              <div key={n} className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/[0.10]">
+                <div
+                  className="h-full rounded-full bg-electric transition-all duration-300"
+                  style={{ width }}
+                />
+              </div>
+            );
+          })}
+        </div>
         {onBack && (
-          <button onClick={onBack} className="hover:text-foreground" type="button">
+          <button
+            onClick={onBack}
+            className="shrink-0 text-xs uppercase tracking-eyebrow text-muted-foreground/80 hover:text-foreground"
+            type="button"
+          >
             ← Back
           </button>
         )}
       </div>
-      <div className="h-1 w-full overflow-hidden rounded-full bg-black/[0.10]">
-        <div
-          className="h-full bg-electric transition-all duration-300"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
     </div>
   );
+}
+
+function useSelectThenAdvance<T>(onSelect: (value: T) => void, delayMs = 180) {
+  const [pending, setPending] = useState<T | null>(null);
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  useEffect(() => {
+    if (pending === null) return;
+    const id = window.setTimeout(() => {
+      onSelectRef.current(pending);
+      setPending(null);
+    }, delayMs);
+    return () => window.clearTimeout(id);
+  }, [pending, delayMs]);
+
+  return {
+    selected: pending,
+    choose: (value: T) => setPending(value),
+  };
 }
 
 function GoalStep({
@@ -288,9 +334,11 @@ function GoalStep({
   selected: GoalId | null;
   onSelect: (g: GoalId) => void;
 }) {
+  const { selected: pending, choose } = useSelectThenAdvance(onSelect);
+
   return (
     <section>
-      <StepHeader eyebrow="Your goal" step={1} total={3} />
+      <StepHeader step={1} total={3} />
       <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
         Let's start with what matters to you
       </p>
@@ -301,17 +349,18 @@ function GoalStep({
         Pick the one that fits best. We'll build your insight around it.
       </p>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {GOALS.map((g) => {
-          const active = selected === g.id;
+          const active = selected === g.id || pending === g.id;
           return (
             <button
               key={g.id}
               type="button"
-              onClick={() => onSelect(g.id)}
-              className={`w-full rounded-2xl border px-5 py-4 text-left text-base font-semibold transition active:scale-[0.99] ${
+              onClick={() => choose(g.id)}
+              disabled={pending !== null}
+              className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
                 active
-                  ? "border-electric bg-electric text-black"
+                  ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
             >
@@ -335,9 +384,11 @@ function AthleteStep({
   onSelect: (a: AthleteType) => void;
   onBack: () => void;
 }) {
+  const { selected: pending, choose } = useSelectThenAdvance(onSelect);
+
   return (
     <section>
-      <StepHeader eyebrow="Your sport" step={2} total={3} onBack={onBack} />
+      <StepHeader step={2} total={3} onBack={onBack} />
       {goal && (
         <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
           Goal · {goalLabel(goal)}
@@ -350,17 +401,18 @@ function AthleteStep({
         This shapes how we read your answers on the next step.
       </p>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {ATHLETE_TYPES.map((t) => {
-          const active = selected === t;
+          const active = selected === t || pending === t;
           return (
             <button
               key={t}
               type="button"
-              onClick={() => onSelect(t)}
-              className={`w-full rounded-2xl border px-5 py-4 text-left text-base font-semibold transition active:scale-[0.99] ${
+              onClick={() => choose(t)}
+              disabled={pending !== null}
+              className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
                 active
-                  ? "border-electric bg-electric text-black"
+                  ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
             >
@@ -384,27 +436,13 @@ function Quiz({
   onAnswer: (a: Answer) => void;
   onBack: () => void;
 }) {
-  const progress = ((index + 1) / QUESTIONS.length) * 100;
   const selected = answers[index];
+  const { selected: pending, choose } = useSelectThenAdvance(onAnswer);
+  const fillWithinStep = (index + 1) / QUESTIONS.length;
 
   return (
     <section>
-      <div className="mb-8">
-        <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-eyebrow text-muted-foreground/80">
-          <span>
-            Step 3 · Habit {index + 1} of {QUESTIONS.length}
-          </span>
-          <button onClick={onBack} className="hover:text-foreground" type="button">
-            ← Back
-          </button>
-        </div>
-        <div className="h-1 w-full overflow-hidden rounded-full bg-black/[0.10]">
-          <div
-            className="h-full bg-electric transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+      <StepHeader step={3} total={3} onBack={onBack} fillWithinStep={fillWithinStep} />
 
       <h2 className="text-balance text-3xl font-bold leading-tight sm:text-4xl">
         {QUESTIONS[index]}
@@ -412,14 +450,15 @@ function Quiz({
 
       <div className="mt-8 flex flex-col gap-3">
         {ANSWERS.map((a) => {
-          const isSelected = selected === a;
+          const isSelected = selected === a || pending === a;
           return (
             <button
               key={a}
-              onClick={() => onAnswer(a)}
-              className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
+              onClick={() => choose(a)}
+              disabled={pending !== null}
+              className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
                 isSelected
-                  ? "border-electric bg-electric text-black"
+                  ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
               type="button"
@@ -453,6 +492,7 @@ function EmailCapture({
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [source, setSource] = useState("");
+  const [sourceOther, setSourceOther] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -462,12 +502,16 @@ function EmailCapture({
     const result = computeResult(answers, goal);
     const sessionToken = generateSessionToken();
     const id = generateId();
+    const sourceValue =
+      source === "Other" && sourceOther.trim()
+        ? `Other: ${sourceOther.trim()}`
+        : source || null;
     try {
       const { error } = await supabase.from("assessment_responses").insert({
         id,
         first_name: firstName.trim() || null,
         email: email.trim(),
-        source: source || null,
+        source: sourceValue,
         goal: goal ?? null,
         athlete_type: athleteType ?? null,
         q1: answers[0], q2: answers[1], q3: answers[2], q4: answers[3], q5: answers[4],
@@ -487,13 +531,7 @@ function EmailCapture({
 
   return (
     <section>
-      <button
-        onClick={onBack}
-        type="button"
-        className="mb-6 self-start text-xs uppercase tracking-eyebrow text-muted-foreground/80 transition hover:text-foreground"
-      >
-        ← Back
-      </button>
+      <StepHeader step={3} total={3} onBack={onBack} fillWithinStep={1} />
       <h2 className="text-balance text-4xl font-bold leading-tight sm:text-5xl">
         Your personalized insight is ready
       </h2>
@@ -513,15 +551,42 @@ function EmailCapture({
           placeholder="First name (optional)"
           className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
-        <select
-          value={source} onChange={(e) => setSource(e.target.value)}
-          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground focus:border-electric focus:outline-none"
-        >
-          <option value="">How did you hear about Clutch Score? (optional)</option>
-          {SOURCES.map((s) => (
-            <option key={s} value={s} className="bg-background">{s}</option>
-          ))}
-        </select>
+
+        <div className="pt-2">
+          <p className="text-sm font-semibold text-foreground">
+            How did you hear about us?{" "}
+            <span className="font-normal text-muted-foreground">(optional)</span>
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {SOURCES.map((s) => {
+              const active = source === s;
+              return (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSource((prev) => (prev === s ? "" : s))}
+                  className={`rounded-full border px-3.5 py-2 text-sm font-medium transition ${
+                    active
+                      ? "border-electric bg-electric text-black"
+                      : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30"
+                  }`}
+                >
+                  {s}
+                </button>
+              );
+            })}
+          </div>
+          {source === "Other" && (
+            <input
+              type="text"
+              value={sourceOther}
+              onChange={(e) => setSourceOther(e.target.value)}
+              placeholder="Tell us where (optional)"
+              className="mt-3 w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+            />
+          )}
+        </div>
+
         <button
           type="submit" disabled={submitting}
           className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
@@ -568,29 +633,26 @@ function Result({
 
   return (
     <section>
-      <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
-        {goalText ? `Based on your goal, ${goalText.toLowerCase()}` : "Your biggest opportunity"}
-      </p>
-      <h2 className="mt-3 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-        Your biggest opportunity is {opportunity}.
-      </h2>
-
-      <div className="mt-10">
-        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/70">What to do next</p>
-        <p className="mt-3 text-xl leading-relaxed text-foreground">{nextStep}</p>
+      <div className="card-elevated p-8 sm:p-10">
+        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">
+          {goalText ? `Based on your goal · ${goalText}` : "Your insight"}
+        </p>
+        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
+          Your biggest opportunity: {opportunity}
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{nextStep}</p>
+        <div className="mt-6 inline-flex items-baseline gap-3 rounded-2xl border border-black/10 bg-black/[0.03] px-4 py-3">
+          <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
+          <span className="text-xl font-bold text-foreground">{score}</span>
+          <span className="text-xs text-muted-foreground/70">/ 100</span>
+        </div>
       </div>
 
-      <div className="mt-10 inline-flex items-baseline gap-3 self-start rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4">
-        <span className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Clutch Score</span>
-        <span className="text-2xl font-bold text-foreground">{score}</span>
-        <span className="text-sm text-muted-foreground/70">/ 100</span>
-      </div>
-
-      <p className="mt-10 text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
         Try your next step for the next 2 weeks. We'll check back and see what changed.
       </p>
 
-      <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.02] p-6">
+      <div className="mt-10 rounded-2xl border border-black/10 bg-black/[0.02] p-6">
         {submitted ? (
           <p className="text-center text-sm text-muted-foreground">Thanks, your feedback is recorded.</p>
         ) : (

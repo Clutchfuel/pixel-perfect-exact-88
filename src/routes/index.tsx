@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { RotatingWord } from "@/components/RotatingWord";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
@@ -10,8 +11,12 @@ import athleteBasketball from "@/assets/sport-basketball.jpg";
 import athleteParent from "@/assets/community-parent.jpg";
 import athleteHyrox from "@/assets/sport-hyrox.jpg";
 
-
-
+const COMMUNITY_ROTATIONS = [
+  "Runners",
+  "Hoopers",
+  "Busy Parents",
+  "HYROX Competitors",
+] as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -231,11 +236,13 @@ function HomePage() {
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
             <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Community</p>
-            <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Built for everyday athletes.
+            <h2 className="mt-4 max-w-4xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
+              Built for{" "}
+              <RotatingWord words={COMMUNITY_ROTATIONS} />{" "}
+              athletes.
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Runners. Hoopers. Busy parents. HYROX competitors. Anyone chasing better, not perfect.
+              Anyone chasing better, not perfect.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

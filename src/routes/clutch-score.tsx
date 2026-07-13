@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Clock, FlaskConical, Hand, Target } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Assessment } from "@/components/clutch-score/Assessment";
 import { Reveal } from "@/components/Reveal";
@@ -19,6 +20,13 @@ export const Route = createFileRoute("/clutch-score")({
   component: ClutchScorePage,
 });
 
+const TRUST_CHIPS = [
+  { label: "60 seconds", icon: Clock },
+  { label: "Personalized", icon: Target },
+  { label: "Science-informed", icon: FlaskConical },
+  { label: "No equipment", icon: Hand },
+] as const;
+
 function ClutchScorePage() {
   return (
     <PageShell showStickyCta={false}>
@@ -29,16 +37,17 @@ function ClutchScorePage() {
             <h1 className="mt-4 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
               What's Your Clutch Score?
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Personalized. Science-informed. No equipment. Immediate insight.
-            </p>
-            <div className="mx-auto mt-8 grid max-w-xl grid-cols-2 gap-3 text-xs uppercase tracking-eyebrow text-muted-foreground sm:grid-cols-4">
-              {["60 seconds", "Personalized", "Science-informed", "No equipment"].map((f) => (
-                <div key={f} className="rounded-full border border-black/10 bg-black/[0.03] px-3 py-2">
-                  {f}
-                </div>
+            <ul className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {TRUST_CHIPS.map(({ label, icon: Icon }) => (
+                <li
+                  key={label}
+                  className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.03] px-3.5 py-2 text-xs font-medium uppercase tracking-eyebrow text-muted-foreground"
+                >
+                  <Icon className="h-3.5 w-3.5 text-electric-dark" aria-hidden />
+                  {label}
+                </li>
               ))}
-            </div>
+            </ul>
           </Reveal>
         </div>
       </section>

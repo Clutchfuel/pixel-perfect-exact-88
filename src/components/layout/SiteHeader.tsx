@@ -56,12 +56,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/clutch-score"
-            className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
-          >
-            Take the Clutch Score
-          </Link>
+          {!pathname.startsWith("/clutch-score") && (
+            <Link
+              to="/clutch-score"
+              className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
+            >
+              Take the Clutch Score
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -91,12 +93,14 @@ export function SiteHeader() {
                 </Link>
               );
             })}
-            <Link
-              to="/clutch-score"
-              className="mt-3 rounded-full bg-electric px-5 py-3 text-center text-sm font-semibold text-black"
-            >
-              Take the Clutch Score
-            </Link>
+            {!pathname.startsWith("/clutch-score") && (
+              <Link
+                to="/clutch-score"
+                className="mt-3 rounded-full bg-electric px-5 py-3 text-center text-sm font-semibold text-black"
+              >
+                Take the Clutch Score
+              </Link>
+            )}
           </div>
         </div>
       )}
