@@ -15,11 +15,9 @@ const COLUMNS = [
   {
     title: "Company",
     links: [
-      { to: "/mission", label: "Mission" },
+      { to: "/about", label: "Our Mission" },
       { to: "/promise", label: "Our Promise" },
       { to: "/partnerships", label: "Partnerships" },
-      { to: "/about", label: "Founder Story" },
-      { to: "/community", label: "Community" },
     ],
   },
   {
@@ -102,6 +100,12 @@ export function SiteFooter() {
             © {new Date().getFullYear()} ClutchFuel. All rights reserved.
           </p>
           <div className="flex items-center gap-5 text-xs text-background/70">
+            <a
+              href="mailto:partners@clutchfuel.com"
+              className="hover:text-background"
+            >
+              Contact
+            </a>
             <a
               href="https://www.instagram.com/drinkclutchfuel"
               target="_blank"

@@ -4,12 +4,16 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const NAV = [
-  { to: "/mission", label: "Mission" },
+  { to: "/", label: "Home", exact: true },
   { to: "/clutch-score", label: "Clutch Score" },
-  { to: "/partnerships", label: "Partnerships" },
-  { to: "/promise", label: "Our Promise" },
   { to: "/performance-hub", label: "Insights" },
+  { to: "/about", label: "Our Mission" },
 ] as const;
+
+function isActive(pathname: string, to: string, exact?: boolean) {
+  if (exact || to === "/") return pathname === "/";
+  return pathname === to || pathname.startsWith(`${to}/`);
+}
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -38,9 +42,9 @@ export function SiteHeader() {
           <Logo size="md" variant="light" />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {NAV.map((item) => {
-            const active = pathname.startsWith(item.to);
+            const active = isActive(pathname, item.to, "exact" in item ? item.exact : false);
             return (
               <Link
                 key={item.to}
@@ -56,14 +60,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {!pathname.startsWith("/clutch-score") && (
-            <Link
-              to="/clutch-score"
-              className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
-            >
-              Take the Clutch Score
-            </Link>
-          )}
+          <Link
+            to="/clutch-score"
+            className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
+          >
+            Get Your Clutch Score
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -78,30 +80,33 @@ export function SiteHeader() {
 
       {open && (
         <div className="border-t border-white/10 bg-foreground lg:hidden">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6">
+          <nav
+            className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6"
+            aria-label="Mobile"
+          >
             {NAV.map((item) => {
-              const active = pathname.startsWith(item.to);
+              const active = isActive(pathname, item.to, "exact" in item ? item.exact : false);
               return (
                 <Link
                   key={item.to}
                   to={item.to}
                   className={`rounded-xl px-4 py-3 text-base font-medium transition ${
-                    active ? "bg-white/10 text-background" : "text-background/70 hover:bg-white/10 hover:text-background"
+                    active
+                      ? "bg-white/10 text-background"
+                      : "text-background/70 hover:bg-white/10 hover:text-background"
                   }`}
                 >
                   {item.label}
                 </Link>
               );
             })}
-            {!pathname.startsWith("/clutch-score") && (
-              <Link
-                to="/clutch-score"
-                className="mt-3 rounded-full bg-electric px-5 py-3 text-center text-sm font-semibold text-black"
-              >
-                Take the Clutch Score
-              </Link>
-            )}
-          </div>
+            <Link
+              to="/clutch-score"
+              className="mt-4 w-full rounded-full bg-electric px-5 py-3.5 text-center text-sm font-semibold text-black"
+            >
+              Get Your Clutch Score
+            </Link>
+          </nav>
         </div>
       )}
     </header>

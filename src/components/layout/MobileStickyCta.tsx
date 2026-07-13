@@ -7,7 +7,7 @@ export function MobileStickyCta() {
         to="/clutch-score"
         className="pointer-events-auto w-full max-w-sm rounded-full bg-electric px-6 py-4 text-center text-sm font-semibold text-black shadow-lg electric-glow transition hover:bg-electric-dark"
       >
-        Take the Clutch Score
+        Get Your Clutch Score
       </Link>
     </div>
   );

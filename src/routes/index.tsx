@@ -154,9 +154,21 @@ function HomePage() {
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {[
-              { n: "01", t: "Take the Clutch Score™", c: "Five quick questions. No wearables, no calculations, no equipment." },
-              { n: "02", t: "Get your personalized insight", c: "Learn the biggest opportunity for your current training." },
-              { n: "03", t: "Take one simple action", c: "A single, concrete step to try before your next workout." },
+              {
+                n: "01",
+                t: "Get your Clutch Score™",
+                c: "Share your goal and answer five quick questions. No wearables, no calculations, no equipment.",
+              },
+              {
+                n: "02",
+                t: "See how your behaviors align",
+                c: "Learn how well your current habits support the goal you selected, and what's limiting progress most.",
+              },
+              {
+                n: "03",
+                t: "Take one Clutch Move",
+                c: "A single, concrete step to try before your next workout.",
+              },
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="card-elevated relative h-full overflow-hidden p-8">

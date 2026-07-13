@@ -7,16 +7,16 @@ import founderImage from "@/assets/founder-jamar.png";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "Founder Story: It Started With One Question | ClutchFuel" },
+      { title: "Our Mission: Why ClutchFuel Exists | ClutchFuel" },
       {
         name: "description",
         content:
           "What's holding me back from performing at my best? That question led to ClutchFuel, a place where everyday athletes can understand themselves and make smarter performance decisions.",
       },
-      { property: "og:title", content: "Founder Story: It Started With One Question | ClutchFuel" },
+      { property: "og:title", content: "Our Mission: Why ClutchFuel Exists | ClutchFuel" },
       {
         property: "og:description",
-        content: "The founder story behind ClutchFuel, built for everyday athletes still asking better questions.",
+        content: "The story behind ClutchFuel, built for everyday athletes still asking better questions.",
       },
     ],
   }),
