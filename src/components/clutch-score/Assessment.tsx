@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { supabase } from "@/integrations/supabase/client";
 import { ScoreRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
@@ -132,8 +133,62 @@ function goalLabel(id: GoalId | null): string {
   return GOALS.find((g) => g.id === id)?.label ?? "";
 }
 
+function scoreStatus(score: number): string {
+  if (score >= 85) return "Elite";
+  if (score >= 70) return "Strong Foundation";
+  if (score >= 55) return "Building Momentum";
+  return "Opportunity to Improve";
+}
+
+function personalizedHeadline(score: number, opportunity: Opportunity): string {
+  if (score >= 85) return "You're closer than you think.";
+  if (score >= 70) return "Your performance starts here.";
+  if (opportunity === "Consistency") return "You're closer than you think.";
+  if (opportunity === "Recovery & Cramping") return "Here's what's holding you back.";
+  return "Your biggest opportunity.";
+}
+
+const OPPORTUNITY_BLURB: Record<Opportunity, string> = {
+  "Hydration Timing":
+    "The window before you train is where small changes stack the fastest. Timing is the lever.",
+  "Electrolyte Use":
+    "Sodium and fluid during sessions are likely your highest-leverage habit right now.",
+  "Recovery & Cramping":
+    "What you do in the hour after training is shaping how tomorrow feels.",
+  Consistency:
+    "You do not need more intensity. You need the same smart habit, every session.",
+};
+
+const COMING_SOON = [
+  "Personalized Clutch Moves",
+  "Smarter Hydration Guidance",
+  "Performance Challenges",
+  "Everyday Athlete Community",
+  "Progress Tracking",
+] as const;
+
+function adjustedScores(answers: Answer[]): number[] {
+  return answers.map((a, i) => (i < 2 ? 4 - pts(a) : pts(a)));
+}
+
+function toPercent(raw: number): number {
+  return Math.max(8, Math.min(100, Math.round((raw / 4) * 100)));
+}
+
+function habitBreakdown(answers: Answer[]): { label: string; value: number }[] {
+  const a = adjustedScores(answers);
+  const mean = (...vals: number[]) => vals.reduce((s, v) => s + v, 0) / vals.length;
+  return [
+    { label: "Hydration", value: toPercent(mean(a[1], a[2], a[3])) },
+    { label: "Recovery", value: toPercent(mean(a[0], a[4])) },
+    { label: "Sleep", value: toPercent(mean(a[4], mean(...a))) },
+    { label: "Nutrition", value: toPercent(a[2]) },
+    { label: "Mindset", value: toPercent(mean(...a)) },
+  ];
+}
+
 function computeResult(answers: Answer[], goal: GoalId | null) {
-  const adjusted = answers.map((a, i) => (i < 2 ? 4 - pts(a) : pts(a)));
+  const adjusted = adjustedScores(answers);
   const sum = adjusted.reduce((s, v) => s + v, 0);
   const clutch_score = Math.min(100, Math.round((sum / 20) * 100) + 10);
   const [q1, , q3, q4, q5] = answers;
@@ -184,7 +239,7 @@ export function Assessment() {
   }, [step.kind]);
 
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div className={`mx-auto w-full ${step.kind === "result" ? "max-w-2xl" : "max-w-xl"}`}>
       {step.kind === "goal" && (
         <GoalStep
           selected={goal}
@@ -245,6 +300,13 @@ export function Assessment() {
           goal={step.goal}
           athleteType={step.athleteType}
           answers={step.answers}
+          onRetake={() => {
+            setGoal(null);
+            setAthleteType(null);
+            setAnswers([null, null, null, null, null]);
+            setStep({ kind: "goal" });
+            scrollToAssessment();
+          }}
         />
       )}
     </div>
@@ -470,6 +532,57 @@ function Quiz({
   );
 }
 
+function FadeIn({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      className={className}
+      initial={reduce ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function HabitBar({ label, value, delay }: { label: string; value: number; delay: number }) {
+  const reduce = useReducedMotion();
+  const [width, setWidth] = useState(reduce ? value : 0);
+
+  useEffect(() => {
+    if (reduce) {
+      setWidth(value);
+      return;
+    }
+    const id = window.setTimeout(() => setWidth(value), 120 + delay * 1000);
+    return () => window.clearTimeout(id);
+  }, [value, delay, reduce]);
+
+  return (
+    <div>
+      <div className="mb-2 flex items-baseline justify-between gap-3">
+        <span className="text-sm font-medium text-foreground">{label}</span>
+        <span className="text-sm tabular-nums text-muted-foreground">{value}</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-black/[0.08]">
+        <div
+          className="h-full rounded-full bg-electric transition-[width] duration-700 ease-out"
+          style={{ width: `${width}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function Result({
   score,
   opportunity,
@@ -477,6 +590,7 @@ function Result({
   goal,
   athleteType,
   answers,
+  onRetake,
 }: {
   score: number;
   opportunity: Opportunity;
@@ -484,48 +598,174 @@ function Result({
   goal: GoalId | null;
   athleteType: AthleteType | null;
   answers: Answer[];
+  onRetake: () => void;
 }) {
+  const status = scoreStatus(score);
+  const headline = personalizedHeadline(score, opportunity);
+  const habits = habitBreakdown(answers);
+  const target = Math.min(100, score + 11);
+  const gap = target - score;
+
   useEffect(() => {
     scrollToAssessment();
   }, []);
 
   return (
-    <section className="space-y-8">
-      <div className="text-center">
-        <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
-          Your biggest opportunity
-        </p>
-        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl md:text-5xl">
-          {opportunity}
-        </h2>
-      </div>
-
-      <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-14">
-        <ScoreRing score={score} />
-      </div>
-
-      <div className="card-elevated p-8 text-center sm:p-10">
-        <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
-          One helpful insight
-        </p>
-        {goal && (
-          <p className="mt-3 text-sm text-muted-foreground">
-            For your goal · <span className="text-foreground">{goalLabel(goal)}</span>
+    <section className="space-y-10 pb-6 sm:space-y-12">
+      {/* 1. Score hero */}
+      <FadeIn>
+        <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-16">
+          <ScoreRing score={score} size={260} stroke={18} />
+          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-[#c1ff00]">
+            {status}
           </p>
-        )}
-        <p className="mx-auto mt-4 max-w-md text-lg font-semibold leading-snug text-foreground sm:text-xl">
-          {nextStep}
-        </p>
-      </div>
+        </div>
+      </FadeIn>
 
-      <EmailCapture
-        answers={answers}
-        goal={goal}
-        athleteType={athleteType}
-        score={score}
-        opportunity={opportunity}
-        nextStep={nextStep}
-      />
+      {/* 2. Personalized headline */}
+      <FadeIn delay={0.08}>
+        <h2 className="text-center text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+          {headline}
+        </h2>
+      </FadeIn>
+
+      {/* 3. Biggest opportunity */}
+      <FadeIn delay={0.12}>
+        <div className="rounded-[2rem] border border-black/10 bg-white p-8 shadow-card sm:p-10">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-electric-dark">
+            Your Biggest Opportunity
+          </p>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">{opportunity}</h3>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {OPPORTUNITY_BLURB[opportunity]}
+          </p>
+        </div>
+      </FadeIn>
+
+      {/* 4. Habit breakdown */}
+      <FadeIn delay={0.16}>
+        <div className="rounded-[2rem] border border-black/10 bg-white p-8 sm:p-10">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Habit snapshot
+          </p>
+          <div className="mt-8 space-y-5">
+            {habits.map((h, i) => (
+              <HabitBar key={h.label} label={h.label} value={h.value} delay={0.2 + i * 0.06} />
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* 5. First Clutch Move */}
+      <FadeIn delay={0.2}>
+        <div className="rounded-[2rem] border border-[#c1ff00]/40 bg-[#070707] p-8 text-white sm:p-10">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#c1ff00]">
+            Your First Clutch Move
+          </p>
+          {goal && (
+            <p className="mt-3 text-sm text-white/45">
+              Built for · {goalLabel(goal)}
+            </p>
+          )}
+          <p className="mt-5 text-xl font-semibold leading-snug sm:text-2xl">{nextStep}</p>
+          <p className="mt-6 inline-flex items-center rounded-full border border-[#c1ff00]/30 bg-[#c1ff00]/10 px-4 py-2 text-sm font-semibold text-[#c1ff00]">
+            +3 Clutch Score potential
+          </p>
+          <p className="mt-3 text-sm text-white/45">Try it in the next 24 hours.</p>
+        </div>
+      </FadeIn>
+
+      {/* 6. Explain the score */}
+      <FadeIn delay={0.24}>
+        <p className="mx-auto max-w-xl text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
+          The Clutch Score is not a measure of talent. It is a snapshot of the daily habits that
+          influence your performance. Small improvements made consistently lead to better results.
+        </p>
+      </FadeIn>
+
+      {/* 7. Progress potential */}
+      <FadeIn delay={0.28}>
+        <div className="rounded-[2rem] border border-black/10 bg-muted/60 px-6 py-10 text-center sm:px-10">
+          <div className="flex flex-wrap items-end justify-center gap-8 sm:gap-14">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Current</p>
+              <p className="mt-2 text-5xl font-extrabold tabular-nums tracking-tight">{score}</p>
+            </div>
+            <p className="pb-3 text-2xl text-muted-foreground/50" aria-hidden>
+              →
+            </p>
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-electric-dark">Target</p>
+              <p className="mt-2 text-5xl font-extrabold tabular-nums tracking-tight text-electric-dark">
+                {target}
+              </p>
+            </div>
+          </div>
+          <p className="mt-8 text-base font-medium text-foreground">
+            Only {gap} point{gap === 1 ? "" : "s"} away.
+          </p>
+          <div className="mx-auto mt-6 h-2 max-w-xs overflow-hidden rounded-full bg-black/[0.08]">
+            <div
+              className="h-full rounded-full bg-electric"
+              style={{ width: `${Math.min(100, (score / target) * 100)}%` }}
+            />
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* 8. Keep Improving CTA */}
+      <FadeIn delay={0.32}>
+        <EmailCapture
+          answers={answers}
+          goal={goal}
+          athleteType={athleteType}
+          score={score}
+          opportunity={opportunity}
+          nextStep={nextStep}
+        />
+      </FadeIn>
+
+      {/* 9. What's coming */}
+      <FadeIn delay={0.36}>
+        <div>
+          <p className="text-center text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Coming Soon
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {COMING_SOON.map((item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-black/10 bg-white px-5 py-5 text-sm font-semibold tracking-tight text-foreground"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* 10. Brand close + retake */}
+      <FadeIn delay={0.4}>
+        <div className="border-t border-black/10 pt-12 text-center">
+          <h3 className="text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+            Your next Clutch Moment starts today.
+          </h3>
+          <p className="mx-auto mt-6 max-w-sm text-base leading-relaxed text-muted-foreground">
+            One small habit.
+            <br />
+            One better performance.
+            <br />
+            One step closer to your best.
+          </p>
+          <button
+            type="button"
+            onClick={onRetake}
+            className="mt-10 text-sm font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
+          >
+            Retake Assessment
+          </button>
+        </div>
+      </FadeIn>
     </section>
   );
 }
@@ -597,33 +837,33 @@ function EmailCapture({
 
   if (saved) {
     return (
-      <div className="rounded-3xl border border-black/10 bg-black/[0.02] px-6 py-10 text-center sm:px-10">
-        <p className="text-xl font-bold text-foreground">You're all set.</p>
-        <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-muted-foreground">
-          Watch for hydration and performance tips in your inbox. We'll check in in two weeks to see
-          how your Clutch Move is landing.
+      <div className="rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center text-white sm:px-10">
+        <p className="text-2xl font-bold">You're in.</p>
+        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/55">
+          Watch for Clutch Moves and performance insights. We'll check in in two weeks to see how
+          your first move is landing.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-3xl border border-black/10 bg-black/[0.02] px-6 py-8 sm:px-10 sm:py-10">
-      <h3 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
-        Want updates and tips?
+    <div className="rounded-[2rem] border border-black/10 bg-white px-6 py-10 sm:px-10 sm:py-12">
+      <h3 className="text-center text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        Keep Improving
       </h3>
-      <p className="mx-auto mt-3 max-w-md text-center text-base leading-relaxed text-muted-foreground">
-        Drop your name and email to get hydration and performance tips. We'll check in in two weeks
-        to see how things are going.
+      <p className="mx-auto mt-4 max-w-md text-center text-base leading-relaxed text-muted-foreground">
+        Get future Clutch Moves, performance insights, new assessment tools, and early access to
+        everything we're building.
       </p>
 
-      <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-4">
+      <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-3">
         <input
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           placeholder="First name"
-          className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
         <input
           type="email"
@@ -631,7 +871,7 @@ function EmailCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
 
         <div className="pt-1">
@@ -649,7 +889,7 @@ function EmailCapture({
                   className={`rounded-full border px-3.5 py-2 text-sm font-medium transition ${
                     active
                       ? "border-electric bg-electric text-black"
-                      : "border-black/10 bg-white text-foreground hover:border-black/30"
+                      : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30"
                   }`}
                 >
                   {s}
@@ -663,7 +903,7 @@ function EmailCapture({
               value={sourceOther}
               onChange={(e) => setSourceOther(e.target.value)}
               placeholder="Tell us where (optional)"
-              className="mt-3 w-full rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+              className="mt-3 w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
             />
           )}
         </div>
@@ -671,9 +911,9 @@ function EmailCapture({
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
+          className="mt-3 w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
-          {submitting ? "Saving..." : "Get tips and updates"}
+          {submitting ? "Saving..." : "Continue My Journey"}
         </button>
       </form>
     </div>
