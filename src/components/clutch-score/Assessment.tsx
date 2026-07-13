@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { submitFeedback } from "@/lib/feedback.functions";
 import { ScoreRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
 
@@ -80,7 +78,6 @@ const isNeverOrRarely = (a: Answer) => a === "Never" || a === "Rarely";
 
 type Opportunity = "Hydration Timing" | "Electrolyte Use" | "Recovery & Cramping" | "Consistency";
 
-/* Goal-aware next-step copy. Falls back to `default` if a goal isn't listed. */
 const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default: string }> = {
   "Hydration Timing": {
     default:
@@ -152,21 +149,28 @@ function computeResult(answers: Answer[], goal: GoalId | null) {
   return { clutch_score, opportunity, next_step };
 }
 
+function scrollToAssessment() {
+  document.getElementById("clutch-assessment")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function emitPhase(phase: string) {
+  window.dispatchEvent(new CustomEvent("clutch-score:phase", { detail: { phase } }));
+}
+
 /* ---------- State machine ---------- */
 
 type Step =
   | { kind: "goal" }
   | { kind: "athlete" }
   | { kind: "quiz"; index: number }
-  | { kind: "email" }
   | {
       kind: "result";
-      id: string;
-      sessionToken: string;
       score: number;
       opportunity: Opportunity;
       nextStep: string;
       goal: GoalId | null;
+      athleteType: AthleteType | null;
+      answers: Answer[];
     };
 
 export function Assessment() {
@@ -174,6 +178,10 @@ export function Assessment() {
   const [goal, setGoal] = useState<GoalId | null>(null);
   const [athleteType, setAthleteType] = useState<AthleteType | null>(null);
   const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
+
+  useEffect(() => {
+    emitPhase(step.kind);
+  }, [step.kind]);
 
   return (
     <div className="mx-auto w-full max-w-xl">
@@ -210,7 +218,16 @@ export function Assessment() {
             if (step.index < QUESTIONS.length - 1) {
               setStep({ kind: "quiz", index: step.index + 1 });
             } else {
-              setStep({ kind: "email" });
+              const result = computeResult(next as Answer[], goal);
+              setStep({
+                kind: "result",
+                score: result.clutch_score,
+                opportunity: result.opportunity,
+                nextStep: result.next_step,
+                goal,
+                athleteType,
+                answers: next as Answer[],
+              });
             }
           }}
           onBack={() => {
@@ -220,34 +237,14 @@ export function Assessment() {
         />
       )}
 
-      {step.kind === "email" && (
-        <EmailCapture
-          answers={answers as Answer[]}
-          goal={goal}
-          athleteType={athleteType}
-          onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
-          onComplete={(id, token, result) =>
-            setStep({
-              kind: "result",
-              id,
-              sessionToken: token,
-              score: result.clutch_score,
-              opportunity: result.opportunity,
-              nextStep: result.next_step,
-              goal,
-            })
-          }
-        />
-      )}
-
       {step.kind === "result" && (
         <Result
-          id={step.id}
-          sessionToken={step.sessionToken}
           score={step.score}
           opportunity={step.opportunity}
           nextStep={step.nextStep}
           goal={step.goal}
+          athleteType={step.athleteType}
+          answers={step.answers}
         />
       )}
     </div>
@@ -265,7 +262,6 @@ function StepHeader({
   step: number;
   total: number;
   onBack?: () => void;
-  /** 0–1 fill of the current segment (e.g. habit progress inside step 3). */
   fillWithinStep?: number;
 }) {
   return (
@@ -382,7 +378,7 @@ function AthleteStep({
 }: {
   goal: GoalId | null;
   selected: AthleteType | null;
-  onSelect: (a: AthleteType) => void;
+  onSelect: (t: AthleteType) => void;
   onBack: () => void;
 }) {
   const { selected: pending, choose } = useSelectThenAdvance(onSelect);
@@ -390,17 +386,18 @@ function AthleteStep({
   return (
     <section>
       <StepHeader step={2} total={3} onBack={onBack} />
+      <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+        A little about how you train
+      </p>
       {goal && (
-        <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
-          Goal · {goalLabel(goal)}
+        <p className="mt-2 text-sm text-muted-foreground">
+          Goal · <span className="text-foreground">{goalLabel(goal)}</span>
         </p>
       )}
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
         What kind of athlete are you?
       </h2>
-      <p className="mt-3 text-base text-muted-foreground">
-        This shapes how we read your answers on the next step.
-      </p>
+      <p className="mt-3 text-base text-muted-foreground">Pick the closest fit.</p>
 
       <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {ATHLETE_TYPES.map((t) => {
@@ -411,9 +408,9 @@ function AthleteStep({
               type="button"
               onClick={() => choose(t)}
               disabled={pending !== null}
-              className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
+              className={`w-full rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
                 active
-                  ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
             >
@@ -437,32 +434,32 @@ function Quiz({
   onAnswer: (a: Answer) => void;
   onBack: () => void;
 }) {
-  const selected = answers[index];
   const { selected: pending, choose } = useSelectThenAdvance(onAnswer);
-  const fillWithinStep = (index + 1) / QUESTIONS.length;
+  const fill = (index + 1) / QUESTIONS.length;
 
   return (
     <section>
-      <StepHeader step={3} total={3} onBack={onBack} fillWithinStep={fillWithinStep} />
-
-      <h2 className="text-balance text-3xl font-bold leading-tight sm:text-4xl">
+      <StepHeader step={3} total={3} onBack={onBack} fillWithinStep={fill} />
+      <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+        Habit {index + 1} of {QUESTIONS.length}
+      </p>
+      <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
         {QUESTIONS[index]}
       </h2>
-
       <div className="mt-8 flex flex-col gap-3">
         {ANSWERS.map((a) => {
-          const isSelected = selected === a || pending === a;
+          const active = answers[index] === a || pending === a;
           return (
             <button
               key={a}
+              type="button"
               onClick={() => choose(a)}
               disabled={pending !== null}
-              className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
-                isSelected
-                  ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
+              className={`w-full rounded-2xl border px-5 py-4 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
+                active
+                  ? "border-electric bg-electric text-black"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
               }`}
-              type="button"
             >
               {a}
             </button>
@@ -473,34 +470,81 @@ function Quiz({
   );
 }
 
+function Result({
+  score,
+  opportunity,
+  nextStep,
+  goal,
+  athleteType,
+  answers,
+}: {
+  score: number;
+  opportunity: Opportunity;
+  nextStep: string;
+  goal: GoalId | null;
+  athleteType: AthleteType | null;
+  answers: Answer[];
+}) {
+  useEffect(() => {
+    scrollToAssessment();
+  }, []);
+
+  return (
+    <section className="space-y-8">
+      <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-14">
+        <ScoreRing score={score} />
+      </div>
+
+      <div className="card-elevated p-8 text-center sm:p-10">
+        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">
+          Your biggest opportunity
+        </p>
+        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
+          {opportunity}
+        </h2>
+        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {nextStep}
+        </p>
+      </div>
+
+      <EmailCapture
+        answers={answers}
+        goal={goal}
+        athleteType={athleteType}
+        score={score}
+        opportunity={opportunity}
+        nextStep={nextStep}
+      />
+    </section>
+  );
+}
+
 function EmailCapture({
   answers,
   goal,
   athleteType,
-  onBack,
-  onComplete,
+  score,
+  opportunity,
+  nextStep,
 }: {
   answers: Answer[];
   goal: GoalId | null;
   athleteType: AthleteType | null;
-  onBack: () => void;
-  onComplete: (
-    id: string,
-    sessionToken: string,
-    result: { clutch_score: number; opportunity: Opportunity; next_step: string },
-  ) => void;
+  score: number;
+  opportunity: Opportunity;
+  nextStep: string;
 }) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [source, setSource] = useState("");
   const [sourceOther, setSourceOther] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return toast.error("Email is required");
     setSubmitting(true);
-    const result = computeResult(answers, goal);
     const sessionToken = generateSessionToken();
     const id = generateId();
     const sourceValue =
@@ -515,50 +559,75 @@ function EmailCapture({
         source: sourceValue,
         goal: goal ?? null,
         athlete_type: athleteType ?? null,
-        q1: answers[0], q2: answers[1], q3: answers[2], q4: answers[3], q5: answers[4],
-        clutch_score: result.clutch_score,
-        opportunity: result.opportunity,
-        next_step: result.next_step,
+        q1: answers[0],
+        q2: answers[1],
+        q3: answers[2],
+        q4: answers[3],
+        q5: answers[4],
+        clutch_score: score,
+        opportunity,
+        next_step: nextStep,
         session_token: sessionToken,
       });
-      if (error) console.error("[Clutch Score] save failed:", error.message);
+      if (error) {
+        console.error("[Clutch Score] save failed:", error.message);
+        toast.error("Couldn't save your details. Try again.");
+      } else {
+        setSaved(true);
+        toast.success("You're on the list.");
+      }
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
+      toast.error("Couldn't save your details. Try again.");
     } finally {
       setSubmitting(false);
     }
-    onComplete(id, sessionToken, result);
   };
 
+  if (saved) {
+    return (
+      <div className="rounded-3xl border border-black/10 bg-black/[0.02] px-6 py-10 text-center sm:px-10">
+        <p className="text-xl font-bold text-foreground">You're all set.</p>
+        <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-muted-foreground">
+          Watch for hydration and performance tips in your inbox. We'll check in in two weeks to see
+          how your Clutch Move is landing.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <section>
-      <StepHeader step={3} total={3} onBack={onBack} fillWithinStep={1} />
-      <h2 className="text-balance text-4xl font-bold leading-tight sm:text-5xl">
-        Your personalized insight is ready
-      </h2>
-      <p className="mt-4 text-lg text-muted-foreground">
-        Enter your email to see what's most likely holding you back from{" "}
-        <span className="text-foreground">{goalLabel(goal).toLowerCase() || "your goal"}</span>.
+    <div className="rounded-3xl border border-black/10 bg-black/[0.02] px-6 py-8 sm:px-10 sm:py-10">
+      <h3 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
+        Want updates and tips?
+      </h3>
+      <p className="mx-auto mt-3 max-w-md text-center text-base leading-relaxed text-muted-foreground">
+        Drop your name and email to get hydration and performance tips. We'll check in in two weeks
+        to see how things are going.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-4">
         <input
-          type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email *"
-          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First name"
+          className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
         <input
-          type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First name (optional)"
-          className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
         />
 
-        <div className="pt-2">
-          <p className="text-sm font-semibold text-foreground">
-            How did you hear about us?{" "}
-            <span className="font-normal text-muted-foreground">(optional)</span>
+        <div className="pt-1">
+          <p className="text-center text-xs text-muted-foreground">
+            How did you hear about us? (optional)
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
             {SOURCES.map((s) => {
               const active = source === s;
               return (
@@ -569,7 +638,7 @@ function EmailCapture({
                   className={`rounded-full border px-3.5 py-2 text-sm font-medium transition ${
                     active
                       ? "border-electric bg-electric text-black"
-                      : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30"
+                      : "border-black/10 bg-white text-foreground hover:border-black/30"
                   }`}
                 >
                   {s}
@@ -583,123 +652,19 @@ function EmailCapture({
               value={sourceOther}
               onChange={(e) => setSourceOther(e.target.value)}
               placeholder="Tell us where (optional)"
-              className="mt-3 w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+              className="mt-3 w-full rounded-2xl border border-black/10 bg-white px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
             />
           )}
         </div>
 
         <button
-          type="submit" disabled={submitting}
-          className="mt-2 w-full rounded-full bg-electric px-8 py-5 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
+          type="submit"
+          disabled={submitting}
+          className="mt-2 w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
-          {submitting ? "Calculating…" : "Show My Insight"}
+          {submitting ? "Saving..." : "Get tips and updates"}
         </button>
       </form>
-    </section>
-  );
-}
-
-function Result({
-  id, sessionToken, score, opportunity, nextStep, goal,
-}: {
-  id: string; sessionToken: string; score: number; opportunity: Opportunity; nextStep: string; goal: GoalId | null;
-}) {
-  const [helpful, setHelpful] = useState<boolean | null>(null);
-  const [feedback, setFeedback] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const submitFeedbackFn = useServerFn(submitFeedback);
-
-  useEffect(() => { window.scrollTo({ top: 0 }); }, []);
-
-  const handleFeedback = async () => {
-    if (helpful === null && !feedback.trim()) {
-      return toast.error("Add a thumbs up/down or a quick note first.");
-    }
-    setSubmitting(true);
-    try {
-      await submitFeedbackFn({
-        data: { id, session_token: sessionToken, helpful_result: helpful, feedback_text: feedback.trim() || null },
-      });
-      setSubmitted(true);
-      toast.success("Thanks for the feedback.");
-    } catch {
-      toast.error("Couldn't save feedback. Try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const goalText = goalLabel(goal);
-
-  return (
-    <section>
-      <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-14">
-        <ScoreRing score={score} />
-        {goalText && (
-          <p className="mt-8 text-xs uppercase tracking-eyebrow text-white/40">
-            Based on your goal · {goalText}
-          </p>
-        )}
-      </div>
-
-      <div className="card-elevated mt-6 p-8 sm:p-10">
-        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">Your insight</p>
-        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
-          Your biggest opportunity: {opportunity}
-        </h2>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{nextStep}</p>
-      </div>
-
-      <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
-        Try your next step for the next 2 weeks. We'll check back and see what changed.
-      </p>
-
-      <div className="mt-10 rounded-2xl border border-black/10 bg-black/[0.02] p-6">
-        {submitted ? (
-          <p className="text-center text-sm text-muted-foreground">Thanks, your feedback is recorded.</p>
-        ) : (
-          <>
-            <p className="text-sm font-semibold uppercase tracking-eyebrow text-muted-foreground">
-              Was this insight helpful?
-            </p>
-            <div className="mt-4 flex gap-3">
-              <button
-                type="button" onClick={() => setHelpful(true)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
-                }`}
-              >
-                Yes
-              </button>
-              <button
-                type="button" onClick={() => setHelpful(false)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false ? "border-electric bg-electric text-black" : "border-black/10 bg-black/[0.03] hover:border-black/30"
-                }`}
-              >
-                No
-              </button>
-            </div>
-
-            <label className="mt-5 block text-sm text-muted-foreground">
-              What surprised you most about your result?
-            </label>
-            <textarea
-              value={feedback} onChange={(e) => setFeedback(e.target.value)} rows={3}
-              placeholder="Optional"
-              className="mt-2 w-full rounded-xl border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
-            />
-
-            <button
-              type="button" onClick={handleFeedback} disabled={submitting}
-              className="mt-4 w-full rounded-full border border-black/15 px-6 py-3 text-sm font-semibold text-foreground transition hover:border-electric hover:text-foreground disabled:opacity-60"
-            >
-              {submitting ? "Saving..." : "Submit Feedback"}
-            </button>
-          </>
-        )}
-      </div>
-    </section>
+    </div>
   );
 }

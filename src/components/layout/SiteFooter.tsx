@@ -18,7 +18,7 @@ const COLUMNS = [
       { to: "/mission", label: "Mission" },
       { to: "/promise", label: "Our Promise" },
       { to: "/partnerships", label: "Partnerships" },
-      { to: "/about", label: "About" },
+      { to: "/about", label: "Founder Story" },
       { to: "/community", label: "Community" },
     ],
   },

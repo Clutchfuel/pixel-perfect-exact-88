@@ -7,16 +7,16 @@ import trainingImage from "@/assets/articles/recovery.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "It Started With One Question | ClutchFuel" },
+      { title: "Founder Story: It Started With One Question | ClutchFuel" },
       {
         name: "description",
         content:
           "What's holding me back from performing at my best? That question led to ClutchFuel, a place where everyday athletes can understand themselves and make smarter performance decisions.",
       },
-      { property: "og:title", content: "It Started With One Question | ClutchFuel" },
+      { property: "og:title", content: "Founder Story: It Started With One Question | ClutchFuel" },
       {
         property: "og:description",
-        content: "The story behind ClutchFuel, built for everyday athletes still asking better questions.",
+        content: "The founder story behind ClutchFuel, built for everyday athletes still asking better questions.",
       },
     ],
   }),
