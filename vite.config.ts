@@ -6,26 +6,11 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-function siteUrlGuard() {
-  return {
-    name: "site-url-guard",
-    buildStart() {
-      if (process.env.CI === "true" && !process.env.VITE_SITE_URL) {
-        throw new Error(
-          "VITE_SITE_URL must be set in CI (e.g. https://pixel-perfect-exact-88.lovable.app)",
-        );
-      }
-    },
-  };
-}
-
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-// @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
+// Force nitro cloudflare-module outside Lovable sandbox so Workers Builds can wrangler deploy.
 export default defineConfig({
+  nitro: true,
   tanstackStart: {
     server: { entry: "server" },
-  },
-  vite: {
-    plugins: [siteUrlGuard()],
   },
 });

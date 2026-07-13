@@ -1,16 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "clutchfuel-website",
+  "name": "pixel-perfect-exact-88",
+  "account_id": "ea1fc10547633886295372efa1b47d93",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts",
-  // Distributed rate limits for /api/leads/* — run: bun run configure:production
-  // (creates RATE_LIMIT_KV and patches id/preview_id below automatically)
+  "main": ".output/server/index.mjs",
   "kv_namespaces": [
     {
       "binding": "RATE_LIMIT_KV",
-      "id": "00000000000000000000000000000000",
-      "preview_id": "00000000000000000000000000000000",
-    },
-  ],
+      "id": "cca6d2760e6c4bf199af3569c1001d27",
+      "preview_id": "ea65800e5cb447af9f7e77118fd614ea"
+    }
+  ]
 }

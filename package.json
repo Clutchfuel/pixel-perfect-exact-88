@@ -11,6 +11,7 @@
     "postbuild": "node scripts/postbuild-server-entry.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "deploy": "node scripts/ci-build.mjs && wrangler deploy",
     "lint": "eslint . --max-warnings 50",
     "format": "prettier --write ."
   },
@@ -56,6 +57,7 @@
     "sharp": "^0.34.5",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "wrangler": "^4.84.1"
   }
 }
