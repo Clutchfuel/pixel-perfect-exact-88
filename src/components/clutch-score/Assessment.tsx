@@ -46,7 +46,7 @@ const QUESTIONS: readonly {
 }[] = [
   {
     pillar: "Hydration",
-    prompt: "How often do hard sessions leave you feeling drained — dry mouth, heavy legs, foggy head?",
+    prompt: "How often do hard sessions leave you feeling drained  -  dry mouth, heavy legs, foggy head?",
     coach: "Be honest. Most athletes under-drink without realizing it.",
     positive: false,
   },
@@ -105,8 +105,8 @@ type ResultPayload = {
 const FIRST_MOVE: Record<Opportunity, Partial<Record<GoalId, string>> & { default: string }> = {
   Hydration: {
     default: "Drink 20 oz of water within 30 minutes after every workout.",
-    energy: "Pre-hydrate with 20 oz and electrolytes 20 minutes before training — most low-energy sessions start under-fueled on fluid.",
-    endurance: "For longer sessions, front-load sodium and fluid 20–30 minutes before you start.",
+    energy: "Pre-hydrate with 20 oz and electrolytes 20 minutes before training  -  most low-energy sessions start under-fueled on fluid.",
+    endurance: "For longer sessions, front-load sodium and fluid 20-30 minutes before you start.",
     hyrox: "Before your next metcon, electrolytes 20 minutes out. Late-station fade is often timing, not fitness.",
   },
   Recovery: {
@@ -117,16 +117,16 @@ const FIRST_MOVE: Record<Opportunity, Partial<Record<GoalId, string>> & { defaul
   Nutrition: {
     default: "Eat protein within one hour after every workout for the next two weeks.",
     strength: "Post-lift: fluid, then protein within 60 minutes. Treat it like the last set.",
-    weight: "Keep protein in the post-workout window even when calories are down — performance depends on it.",
+    weight: "Keep protein in the post-workout window even when calories are down  -  performance depends on it.",
   },
   Consistency: {
     default: "Schedule three non-negotiable sessions this week and protect them like appointments.",
-    consistency: "You're chasing consistency — make the small pre-session ritual (hydrate, then train) automatic for 14 days.",
+    consistency: "You're chasing consistency  -  make the small pre-session ritual (hydrate, then train) automatic for 14 days.",
   },
   Sleep: {
     default: "Sleep 30 minutes earlier three nights this week before your hardest sessions.",
     gameday: "Protect the night before game day like warm-up: earlier bedtime, screens down, lights out.",
-    energy: "If energy is the goal, start with sleep — three earlier nights often unlock more than another supplement.",
+    energy: "If energy is the goal, start with sleep  -  three earlier nights often unlock more than another supplement.",
   },
 };
 
@@ -407,17 +407,19 @@ function OptionButton({
   disabled?: boolean;
   className?: string;
 }) {
+  const stateClass = active
+    ? "border-[#c1ff00] bg-[#c1ff00] text-black"
+    : "border-white/12 bg-white/[0.04] text-white hover:border-white/25 hover:bg-white/[0.07]";
+  const classes = [
+    "w-full rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait",
+    stateClass,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className={`w-full rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
-        active
-          ? "border-[#c1ff00] bg-[#c1ff00] text-black"
-          : "border-white/12 bg-white/[0.04] text-white hover:border-white/25 hover:bg-white/[0.07]"
-      } ${className}`}
-    >
+    <button type="button" onClick={onClick} disabled={disabled} className={classes}>
       {children}
     </button>
   );
@@ -427,7 +429,7 @@ function GoalStep({ selected, onSelect }: { selected: GoalId | null; onSelect: (
   const { selected: pending, choose } = useSelectThenAdvance(onSelect);
   return (
     <section>
-      <p className="text-xs uppercase tracking-[0.2em] text-[#c1ff00]/Question 01</p>
+      <p className="text-xs uppercase tracking-[0.2em] text-[#c1ff00]">Question 01</p>
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
         What are you trying to achieve?
       </h2>
@@ -465,12 +467,12 @@ function AthleteStep({
     <section>
       <div className="mb-2 flex justify-end">
         <button type="button" onClick={onBack} className="text-xs uppercase tracking-[0.18em] text-white/45 hover:text-white">
-          ← Back
+          {"<- Back"}
         </button>
       </div>
       <p className="text-xs uppercase tracking-[0.2em] text-[#c1ff00]">Question 02</p>
       {goal && (
-        <p className="mt-2 text-xs text-white/40">Goal · {goalLabel(goal)}</p>
+        <p className="mt-2 text-xs text-white/40">Goal | {goalLabel(goal)}</p>
       )}
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
         What kind of athlete are you?
@@ -513,10 +515,10 @@ function Quiz({
     <section>
       <div className="mb-2 flex items-center justify-between">
         <p className="text-xs uppercase tracking-[0.2em] text-[#c1ff00]">
-          Question {num} · {q.pillar}
+          Question {num} | {q.pillar}
         </p>
         <button type="button" onClick={onBack} className="text-xs uppercase tracking-[0.18em] text-white/45 hover:text-white">
-          ← Back
+          {"<- Back"}
         </button>
       </div>
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">{q.prompt}</h2>
@@ -588,7 +590,7 @@ function ScoreRing({ score }: { score: number }) {
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      // ease-out cubic — fills fast, settles soft
+      // ease-out cubic  -  fills fast, settles soft
       const eased = 1 - Math.pow(1 - t, 3);
       const value = Math.round(score * eased);
       setDisplay(value);
@@ -720,7 +722,7 @@ function Result({
 
   return (
     <section className="space-y-16 pb-10">
-      {/* 1. Hero Score — visual identity */}
+      {/* 1. Hero Score  -  visual identity */}
       <div className="pt-4 text-center">
         <ScoreRing score={payload.clutch_score} />
         <p className="mt-10 text-xl font-semibold tracking-wide text-[#c1ff00]">{payload.level}</p>
@@ -811,7 +813,7 @@ function Result({
                 disabled={submitting}
                 className="mt-2 w-full rounded-full bg-[#c1ff00] px-8 py-4 text-base font-semibold text-black transition hover:bg-[#d6ff4d] disabled:opacity-60"
               >
-                {submitting ? "Saving…" : "Get My Report"}
+                {submitting ? "Saving..." : "Get My Report"}
               </button>
             </form>
           </>
