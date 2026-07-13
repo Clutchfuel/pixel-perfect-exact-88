@@ -3,24 +3,11 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 
 import photoRunning from "@/assets/sport-running.jpg";
-import photoParent from "@/assets/community-parent.jpg";
 import photoBasketball from "@/assets/sport-basketball.jpg";
-import photoWeekend from "@/assets/community-weekend.jpg";
-import photoCrossfit from "@/assets/community-crossfit.jpg";
-import photoCollege from "@/assets/community-college.jpg";
 import photoHyrox from "@/assets/sport-hyrox.jpg";
-import photoHero from "@/assets/home-hero-cinematic.jpg";
+import photoHyroxFinish from "@/assets/hyrox-finish-male.jpg";
 
-const FACES = [
-  photoRunning,
-  photoParent,
-  photoBasketball,
-  photoWeekend,
-  photoCrossfit,
-  photoCollege,
-  photoHyrox,
-  photoHero,
-] as const;
+const FACES = [photoRunning, photoHyrox, photoBasketball, photoHyroxFinish] as const;
 
 const WHO = [
   "The runner chasing a first 5K.",
@@ -97,7 +84,7 @@ export function CommunityAthletes() {
                   src={src}
                   alt=""
                   loading="lazy"
-                  className="h-full w-full object-cover grayscale contrast-110 transition duration-700 hover:grayscale-0"
+                  className="h-full w-full object-cover object-center grayscale contrast-110 transition duration-700 hover:grayscale-0"
                 />
               </div>
             ))}
