@@ -491,18 +491,29 @@ function Result({
 
   return (
     <section className="space-y-8">
+      <div className="text-center">
+        <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+          Your biggest opportunity
+        </p>
+        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl md:text-5xl">
+          {opportunity}
+        </h2>
+      </div>
+
       <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-14">
         <ScoreRing score={score} />
       </div>
 
       <div className="card-elevated p-8 text-center sm:p-10">
-        <p className="text-xs uppercase tracking-eyebrow text-muted-foreground/80">
-          Your biggest opportunity
+        <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+          One helpful insight
         </p>
-        <h2 className="mt-3 text-balance text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
-          {opportunity}
-        </h2>
-        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+        {goal && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            For your goal · <span className="text-foreground">{goalLabel(goal)}</span>
+          </p>
+        )}
+        <p className="mx-auto mt-4 max-w-md text-lg font-semibold leading-snug text-foreground sm:text-xl">
           {nextStep}
         </p>
       </div>
