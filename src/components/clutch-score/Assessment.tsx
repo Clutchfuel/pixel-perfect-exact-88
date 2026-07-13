@@ -20,21 +20,21 @@ function generateId(): string {
   return generateSessionToken().slice(0, 36);
 }
 
-/* ---------- Goals ---------- */
+/* ---------- Goals (outcome-based labels) ---------- */
 
 const GOALS = [
-  { id: "energy", label: "Have more energy during workouts" },
-  { id: "cramping", label: "Stop cramping" },
-  { id: "recover", label: "Recover faster" },
-  { id: "endurance", label: "Build endurance" },
-  { id: "strength", label: "Get stronger" },
-  { id: "weight", label: "Lose weight without sacrificing performance" },
-  { id: "gameday", label: "Improve game-day performance" },
-  { id: "consistency", label: "Stay consistent" },
-  { id: "hyrox", label: "Prepare for my first HYROX" },
-  { id: "5k", label: "Run a faster 5K" },
-  { id: "basketball", label: "Train for basketball season" },
-  { id: "feel", label: "Simply feel better after workouts" },
+  { id: "energy", label: "More Energy" },
+  { id: "cramping", label: "Fewer Cramps" },
+  { id: "recover", label: "Faster Recovery" },
+  { id: "endurance", label: "Greater Endurance" },
+  { id: "strength", label: "Muscle Growth" },
+  { id: "weight", label: "Fat Loss" },
+  { id: "gameday", label: "Better Game-Day Performance" },
+  { id: "consistency", label: "Improved Daily Performance" },
+  { id: "hyrox", label: "HYROX Readiness" },
+  { id: "5k", label: "Faster 5K Time" },
+  { id: "basketball", label: "Better Basketball Performance" },
+  { id: "feel", label: "Better Hydration" },
 ] as const;
 type GoalId = (typeof GOALS)[number]["id"];
 
@@ -140,12 +140,77 @@ function scoreStatus(score: number): string {
   return "Room to Align";
 }
 
+type BehaviorPillar = "Hydration" | "Recovery" | "Training" | "Nutrition" | "Consistency";
+
 /** Maps scoring opportunity → the behavior pillar users see. */
-function limitingBehavior(opportunity: Opportunity): string {
+function opportunityPillar(opportunity: Opportunity): BehaviorPillar {
   if (opportunity === "Hydration Timing") return "Hydration";
   if (opportunity === "Electrolyte Use") return "Nutrition";
   if (opportunity === "Recovery & Cramping") return "Recovery";
   return "Consistency";
+}
+
+const OPPORTUNITY_INSIGHT: Record<
+  BehaviorPillar,
+  { description: string; whyItMatters: string }
+> = {
+  Hydration: {
+    description:
+      "Based on your responses, improving your hydration habits will have the greatest impact on your performance.",
+    whyItMatters:
+      "Hydration influences energy, focus, and how well you hold up through a session. Getting this right helps you train harder and finish stronger.",
+  },
+  Recovery: {
+    description:
+      "Based on your responses, improving your recovery habits will have the greatest impact on your performance.",
+    whyItMatters:
+      "Recovery influences how well you train, adapt, and perform. Improving this area will help you recover faster, reduce soreness, and be ready for your next workout.",
+  },
+  Training: {
+    description:
+      "Based on your responses, refining your training habits will have the greatest impact on your performance.",
+    whyItMatters:
+      "Training quality compounds when intensity, recovery, and consistency stay in balance. Focusing here sharpens how you show up for every session.",
+  },
+  Nutrition: {
+    description:
+      "Based on your responses, improving your nutrition and electrolyte habits will have the greatest impact on your performance.",
+    whyItMatters:
+      "What you put in before and during training shapes energy, cramp risk, and how you feel afterward. This is one of the highest-leverage places to improve.",
+  },
+  Consistency: {
+    description:
+      "Based on your responses, building consistency is the highest-impact habit to improve right now.",
+    whyItMatters:
+      "Small behaviors repeated over time beat occasional perfection. Locking in one reliable routine is what turns insights into lasting performance gains.",
+  },
+};
+
+/** Structured result payload — UI renders fields independently (no goal string splicing). */
+type ResultInsight = {
+  goal: string;
+  biggestOpportunity: BehaviorPillar;
+  headline: string;
+  description: string;
+  whyItMatters: string;
+  firstClutchMove: string;
+};
+
+function buildResultInsight(
+  opportunity: Opportunity,
+  nextStep: string,
+  goal: GoalId | null,
+): ResultInsight {
+  const biggestOpportunity = opportunityPillar(opportunity);
+  const insight = OPPORTUNITY_INSIGHT[biggestOpportunity];
+  return {
+    goal: goalLabel(goal) || "Performance",
+    biggestOpportunity,
+    headline: biggestOpportunity,
+    description: insight.description,
+    whyItMatters: insight.whyItMatters,
+    firstClutchMove: nextStep,
+  };
 }
 
 type BehaviorContribution = {
@@ -187,7 +252,7 @@ function behaviorContributions(
 
   // Keep the scored opportunity visually lowest so the ring matches the story.
   if (opportunity) {
-    const focus = limitingBehavior(opportunity);
+    const focus = opportunityPillar(opportunity);
     const focused = raw.find((b) => b.id === focus);
     if (focused) {
       const othersMin = Math.min(...raw.filter((b) => b.id !== focus).map((b) => b.fill));
@@ -611,64 +676,89 @@ function Result({
 }) {
   const status = scoreStatus(score);
   const behaviors = behaviorContributions(answers, opportunity);
-  const limiting = limitingBehavior(opportunity);
-  const goalText = goalLabel(goal) || "your performance goal";
+  const insight = buildResultInsight(opportunity, nextStep, goal);
 
   useEffect(() => {
     scrollToAssessment();
   }, []);
 
   return (
-    <section className="space-y-10 pb-6 sm:space-y-12">
-      {/* Score hero — segmented alignment ring */}
+    <section className="space-y-14 pb-8 sm:space-y-16">
+      {/* Score hero */}
       <FadeIn>
-        <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center sm:px-10 sm:py-16">
+        <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-14 text-center sm:px-10 sm:py-20">
           <SegmentedClutchRing score={score} segments={behaviors} />
-          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-[#c1ff00]">
+          <p className="mt-10 text-sm font-semibold uppercase tracking-[0.22em] text-[#c1ff00]">
             {status}
           </p>
-          <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-white/45">
-            How well your current behaviors align with the goal you selected.
+          <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-white/40">
+            How well your current behaviors support your goal.
           </p>
         </div>
       </FadeIn>
 
-      {/* Your Goal */}
-      <FadeIn delay={0.08}>
+      {/* Your Goal — metadata only */}
+      <FadeIn delay={0.06}>
         <div className="text-center">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
             Your Goal
           </p>
-          <h2 className="mt-3 text-balance text-2xl font-extrabold tracking-tight sm:text-3xl">
-            {goalText}
+          <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {insight.goal}
           </h2>
         </div>
       </FadeIn>
 
-      {/* What's Holding You Back */}
-      <FadeIn delay={0.12}>
-        <div className="rounded-[2rem] border border-black/10 bg-white p-8 sm:p-10">
+      {/* Biggest Opportunity */}
+      <FadeIn delay={0.1}>
+        <div className="rounded-[2rem] border border-black/10 bg-white px-8 py-10 sm:px-12 sm:py-12">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-electric-dark">
-            What's Holding You Back
+            Your Biggest Opportunity
           </p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">{limiting}</h3>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {limiting} is currently the biggest behavior limiting your progress toward{" "}
-            <span className="text-foreground">{goalText.toLowerCase()}</span>.
+          <h3 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {insight.headline}
+          </h3>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            {insight.description}
           </p>
         </div>
       </FadeIn>
 
+      {/* Why This Matters */}
+      <FadeIn delay={0.14}>
+        <div className="rounded-[2rem] border border-black/10 bg-muted/50 px-8 py-10 sm:px-12 sm:py-12">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Why This Matters
+          </p>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-foreground sm:text-xl">
+            {insight.whyItMatters}
+          </p>
+        </div>
+      </FadeIn>
+
+      {/* First Clutch Move */}
+      <FadeIn delay={0.18}>
+        <div className="rounded-[2rem] border border-[#c1ff00]/35 bg-[#070707] px-8 py-10 text-white sm:px-12 sm:py-12">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#c1ff00]">
+            First Clutch Move
+          </p>
+          <p className="mt-5 text-xl font-semibold leading-snug sm:text-2xl">
+            {insight.firstClutchMove}
+          </p>
+          <p className="mt-5 text-sm text-white/40">One action for the next 24 hours.</p>
+        </div>
+      </FadeIn>
+
       {/* How Your Score Was Built */}
-      <FadeIn delay={0.16}>
-        <div className="rounded-[2rem] border border-black/10 bg-white p-8 sm:p-10">
+      <FadeIn delay={0.22}>
+        <div className="rounded-[2rem] border border-black/10 bg-white px-8 py-10 sm:px-12 sm:py-12">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
             How Your Score Was Built
           </p>
-          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
-            Your Clutch Score reflects how your current behaviors support the goal you selected.
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-muted-foreground">
+            These are the behaviors influencing your score.
           </p>
-          <ul className="mt-8 space-y-4">
+          <ul className="mt-10 space-y-5">
             {behaviors.map((b) => (
               <li key={b.id} className="flex items-center justify-between gap-4">
                 <span className="flex items-center gap-3 text-sm font-semibold text-foreground">
@@ -690,32 +780,7 @@ function Result({
         </div>
       </FadeIn>
 
-      {/* First Clutch Move */}
-      <FadeIn delay={0.2}>
-        <div className="rounded-[2rem] border border-[#c1ff00]/35 bg-[#070707] p-8 text-white sm:p-10">
-          <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#c1ff00]">
-            First Clutch Move
-          </p>
-          <p className="mt-5 text-xl font-semibold leading-snug sm:text-2xl">{nextStep}</p>
-          <p className="mt-4 text-sm text-white/45">One action for the next 24 hours.</p>
-        </div>
-      </FadeIn>
-
-      {/* Why This Matters */}
-      <FadeIn delay={0.24}>
-        <div className="text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Why This Matters
-          </p>
-          <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Improving one behavior consistently often creates improvements across multiple areas of
-            performance.
-          </p>
-        </div>
-      </FadeIn>
-
-      {/* Keep improving */}
-      <FadeIn delay={0.28}>
+      <FadeIn delay={0.26}>
         <EmailCapture
           answers={answers}
           goal={goal}
@@ -726,7 +791,7 @@ function Result({
         />
       </FadeIn>
 
-      <FadeIn delay={0.32}>
+      <FadeIn delay={0.3}>
         <div className="text-center">
           <button
             type="button"

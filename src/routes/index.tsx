@@ -214,13 +214,20 @@ function HomePage() {
               <p className="mt-8 text-sm font-semibold uppercase tracking-eyebrow text-[#c1ff00]">
                 Strong Alignment
               </p>
-              <p className="mt-2 text-xs text-white/40">Goal · Recover Faster</p>
-              <p className="mt-5 text-xl font-bold leading-snug text-white">
-                Recovery is currently the biggest behavior limiting your progress.
+              <p className="mt-2 text-xs text-white/40">Goal · Faster Recovery</p>
+              <p className="mt-6 text-[10px] font-medium uppercase tracking-[0.22em] text-white/35">
+                Biggest Opportunity
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-white/55">
-                First Clutch Move: Rehydrate with sodium within 60 minutes after every hard session this
-                week, even when you don't feel thirsty.
+              <p className="mt-2 text-xl font-bold leading-snug text-white">
+                Recovery
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-white/55">
+                Based on your responses, improving your recovery habits will have the greatest impact
+                on your performance.
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-white/45">
+                First Clutch Move: Rehydrate with sodium within 60 minutes after every hard session
+                this week, even when you don't feel thirsty.
               </p>
             </div>
           </Reveal>
