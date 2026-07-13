@@ -42,7 +42,7 @@ function NotFoundComponent() {
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
         <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-          The page you're looking for doesn't exist. Head back home or take the Clutch Score.
+          The page you're looking for doesn't exist. Head back home or get your Clutch Score.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Link
@@ -55,7 +55,7 @@ function NotFoundComponent() {
             to="/clutch-score"
             className="inline-flex items-center justify-center rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
           >
-            Take the Clutch Score
+            Get Your Clutch Score
           </Link>
         </div>
       </div>

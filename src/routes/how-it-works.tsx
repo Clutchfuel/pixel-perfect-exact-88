@@ -28,7 +28,7 @@ const STEPS = [
   {
     n: "01",
     icon: Clock,
-    title: "Get your Clutch Score™",
+    title: "Get Your Clutch Score™",
     copy: "Tell us your goal, then answer five quick questions about how you train, recover, and fuel. Sixty seconds, no wearables required.",
   },
   {

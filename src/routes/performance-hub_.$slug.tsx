@@ -155,7 +155,7 @@ function ArticlePage() {
 
           <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.03] p-8">
             <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Try it yourself</p>
-            <h3 className="mt-3 text-2xl font-bold">Take the Clutch Score</h3>
+            <h3 className="mt-3 text-2xl font-bold">Get Your Clutch Score</h3>
             <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
             <Link
               to="/clutch-score"

@@ -67,7 +67,7 @@ function ClutchScorePage() {
                 onClick={start}
                 className="mt-10 inline-flex items-center justify-center rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
               >
-                Take My Clutch Score →
+                Get Your Clutch Score →
               </button>
               <ul className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-3 text-sm text-muted-foreground sm:flex-row sm:justify-center sm:gap-6">
                 {TRUST.map((t) => (

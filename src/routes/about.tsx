@@ -276,7 +276,7 @@ function AboutPage() {
               to="/clutch-score"
               className="mt-12 inline-flex items-center gap-2 rounded-full bg-[#c1ff00] px-8 py-4 text-base font-semibold text-black transition hover:bg-[#d6ff4d]"
             >
-              Take Your Clutch Score <ArrowRight className="h-4 w-4" />
+              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>
         </div>

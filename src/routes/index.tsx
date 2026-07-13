@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Every goal starts with better performance. Take the 60-second Clutch Score and find what's holding you back.",
+          "Every goal starts with better performance. Get your Clutch Score in 60 seconds and find what's holding you back.",
       },
       { property: "og:type", content: "website" },
 
@@ -94,7 +94,7 @@ function HomePage() {
               to="/clutch-score"
               className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
             >
-              Take the Clutch Score <ArrowRight className="h-4 w-4" />
+              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/how-it-works"
@@ -156,7 +156,7 @@ function HomePage() {
             {[
               {
                 n: "01",
-                t: "Get your Clutch Score™",
+                t: "Get Your Clutch Score™",
                 c: "Share your goal and answer five quick questions. No wearables, no calculations, no equipment.",
               },
               {
@@ -197,7 +197,7 @@ function HomePage() {
               to="/clutch-score"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
             >
-              Take the Clutch Score <ArrowRight className="h-4 w-4" />
+              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>
           <Reveal delay={0.08}>
@@ -316,7 +316,7 @@ function HomePage() {
               to="/clutch-score"
               className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
             >
-              Take the Clutch Score <ArrowRight className="h-4 w-4" />
+              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>
         </div>
