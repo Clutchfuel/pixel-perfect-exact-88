@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { supabase } from "@/integrations/supabase/client";
 import { submitAssessment } from "@/lib/assessment.functions";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
@@ -887,49 +886,16 @@ function EmailCapture({
     };
 
     try {
-      try {
-        // Preferred: Worker server fn reads runtime secrets via getEnv.
-        const result = await submitAssessment({ data: payload });
-        setSaved(true);
-        toast.success(
-          result.alreadyRegistered ? "You're already on the list." : "You're on the list.",
-        );
-        return;
-      } catch (serverErr) {
-        console.error("[Clutch Score] server save failed, trying client insert:", serverErr);
-      }
-
-      // Fallback: direct anon insert (works when VITE_ Supabase keys are baked into the client).
-      let { error } = await supabase.from("assessment_responses").insert(payload);
-
-      if (error && /goal|athlete_type|column|schema cache/i.test(error.message)) {
-        const { goal: _g, athlete_type: _a, ...legacy } = payload;
-        ({ error } = await supabase.from("assessment_responses").insert(legacy));
-      }
-
-      if (error) {
-        console.error("[Clutch Score] client save failed:", error.message, error);
-        if (/duplicate|unique|already exists/i.test(error.message)) {
-          setSaved(true);
-          toast.success("You're already on the list.");
-        } else {
-          toast.error(
-            error.message?.length < 120
-              ? error.message
-              : "Couldn't save your details. Try again.",
-          );
-        }
-      } else {
-        setSaved(true);
-        toast.success("You're on the list.");
-      }
+      await submitAssessment({ data: payload });
+      setSaved(true);
+      toast.success("You're on the list.");
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
       const message = err instanceof Error ? err.message : "";
       toast.error(
-        /Missing Supabase/i.test(message)
-          ? "Email signup isn't configured yet. Please try again later."
-          : "Couldn't save your details. Check your connection and try again.",
+        message.length > 0 && message.length < 120
+          ? message
+          : "Couldn't save your details. Try again.",
       );
     } finally {
       setSubmitting(false);

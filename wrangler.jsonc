@@ -11,5 +11,13 @@
       "id": "cca6d2760e6c4bf199af3569c1001d27",
       "preview_id": "ea65800e5cb447af9f7e77118fd614ea"
     }
+  ],
+  "d1_databases": [
+    {
+      "binding": "LEADS_DB",
+      "database_name": "clutchfuel-leads",
+      "database_id": "b101d9b9-b0d9-412f-8094-ef778266a95b",
+      "migrations_dir": "migrations"
+    }
   ]
 }

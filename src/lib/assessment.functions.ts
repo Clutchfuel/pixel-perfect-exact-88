@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { persistClutchScoreLead } from "@/lib/leads-db";
 
 const ANSWERS = ["Never", "Rarely", "Sometimes", "Often", "Always"] as const;
 
@@ -80,52 +81,34 @@ function validate(input: unknown): AssessmentInput {
   };
 }
 
-/** Persist Clutch Score email capture via service role (Worker secrets / getEnv). */
+/**
+ * Persist Clutch Score email capture to Cloudflare D1 (LEADS_DB).
+ * This is the production path — no Supabase secrets required.
+ */
 export const submitAssessment = createServerFn({ method: "POST" })
   .inputValidator(validate)
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const payload = {
-      first_name: data.first_name,
-      email: data.email,
-      source: data.source,
-      goal: data.goal,
-      athlete_type: data.athlete_type,
+    const answers = {
       q1: data.q1,
       q2: data.q2,
       q3: data.q3,
       q4: data.q4,
       q5: data.q5,
-      clutch_score: data.clutch_score,
-      opportunity: data.opportunity,
-      next_step: data.next_step,
+      first_name: data.first_name,
+      athlete_type: data.athlete_type,
       session_token: data.session_token,
     };
 
-    let { data: row, error } = await supabaseAdmin
-      .from("assessment_responses")
-      .insert(payload)
-      .select("id")
-      .single();
+    await persistClutchScoreLead({
+      email: data.email,
+      answersJson: JSON.stringify(answers),
+      score: data.clutch_score,
+      opportunity: data.opportunity,
+      goal: data.goal || "Performance",
+      firstClutchMove: data.next_step,
+      marketingConsent: true,
+      source: data.source || "clutch-score",
+    });
 
-    // Older remote schemas may not have goal / athlete_type yet.
-    if (error && /goal|athlete_type|column|schema cache/i.test(error.message)) {
-      const { goal: _g, athlete_type: _a, ...legacy } = payload;
-      ({ data: row, error } = await supabaseAdmin
-        .from("assessment_responses")
-        .insert(legacy)
-        .select("id")
-        .single());
-    }
-
-    if (error) {
-      console.error("[Clutch Score] server save failed:", error.message);
-      if (/duplicate|unique|already exists/i.test(error.message)) {
-        return { ok: true as const, alreadyRegistered: true as const };
-      }
-      throw new Error(error.message);
-    }
-
-    return { ok: true as const, id: row?.id ?? null, alreadyRegistered: false as const };
+    return { ok: true as const, alreadyRegistered: false as const };
   });
