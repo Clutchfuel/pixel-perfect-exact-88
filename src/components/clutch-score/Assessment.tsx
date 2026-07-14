@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { supabase } from "@/integrations/supabase/client";
+import { submitAssessment } from "@/lib/assessment.functions";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
 
@@ -886,24 +887,31 @@ function EmailCapture({
     };
 
     try {
+      try {
+        // Preferred: Worker server fn reads runtime secrets via getEnv.
+        const result = await submitAssessment({ data: payload });
+        setSaved(true);
+        toast.success(
+          result.alreadyRegistered ? "You're already on the list." : "You're on the list.",
+        );
+        return;
+      } catch (serverErr) {
+        console.error("[Clutch Score] server save failed, trying client insert:", serverErr);
+      }
+
+      // Fallback: direct anon insert (works when VITE_ Supabase keys are baked into the client).
       let { error } = await supabase.from("assessment_responses").insert(payload);
 
-      // If remote schema is missing newer columns, retry without them.
-      if (
-        error &&
-        /goal|athlete_type|column|schema cache/i.test(error.message)
-      ) {
+      if (error && /goal|athlete_type|column|schema cache/i.test(error.message)) {
         const { goal: _g, athlete_type: _a, ...legacy } = payload;
         ({ error } = await supabase.from("assessment_responses").insert(legacy));
       }
 
       if (error) {
-        console.error("[Clutch Score] save failed:", error.message, error);
+        console.error("[Clutch Score] client save failed:", error.message, error);
         if (/duplicate|unique|already exists/i.test(error.message)) {
           setSaved(true);
           toast.success("You're already on the list.");
-        } else if (/session_token|policy|permission|rls/i.test(error.message)) {
-          toast.error("Couldn't save right now. Refresh and try again.");
         } else {
           toast.error(
             error.message?.length < 120
@@ -917,7 +925,12 @@ function EmailCapture({
       }
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
-      toast.error("Couldn't save your details. Check your connection and try again.");
+      const message = err instanceof Error ? err.message : "";
+      toast.error(
+        /Missing Supabase/i.test(message)
+          ? "Email signup isn't configured yet. Please try again later."
+          : "Couldn't save your details. Check your connection and try again.",
+      );
     } finally {
       setSubmitting(false);
     }

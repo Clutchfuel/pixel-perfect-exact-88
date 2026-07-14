@@ -7,6 +7,9 @@
 # --- Client (Vite — exposed to browser, must be VITE_ prefixed) ---
 # Required in CI builds; optional locally (falls back to Lovable preview URL)
 VITE_SITE_URL=https://pixel-perfect-exact-88.lovable.app
+# Supabase anon keys for browser fallback inserts (also bake these into Workers Builds)
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
 # Optional GA4 measurement ID (e.g. G-XXXXXXXXXX) — loads only after cookie consent
 VITE_GA_MEASUREMENT_ID=
 # Turnstile site key — must be paired with TURNSTILE_SECRET_KEY (both or neither)
@@ -15,6 +18,9 @@ VITE_TURNSTILE_SITE_KEY=
 VITE_HERO_VIDEO_CDN=
 
 # --- Server only (Worker — never prefix with VITE_) ---
+# Required for Clutch Score email capture (service role bypasses RLS)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 # Lovable: Project → Settings → Environment — same keys, no VITE_ on server secrets
 # Required in production (skipped in dev/CI when empty)
 RESEND_API_KEY=
