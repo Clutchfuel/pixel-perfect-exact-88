@@ -85,10 +85,14 @@ function finalizeResponse(response: Response): Response {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    // Nitro's Worker entry sets globalThis.__env__; the SSR service may be called as
+    // fetch(request) only, so env here is often undefined.
+    const nitroEnv = (globalThis as { __env__?: unknown }).__env__;
+    bindWorkerEnv(nitroEnv);
     bindWorkerEnv(env);
     try {
       const handler = await getServerEntry();
-      const response = await handler.fetch(request, env, ctx);
+      const response = await handler.fetch(request, env ?? nitroEnv, ctx);
       const normalized = await normalizeCatastrophicSsrResponse(response);
       return finalizeResponse(normalized);
     } catch (error) {

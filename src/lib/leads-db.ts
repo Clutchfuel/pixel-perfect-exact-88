@@ -16,7 +16,18 @@ export type ClutchScoreLeadRow = {
 
 /** Persist a Clutch Score signup to Cloudflare D1. Throws in production if DB is unbound. */
 export async function persistClutchScoreLead(row: ClutchScoreLeadRow): Promise<void> {
-  const db = getLeadsDb();
+  let db = getLeadsDb();
+
+  if (!db) {
+    try {
+      const { env } = await import("cloudflare:workers");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      db = (env as any)?.LEADS_DB as D1Database | undefined;
+    } catch {
+      /* local / unbound */
+    }
+  }
+
   if (!db) {
     const err = new Error("LEADS_DB not bound — clutch score lead not persisted");
     reportError(err);

@@ -21,25 +21,21 @@ function pickKv(env: unknown): KVNamespace | undefined {
   return kv && typeof kv === "object" ? (kv as KVNamespace) : undefined;
 }
 
-/** Best-effort read of Cloudflare module env when bindWorkerEnv didn't run. */
-function readCloudflareModuleEnv(): unknown {
+/**
+ * Nitro's cloudflare-module handler assigns Worker bindings here on every request.
+ * The SSR service is invoked as fetch(request) without env, so this is the reliable path.
+ */
+function readNitroEnv(): unknown {
   try {
-    // Cloudflare Workers native module (available in supported runtimes).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mod = (globalThis as any)["__CLOUDFLARE_WORKER_ENV__"];
-    if (mod) return mod;
+    return (globalThis as { __env__?: unknown }).__env__;
   } catch {
-    /* ignore */
+    return undefined;
   }
-  try {
-    // Some Nitro builds expose bindings here.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cf = (globalThis as any).Cloudflare?.env;
-    if (cf) return cf;
-  } catch {
-    /* ignore */
-  }
-  return undefined;
+}
+
+function readAllEnvCandidates(): unknown[] {
+  return [workerEnv, readNitroEnv()];
 }
 
 export function bindWorkerEnv(env: unknown) {
@@ -51,8 +47,11 @@ export function bindWorkerEnv(env: unknown) {
 }
 
 export function getEnv(key: string): string | undefined {
-  const fromWorker = workerEnv?.[key];
-  if (typeof fromWorker === "string" && fromWorker.length > 0) return fromWorker;
+  for (const candidate of readAllEnvCandidates()) {
+    const record = asRecord(candidate);
+    const value = record?.[key];
+    if (typeof value === "string" && value.length > 0) return value;
+  }
   if (typeof process !== "undefined" && process.env?.[key]) {
     return process.env[key];
   }
@@ -61,17 +60,24 @@ export function getEnv(key: string): string | undefined {
 
 export function getRateLimitKv(): KVNamespace | undefined {
   if (rateLimitKv) return rateLimitKv;
-  const fromModule = pickKv(readCloudflareModuleEnv());
-  if (fromModule) rateLimitKv = fromModule;
-  return rateLimitKv;
+  for (const candidate of readAllEnvCandidates()) {
+    const kv = pickKv(candidate);
+    if (kv) {
+      rateLimitKv = kv;
+      return kv;
+    }
+  }
+  return undefined;
 }
 
 export function getLeadsDb(): D1Database | undefined {
   if (leadsDb) return leadsDb;
-  const fromModule = pickLeadsDb(readCloudflareModuleEnv());
-  if (fromModule) {
-    leadsDb = fromModule;
-    return leadsDb;
+  for (const candidate of readAllEnvCandidates()) {
+    const db = pickLeadsDb(candidate);
+    if (db) {
+      leadsDb = db;
+      return db;
+    }
   }
   return undefined;
 }
