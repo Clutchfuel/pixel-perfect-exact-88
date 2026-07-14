@@ -35,4 +35,9 @@ if (buildStatus !== 0) process.exit(buildStatus);
 
 // Use the same runtime that launched this script (node on CF Builds, bun locally).
 const mergeStatus = run(process.execPath, [join(root, "scripts", "merge-wrangler-bindings.mjs")]);
-process.exit(mergeStatus);
+if (mergeStatus !== 0) process.exit(mergeStatus);
+
+const assertStatus = run(process.execPath, [
+  join(root, "scripts", "assert-leads-db-binding.mjs"),
+]);
+process.exit(assertStatus);

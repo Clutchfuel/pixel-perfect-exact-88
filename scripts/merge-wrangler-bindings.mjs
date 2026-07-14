@@ -2,18 +2,21 @@
  * Nitro/Cloudflare generates .output/server/wrangler.json and may omit D1/KV
  * from the repo wrangler.jsonc. Merge critical bindings so Workers Builds keep LEADS_DB.
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourcePath = join(root, "wrangler.jsonc");
+const outputWrangler = join(root, ".output", "server", "wrangler.json");
+const distWrangler = join(root, "dist", "server", "wrangler.json");
+const deployConfigPath = join(root, ".wrangler", "deploy", "config.json");
+
 const targets = [
-  join(root, ".output", "server", "wrangler.json"),
+  outputWrangler,
   join(root, ".output", "server", "wrangler.jsonc"),
-  join(root, "dist", "server", "wrangler.json"),
+  distWrangler,
   join(root, "dist", "server", "wrangler.jsonc"),
-  join(root, ".wrangler", "deploy", "config.json"),
 ];
 
 function stripJsonc(raw) {
@@ -40,7 +43,9 @@ function mergeBindings(target, source) {
     );
     for (const binding of from) {
       if (!binding?.binding) continue;
-      if (!byBinding.has(binding.binding)) {
+      const prev = byBinding.get(binding.binding);
+      // Always prefer repo wrangler.jsonc as source of truth for binding IDs.
+      if (JSON.stringify(prev) !== JSON.stringify(binding)) {
         byBinding.set(binding.binding, binding);
         changed = true;
       }
@@ -48,13 +53,11 @@ function mergeBindings(target, source) {
     target[key] = [...byBinding.values()];
   }
 
-  if (source.account_id && !target.account_id) {
-    target.account_id = source.account_id;
-    changed = true;
-  }
-  if (source.name && !target.name) {
-    target.name = source.name;
-    changed = true;
+  for (const key of ["account_id", "name"]) {
+    if (source[key] && target[key] !== source[key]) {
+      target[key] = source[key];
+      changed = true;
+    }
   }
   return changed;
 }
@@ -74,14 +77,35 @@ for (const targetPath of targets) {
     if (mergeBindings(target, source)) {
       writeFileSync(targetPath, `${JSON.stringify(target, null, 2)}\n`);
       console.log(`[merge-wrangler] merged bindings → ${targetPath}`);
-      mergedAny = true;
     } else {
       console.log(`[merge-wrangler] already complete → ${targetPath}`);
-      mergedAny = true;
     }
+    mergedAny = true;
   } catch (error) {
     console.warn(`[merge-wrangler] failed ${targetPath}:`, error);
   }
+}
+
+// Always rewrite Nitro's deploy redirect so wrangler uses the merged .output config.
+const preferred = existsSync(outputWrangler)
+  ? outputWrangler
+  : existsSync(distWrangler)
+    ? distWrangler
+    : null;
+
+if (preferred) {
+  mkdirSync(dirname(deployConfigPath), { recursive: true });
+  const redirect = {
+    configPath: relative(dirname(deployConfigPath), preferred).replace(/\\/g, "/"),
+    kv_namespaces: source.kv_namespaces ?? [],
+    d1_databases: source.d1_databases ?? [],
+    account_id: source.account_id,
+    name: source.name,
+  };
+  writeFileSync(deployConfigPath, `${JSON.stringify(redirect, null, 2)}\n`);
+  console.log(`[merge-wrangler] wrote deploy redirect → ${deployConfigPath}`);
+  console.log(`[merge-wrangler] configPath=${redirect.configPath}`);
+  mergedAny = true;
 }
 
 if (!mergedAny) {

@@ -11,7 +11,7 @@
     "postbuild": "node scripts/postbuild-server-entry.mjs && node scripts/merge-wrangler-bindings.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "node scripts/ci-build.mjs && wrangler deploy --config wrangler.jsonc",
+    "deploy": "node scripts/ci-build.mjs && wrangler deploy --config .output/server/wrangler.json",
     "lint": "eslint . --max-warnings 50",
     "format": "prettier --write ."
   },
