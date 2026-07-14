@@ -108,6 +108,24 @@ export type BehaviorSegment = {
   fill: number;
 };
 
+/** Soft tint of a hex color for the unused portion of a behavior arc. */
+function lightShade(hex: string, alpha = 0.22): string {
+  const raw = hex.replace("#", "");
+  if (raw.length !== 3 && raw.length !== 6) return `rgba(255,255,255,${alpha})`;
+  const full =
+    raw.length === 3
+      ? raw
+          .split("")
+          .map((ch) => ch + ch)
+          .join("")
+      : raw;
+  const r = Number.parseInt(full.slice(0, 2), 16);
+  const g = Number.parseInt(full.slice(2, 4), 16);
+  const b = Number.parseInt(full.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 type SegmentedRingProps = {
   score: number;
   segments: BehaviorSegment[];
@@ -187,7 +205,7 @@ export function SegmentedClutchRing({
                 cy={size / 2}
                 r={r}
                 fill="none"
-                stroke="rgba(255,255,255,0.1)"
+                stroke={lightShade(seg.color)}
                 strokeWidth={stroke}
                 strokeLinecap="round"
                 strokeDasharray={`${track} ${c - track}`}
