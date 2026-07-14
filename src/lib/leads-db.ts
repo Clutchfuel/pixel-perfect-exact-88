@@ -20,7 +20,9 @@ export async function persistClutchScoreLead(row: ClutchScoreLeadRow): Promise<v
   if (!db) {
     const err = new Error("LEADS_DB not bound — clutch score lead not persisted");
     reportError(err);
-    if (isProductionRuntime()) throw err;
+    if (isProductionRuntime()) {
+      throw new Error("Lead storage is not connected yet. Please try again shortly.");
+    }
     return;
   }
 

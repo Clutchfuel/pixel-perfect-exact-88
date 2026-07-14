@@ -8,10 +8,10 @@
     "dev": "vite dev",
     "setup": "node scripts/setup.mjs",
     "build": "vite build",
-    "postbuild": "node scripts/postbuild-server-entry.mjs",
+    "postbuild": "node scripts/postbuild-server-entry.mjs && node scripts/merge-wrangler-bindings.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "node scripts/ci-build.mjs && wrangler deploy",
+    "deploy": "node scripts/ci-build.mjs && wrangler deploy --config wrangler.jsonc",
     "lint": "eslint . --max-warnings 50",
     "format": "prettier --write ."
   },
