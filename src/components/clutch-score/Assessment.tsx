@@ -15,11 +15,6 @@ function generateSessionToken(): string {
   );
 }
 
-function generateId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
-  return generateSessionToken().slice(0, 36);
-}
-
 /* ---------- Goals (outcome-based labels) ---------- */
 
 const GOALS = [
@@ -129,8 +124,14 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
   },
 };
 
-function goalLabel(id: GoalId | null): string {
+function goalLabel(id: GoalId | null | undefined): string {
+  if (!id) return "";
   return GOALS.find((g) => g.id === id)?.label ?? "";
+}
+
+function goalsLabel(ids: GoalId[]): string {
+  if (!ids.length) return "Performance";
+  return ids.map((id) => goalLabel(id)).filter(Boolean).join(" · ");
 }
 
 function scoreStatus(score: number): string {
@@ -199,12 +200,12 @@ type ResultInsight = {
 function buildResultInsight(
   opportunity: Opportunity,
   nextStep: string,
-  goal: GoalId | null,
+  goals: GoalId[],
 ): ResultInsight {
   const biggestOpportunity = opportunityPillar(opportunity);
   const insight = OPPORTUNITY_INSIGHT[biggestOpportunity];
   return {
-    goal: goalLabel(goal) || "Performance",
+    goal: goalsLabel(goals),
     biggestOpportunity,
     headline: biggestOpportunity,
     description: insight.description,
@@ -290,7 +291,7 @@ function ContributionDots({
   );
 }
 
-function computeResult(answers: Answer[], goal: GoalId | null) {
+function computeResult(answers: Answer[], goals: GoalId[]) {
   const adjusted = adjustedScores(answers);
   const sum = adjusted.reduce((s, v) => s + v, 0);
   const clutch_score = Math.min(100, Math.round((sum / 20) * 100) + 10);
@@ -303,8 +304,14 @@ function computeResult(answers: Answer[], goal: GoalId | null) {
   else opportunity = "Consistency";
 
   const copy = NEXT_STEP[opportunity];
-  const next_step = (goal && copy[goal]) || copy.default;
+  // Prefer the first selected goal that has specialized coaching copy.
+  const matched = goals.find((g) => copy[g]);
+  const next_step = (matched && copy[matched]) || copy.default;
   return { clutch_score, opportunity, next_step };
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 }
 
 function scrollToAssessment() {
@@ -326,14 +333,14 @@ type Step =
       score: number;
       opportunity: Opportunity;
       nextStep: string;
-      goal: GoalId | null;
+      goals: GoalId[];
       athleteType: AthleteType | null;
       answers: Answer[];
     };
 
 export function Assessment() {
   const [step, setStep] = useState<Step>({ kind: "goal" });
-  const [goal, setGoal] = useState<GoalId | null>(null);
+  const [goals, setGoals] = useState<GoalId[]>([]);
   const [athleteType, setAthleteType] = useState<AthleteType | null>(null);
   const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
 
@@ -345,17 +352,15 @@ export function Assessment() {
     <div className={`mx-auto w-full ${step.kind === "result" ? "max-w-2xl" : "max-w-xl"}`}>
       {step.kind === "goal" && (
         <GoalStep
-          selected={goal}
-          onSelect={(g) => {
-            setGoal(g);
-            setStep({ kind: "athlete" });
-          }}
+          selected={goals}
+          onChange={setGoals}
+          onContinue={() => setStep({ kind: "athlete" })}
         />
       )}
 
       {step.kind === "athlete" && (
         <AthleteStep
-          goal={goal}
+          goals={goals}
           selected={athleteType}
           onSelect={(t) => {
             setAthleteType(t);
@@ -376,13 +381,13 @@ export function Assessment() {
             if (step.index < QUESTIONS.length - 1) {
               setStep({ kind: "quiz", index: step.index + 1 });
             } else {
-              const result = computeResult(next as Answer[], goal);
+              const result = computeResult(next as Answer[], goals);
               setStep({
                 kind: "result",
                 score: result.clutch_score,
                 opportunity: result.opportunity,
                 nextStep: result.next_step,
-                goal,
+                goals,
                 athleteType,
                 answers: next as Answer[],
               });
@@ -400,11 +405,11 @@ export function Assessment() {
           score={step.score}
           opportunity={step.opportunity}
           nextStep={step.nextStep}
-          goal={step.goal}
+          goals={step.goals}
           athleteType={step.athleteType}
           answers={step.answers}
           onRetake={() => {
-            setGoal(null);
+            setGoals([]);
             setAthleteType(null);
             setAnswers([null, null, null, null, null]);
             setStep({ kind: "goal" });
@@ -491,12 +496,18 @@ function useSelectThenAdvance<T>(onSelect: (value: T) => void, delayMs = 180) {
 
 function GoalStep({
   selected,
-  onSelect,
+  onChange,
+  onContinue,
 }: {
-  selected: GoalId | null;
-  onSelect: (g: GoalId) => void;
+  selected: GoalId[];
+  onChange: (goals: GoalId[]) => void;
+  onContinue: () => void;
 }) {
-  const { selected: pending, choose } = useSelectThenAdvance(onSelect);
+  const toggle = (id: GoalId) => {
+    onChange(
+      selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id],
+    );
+  };
 
   return (
     <section>
@@ -508,19 +519,19 @@ function GoalStep({
         What are you trying to achieve?
       </h2>
       <p className="mt-3 text-base text-muted-foreground">
-        Pick the one that fits best. We'll build your insight around it.
+        Select all that apply. We'll build your insight around your goals.
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {GOALS.map((g) => {
-          const active = selected === g.id || pending === g.id;
+          const active = selected.includes(g.id);
           return (
             <button
               key={g.id}
               type="button"
-              onClick={() => choose(g.id)}
-              disabled={pending !== null}
-              className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
+              onClick={() => toggle(g.id)}
+              aria-pressed={active}
+              className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] ${
                 active
                   ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
                   : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
@@ -531,17 +542,26 @@ function GoalStep({
           );
         })}
       </div>
+
+      <button
+        type="button"
+        disabled={selected.length === 0}
+        onClick={onContinue}
+        className="mt-8 w-full rounded-full bg-electric px-6 py-4 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Continue
+      </button>
     </section>
   );
 }
 
 function AthleteStep({
-  goal,
+  goals,
   selected,
   onSelect,
   onBack,
 }: {
-  goal: GoalId | null;
+  goals: GoalId[];
   selected: AthleteType | null;
   onSelect: (t: AthleteType) => void;
   onBack: () => void;
@@ -554,9 +574,9 @@ function AthleteStep({
       <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
         A little about how you train
       </p>
-      {goal && (
+      {goals.length > 0 && (
         <p className="mt-2 text-sm text-muted-foreground">
-          Goal · <span className="text-foreground">{goalLabel(goal)}</span>
+          Goals · <span className="text-foreground">{goalsLabel(goals)}</span>
         </p>
       )}
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
@@ -661,7 +681,7 @@ function Result({
   score,
   opportunity,
   nextStep,
-  goal,
+  goals,
   athleteType,
   answers,
   onRetake,
@@ -669,17 +689,20 @@ function Result({
   score: number;
   opportunity: Opportunity;
   nextStep: string;
-  goal: GoalId | null;
+  goals: GoalId[];
   athleteType: AthleteType | null;
   answers: Answer[];
   onRetake: () => void;
 }) {
   const status = scoreStatus(score);
   const behaviors = behaviorContributions(answers, opportunity);
-  const insight = buildResultInsight(opportunity, nextStep, goal);
+  const insight = buildResultInsight(opportunity, nextStep, goals);
 
   useEffect(() => {
-    scrollToAssessment();
+    // Intro collapses on result phase; reset so the score ring is above the fold.
+    scrollToTop();
+    const id = window.setTimeout(scrollToTop, 50);
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
@@ -692,7 +715,8 @@ function Result({
             {status}
           </p>
           <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-white/40">
-            How well your current behaviors support your goal.
+            How well your current behaviors support your goal
+            {goals.length > 1 ? "s" : ""}.
           </p>
         </div>
       </FadeIn>
@@ -701,7 +725,7 @@ function Result({
       <FadeIn delay={0.06}>
         <div className="text-center">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Your Goal
+            {goals.length > 1 ? "Your Goals" : "Your Goal"}
           </p>
           <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">
             {insight.goal}
@@ -783,7 +807,7 @@ function Result({
       <FadeIn delay={0.26}>
         <EmailCapture
           answers={answers}
-          goal={goal}
+          goals={goals}
           athleteType={athleteType}
           score={score}
           opportunity={opportunity}
@@ -808,14 +832,14 @@ function Result({
 
 function EmailCapture({
   answers,
-  goal,
+  goals,
   athleteType,
   score,
   opportunity,
   nextStep,
 }: {
   answers: Answer[];
-  goal: GoalId | null;
+  goals: GoalId[];
   athleteType: AthleteType | null;
   score: number;
   opportunity: Opportunity;
@@ -830,42 +854,70 @@ function EmailCapture({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return toast.error("Email is required");
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) return toast.error("Email is required");
+    if (!trimmedEmail.includes("@") || trimmedEmail.length < 5) {
+      return toast.error("Enter a valid email address.");
+    }
+
     setSubmitting(true);
     const sessionToken = generateSessionToken();
-    const id = generateId();
     const sourceValue =
       source === "Other" && sourceOther.trim()
         ? `Other: ${sourceOther.trim()}`
         : source || null;
+    const goalValue = goalsLabel(goals) || null;
+
+    const payload = {
+      first_name: firstName.trim() || null,
+      email: trimmedEmail,
+      source: sourceValue,
+      goal: goalValue,
+      athlete_type: athleteType ?? null,
+      q1: answers[0],
+      q2: answers[1],
+      q3: answers[2],
+      q4: answers[3],
+      q5: answers[4],
+      clutch_score: score,
+      opportunity,
+      next_step: nextStep,
+      session_token: sessionToken,
+    };
+
     try {
-      const { error } = await supabase.from("assessment_responses").insert({
-        id,
-        first_name: firstName.trim() || null,
-        email: email.trim(),
-        source: sourceValue,
-        goal: goal ?? null,
-        athlete_type: athleteType ?? null,
-        q1: answers[0],
-        q2: answers[1],
-        q3: answers[2],
-        q4: answers[3],
-        q5: answers[4],
-        clutch_score: score,
-        opportunity,
-        next_step: nextStep,
-        session_token: sessionToken,
-      });
+      let { error } = await supabase.from("assessment_responses").insert(payload);
+
+      // If remote schema is missing newer columns, retry without them.
+      if (
+        error &&
+        /goal|athlete_type|column|schema cache/i.test(error.message)
+      ) {
+        const { goal: _g, athlete_type: _a, ...legacy } = payload;
+        ({ error } = await supabase.from("assessment_responses").insert(legacy));
+      }
+
       if (error) {
-        console.error("[Clutch Score] save failed:", error.message);
-        toast.error("Couldn't save your details. Try again.");
+        console.error("[Clutch Score] save failed:", error.message, error);
+        if (/duplicate|unique|already exists/i.test(error.message)) {
+          setSaved(true);
+          toast.success("You're already on the list.");
+        } else if (/session_token|policy|permission|rls/i.test(error.message)) {
+          toast.error("Couldn't save right now. Refresh and try again.");
+        } else {
+          toast.error(
+            error.message?.length < 120
+              ? error.message
+              : "Couldn't save your details. Try again.",
+          );
+        }
       } else {
         setSaved(true);
         toast.success("You're on the list.");
       }
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
-      toast.error("Couldn't save your details. Try again.");
+      toast.error("Couldn't save your details. Check your connection and try again.");
     } finally {
       setSubmitting(false);
     }

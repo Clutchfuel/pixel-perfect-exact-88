@@ -42,6 +42,12 @@ function ClutchScorePage() {
     return () => window.removeEventListener("clutch-score:phase", onPhase);
   }, []);
 
+  useEffect(() => {
+    if (!showIntro) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [showIntro]);
+
   const start = () => {
     document.getElementById("clutch-assessment")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -88,8 +94,8 @@ function ClutchScorePage() {
 
       <section
         id="clutch-assessment"
-        className={`mx-auto w-full max-w-xl bg-white px-5 sm:px-8 ${
-          showIntro ? "py-14 sm:py-20" : "pb-14 pt-10 sm:pb-20 sm:pt-14"
+        className={`mx-auto w-full bg-white px-5 sm:px-8 ${
+          showIntro ? "max-w-xl py-14 sm:py-20" : "max-w-2xl pb-14 pt-10 sm:pb-20 sm:pt-14"
         }`}
       >
         <Assessment />
