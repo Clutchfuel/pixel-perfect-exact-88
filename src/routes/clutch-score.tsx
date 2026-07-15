@@ -4,22 +4,17 @@ import { Check } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Assessment } from "@/components/clutch-score/Assessment";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/clutch-score")({
   head: () => ({
-    meta: [
-      { title: "Clutch Score: Discover what's holding your performance back | ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "Every athlete has one habit costing them performance. Discover yours in less than 60 seconds and get one personalized action to improve before your next workout.",
-      },
-      { property: "og:title", content: "Clutch Score: Every athlete has one habit costing them performance" },
-      {
-        property: "og:description",
-        content: "Discover yours in less than 60 seconds and get one personalized action to improve.",
-      },
-    ],
+    meta: makeMeta({
+      title: "Clutch Score: Discover what's holding your performance back | ClutchFuel",
+      description:
+        "Every athlete has one habit costing them performance. Discover yours in less than 60 seconds and get one personalized action to improve before your next workout.",
+      path: "/clutch-score",
+    }),
+    links: canonical("/clutch-score"),
   }),
   component: ClutchScorePage,
 });

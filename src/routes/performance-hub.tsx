@@ -4,6 +4,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { ARTICLES, type ArticleCategory } from "@/content/articles";
 import { Reveal } from "@/components/Reveal";
 import { ArticleCover } from "@/components/ArticleCover";
+import { canonical, makeMeta } from "@/lib/seo";
 
 const CATEGORIES: ("All" | ArticleCategory)[] = [
   "All", "Hydration", "Recovery", "Fueling", "Performance", "Training", "Mindset",
@@ -11,15 +12,13 @@ const CATEGORIES: ("All" | ArticleCategory)[] = [
 
 export const Route = createFileRoute("/performance-hub")({
   head: () => ({
-    meta: [
-      { title: "Performance Hub: ClutchFuel" },
-      {
-        name: "description",
-        content: "Science-backed articles on hydration, recovery, fueling, and the habits that quietly change your training.",
-      },
-      { property: "og:title", content: "Performance Hub: ClutchFuel" },
-      { property: "og:description", content: "Science-backed articles for everyday athletes." },
-    ],
+    meta: makeMeta({
+      title: "Performance Hub: ClutchFuel",
+      description:
+        "Science-backed articles on hydration, recovery, fueling, and the habits that quietly change your training.",
+      path: "/performance-hub",
+    }),
+    links: canonical("/performance-hub"),
   }),
   component: PerformanceHubPage,
 });

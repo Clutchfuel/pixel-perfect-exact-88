@@ -28,7 +28,7 @@ function PrivacyPage() {
 
         <section className="flex-1">
           <h1 className="text-3xl font-bold leading-tight sm:text-4xl">Privacy Policy</h1>
-          <p className="mt-3 text-sm text-muted-foreground/80">Last updated June 20, 2026</p>
+          <p className="mt-3 text-sm text-muted-foreground/80">Last updated July 14, 2026</p>
 
           <div className="mt-8 flex flex-col gap-6 text-base leading-relaxed text-muted-foreground">
             <p>
@@ -40,9 +40,10 @@ function PrivacyPage() {
               <h2 className="text-lg font-semibold text-foreground">What we collect</h2>
               <p className="mt-2">
                 When you complete the assessment, we store your email address, your answers to the
-                five hydration questions, your calculated Clutch Score and result, and any optional
+                assessment questions, your calculated Clutch Score and result, and any optional
                 details you provide, first name and how you heard about Clutch Score. If you submit
-                feedback on your result, we store that too.
+                feedback on your result, we store that too. Newsletter signups on this site store
+                your email so we can send updates you asked for.
               </p>
             </div>
 
@@ -50,8 +51,8 @@ function PrivacyPage() {
               <h2 className="text-lg font-semibold text-foreground">Why we collect it</h2>
               <p className="mt-2">
                 We use this information to show you your result, to understand how the assessment is
-                performing during testing, and to follow up about your hydration strategy if you've
-                opted in to hear from us. We do not sell this information.
+                performing, and to follow up with performance insights if you've opted in to hear
+                from us. We do not sell this information.
               </p>
             </div>
 
@@ -69,9 +70,12 @@ function PrivacyPage() {
             <div>
               <h2 className="text-lg font-semibold text-foreground">How we store it</h2>
               <p className="mt-2">
-                Your responses are stored in a Supabase database. Submissions are write-once for
-                feedback, once you submit a 👍/👎 or a note, that submission can't be modified
-                again. We don't make your individual responses publicly readable.
+                Clutch Score submissions are stored in a Cloudflare D1 database on our production
+                Worker. If that primary store is unavailable, we may fall back to a Supabase
+                database or deliver the lead details to our team inbox so your signup is not lost.
+                Feedback submissions are write-once: once you submit a 👍/👎 or a note, that
+                submission can't be modified again. We don't make your individual responses
+                publicly readable.
               </p>
             </div>
 

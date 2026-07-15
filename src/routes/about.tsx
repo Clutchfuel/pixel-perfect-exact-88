@@ -2,23 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 import founderImage from "@/assets/founder-jamar.png";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
-    meta: [
-      { title: "Our Mission: Why ClutchFuel Exists | ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "What's holding me back from performing at my best? That question led to ClutchFuel, a place where everyday athletes can understand themselves and make smarter performance decisions.",
-      },
-      { property: "og:title", content: "Our Mission: Why ClutchFuel Exists | ClutchFuel" },
-      {
-        property: "og:description",
-        content: "The story behind ClutchFuel, built for everyday athletes still asking better questions.",
-      },
-    ],
+    meta: makeMeta({
+      title: "Our Mission: Why ClutchFuel Exists | ClutchFuel",
+      description:
+        "What's holding me back from performing at my best? That question led to ClutchFuel, a place where everyday athletes can understand themselves and make smarter performance decisions.",
+      path: "/about",
+    }),
+    links: canonical("/about"),
   }),
   component: AboutPage,
 });

@@ -70,7 +70,7 @@ export function ArticleCover({ category, title, className = "", variant = "compa
       {variant === "compact" && (
         <div className="relative flex h-full flex-col justify-between p-5 sm:p-6">
           <div className="flex items-center gap-2">
-            <img src={logoAsset.url} alt="" className="h-4 w-auto no-bw" />
+            <img src={logoAsset.url} alt="ClutchFuel" className="h-4 w-auto no-bw" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/80">
               Insights
             </span>

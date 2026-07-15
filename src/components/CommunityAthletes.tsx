@@ -7,7 +7,12 @@ import photoBasketball from "@/assets/sport-basketball.jpg";
 import photoHyrox from "@/assets/sport-hyrox.jpg";
 import photoHyroxFinish from "@/assets/hyrox-finish-male.jpg";
 
-const FACES = [photoRunning, photoHyrox, photoBasketball, photoHyroxFinish] as const;
+const FACES = [
+  { src: photoRunning, alt: "Everyday athlete on a run" },
+  { src: photoHyrox, alt: "Athlete pushing a HYROX sled" },
+  { src: photoBasketball, alt: "Basketball player mid-game" },
+  { src: photoHyroxFinish, alt: "Athlete finishing a HYROX race" },
+] as const;
 
 const WHO = [
   "The runner chasing a first 5K.",
@@ -75,14 +80,14 @@ export function CommunityAthletes() {
         {/* Faces — no labels, just recognition */}
         <Reveal delay={0.14}>
           <div className="mt-20 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-            {FACES.map((src, i) => (
+            {FACES.map((face) => (
               <div
-                key={i}
+                key={face.alt}
                 className="aspect-[4/5] overflow-hidden bg-white/5 sm:aspect-[3/4]"
               >
                 <img
-                  src={src}
-                  alt=""
+                  src={face.src}
+                  alt={face.alt}
                   loading="lazy"
                   className="h-full w-full object-cover object-center grayscale contrast-110 transition duration-700 hover:grayscale-0"
                 />

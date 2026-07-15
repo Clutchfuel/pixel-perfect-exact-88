@@ -3,23 +3,17 @@ import { ArrowRight, Clock, ListChecks, Target } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
-    meta: [
-      { title: "How It Works: ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "How the 60-second Clutch Score assessment shows how your current behaviors align with the performance goal you're trying to achieve.",
-      },
-      { property: "og:title", content: "How It Works: ClutchFuel" },
-      {
-        property: "og:description",
-        content:
-          "Get your Clutch Score in 60 seconds. See how your behaviors support your goal, and get one action to try this week.",
-      },
-    ],
+    meta: makeMeta({
+      title: "How It Works: ClutchFuel",
+      description:
+        "How the 60-second Clutch Score assessment shows how your current behaviors align with the performance goal you're trying to achieve.",
+      path: "/how-it-works",
+    }),
+    links: canonical("/how-it-works"),
   }),
   component: HowItWorksPage,
 });

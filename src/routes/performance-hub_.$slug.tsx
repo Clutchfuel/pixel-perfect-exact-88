@@ -4,6 +4,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { getArticle, relatedArticles } from "@/content/articles";
 import logoAsset from "@/assets/clutchfuel-logo-white.png.asset.json";
 import { ArticleCover } from "@/components/ArticleCover";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/performance-hub_/$slug")({
   loader: ({ params }) => {
@@ -16,14 +17,15 @@ export const Route = createFileRoute("/performance-hub_/$slug")({
       return { meta: [{ title: "Article not found: ClutchFuel" }, { name: "robots", content: "noindex" }] };
     }
     const { article } = loaderData;
+    const path = `/performance-hub/${article.slug}`;
     return {
-      meta: [
-        { title: `${article.title}: ClutchFuel` },
-        { name: "description", content: article.excerpt },
-        { property: "og:title", content: article.title },
-        { property: "og:description", content: article.excerpt },
-        { property: "og:type", content: "article" },
-      ],
+      meta: makeMeta({
+        title: `${article.title}: ClutchFuel`,
+        description: article.excerpt,
+        path,
+        type: "article",
+      }),
+      links: canonical(path),
     };
   },
   component: ArticlePage,

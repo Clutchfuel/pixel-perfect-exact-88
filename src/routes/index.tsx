@@ -1,31 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain, Sparkles } from "lucide-react";
+import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
 import { CommunityAthletes } from "@/components/CommunityAthletes";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { ArticleCover } from "@/components/ArticleCover";
 import { ARTICLES } from "@/content/articles";
+import { canonical, makeMeta } from "@/lib/seo";
 import heroImage from "@/assets/home-hero-cinematic.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "ClutchFuel: Helping Everyday Athletes Perform Better" },
-      {
-        name: "description",
-        content:
-          "Personalized insights and better habits, starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
-      },
-      { property: "og:title", content: "ClutchFuel: Helping Everyday Athletes Perform Better" },
-      {
-        property: "og:description",
-        content:
-          "Every goal starts with better performance. Get your Clutch Score in 60 seconds and find what's holding you back.",
-      },
-      { property: "og:type", content: "website" },
-
-    ],
+    meta: makeMeta({
+      title: "ClutchFuel: Helping Everyday Athletes Perform Better",
+      description:
+        "Personalized insights and better habits, starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
+      path: "/",
+    }),
+    links: canonical("/"),
   }),
   component: HomePage,
 });
@@ -71,8 +63,7 @@ function HomePage() {
       <section className="relative overflow-hidden bg-foreground text-background">
         <img
           src={heroImage}
-          alt=""
-          aria-hidden
+          alt="Athletes training outdoors at dusk"
           width={1600}
           height={1104}
           className="no-bw absolute inset-0 h-full w-full object-cover object-center opacity-70"

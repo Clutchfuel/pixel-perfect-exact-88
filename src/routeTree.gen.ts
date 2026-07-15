@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PromiseRouteImport } from './routes/promise'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PerformanceHubRouteImport } from './routes/performance-hub'
@@ -21,6 +22,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub_.$slug'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PromiseRoute = PromiseRouteImport.update({
   id: '/promise',
   path: '/promise',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/performance-hub': typeof PerformanceHubRoute
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/performance-hub_/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/performance-hub'
     | '/privacy'
     | '/promise'
+    | '/sitemap.xml'
     | '/performance-hub/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/performance-hub'
     | '/privacy'
     | '/promise'
+    | '/sitemap.xml'
     | '/performance-hub/$slug'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/performance-hub'
     | '/privacy'
     | '/promise'
+    | '/sitemap.xml'
     | '/performance-hub_/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -170,11 +182,19 @@ export interface RootRouteChildren {
   PerformanceHubRoute: typeof PerformanceHubRoute
   PrivacyRoute: typeof PrivacyRoute
   PromiseRoute: typeof PromiseRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   PerformanceHubSlugRoute: typeof PerformanceHubSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/promise': {
       id: '/promise'
       path: '/promise'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   PerformanceHubRoute: PerformanceHubRoute,
   PrivacyRoute: PrivacyRoute,
   PromiseRoute: PromiseRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   PerformanceHubSlugRoute: PerformanceHubSlugRoute,
 }
 export const routeTree = rootRouteImport
