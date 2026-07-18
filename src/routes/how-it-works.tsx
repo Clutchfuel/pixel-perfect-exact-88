@@ -35,7 +35,7 @@ const STEPS = [
     n: "03",
     icon: Target,
     title: "Take one Clutch Move",
-    copy: "One concrete, science-informed step you can try before your next workout. No overwhelm, no complicated protocols.",
+    copy: "One concrete step to try before your next workout — no overwhelm, no complicated protocols, just what actually moves the needle.",
   },
 ];
 

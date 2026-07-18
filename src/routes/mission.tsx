@@ -24,7 +24,7 @@ export const Route = createFileRoute("/mission")({
 
 const PILLARS = [
   { icon: Compass, title: "Discover", copy: "Understand your body through the Clutch Score." },
-  { icon: GraduationCap, title: "Learn", copy: "Science-backed education that removes guesswork." },
+  { icon: GraduationCap, title: "Learn", copy: "Straight answers that remove the guesswork, not gimmicks." },
   { icon: Activity, title: "Perform", copy: "Build habits that improve performance." },
   { icon: Users, title: "Belong", copy: "Join a community of everyday athletes." },
   { icon: HeartHandshake, title: "Give Back", copy: "As we grow, invest in making sports more accessible." },

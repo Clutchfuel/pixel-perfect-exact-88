@@ -15,7 +15,7 @@ export const Route = createFileRoute("/performance-hub")({
     meta: makeMeta({
       title: "Performance Hub: ClutchFuel",
       description:
-        "Science-backed articles on hydration, recovery, fueling, and the habits that quietly change your training.",
+        "Practical guides on hydration, recovery, and fueling — the habits that quietly change your training, in minutes not hours.",
       path: "/performance-hub",
     }),
     links: canonical("/performance-hub"),
@@ -41,7 +41,7 @@ function PerformanceHubPage() {
             Learn what your body is trying to tell you.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-background/75">
-            Editorial, science-informed guides on hydration, recovery, fueling, training habits, and the small things that quietly change results.
+            Straight-to-the-point guides on hydration, recovery, fueling, and training habits — the small things that quietly change results, written for people who want to decide fast and move on.
           </p>
 
 
