@@ -23,7 +23,10 @@ export function ArticleCover({ category, title, className = "", variant = "compa
       aria-label={title ? `${category}: ${title}` : undefined}
     >
       {/* Repeating category name */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-1 -rotate-6 opacity-[0.22] leading-none select-none">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-1 -rotate-6 opacity-[0.22] leading-none select-none"
+      >
         {Array.from({ length: rows }).map((_, i) => (
           <div
             key={i}
@@ -42,6 +45,7 @@ export function ArticleCover({ category, title, className = "", variant = "compa
 
       {/* Outlined clutchfuel wordmark on the right */}
       <div
+        aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 right-[-8%] flex w-[55%] items-center overflow-hidden select-none"
       >
         <div

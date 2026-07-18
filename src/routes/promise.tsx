@@ -2,22 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/promise")({
   head: () => ({
-    meta: [
-      { title: "Our Promise: ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "As ClutchFuel grows, we give back. Supporting youth sports, community events, and removing barriers that keep athletes from participating.",
-      },
-      { property: "og:title", content: "Our Promise: ClutchFuel" },
-      {
-        property: "og:description",
-        content: "As we grow, we invest back into the communities that helped build us.",
-      },
-    ],
+    meta: makeMeta({
+      title: "Our Promise: ClutchFuel",
+      description:
+        "As ClutchFuel grows, we give back. Supporting youth sports, community events, and removing barriers that keep athletes from participating.",
+      path: "/promise",
+    }),
+    links: canonical("/promise"),
   }),
   component: PromisePage,
 });

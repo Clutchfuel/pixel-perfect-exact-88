@@ -2,22 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Compass, GraduationCap, Activity, Users, HeartHandshake } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/mission")({
   head: () => ({
-    meta: [
-      { title: "Mission: ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "Performance creates opportunity. ClutchFuel exists to help everyday athletes become better teammates, coaches, parents, and leaders.",
-      },
-      { property: "og:title", content: "Our Mission: ClutchFuel" },
-      {
-        property: "og:description",
-        content: "More than performance. We're building a company that strengthens athletes and communities.",
-      },
-    ],
+    meta: makeMeta({
+      title: "Mission: ClutchFuel",
+      description:
+        "Performance creates opportunity. ClutchFuel exists to help everyday athletes become better teammates, coaches, parents, and leaders.",
+      path: "/mission",
+    }),
+    links: canonical("/mission"),
   }),
   component: MissionPage,
 });

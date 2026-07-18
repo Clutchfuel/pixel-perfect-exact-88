@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
+import { SITE_URL } from "@/config";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
@@ -10,7 +11,14 @@ export const Route = createFileRoute("/privacy")({
         content: "How ClutchFuel collects, stores, and uses data from the Clutch Score assessment.",
       },
       { name: "robots", content: "noindex, nofollow" },
+      { property: "og:title", content: "Privacy Policy: Clutch Score by ClutchFuel" },
+      {
+        property: "og:description",
+        content: "How ClutchFuel collects, stores, and uses data from the Clutch Score assessment.",
+      },
+      { property: "og:url", content: `${SITE_URL}/privacy` },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/privacy` }],
   }),
   component: PrivacyPage,
 });
