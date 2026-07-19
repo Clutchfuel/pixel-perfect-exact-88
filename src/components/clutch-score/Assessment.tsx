@@ -1015,8 +1015,8 @@ function EmailCapture({
         Keep Improving
       </h3>
       <p className="mx-auto mt-4 max-w-md text-center text-base leading-relaxed text-muted-foreground">
-        Get future Clutch Moves, performance insights, new assessment tools, and early access to
-        everything we're building.
+        Join the ClutchFuel community to receive personalized performance insights, weekly Clutch
+        Moves, new assessment tools, and early access to everything we're building.
       </p>
 
       <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-3">
@@ -1075,7 +1075,7 @@ function EmailCapture({
           disabled={submitting}
           className="mt-3 w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
-          {submitting ? "Saving..." : "Continue My Journey"}
+          {submitting ? "Saving..." : "Unlock My Performance Insights"}
         </button>
       </form>
     </div>
