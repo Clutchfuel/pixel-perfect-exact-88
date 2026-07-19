@@ -26,7 +26,7 @@ const COLUMNS = [
   },
 ] as const;
 
-export function SiteFooter() {
+const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 100; /* Set FOUNDING_MEMBER_COUNT to a number to show X / 100 Founding Members above the copy. */ export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,7 +41,7 @@ export function SiteFooter() {
     await new Promise((r) => setTimeout(r, 400));
     setSubmitting(false);
     setEmail("");
-    toast.success("You're on the list. Welcome to the Clutch Crew.");
+    toast.success("You're in. Welcome to the Clutch 100.");
   };
 
   return (
@@ -53,12 +53,12 @@ export function SiteFooter() {
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-background/70">
               Helping everyday athletes stop guessing and start performing with confidence.
             </p>
-            <form onSubmit={submit} className="mt-6 flex max-w-sm gap-2">
+            <p className="mt-8 max-w-sm text-xl font-bold text-background">The Clutch 100</p> {FOUNDING_MEMBER_COUNT !== null && (<p className="max-w-sm mt-1 text-xs font-semibold text-electric">{FOUNDING_MEMBER_COUNT} / {FOUNDING_MEMBER_GOAL} Founding Members</p>)} <p className="max-w-sm mt-2 text-sm leading-relaxed text-background/70">Be one of the first 100 everyday athletes helping build ClutchFuel. Get early access to new tools, exclusive performance insights, and help shape what's next.</p> <form onSubmit={submit} className="mt-4 flex max-w-sm gap-2">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Join the Clutch Crew"
+                placeholder="Enter your email"
                 className="min-w-0 flex-1 rounded-full border border-white/15 bg-foreground px-4 py-2.5 text-sm text-background placeholder:text-background/50 focus:border-electric focus:outline-none"
               />
               <button
@@ -66,11 +66,11 @@ export function SiteFooter() {
                 disabled={submitting}
                 className="shrink-0 rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
               >
-                {submitting ? "…" : "Join"}
+                {submitting ? "…" : "Claim My Spot"}
               </button>
             </form>
             <p className="mt-2 text-xs text-background/60">
-              One practical tip a week. No fluff, no spam.
+              Limited to the first 100 founding members.
             </p>
           </div>
 
