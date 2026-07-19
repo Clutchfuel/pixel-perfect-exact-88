@@ -22,13 +22,7 @@ const GOALS = [
   { id: "cramping", label: "Fewer Cramps" },
   { id: "recover", label: "Faster Recovery" },
   { id: "endurance", label: "Greater Endurance" },
-  { id: "strength", label: "Muscle Growth" },
-  { id: "weight", label: "Fat Loss" },
-  { id: "gameday", label: "Better Game-Day Performance" },
   { id: "consistency", label: "Improved Daily Performance" },
-  { id: "hyrox", label: "HYROX Readiness" },
-  { id: "5k", label: "Faster 5K Time" },
-  { id: "basketball", label: "Better Basketball Performance" },
   { id: "feel", label: "Better Hydration" },
 ] as const;
 type GoalId = (typeof GOALS)[number]["id"];
@@ -37,11 +31,9 @@ const ATHLETE_TYPES = [
   "Runner",
   "Basketball",
   "Strength",
-  "CrossFit",
   "HYROX",
   "Cycling",
   "General Fitness",
-  "Weekend Warrior",
 ] as const;
 type AthleteType = (typeof ATHLETE_TYPES)[number];
 
@@ -80,12 +72,6 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
       "Drink electrolytes 15 to 30 minutes before training, not just during. Try it for your next 3 sessions.",
     endurance:
       "If you want to build endurance, pre-hydrate 20 to 30 minutes before your long sessions, sodium in, then start. Small change, big change in the back half.",
-    hyrox:
-      "For HYROX prep, front-load electrolytes 20 minutes before your metcons. Fatigue in the final stations is usually a timing problem, not a fitness one.",
-    "5k":
-      "For a faster 5K, take electrolytes 15 to 20 minutes before hard efforts. You'll hold pace deeper into the effort.",
-    gameday:
-      "On game day, pre-hydrate 30 minutes before tip-off / kickoff, not while you're already warming up.",
     energy:
       "If you want more energy in workouts, hydrate 20 minutes before you train. Most 'low energy' sessions start under-fueled on fluid.",
   },
@@ -94,12 +80,8 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
       "Add electrolytes to your next 3 workouts, even short ones. Consistency matters more than amount.",
     cramping:
       "If the goal is to stop cramping, add electrolytes to every session for the next 2 weeks, even the short ones. This is the single highest-leverage change for you.",
-    gameday:
-      "For game-day performance, don't wait until you're depleted. Sip electrolytes through warm-up and the first quarter/half.",
     endurance:
       "Building endurance is a sodium problem as much as a mileage problem. Add electrolytes to every session over 45 minutes.",
-    weight:
-      "Losing weight without losing performance means keeping electrolytes in even when calories are down. Don't cut sodium with your food.",
   },
   "Recovery & Cramping": {
     default: "Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.",
@@ -107,10 +89,6 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
       "To recover faster, rehydrate with sodium within 60 minutes of finishing. Water alone isn't recovery, it's dilution.",
     cramping:
       "To stop cramping, rebuild sodium within an hour of training. Cramps tomorrow are usually a recovery problem from today.",
-    basketball:
-      "For a basketball season, treat post-practice recovery as part of the practice. Fluids + sodium inside 60 minutes.",
-    strength:
-      "For strength gains, don't skip the post-lift refuel window. Fluid, sodium, protein, in that order, inside an hour.",
   },
   Consistency: {
     default:
@@ -129,9 +107,13 @@ function goalLabel(id: GoalId | null | undefined): string {
   return GOALS.find((g) => g.id === id)?.label ?? "";
 }
 
-function goalsLabel(ids: GoalId[]): string {
-  if (!ids.length) return "Performance";
-  return ids.map((id) => goalLabel(id)).filter(Boolean).join(" · ");
+/** Combines the selected goal chips with the free-text "Other" goal, if any. */
+function combinedGoalsLabel(ids: GoalId[], other: string): string {
+  const base = ids.map((id) => goalLabel(id)).filter(Boolean);
+  const trimmedOther = other.trim();
+  if (trimmedOther) base.push(trimmedOther);
+  if (!base.length) return "Performance";
+  return base.join(" · ");
 }
 
 function scoreStatus(score: number): string {
@@ -201,11 +183,12 @@ function buildResultInsight(
   opportunity: Opportunity,
   nextStep: string,
   goals: GoalId[],
+  goalOther: string,
 ): ResultInsight {
   const biggestOpportunity = opportunityPillar(opportunity);
   const insight = OPPORTUNITY_INSIGHT[biggestOpportunity];
   return {
-    goal: goalsLabel(goals),
+    goal: combinedGoalsLabel(goals, goalOther),
     biggestOpportunity,
     headline: biggestOpportunity,
     description: insight.description,
@@ -334,14 +317,18 @@ type Step =
       opportunity: Opportunity;
       nextStep: string;
       goals: GoalId[];
+      goalOther: string;
       athleteType: AthleteType | null;
+      athleteOther: string;
       answers: Answer[];
     };
 
 export function Assessment() {
   const [step, setStep] = useState<Step>({ kind: "goal" });
   const [goals, setGoals] = useState<GoalId[]>([]);
+  const [goalOther, setGoalOther] = useState("");
   const [athleteType, setAthleteType] = useState<AthleteType | null>(null);
+  const [athleteOther, setAthleteOther] = useState("");
   const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
 
   useEffect(() => {
@@ -354,6 +341,8 @@ export function Assessment() {
         <GoalStep
           selected={goals}
           onChange={setGoals}
+          otherValue={goalOther}
+          onOtherChange={setGoalOther}
           onContinue={() => setStep({ kind: "athlete" })}
         />
       )}
@@ -361,9 +350,17 @@ export function Assessment() {
       {step.kind === "athlete" && (
         <AthleteStep
           goals={goals}
+          goalOther={goalOther}
           selected={athleteType}
+          otherValue={athleteOther}
           onSelect={(t) => {
             setAthleteType(t);
+            setAthleteOther("");
+            setStep({ kind: "quiz", index: 0 });
+          }}
+          onSelectOther={(text) => {
+            setAthleteType(null);
+            setAthleteOther(text);
             setStep({ kind: "quiz", index: 0 });
           }}
           onBack={() => setStep({ kind: "goal" })}
@@ -388,7 +385,9 @@ export function Assessment() {
                 opportunity: result.opportunity,
                 nextStep: result.next_step,
                 goals,
+                goalOther,
                 athleteType,
+                athleteOther,
                 answers: next as Answer[],
               });
             }
@@ -406,11 +405,15 @@ export function Assessment() {
           opportunity={step.opportunity}
           nextStep={step.nextStep}
           goals={step.goals}
+          goalOther={step.goalOther}
           athleteType={step.athleteType}
+          athleteOther={step.athleteOther}
           answers={step.answers}
           onRetake={() => {
             setGoals([]);
+            setGoalOther("");
             setAthleteType(null);
+            setAthleteOther("");
             setAnswers([null, null, null, null, null]);
             setStep({ kind: "goal" });
             scrollToAssessment();
@@ -494,13 +497,42 @@ function useSelectThenAdvance<T>(onSelect: (value: T) => void, delayMs = 180) {
   };
 }
 
+function OtherToggle({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex min-h-[4.5rem] w-full items-center rounded-2xl border px-5 py-5 text-left text-base font-semibold transition active:scale-[0.99] ${
+        active
+          ? "border-electric bg-electric text-black shadow-[0_0_0_1px_rgba(157,255,61,0.35)]"
+          : "border-black/10 bg-black/[0.03] text-foreground hover:border-black/30 hover:bg-black/[0.06]"
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
 function GoalStep({
   selected,
   onChange,
+  otherValue,
+  onOtherChange,
   onContinue,
 }: {
   selected: GoalId[];
   onChange: (goals: GoalId[]) => void;
+  otherValue: string;
+  onOtherChange: (value: string) => void;
   onContinue: () => void;
 }) {
   const toggle = (id: GoalId) => {
@@ -508,6 +540,8 @@ function GoalStep({
       selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id],
     );
   };
+  const [otherOpen, setOtherOpen] = useState(otherValue.trim().length > 0);
+  const canContinue = selected.length > 0 || otherValue.trim().length > 0;
 
   return (
     <section>
@@ -541,11 +575,26 @@ function GoalStep({
             </button>
           );
         })}
+        <OtherToggle
+          label="Other"
+          active={otherOpen}
+          onClick={() => setOtherOpen(true)}
+        />
       </div>
+
+      {otherOpen && (
+        <input
+          type="text"
+          value={otherValue}
+          onChange={(e) => onOtherChange(e.target.value)}
+          placeholder="Tell us your goal"
+          className="mt-3 w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+        />
+      )}
 
       <button
         type="button"
-        disabled={selected.length === 0}
+        disabled={!canContinue}
         onClick={onContinue}
         className="mt-8 w-full rounded-full bg-electric px-6 py-4 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-40"
       >
@@ -557,16 +606,24 @@ function GoalStep({
 
 function AthleteStep({
   goals,
+  goalOther,
   selected,
+  otherValue,
   onSelect,
+  onSelectOther,
   onBack,
 }: {
   goals: GoalId[];
+  goalOther: string;
   selected: AthleteType | null;
+  otherValue: string;
   onSelect: (t: AthleteType) => void;
+  onSelectOther: (text: string) => void;
   onBack: () => void;
 }) {
   const { selected: pending, choose } = useSelectThenAdvance(onSelect);
+  const [otherOpen, setOtherOpen] = useState(otherValue.trim().length > 0 && !selected);
+  const [otherText, setOtherText] = useState(otherValue);
 
   return (
     <section>
@@ -574,9 +631,9 @@ function AthleteStep({
       <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
         A little about how you train
       </p>
-      {goals.length > 0 && (
+      {(goals.length > 0 || goalOther.trim().length > 0) && (
         <p className="mt-2 text-sm text-muted-foreground">
-          Goals · <span className="text-foreground">{goalsLabel(goals)}</span>
+          Goals · <span className="text-foreground">{combinedGoalsLabel(goals, goalOther)}</span>
         </p>
       )}
       <h2 className="mt-3 text-balance text-3xl font-bold leading-tight sm:text-4xl">
@@ -603,7 +660,32 @@ function AthleteStep({
             </button>
           );
         })}
+        <OtherToggle
+          label="Other"
+          active={otherOpen}
+          onClick={() => setOtherOpen(true)}
+        />
       </div>
+
+      {otherOpen && (
+        <div className="mt-4">
+          <input
+            type="text"
+            value={otherText}
+            onChange={(e) => setOtherText(e.target.value)}
+            placeholder="Tell us how you train"
+            className="w-full rounded-2xl border border-black/10 bg-black/[0.03] px-5 py-4 text-base text-foreground placeholder:text-muted-foreground/70 focus:border-electric focus:outline-none"
+          />
+          <button
+            type="button"
+            disabled={otherText.trim().length === 0}
+            onClick={() => onSelectOther(otherText.trim())}
+            className="mt-3 w-full rounded-full bg-electric px-6 py-4 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Continue
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -682,7 +764,9 @@ function Result({
   opportunity,
   nextStep,
   goals,
+  goalOther,
   athleteType,
+  athleteOther,
   answers,
   onRetake,
 }: {
@@ -690,13 +774,16 @@ function Result({
   opportunity: Opportunity;
   nextStep: string;
   goals: GoalId[];
+  goalOther: string;
   athleteType: AthleteType | null;
+  athleteOther: string;
   answers: Answer[];
   onRetake: () => void;
 }) {
   const status = scoreStatus(score);
   const behaviors = behaviorContributions(answers, opportunity);
-  const insight = buildResultInsight(opportunity, nextStep, goals);
+  const insight = buildResultInsight(opportunity, nextStep, goals, goalOther);
+  const totalGoalCount = goals.length + (goalOther.trim().length > 0 ? 1 : 0);
 
   useEffect(() => {
     // Intro collapses on result phase; reset so the score ring is above the fold.
@@ -716,7 +803,7 @@ function Result({
           </p>
           <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-white/40">
             How well your current behaviors support your goal
-            {goals.length > 1 ? "s" : ""}.
+            {totalGoalCount > 1 ? "s" : ""}.
           </p>
         </div>
       </FadeIn>
@@ -725,7 +812,7 @@ function Result({
       <FadeIn delay={0.06}>
         <div className="text-center">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            {goals.length > 1 ? "Your Goals" : "Your Goal"}
+            {totalGoalCount > 1 ? "Your Goals" : "Your Goal"}
           </p>
           <h2 className="mt-4 text-balance text-3xl font-extrabold tracking-tight sm:text-4xl">
             {insight.goal}
@@ -808,7 +895,9 @@ function Result({
         <EmailCapture
           answers={answers}
           goals={goals}
+          goalOther={goalOther}
           athleteType={athleteType}
+          athleteOther={athleteOther}
           score={score}
           opportunity={opportunity}
           nextStep={nextStep}
@@ -833,14 +922,18 @@ function Result({
 function EmailCapture({
   answers,
   goals,
+  goalOther,
   athleteType,
+  athleteOther,
   score,
   opportunity,
   nextStep,
 }: {
   answers: Answer[];
   goals: GoalId[];
+  goalOther: string;
   athleteType: AthleteType | null;
+  athleteOther: string;
   score: number;
   opportunity: Opportunity;
   nextStep: string;
@@ -866,14 +959,16 @@ function EmailCapture({
       source === "Other" && sourceOther.trim()
         ? `Other: ${sourceOther.trim()}`
         : source || null;
-    const goalValue = goalsLabel(goals) || null;
+    const goalValue = combinedGoalsLabel(goals, goalOther) || null;
+    const athleteTypeValue =
+      athleteType ?? (athleteOther.trim() ? `Other: ${athleteOther.trim()}` : null);
 
     const payload = {
       first_name: firstName.trim() || null,
       email: trimmedEmail,
       source: sourceValue,
       goal: goalValue,
-      athlete_type: athleteType ?? null,
+      athlete_type: athleteTypeValue,
       q1: answers[0],
       q2: answers[1],
       q3: answers[2],
