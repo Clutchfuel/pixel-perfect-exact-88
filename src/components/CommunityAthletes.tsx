@@ -20,13 +20,13 @@ const WHO = [
   "The basketball player trying to stay ready.",
   "The lifter working toward one more rep.",
   "The cyclist training for the next ride.",
-  "The student balancing school and sport.",
+  "The founder training between back-to-back meetings.",
 ] as const;
 
 const VALUES = [
   {
     title: "Learn",
-    copy: "Evidence-based insights from coaches and sports science.",
+    copy: "Straight talk from coaches, not influencer noise.",
   },
   {
     title: "Improve",
@@ -58,7 +58,7 @@ export function CommunityAthletes() {
 
         <Reveal delay={0.06}>
           <div className="mx-auto mt-10 max-w-2xl space-y-4 text-center text-lg leading-relaxed text-white/55 sm:text-xl">
-            <p>Not professionals.</p>
+            <p>Not pros.</p>
             <p>Not influencers.</p>
             <p className="text-white">People who show up.</p>
           </div>

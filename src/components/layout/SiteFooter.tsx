@@ -70,7 +70,7 @@ export function SiteFooter() {
               </button>
             </form>
             <p className="mt-2 text-xs text-background/60">
-              Weekly science-backed performance tips. No spam.
+              One practical tip a week. No fluff, no spam.
             </p>
           </div>
 
