@@ -2,22 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/partnerships")({
   head: () => ({
-    meta: [
-      { title: "Partnerships: ClutchFuel" },
-      {
-        name: "description",
-        content:
-          "Let's build better athletes together. ClutchFuel partners with run clubs, gyms, coaches, dietitians, schools, and creators who share our mission.",
-      },
-      { property: "og:title", content: "Partnerships: ClutchFuel" },
-      {
-        property: "og:description",
-        content: "The future of performance is collaborative. Partner with ClutchFuel.",
-      },
-    ],
+    meta: makeMeta({
+      title: "Partnerships: ClutchFuel",
+      description:
+        "Let's build better athletes together. ClutchFuel partners with run clubs, gyms, coaches, dietitians, schools, and creators who share our mission.",
+      path: "/partnerships",
+    }),
+    links: canonical("/partnerships"),
   }),
   component: PartnershipsPage,
 });

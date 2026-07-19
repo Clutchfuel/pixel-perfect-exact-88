@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Calendar, Users } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
 import { Reveal } from "@/components/Reveal";
+import { canonical, makeMeta } from "@/lib/seo";
 
 import athleteRunning from "@/assets/sport-running.jpg";
 import athleteBasketball from "@/assets/sport-basketball.jpg";
@@ -13,15 +14,13 @@ import athleteCrossfit from "@/assets/community-crossfit.jpg";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
-    meta: [
-      { title: "Community: ClutchFuel" },
-      {
-        name: "description",
-        content: "Everyday athletes chasing better. Runners, HYROX competitors, hoopers, busy parents, real stories from the ClutchFuel community.",
-      },
-      { property: "og:title", content: "The ClutchFuel Community" },
-      { property: "og:description", content: "Real stories from everyday athletes." },
-    ],
+    meta: makeMeta({
+      title: "Community: ClutchFuel",
+      description:
+        "Everyday athletes chasing better. Runners, HYROX competitors, hoopers, busy parents, real stories from the ClutchFuel community.",
+      path: "/community",
+    }),
+    links: canonical("/community"),
   }),
   component: CommunityPage,
 });
