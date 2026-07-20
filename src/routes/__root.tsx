@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { Analytics } from "@/components/Analytics";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Logo } from "@/components/Logo";
+import { ScrollToTopOnNavigate } from "@/components/ScrollToTopOnNavigate";
 import { Toaster } from "@/components/ui/sonner";
 
 function useNoindexMeta() {
@@ -149,6 +150,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ScrollToTopOnNavigate />
       <Outlet />
       <Toaster position="top-center" richColors />
       <Analytics />
