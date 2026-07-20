@@ -86,7 +86,7 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
   "Recovery & Cramping": {
     default: "Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.",
     recover:
-      "To recover faster, rehydrate with sodium within 60 minutes of finishing. Water alone isn't recovery, it's dilution.",
+      "To recover faster, rehydrate with sodium within 60 minutes of finishing. Water alone isn't recovery — it's dilution.",
     cramping:
       "To stop cramping, rebuild sodium within an hour of training. Cramps tomorrow are usually a recovery problem from today.",
   },
@@ -98,7 +98,7 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
     feel:
       "You want to feel better after workouts. That comes from doing the small stuff every time, pre-hydrate, then train. Two weeks.",
     energy:
-      "You're close. Make pre-workout hydration a non-negotiable habit for 2 weeks, that's usually where the energy shows up.",
+      "You're close. Make pre-workout hydration a non-negotiable habit for 2 weeks — that's usually where the energy shows up.",
   },
 };
 

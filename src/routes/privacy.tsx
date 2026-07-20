@@ -69,7 +69,7 @@ function PrivacyPage() {
               <p className="mt-2">
                 If you accept analytics cookies in the banner shown on this site, we load Google
                 Analytics to understand how people move through the assessment. This only happens
-                after you accept, declining means no analytics script loads. Your choice is
+                after you accept — declining means no analytics script loads. Your choice is
                 remembered on this device and you can change your mind by clearing your browser's
                 local storage for this site.
               </p>

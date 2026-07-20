@@ -46,7 +46,7 @@ const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 
 
   return (
     <footer className="border-t border-white/10 bg-foreground">
-      <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+      <div className="mx-auto w-full max-w-6xl px-5 pt-16 pb-32 sm:px-8 md:pb-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Logo size="md" variant="light" />
