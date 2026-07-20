@@ -44,14 +44,14 @@ export const ARTICLES: Article[] = [
     body: [
       "Most athletes treat cramping as a random surprise mid-workout. It rarely is. Cramps typically follow a pattern that starts hours before you lace up, sometimes the day before.",
       "The most common driver isn't total dehydration. It's an imbalance between how much sodium you lose in sweat and how much you take back in during longer or harder sessions. When your body sweats out more sodium than it replaces, muscle firing gets noisy and unpredictable.",
-      "That's why endurance athletes who drink plenty of plain water still cramp. Volume isn't the whole story, composition is. Water without sodium can even dilute what electrolytes you have left, making the problem worse.",
+      "That's why endurance athletes who drink plenty of plain water still cramp. Volume isn't the whole story — composition is. Water without sodium can even dilute what electrolytes you have left, making the problem worse.",
       "The other overlooked variable is your baseline. If you started your training session already low on sodium, magnesium, or glycogen, no amount of sipping mid-workout will catch you up. You're playing defense the whole time.",
       "The fix is boring and effective. Start every session hydrated the day before, not five minutes before. Add electrolytes to what you drink during any effort over 60 minutes. Then rehydrate deliberately, fluids and sodium together, inside the first hour after training.",
       "Cramping is your body sending an invoice for choices you made earlier. Once you see it that way, prevention gets a lot simpler than treatment.",
     ],
     takeaways: [
       "Cramps are usually a sodium balance problem, not a total water problem.",
-      "Start hydrated the day before hard sessions, you can't catch up mid-workout.",
+      "Start hydrated the day before hard sessions — you can't catch up mid-workout.",
       "Add electrolytes to any effort lasting over 60 minutes.",
       "Rehydrate with fluids AND sodium within the first hour after training.",
     ],
@@ -80,7 +80,7 @@ export const ARTICLES: Article[] = [
   },
   {
     slug: "science-of-recovery",
-    title: "The science of recovery: what your first 60 minutes really matter for",
+    title: "The science of recovery: why your first 60 minutes matter most",
     category: "Recovery",
     excerpt:
       "The hour after training decides more than the workout itself. Here's how to actually use it.",
@@ -123,7 +123,7 @@ export const ARTICLES: Article[] = [
     slug: "performance-habits",
     title: "Six performance habits that quietly beat any supplement",
     category: "Performance",
-    excerpt: "The unglamorous stack, sleep, sodium, timing, consistency, that outperforms every shortcut.",
+    excerpt: "The unglamorous stack — sleep, sodium, timing, consistency — that outperforms every shortcut.",
     readingTime: "5 min read",
     image: habits,
     body: [
