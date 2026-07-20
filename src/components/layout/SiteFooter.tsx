@@ -17,7 +17,7 @@ const COLUMNS = [
     links: [
       { to: "/about", label: "Our Mission" },
       { to: "/promise", label: "Our Promise" },
-      { to: "/partnerships", label: "Partnerships" },
+      { to: "/partnerships", label: "Partnerships" }, { to: "/mission", label: "Our Vision" }, { to: "/community", label: "Community" },
     ],
   },
   {
