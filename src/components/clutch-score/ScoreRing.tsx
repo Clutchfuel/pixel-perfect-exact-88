@@ -54,7 +54,7 @@ export function ScoreRing({ score, size = 240, stroke = 16 }: ScoreRingProps) {
       : "text-5xl font-extrabold tracking-tight text-white tabular-nums";
 
   return (
-    <div className="relative mx-auto" style={{ width: size, height: size }}>
+    <div className="relative mx-auto" style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}>
       <div
         className="pointer-events-none absolute inset-[-20%] rounded-full transition-opacity duration-700"
         style={{
@@ -64,7 +64,7 @@ export function ScoreRing({ score, size = 240, stroke = 16 }: ScoreRingProps) {
         }}
         aria-hidden
       />
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+      <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -183,7 +183,7 @@ export function SegmentedClutchRing({
   let cursor = gap / 2;
 
   return (
-    <div className="relative mx-auto" style={{ width: size, height: size }}>
+    <div className="relative mx-auto" style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}>
       <div
         className="pointer-events-none absolute inset-[-18%] rounded-full opacity-60"
         style={{
@@ -192,7 +192,7 @@ export function SegmentedClutchRing({
         }}
         aria-hidden
       />
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+      <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
         {segments.map((seg) => {
           const start = cursor;
           cursor += segmentLen + gap;
