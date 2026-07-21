@@ -32,6 +32,9 @@ LEADS_TO_EMAIL=hello@clutchfuel.com
 TURNSTILE_SECRET_KEY=
 # Recommended: Slack/Discord/PagerDuty webhook for JSON error reports (see docs/PRODUCTION.md)
 ERROR_WEBHOOK_URL=
+# Klaviyo private API key (Events + list WTECB3). Never use VITE_ — client bundle would leak it.
+# Production: wrangler secret put KLAVIYO_API_KEY
+KLAVIYO_API_KEY=
 
 # Clutch Score submit sends TWO emails when RESEND_API_KEY is set:
 #   1. User — formatted quiz results (score, profile, tips, product link)

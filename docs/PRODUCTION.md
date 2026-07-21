@@ -24,6 +24,7 @@ In the Lovable project: **Settings** → **Environment**, set the same values as
 | `RESEND_FROM_EMAIL`       | Verified domain in Resend                     |
 | `LEADS_TO_EMAIL`          | Internal inbox                                |
 | `ERROR_WEBHOOK_URL`       | JSON POST webhook for `reportError` payloads  |
+| `KLAVIYO_API_KEY`         | Server-only; Worker secret (never `VITE_*`)   |
 | `VITE_HERO_VIDEO_CDN`     | Optional CDN origin for hero MP4s             |
 | `VITE_GA_MEASUREMENT_ID`  | Optional GA4                                  |
 
