@@ -114,6 +114,53 @@ async function persistViaResend(row: ClutchScoreLeadRow): Promise<boolean> {
   return true;
 }
 
+export type PriorClutchScoreLead = {
+  email: string;
+  score: number;
+  goal: string;
+  opportunity: string;
+  firstClutchMove: string;
+};
+
+/** Latest D1 row for this email, if any. Used to fork new join vs score retake. */
+export async function findPriorClutchScoreByEmail(
+  email: string,
+): Promise<PriorClutchScoreLead | null> {
+  const d1 = getLeadsDb();
+  if (!d1) return null;
+
+  try {
+    const row = await d1
+      .prepare(
+        `SELECT email, score, goal, opportunity, first_clutch_move
+         FROM clutch_score_responses
+         WHERE lower(email) = lower(?)
+         ORDER BY created_at DESC
+         LIMIT 1`,
+      )
+      .bind(email.trim())
+      .first<{
+        email: string;
+        score: number;
+        goal: string;
+        opportunity: string;
+        first_clutch_move: string;
+      }>();
+
+    if (!row || typeof row.score !== "number") return null;
+    return {
+      email: row.email,
+      score: row.score,
+      goal: row.goal,
+      opportunity: row.opportunity,
+      firstClutchMove: row.first_clutch_move,
+    };
+  } catch (error) {
+    reportError(error, { source: "leads-db", op: "findPriorClutchScoreByEmail" });
+    return null;
+  }
+}
+
 /** Persist a Clutch Score signup. Prefers D1, then Supabase, then Resend email. */
 export async function persistClutchScoreLead(row: ClutchScoreLeadRow): Promise<void> {
   const d1 = getLeadsDb();

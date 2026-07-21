@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
+import { joinClutch100 } from "@/lib/assessment.functions";
 
 const COLUMNS = [
   {
@@ -17,7 +18,9 @@ const COLUMNS = [
     links: [
       { to: "/about", label: "Our Mission" },
       { to: "/promise", label: "Our Promise" },
-      { to: "/partnerships", label: "Partnerships" }, { to: "/mission", label: "Our Vision" }, { to: "/community", label: "Community" },
+      { to: "/partnerships", label: "Partnerships" },
+      { to: "/mission", label: "Our Vision" },
+      { to: "/community", label: "Community" },
     ],
   },
   {
@@ -26,7 +29,11 @@ const COLUMNS = [
   },
 ] as const;
 
-const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 100; /* Set FOUNDING_MEMBER_COUNT to a number to show X / 100 Founding Members above the copy. */ export function SiteFooter() {
+const FOUNDING_MEMBER_COUNT: number | null = null;
+const FOUNDING_MEMBER_GOAL = 100;
+/* Set FOUNDING_MEMBER_COUNT to a number to show X / 100 Founding Members above the copy. */
+
+export function SiteFooter() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -37,11 +44,26 @@ const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 
       return;
     }
     setSubmitting(true);
-    // Lightweight signup, no backend yet. We show success and log locally.
-    await new Promise((r) => setTimeout(r, 400));
-    setSubmitting(false);
-    setEmail("");
-    toast.success("You're in. Welcome to the Clutch 100.");
+    try {
+      await joinClutch100({
+        data: {
+          email: email.trim(),
+          first_name: null,
+          referral_source: "footer",
+        },
+      });
+      setEmail("");
+      toast.success("You're in. Welcome to the Clutch 100.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      toast.error(
+        message.length > 0 && message.length < 120
+          ? message
+          : "Couldn't join right now. Try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -53,7 +75,17 @@ const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-background/70">
               Helping everyday athletes stop guessing and start performing with confidence.
             </p>
-            <p className="mt-8 max-w-sm text-xl font-bold text-background">The Clutch 100</p> {FOUNDING_MEMBER_COUNT !== null && (<p className="max-w-sm mt-1 text-xs font-semibold text-electric">{FOUNDING_MEMBER_COUNT} / {FOUNDING_MEMBER_GOAL} Founding Members</p>)} <p className="max-w-sm mt-2 text-sm leading-relaxed text-background/70">Be one of the first 100 everyday athletes helping build ClutchFuel. Get early access to new tools, exclusive performance insights, and help shape what's next.</p> <form onSubmit={submit} className="mt-4 flex max-w-sm gap-2">
+            <p className="mt-8 max-w-sm text-xl font-bold text-background">The Clutch 100</p>
+            {FOUNDING_MEMBER_COUNT !== null && (
+              <p className="mt-1 max-w-sm text-xs font-semibold text-electric">
+                {FOUNDING_MEMBER_COUNT} / {FOUNDING_MEMBER_GOAL} Founding Members
+              </p>
+            )}
+            <p className="mt-2 max-w-sm text-sm leading-relaxed text-background/70">
+              Be one of the first 100 everyday athletes helping build ClutchFuel. Get early access
+              to new tools, exclusive performance insights, and help shape what's next.
+            </p>
+            <form onSubmit={submit} className="mt-4 flex max-w-sm gap-2">
               <input
                 type="email"
                 value={email}
@@ -66,7 +98,7 @@ const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 
                 disabled={submitting}
                 className="shrink-0 rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
               >
-                {submitting ? "…" : "Claim My Spot"}
+                {submitting ? "…" : "Join The Clutch 100"}
               </button>
             </form>
             <p className="mt-2 text-xs text-background/60">
@@ -100,10 +132,7 @@ const FOUNDING_MEMBER_COUNT: number | null = null; const FOUNDING_MEMBER_GOAL = 
             © {new Date().getFullYear()} ClutchFuel. All rights reserved.
           </p>
           <div className="flex items-center gap-5 text-xs text-background/70">
-            <a
-              href="mailto:partners@clutchfuel.com"
-              className="hover:text-background"
-            >
+            <a href="mailto:partners@clutchfuel.com" className="hover:text-background">
               Contact
             </a>
             <a

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { submitAssessment } from "@/lib/assessment.functions";
+import { optInSms, submitAssessment } from "@/lib/assessment.functions";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
+
 
 function generateSessionToken(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -900,6 +901,7 @@ function Result({
           athleteOther={athleteOther}
           score={score}
           opportunity={opportunity}
+          lowestCategory={insight.biggestOpportunity}
           nextStep={nextStep}
         />
       </FadeIn>
@@ -927,6 +929,7 @@ function EmailCapture({
   athleteOther,
   score,
   opportunity,
+  lowestCategory,
   nextStep,
 }: {
   answers: Answer[];
@@ -936,6 +939,7 @@ function EmailCapture({
   athleteOther: string;
   score: number;
   opportunity: Opportunity;
+  lowestCategory: BehaviorPillar;
   nextStep: string;
 }) {
   const [firstName, setFirstName] = useState("");
@@ -943,7 +947,12 @@ function EmailCapture({
   const [source, setSource] = useState("");
   const [sourceOther, setSourceOther] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [phase, setPhase] = useState<"form" | "joined" | "retake" | "sms_done">("form");
+  const [phone, setPhone] = useState("");
+  const [smsSubmitting, setSmsSubmitting] = useState(false);
+  const [retakeScores, setRetakeScores] = useState<{ previous: number; next: number } | null>(
+    null,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -976,14 +985,21 @@ function EmailCapture({
       q5: answers[4],
       clutch_score: score,
       opportunity,
+      lowest_category: lowestCategory,
       next_step: nextStep,
       session_token: sessionToken,
     };
 
     try {
-      await submitAssessment({ data: payload });
-      setSaved(true);
-      toast.success("You're on the list.");
+      const result = await submitAssessment({ data: payload });
+      if (result.kind === "retake") {
+        setRetakeScores({ previous: result.previousScore, next: result.newScore });
+        setPhase("retake");
+        toast.success("Score updated.");
+      } else {
+        setPhase("joined");
+        toast.success("Welcome to the Clutch 100.");
+      }
     } catch (err) {
       console.error("[Clutch Score] save error:", err);
       const message = err instanceof Error ? err.message : "";
@@ -997,14 +1013,84 @@ function EmailCapture({
     }
   };
 
-  if (saved) {
+  const handleSms = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!phone.trim()) return toast.error("Enter your mobile number.");
+    setSmsSubmitting(true);
+    try {
+      await optInSms({
+        data: {
+          email: email.trim(),
+          first_name: firstName.trim() || null,
+          phone_number: phone.trim(),
+        },
+      });
+      setPhase("sms_done");
+      toast.success("You're opted in for texts.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      toast.error(
+        message.length > 0 && message.length < 120
+          ? message
+          : "Couldn't save your number. Try again.",
+      );
+    } finally {
+      setSmsSubmitting(false);
+    }
+  };
+
+  if (phase === "retake") {
     return (
       <div className="rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center text-white sm:px-10">
-        <p className="text-2xl font-bold">You're in.</p>
+        <p className="text-2xl font-bold">Score updated.</p>
         <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/55">
-          Watch for Clutch Moves and performance insights. We'll check in in two weeks to see how
-          your first move is landing.
+          {retakeScores
+            ? `Previous score ${retakeScores.previous} → new score ${retakeScores.next}. You're already in the Clutch 100, so we skipped the signup step.`
+            : "You're already in the Clutch 100. We logged your new score."}
         </p>
+      </div>
+    );
+  }
+
+  if (phase === "joined" || phase === "sms_done") {
+    return (
+      <div className="rounded-[2rem] border border-black/10 bg-[#070707] px-6 py-12 text-center text-white sm:px-10">
+        <p className="text-2xl font-bold">You're in the Clutch 100.</p>
+        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-white/55">
+          Watch for your first Clutch Move and performance insights in your inbox.
+        </p>
+        {phase === "joined" ? (
+          <form onSubmit={handleSms} className="mx-auto mt-8 flex max-w-sm flex-col gap-3 text-left">
+            <p className="text-center text-sm text-white/70">
+              Optional: get check-ins by text. Reply STOP anytime.
+            </p>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Mobile number"
+              className="w-full rounded-2xl border border-white/15 bg-white/5 px-5 py-4 text-base text-white placeholder:text-white/40 focus:border-electric focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={smsSubmitting}
+              className="w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
+            >
+              {smsSubmitting ? "Saving..." : "Opt in to SMS"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setPhase("sms_done")}
+              className="text-sm text-white/50 underline-offset-4 hover:text-white/80 hover:underline"
+            >
+              Skip for now
+            </button>
+          </form>
+        ) : (
+          <p className="mx-auto mt-6 max-w-md text-sm text-white/45">
+            We'll check in around day 5 to see how your first move is landing.
+          </p>
+        )}
       </div>
     );
   }
@@ -1012,11 +1098,11 @@ function EmailCapture({
   return (
     <div className="rounded-[2rem] border border-black/10 bg-white px-6 py-10 sm:px-10 sm:py-12">
       <h3 className="text-center text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-        Keep Improving
+        Join The Clutch 100
       </h3>
       <p className="mx-auto mt-4 max-w-md text-center text-base leading-relaxed text-muted-foreground">
-        Join the ClutchFuel community to receive personalized performance insights, weekly Clutch
-        Moves, new assessment tools, and early access to everything we're building.
+        One step. Get personalized Clutch Moves, performance insights, and early access as a
+        founding member.
       </p>
 
       <form onSubmit={handleSubmit} className="mx-auto mt-8 flex max-w-md flex-col gap-3">
@@ -1075,7 +1161,7 @@ function EmailCapture({
           disabled={submitting}
           className="mt-3 w-full rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark disabled:opacity-60"
         >
-          {submitting ? "Saving..." : "Unlock My Performance Insights"}
+          {submitting ? "Joining..." : "Join The Clutch 100"}
         </button>
       </form>
     </div>

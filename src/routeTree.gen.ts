@@ -9,62 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as PromiseRouteImport } from './routes/promise'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PerformanceHubRouteImport } from './routes/performance-hub'
-import { Route as PartnershipsRouteImport } from './routes/partnerships'
-import { Route as MissionRouteImport } from './routes/mission'
-import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as CommunityRouteImport } from './routes/community'
-import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ClutchScoreRouteImport } from './routes/clutch-score'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as MissionRouteImport } from './routes/mission'
+import { Route as PartnershipsRouteImport } from './routes/partnerships'
+import { Route as PerformanceHubRouteImport } from './routes/performance-hub'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PromiseRouteImport } from './routes/promise'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as Clutch100CheckInRouteImport } from './routes/clutch-100.check-in'
 import { Route as PerformanceHubSlugRouteImport } from './routes/performance-hub_.$slug'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PromiseRoute = PromiseRouteImport.update({
-  id: '/promise',
-  path: '/promise',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PerformanceHubRoute = PerformanceHubRouteImport.update({
-  id: '/performance-hub',
-  path: '/performance-hub',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartnershipsRoute = PartnershipsRouteImport.update({
-  id: '/partnerships',
-  path: '/partnerships',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MissionRoute = MissionRouteImport.update({
-  id: '/mission',
-  path: '/mission',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HowItWorksRoute = HowItWorksRouteImport.update({
-  id: '/how-it-works',
-  path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommunityRoute = CommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClutchScoreRoute = ClutchScoreRouteImport.update({
-  id: '/clutch-score',
-  path: '/clutch-score',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -72,9 +33,54 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ClutchScoreRoute = ClutchScoreRouteImport.update({
+  id: '/clutch-score',
+  path: '/clutch-score',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnershipsRoute = PartnershipsRouteImport.update({
+  id: '/partnerships',
+  path: '/partnerships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerformanceHubRoute = PerformanceHubRouteImport.update({
+  id: '/performance-hub',
+  path: '/performance-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromiseRoute = PromiseRouteImport.update({
+  id: '/promise',
+  path: '/promise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Clutch100CheckInRoute = Clutch100CheckInRouteImport.update({
+  id: '/clutch-100/check-in',
+  path: '/clutch-100/check-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerformanceHubSlugRoute = PerformanceHubSlugRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/clutch-100/check-in': typeof Clutch100CheckInRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/clutch-100/check-in': typeof Clutch100CheckInRoute
   '/performance-hub/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/promise': typeof PromiseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/clutch-100/check-in': typeof Clutch100CheckInRoute
   '/performance-hub_/$slug': typeof PerformanceHubSlugRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/sitemap.xml'
+    | '/clutch-100/check-in'
     | '/performance-hub/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/sitemap.xml'
+    | '/clutch-100/check-in'
     | '/performance-hub/$slug'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/promise'
     | '/sitemap.xml'
+    | '/clutch-100/check-in'
     | '/performance-hub_/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -183,72 +195,17 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   PromiseRoute: typeof PromiseRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Clutch100CheckInRoute: typeof Clutch100CheckInRoute
   PerformanceHubSlugRoute: typeof PerformanceHubSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/promise': {
-      id: '/promise'
-      path: '/promise'
-      fullPath: '/promise'
-      preLoaderRoute: typeof PromiseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/performance-hub': {
-      id: '/performance-hub'
-      path: '/performance-hub'
-      fullPath: '/performance-hub'
-      preLoaderRoute: typeof PerformanceHubRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partnerships': {
-      id: '/partnerships'
-      path: '/partnerships'
-      fullPath: '/partnerships'
-      preLoaderRoute: typeof PartnershipsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mission': {
-      id: '/mission'
-      path: '/mission'
-      fullPath: '/mission'
-      preLoaderRoute: typeof MissionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/how-it-works': {
-      id: '/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/community': {
-      id: '/community'
-      path: '/community'
-      fullPath: '/community'
-      preLoaderRoute: typeof CommunityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/clutch-score': {
-      id: '/clutch-score'
-      path: '/clutch-score'
-      fullPath: '/clutch-score'
-      preLoaderRoute: typeof ClutchScoreRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -258,11 +215,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/clutch-score': {
+      id: '/clutch-score'
+      path: '/clutch-score'
+      fullPath: '/clutch-score'
+      preLoaderRoute: typeof ClutchScoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partnerships': {
+      id: '/partnerships'
+      path: '/partnerships'
+      fullPath: '/partnerships'
+      preLoaderRoute: typeof PartnershipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/performance-hub': {
+      id: '/performance-hub'
+      path: '/performance-hub'
+      fullPath: '/performance-hub'
+      preLoaderRoute: typeof PerformanceHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/promise': {
+      id: '/promise'
+      path: '/promise'
+      fullPath: '/promise'
+      preLoaderRoute: typeof PromiseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clutch-100/check-in': {
+      id: '/clutch-100/check-in'
+      path: '/clutch-100/check-in'
+      fullPath: '/clutch-100/check-in'
+      preLoaderRoute: typeof Clutch100CheckInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/performance-hub_/$slug': {
@@ -287,18 +307,9 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   PromiseRoute: PromiseRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Clutch100CheckInRoute: Clutch100CheckInRoute,
   PerformanceHubSlugRoute: PerformanceHubSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
