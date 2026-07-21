@@ -49,6 +49,12 @@ const EVENTS = [
 console.log("\n=== Klaviyo Clutch 100 — event wiring checklist ===\n");
 console.log("Secret: KLAVIYO_API_KEY in .dev.vars (local) or wrangler secret put (prod)");
 console.log("Never VITE_KLAVIYO_* — would ship in the client bundle.\n");
+console.log("Profile map (assessment → segment vocabulary):");
+console.log("  Athletes: Basketball→Basketball Player, Strength/HYROX→Lifter,");
+console.log("            Cycling→Cyclist, General Fitness→Busy Professional, Runner→Runner");
+console.log("  Goals: More Energy→More Energy; other chips→Better Performance;");
+console.log("         Weight Loss / Muscle Building / Better Sleep pass through if typed");
+console.log("  Raw labels also stored as goal_raw / athlete_type_raw\n");
 
 for (const [i, event] of EVENTS.entries()) {
   console.log(`${i + 1}. ${event.name}`);

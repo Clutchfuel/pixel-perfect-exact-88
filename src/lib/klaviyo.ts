@@ -1,5 +1,6 @@
 import { getEnv } from "@/lib/env";
 import { reportError } from "@/lib/observability";
+import { mapAthleteTypeForKlaviyo, mapGoalForKlaviyo } from "@/lib/klaviyo-profile-map";
 
 /** Matches the revision used when the existing metrics/templates were built. */
 const KLAVIYO_REVISION = "2026-04-15";
@@ -152,9 +153,15 @@ async function addEmailToClutch100List(email: string): Promise<void> {
 }
 
 function assessmentProfileProps(fields: AssessmentProfileFields): Record<string, unknown> {
+  const goalRaw = fields.goal ?? null;
+  const athleteRaw = fields.athleteType ?? null;
   return {
-    goal: fields.goal ?? null,
-    athlete_type: fields.athleteType ?? null,
+    // Segment vocabulary (exact match for Goal:* / Athlete Type:* / Sweat Rate)
+    goal: mapGoalForKlaviyo(goalRaw),
+    athlete_type: mapAthleteTypeForKlaviyo(athleteRaw),
+    // Original assessment labels for email copy / debugging
+    goal_raw: goalRaw,
+    athlete_type_raw: athleteRaw,
     lowest_category: fields.lowestCategory ?? null,
     clutch_score: fields.clutchScore ?? null,
     clutch_move: fields.clutchMove ?? null,
