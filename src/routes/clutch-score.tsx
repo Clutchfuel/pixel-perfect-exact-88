@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
@@ -26,12 +26,12 @@ const TRUST = [
 ] as const;
 
 function ClutchScorePage() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(true); const hasAdvancedRef = useRef(false);
 
   useEffect(() => {
-    const onPhase = (event: Event) => {
-      const phase = (event as CustomEvent<{ phase?: string }>).detail?.phase;
-      setShowIntro(phase !== "result");
+    const onPhase = () => {
+      if (!hasAdvancedRef.current) { hasAdvancedRef.current = true; return; }
+      setShowIntro(false);
     };
     window.addEventListener("clutch-score:phase", onPhase);
     return () => window.removeEventListener("clutch-score:phase", onPhase);
@@ -44,7 +44,7 @@ function ClutchScorePage() {
   }, [showIntro]);
 
   const start = () => {
-    document.getElementById("clutch-assessment")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    hasAdvancedRef.current = true; setShowIntro(false);
   };
 
   return (
