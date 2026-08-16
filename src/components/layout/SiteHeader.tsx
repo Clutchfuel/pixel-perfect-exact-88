@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const NAV = [
-  { to: "/", label: "Home", exact: true },
-  { to: "/clutch-score", label: "Clutch Score" },
-  { to: "/performance-hub", label: "Insights" },
-  { to: "/about", label: "Our Mission" },
+  { href: "#clutch-score", label: "Clutch Score" },
+  { href: "#athletes", label: "Athletes" },
+  { href: "#parents", label: "Parents" },
+  { href: "#teams", label: "Teams" },
+  { href: "#learn", label: "Learn" },
+  { href: "#about", label: "About" },
 ] as const;
 
-function isActive(pathname: string, to: string, exact?: boolean) {
-  if (exact || to === "/") return pathname === "/";
-  return pathname === to || pathname.startsWith(`${to}/`);
-}
+type SiteHeaderProps = {
+  onGetScore: () => void;
+};
 
-export function SiteHeader() {
+export function SiteHeader({ onGetScore }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -28,48 +27,51 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open ? "bg-foreground border-b border-white/10" : "bg-foreground"
+        scrolled || open
+          ? "border-b border-white/10 bg-[#050505]/95 backdrop-blur-md"
+          : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:h-20 sm:px-8">
-        <Link to="/" aria-label="ClutchFuel home" className="shrink-0">
-          <Logo size="md" variant="light" />
-        </Link>
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-8">
+        <a href="#" aria-label="ClutchFuel home" className="shrink-0">
+          <Logo size="md" />
+        </a>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {NAV.map((item) => {
-            const active = isActive(pathname, item.to, "exact" in item ? item.exact : false);
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`text-sm font-medium transition-colors ${
-                  active ? "text-background" : "text-background/70 hover:text-background"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="hidden items-center gap-6 xl:gap-8 lg:flex" aria-label="Primary">
+          {NAV.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65 transition hover:text-white"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/clutch-score"
-            className="hidden rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-electric-dark md:inline-flex"
+          <button
+            type="button"
+            onClick={onGetScore}
+            className="hidden rounded-full bg-lime px-5 py-2.5 text-sm font-semibold text-background transition hover:bg-lime-dark md:inline-flex"
           >
-            Get Your Clutch Score
-          </Link>
+            Get Your Score
+          </button>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-background lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
@@ -79,33 +81,31 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-foreground lg:hidden">
+        <div className="border-t border-white/10 bg-[#050505] lg:hidden">
           <nav
             className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6"
             aria-label="Mobile"
           >
-            {NAV.map((item) => {
-              const active = isActive(pathname, item.to, "exact" in item ? item.exact : false);
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`rounded-xl px-4 py-3 text-base font-medium transition ${
-                    active
-                      ? "bg-white/10 text-background"
-                      : "text-background/70 hover:bg-white/10 hover:text-background"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-            <Link
-              to="/clutch-score"
-              className="mt-4 w-full rounded-full bg-electric px-5 py-3.5 text-center text-sm font-semibold text-black"
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white/70 transition hover:bg-white/10 hover:text-white"
+              >
+                {item.label}
+              </a>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onGetScore();
+              }}
+              className="mt-4 w-full rounded-full bg-lime px-5 py-3.5 text-center text-sm font-semibold text-background"
             >
-              Get Your Clutch Score
-            </Link>
+              Get Your Score
+            </button>
           </nav>
         </div>
       )}

@@ -1,317 +1,494 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Zap, HeartPulse, Utensils, Repeat, Timer, Brain } from "lucide-react";
-import { PageShell } from "@/components/layout/PageShell";
-import { Reveal } from "@/components/Reveal";
-import { CommunityAthletes } from "@/components/CommunityAthletes";
-import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
-import { ArticleCover } from "@/components/ArticleCover";
-import { ARTICLES } from "@/content/articles";
+import { useEffect, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
+import { Logo } from "@/components/Logo";
+import { HomepageMarketing } from "@/components/landing/HomepageMarketing";
+import { submitFeedback } from "@/lib/feedback.functions";
 import { canonical, makeMeta } from "@/lib/seo";
-import heroImage from "@/assets/home-hero-cinematic.jpg";
+import { toast } from "sonner";
+
+function generateSessionToken(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
+  }
+  return (
+    Math.random().toString(36).slice(2) +
+    Math.random().toString(36).slice(2) +
+    Date.now().toString(36)
+  );
+}
+
+function generateId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return generateSessionToken().slice(0, 36);
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: makeMeta({
-      title: "ClutchFuel: Helping Everyday Athletes Perform Better",
+      title: "ClutchFuel — Build Better Athletes",
       description:
-        "Personalized insights and better habits, starting with your Clutch Score. Tell us your goal and get one clear next step before your next workout.",
+        "Performance habits for competitive athletes. Take the Clutch Score in 60 seconds — hydration, fueling, recovery, sleep and preparation.",
       path: "/",
     }),
     links: canonical("/"),
   }),
-  component: HomePage,
+  component: ClutchScoreApp,
 });
 
-const PROBLEMS = [
-  { icon: Zap, title: "Hydration", copy: "The overlooked lever most athletes never fully use." },
-  { icon: HeartPulse, title: "Recovery", copy: "The window that decides how the next session feels." },
-  { icon: Utensils, title: "Fueling", copy: "What you eat around training beats what you eat all day." },
-  { icon: Repeat, title: "Consistency", copy: "The unglamorous habit that quietly compounds results." },
-  { icon: Timer, title: "Timing", copy: "When you fuel matters as much as what you fuel with." },
-  { icon: Brain, title: "Body awareness", copy: "The signals you're ignoring are already telling you what to fix." },
-];
+// ---------- Scoring ----------
 
-/** Homepage sample — Recovery intentionally weakest so the ring tells the story. */
-const SAMPLE_SEGMENTS = [
-  { id: "Hydration", color: "#c1ff00", fill: 0.78 },
-  { id: "Recovery", color: "#f5c542", fill: 0.32 },
-  { id: "Training", color: "#4da3ff", fill: 0.82 },
-  { id: "Nutrition", color: "#a78bfa", fill: 0.7 },
-  { id: "Consistency", color: "#d4d4d4", fill: 0.64 },
-];
+const ANSWERS = ["Never", "Rarely", "Sometimes", "Often", "Always"] as const;
+type Answer = (typeof ANSWERS)[number];
 
-const PILLARS = [
-  { icon: Zap, title: "Hydration", copy: "Understand your fluid and sodium strategy end to end." },
-  { icon: HeartPulse, title: "Recovery", copy: "Use the first hour after training deliberately." },
-  { icon: Utensils, title: "Fueling", copy: "Match intake to demand, not to habit." },
-  { icon: Repeat, title: "Training Habits", copy: "The small rituals that compound over months." },
-  { icon: Timer, title: "Consistency", copy: "Show up in the details, not just the big sessions." },
-  { icon: Brain, title: "Self Awareness", copy: "Learn to read your own performance signals." },
-];
+const QUESTIONS = [
+  "How often do you cramp during training?",
+  "How often do you finish workouts feeling dehydrated?",
+  "How often do you use electrolytes during training?",
+  "How often do you feel your hydration strategy is working?",
+  "How often do you recover well after intense sessions?",
+] as const;
 
-const QUOTES = [
-  { text: "That described me perfectly.", author: "Runner, 34" },
-  { text: "I never realized hydration was affecting me.", author: "HYROX athlete, 29" },
-  { text: "I've never seen anything like this.", author: "Hooper, 41" },
-  { text: "My score actually made sense.", author: "Weekend warrior, 36" },
-];
+const SOURCES = ["Run Club", "Basketball", "HYROX", "Instagram", "Friend", "Other"];
 
-function HomePage() {
+const pts = (a: Answer) => ANSWERS.indexOf(a);
+const isOftenOrAlways = (a: Answer) => a === "Often" || a === "Always";
+const isNeverOrRarely = (a: Answer) => a === "Never" || a === "Rarely";
+
+type Opportunity = "Hydration Timing" | "Electrolyte Use" | "Recovery & Cramping" | "Consistency";
+
+const NEXT_STEP: Record<Opportunity, string> = {
+  "Hydration Timing":
+    "Drink electrolytes 15–30 minutes before training, not just during. Try it for your next 3 sessions.",
+  "Electrolyte Use":
+    "Add electrolytes to your next 3 workouts, even short ones. Consistency matters more than amount.",
+  "Recovery & Cramping":
+    "Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.",
+  Consistency:
+    "You're close. Lock in electrolytes before every session this week and notice the difference.",
+};
+
+function computeResult(answers: Answer[]) {
+  const adjusted = answers.map((a, i) => (i < 2 ? 4 - pts(a) : pts(a)));
+  const sum = adjusted.reduce((s, v) => s + v, 0);
+  const clutch_score = Math.min(100, Math.round((sum / 20) * 100) + 10);
+
+  const [q1, q2, q3, , q5] = answers;
+  const q4 = answers[3];
+
+  let opportunity: Opportunity;
+  if (isOftenOrAlways(q3) && isNeverOrRarely(q4)) opportunity = "Hydration Timing";
+  else if (isNeverOrRarely(q3)) opportunity = "Electrolyte Use";
+  else if (isOftenOrAlways(q1) || isNeverOrRarely(q5)) opportunity = "Recovery & Cramping";
+  else opportunity = "Consistency";
+
+  // q2 referenced for completeness so unused-var rules don't trip on the destructure
+  void q2;
+
+  return { clutch_score, opportunity, next_step: NEXT_STEP[opportunity] };
+}
+
+// ---------- App ----------
+
+type Step =
+  | { kind: "landing" }
+  | { kind: "quiz"; index: number }
+  | { kind: "email" }
+  | {
+      kind: "result";
+      id: string;
+      sessionToken: string;
+      score: number;
+      opportunity: Opportunity;
+      nextStep: string;
+    };
+
+function ClutchScoreApp() {
+  const [step, setStep] = useState<Step>({ kind: "landing" });
+  const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
+
+  const startAssessment = () => {
+    window.scrollTo({ top: 0 });
+    setStep({ kind: "quiz", index: 0 });
+  };
+
+  if (step.kind === "landing") {
+    return (
+      <main id="main">
+        <HomepageMarketing onGetScore={startAssessment} />
+      </main>
+    );
+  }
+
   return (
-    <PageShell>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-foreground text-background">
-        <img
-          src={heroImage}
-          alt="Athletes training outdoors at dusk"
-          width={1600}
-          height={1104}
-          className="no-bw absolute inset-0 h-full w-full object-cover object-center opacity-70"
+    <main id="main" className="min-h-screen bg-background text-foreground">
+      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 pt-6 pb-10 sm:py-16">
+        <header className="mb-4 flex items-center gap-4 sm:mb-10">
+          <Logo size="lg" />
+        </header>
+
+        {step.kind === "quiz" && (
+          <Quiz
+            index={step.index}
+            answers={answers}
+            onAnswer={(value) => {
+              const next = [...answers];
+              next[step.index] = value;
+              setAnswers(next);
+              if (step.index < QUESTIONS.length - 1) {
+                setStep({ kind: "quiz", index: step.index + 1 });
+              } else {
+                setStep({ kind: "email" });
+              }
+            }}
+            onBack={() => {
+              if (step.index === 0) {
+                setStep({ kind: "landing" });
+                window.scrollTo({ top: 0 });
+              } else setStep({ kind: "quiz", index: step.index - 1 });
+            }}
+          />
+        )}
+
+        {step.kind === "email" && (
+          <EmailCapture
+            answers={answers as Answer[]}
+            onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
+            onComplete={(id, token, result) =>
+              setStep({
+                kind: "result",
+                id,
+                sessionToken: token,
+                score: result.clutch_score,
+                opportunity: result.opportunity,
+                nextStep: result.next_step,
+              })
+            }
+          />
+        )}
+
+        {step.kind === "result" && (
+          <Result
+            id={step.id}
+            sessionToken={step.sessionToken}
+            score={step.score}
+            opportunity={step.opportunity}
+            nextStep={step.nextStep}
+          />
+        )}
+      </div>
+    </main>
+  );
+}
+
+// ---------- Quiz ----------
+
+function Quiz({
+  index,
+  answers,
+  onAnswer,
+  onBack,
+}: {
+  index: number;
+  answers: (Answer | null)[];
+  onAnswer: (a: Answer) => void;
+  onBack: () => void;
+}) {
+  const progress = ((index + 1) / QUESTIONS.length) * 100;
+  const selected = answers[index];
+
+  return (
+    <section className="flex flex-1 flex-col">
+      <div className="mb-8">
+        <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-white/50">
+          <span>
+            Question {index + 1} of {QUESTIONS.length}
+          </span>
+          <button
+            onClick={onBack}
+            className="text-white/50 transition hover:text-white"
+            type="button"
+          >
+            ← Back
+          </button>
+        </div>
+        <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full bg-lime transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      <h2 className="text-balance text-3xl font-bold leading-tight sm:text-4xl">
+        {QUESTIONS[index]}
+      </h2>
+
+      <div className="mt-8 flex flex-col gap-3">
+        {ANSWERS.map((a) => {
+          const isSelected = selected === a;
+          return (
+            <button
+              key={a}
+              onClick={() => onAnswer(a)}
+              className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
+                isSelected
+                  ? "border-lime bg-lime/10 text-lime"
+                  : "border-white/10 bg-white/[0.03] text-white hover:border-white/30 hover:bg-white/[0.06]"
+              }`}
+              type="button"
+            >
+              {a}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+// ---------- Email Capture ----------
+
+function EmailCapture({
+  answers,
+  onBack,
+  onComplete,
+}: {
+  answers: Answer[];
+  onBack: () => void;
+  onComplete: (
+    id: string,
+    sessionToken: string,
+    result: { clutch_score: number; opportunity: Opportunity; next_step: string },
+  ) => void;
+}) {
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [source, setSource] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+    setSubmitting(true);
+    const result = computeResult(answers);
+    const sessionToken = generateSessionToken();
+    const id = generateId();
+    try {
+      const { error } = await supabase.from("assessment_responses").insert({
+        id,
+        first_name: firstName.trim() || null,
+        email: email.trim(),
+        source: source || null,
+        q1: answers[0],
+        q2: answers[1],
+        q3: answers[2],
+        q4: answers[3],
+        q5: answers[4],
+        clutch_score: result.clutch_score,
+        opportunity: result.opportunity,
+        next_step: result.next_step,
+        session_token: sessionToken,
+      });
+      if (error) {
+        console.error("[Clutch Score] assessment save failed:", error.message);
+      }
+    } catch (err) {
+      console.error("[Clutch Score] assessment save error:", err);
+    } finally {
+      setSubmitting(false);
+    }
+    onComplete(id, sessionToken, result);
+  };
+
+  return (
+    <section className="flex flex-1 flex-col justify-center">
+      <button
+        onClick={onBack}
+        type="button"
+        className="mb-6 self-start text-xs uppercase tracking-[0.18em] text-white/50 transition hover:text-white"
+      >
+        ← Back
+      </button>
+      <h2 className="text-balance text-4xl font-bold leading-tight sm:text-5xl">
+        Your Clutch Score is ready
+      </h2>
+      <p className="mt-4 text-lg text-white/70">Enter your email to see your result.</p>
+
+      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email *"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
         />
-
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"
-          aria-hidden
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First name (optional)"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
         />
-        <div className="relative mx-auto flex w-full max-w-6xl flex-col items-start px-5 pb-28 pt-20 sm:px-8 sm:pb-32 sm:pt-28 lg:pt-36">
-          <h1 className="mt-6 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-            Helping Everyday Athletes Perform Better.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-background/80 sm:text-xl">
-            Personalized insights and better habits, starting with your Clutch Score™. Tell us your goal. We'll show you the one thing most likely holding you back.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Link
-              to="/clutch-score"
-              className="inline-flex items-center gap-2 rounded-full bg-electric px-7 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
-            >
-              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/how-it-works"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 py-4 text-base font-semibold text-background transition hover:border-white/60 hover:bg-white/10"
-            >
-              See how it works
-            </Link>
-          </div>
-          <div className="mt-16 flex items-center gap-3 text-xs uppercase tracking-eyebrow text-background/60">
-            <span className="h-px w-8 bg-white/40" /> A conversation, not a questionnaire
-          </div>
-        </div>
-      </section>
+        <select
+          value={source}
+          onChange={(e) => setSource(e.target.value)}
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white focus:border-lime focus:outline-none"
+        >
+          <option value="">How did you hear about Clutch Score? (optional)</option>
+          {SOURCES.map((s) => (
+            <option key={s} value={s} className="bg-background">
+              {s}
+            </option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mt-2 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark disabled:opacity-60"
+        >
+          {submitting ? "Calculating…" : "Show My Result"}
+        </button>
+      </form>
+    </section>
+  );
+}
 
+// ---------- Result ----------
 
-      {/* Problem */}
-      <section className="border-t border-black/5 bg-muted">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">What matters to you</p>
-            <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Goals drive behavior. Behavior drives performance.
-            </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              You don't wake up wanting a hydration score. You wake up wanting to run faster, recover better, stop cramping, or just feel good after a workout. Clutch Score starts there, with your goal, and works backwards to the habits most likely holding it back.
+function Result({
+  id,
+  sessionToken,
+  score,
+  opportunity,
+  nextStep,
+}: {
+  id: string;
+  sessionToken: string;
+  score: number;
+  opportunity: Opportunity;
+  nextStep: string;
+}) {
+  const [helpful, setHelpful] = useState<boolean | null>(null);
+  const [feedback, setFeedback] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const submitFeedbackFn = useServerFn(submitFeedback);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const handleFeedback = async () => {
+    if (helpful === null && !feedback.trim()) {
+      toast.error("Add a 👍/👎 or a quick note first.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await submitFeedbackFn({
+        data: {
+          id,
+          session_token: sessionToken,
+          helpful_result: helpful,
+          feedback_text: feedback.trim() || null,
+        },
+      });
+      setSubmitted(true);
+      toast.success("Thanks for the feedback.");
+    } catch {
+      toast.error("Couldn't save feedback. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <section className="flex flex-1 flex-col">
+      <p className="text-xs uppercase tracking-[0.22em] text-lime">
+        Your biggest hydration opportunity
+      </p>
+      <h2 className="mt-3 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+        {opportunity}
+      </h2>
+
+      <div className="mt-10">
+        <p className="text-xs uppercase tracking-[0.22em] text-white/40">What to do next</p>
+        <p className="mt-3 text-xl leading-relaxed text-white">{nextStep}</p>
+      </div>
+
+      <div className="mt-10 inline-flex items-baseline gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 self-start">
+        <span className="text-xs uppercase tracking-[0.18em] text-white/50">Clutch Score</span>
+        <span className="text-2xl font-bold text-white">{score}</span>
+        <span className="text-sm text-white/40">/ 100</span>
+      </div>
+
+      <p className="mt-10 text-sm leading-relaxed text-white/60">
+        Try your Next Step for the next 2 weeks. We'll check back and see what changed.
+      </p>
+
+      <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+        {submitted ? (
+          <p className="text-center text-sm text-white/70">Thanks — your feedback is recorded.</p>
+        ) : (
+          <>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+              Was this result helpful?
             </p>
-          </Reveal>
-
-
-
-
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {PROBLEMS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.04}>
-                <div className="card-elevated group h-full p-6 transition hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black transition group-hover:bg-electric/25">
-                    <p.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="border-t border-black/5">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">How it works</p>
-            <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Three steps. Sixty seconds. One clear next move.
-            </h2>
-          </Reveal>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                n: "01",
-                t: "Get Your Clutch Score™",
-                c: "Share your goal and answer five quick questions. No wearables, no calculations, no equipment.",
-              },
-              {
-                n: "02",
-                t: "See how your behaviors align",
-                c: "Learn how well your current habits support the goal you selected, and what's limiting progress most.",
-              },
-              {
-                n: "03",
-                t: "Take one Clutch Move",
-                c: "A single, concrete step to try before your next workout.",
-              },
-            ].map((s, i) => (
-              <Reveal key={s.n} delay={i * 0.08}>
-                <div className="card-elevated relative h-full overflow-hidden p-8">
-                  <span className="text-sm font-semibold text-foreground">{s.n}</span>
-                  <h3 className="mt-4 text-2xl font-bold">{s.t}</h3>
-                  <p className="mt-3 text-base leading-relaxed text-muted-foreground">{s.c}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Clutch Score */}
-      <section className="border-t border-black/5 bg-muted">
-        <div className="mx-auto grid w-full max-w-6xl gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-2 lg:items-center">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Why Clutch Score exists</p>
-            <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Stop guessing. Start understanding.
-            </h2>
-            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              Most athletes don't need more motivation. They need more clarity. Clutch Score helps identify the habits that may be limiting your performance and gives you one personalized next step.
-            </p>
-            <Link
-              to="/clutch-score"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
-            >
-              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] p-8 text-center sm:p-10">
-              <p className="text-xs uppercase tracking-eyebrow text-white/40">Sample insight</p>
-              <div className="mt-8">
-                <SegmentedClutchRing
-                  score={72}
-                  segments={SAMPLE_SEGMENTS}
-                  size={200}
-                  stroke={14}
-                />
-              </div>
-              <p className="mt-8 text-sm font-semibold uppercase tracking-eyebrow text-[#c1ff00]">
-                Strong Alignment
-              </p>
-              <p className="mt-2 text-xs text-white/40">Goal · Faster Recovery</p>
-              <p className="mt-6 text-[10px] font-medium uppercase tracking-[0.22em] text-white/35">
-                Biggest Opportunity
-              </p>
-              <p className="mt-2 text-xl font-bold leading-snug text-white">
-                Recovery
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
-                Based on your responses, improving your recovery habits will have the greatest impact
-                on your performance.
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-white/45">
-                First Clutch Move: Rehydrate with sodium within 60 minutes after every hard session
-                this week, even when you don't feel thirsty.
-              </p>
+            <div className="mt-4 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setHelpful(true)}
+                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
+                  helpful === true
+                    ? "border-lime bg-lime/10 text-lime"
+                    : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                }`}
+              >
+                👍 Yes
+              </button>
+              <button
+                type="button"
+                onClick={() => setHelpful(false)}
+                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
+                  helpful === false
+                    ? "border-lime bg-lime/10 text-lime"
+                    : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                }`}
+              >
+                👎 No
+              </button>
             </div>
-          </Reveal>
-        </div>
-      </section>
 
-      {/* Pillars */}
-      <section className="border-t border-black/5">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance pillars</p>
-            <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-              Six levers most athletes overlook.
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {PILLARS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.04}>
-                <div className="card-elevated group h-full p-6 transition hover:-translate-y-1 hover:border-black/25">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-electric text-black">
-                    <p.icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+            <label className="mt-5 block text-sm text-white/70">
+              What surprised you most about your result?
+            </label>
+            <textarea
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              rows={3}
+              placeholder="Optional"
+              className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
+            />
 
-      <CommunityAthletes />
-
-      {/* Performance Hub preview */}
-      <section className="border-t border-black/5">
-        <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Performance Hub</p>
-                <h2 className="mt-4 max-w-2xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
-                  Learn what your body is trying to tell you.
-                </h2>
-              </div>
-              <Link to="/performance-hub" className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:underline">
-                Browse all <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {ARTICLES.slice(0, 3).map((a, i) => (
-              <Reveal key={a.slug} delay={i * 0.05}>
-                <Link
-                  to="/performance-hub/$slug"
-                  params={{ slug: a.slug }}
-                  className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
-                >
-                  <ArticleCover category={a.category} title={a.title} className="aspect-[16/10] w-full" />
-                  <div className="p-6">
-                    <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
-                    <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
-                      {a.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{a.readingTime}</p>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Final CTA */}
-      <section className="border-t border-black/5">
-        <div className="mx-auto w-full max-w-4xl px-5 py-28 text-center sm:px-8 sm:py-36">
-          <Reveal>
-            <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Ready?</p>
-            <h2 className="mt-4 text-balance text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
-              Ready to understand your performance?
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              Sixty seconds. One personalized insight. One action to try this week.
-            </p>
-            <Link
-              to="/clutch-score"
-              className="mt-10 inline-flex items-center gap-2 rounded-full bg-electric px-8 py-4 text-base font-semibold text-black transition hover:bg-electric-dark"
+            <button
+              type="button"
+              onClick={handleFeedback}
+              disabled={submitting}
+              className="mt-4 w-full rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-lime hover:text-lime disabled:opacity-60"
             >
-              Get Your Clutch Score <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-    </PageShell>
+              {submitting ? "Saving…" : "Submit Feedback"}
+            </button>
+          </>
+        )}
+      </div>
+    </section>
   );
 }
