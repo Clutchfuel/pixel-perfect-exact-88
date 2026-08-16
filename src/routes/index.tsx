@@ -3,7 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
+import { HomepageMarketing } from "@/components/landing/HomepageMarketing";
 import { submitFeedback } from "@/lib/feedback.functions";
+import { canonical, makeMeta } from "@/lib/seo";
 import { toast } from "sonner";
 
 function generateSessionToken(): string {
@@ -26,19 +28,13 @@ function generateId(): string {
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "Clutch Score — The 60-second hydration assessment for athletes" },
-      {
-        name: "description",
-        content:
-          "What's your Clutch Score? Discover your biggest hydration opportunity in 60 seconds.",
-      },
-      { property: "og:title", content: "Clutch Score by ClutchFuel" },
-      {
-        property: "og:description",
-        content: "The 60-second hydration assessment for athletes.",
-      },
-    ],
+    meta: makeMeta({
+      title: "ClutchFuel — Build Better Athletes",
+      description:
+        "Performance habits for competitive athletes. Take the Clutch Score in 60 seconds — hydration, fueling, recovery, sleep and preparation.",
+      path: "/",
+    }),
+    links: canonical("/"),
   }),
   component: ClutchScoreApp,
 });
@@ -114,14 +110,25 @@ function ClutchScoreApp() {
   const [step, setStep] = useState<Step>({ kind: "landing" });
   const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
 
+  const startAssessment = () => {
+    window.scrollTo({ top: 0 });
+    setStep({ kind: "quiz", index: 0 });
+  };
+
+  if (step.kind === "landing") {
+    return (
+      <main id="main">
+        <HomepageMarketing onGetScore={startAssessment} />
+      </main>
+    );
+  }
+
   return (
     <main id="main" className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 pt-6 pb-10 sm:py-16">
         <header className="mb-4 flex items-center gap-4 sm:mb-10">
           <Logo size="lg" />
         </header>
-
-        {step.kind === "landing" && <Landing onStart={() => setStep({ kind: "quiz", index: 0 })} />}
 
         {step.kind === "quiz" && (
           <Quiz
@@ -138,8 +145,10 @@ function ClutchScoreApp() {
               }
             }}
             onBack={() => {
-              if (step.index === 0) setStep({ kind: "landing" });
-              else setStep({ kind: "quiz", index: step.index - 1 });
+              if (step.index === 0) {
+                setStep({ kind: "landing" });
+                window.scrollTo({ top: 0 });
+              } else setStep({ kind: "quiz", index: step.index - 1 });
             }}
           />
         )}
@@ -172,53 +181,6 @@ function ClutchScoreApp() {
         )}
       </div>
     </main>
-  );
-}
-
-// ---------- Landing ----------
-
-function Landing({ onStart }: { onStart: () => void }) {
-  return (
-    <section className="flex flex-1 flex-col justify-start pt-2 sm:justify-center sm:pt-0">
-      <h1 className="text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-        What's your <span className="text-lime">Clutch Score?</span>
-      </h1>
-      <p className="mt-4 text-lg text-white/70 sm:mt-6">
-        Discover your biggest hydration opportunity in 60 seconds.
-      </p>
-
-      <div className="mt-6 sm:mt-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
-          What You'll Get
-        </p>
-        <ul className="mt-3 space-y-2">
-          <li className="flex items-center gap-2.5 text-sm text-white/80">
-            <span className="text-lime">•</span>
-            Your Clutch Score
-          </li>
-          <li className="flex items-center gap-2.5 text-sm text-white/80">
-            <span className="text-lime">•</span>
-            Your Biggest Hydration Opportunity
-          </li>
-          <li className="flex items-center gap-2.5 text-sm text-white/80">
-            <span className="text-lime">•</span>A Personalized Next Step
-          </li>
-        </ul>
-      </div>
-
-      <button
-        onClick={onStart}
-        className="mt-8 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark sm:mt-10"
-      >
-        Start My Assessment
-      </button>
-
-      <p className="mt-3 text-center text-xs text-white/30">
-        No tracking. No wearables. No complicated calculations.
-      </p>
-
-      <p className="mt-4 text-center text-xs text-white/25">Built for everyday athletes.</p>
-    </section>
   );
 }
 
