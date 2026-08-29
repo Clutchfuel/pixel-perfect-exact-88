@@ -18,11 +18,26 @@ export const Route = createFileRoute("/promise")({
 });
 
 const COMMITMENTS = [
-  { t: "Youth sports", c: "Supporting local youth sports organizations that give kids their first shot." },
-  { t: "Community events", c: "Providing hydration and education at races, meetups, and local events." },
-  { t: "Health nonprofits", c: "Partnering with organizations promoting health, wellness, and access." },
-  { t: "Removing barriers", c: "Helping remove financial barriers that keep kids from participating in sports." },
-  { t: "Next generation", c: "Creating opportunities for the next generation of everyday athletes." },
+  {
+    t: "Youth sports",
+    c: "Supporting local youth sports organizations that give kids their first shot.",
+  },
+  {
+    t: "Community events",
+    c: "Providing hydration and education at races, meetups, and local events.",
+  },
+  {
+    t: "Health nonprofits",
+    c: "Partnering with organizations promoting health, wellness, and access.",
+  },
+  {
+    t: "Removing barriers",
+    c: "Helping remove financial barriers that keep kids from participating in sports.",
+  },
+  {
+    t: "Next generation",
+    c: "Creating opportunities for the next generation of everyday athletes.",
+  },
 ];
 
 function PromisePage() {
@@ -36,14 +51,18 @@ function PromisePage() {
             As we grow, we give back.
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Today, we're focused on building tools that help everyday athletes perform at their best. Tomorrow, we'll use our platform to invest back into the communities that helped build us.
+            Today, we're focused on building tools that help everyday athletes perform at their
+            best. Tomorrow, we'll use our platform to invest back into the communities that helped
+            build us.
           </p>
         </div>
       </section>
 
       <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Long-term commitments</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+            Long-term commitments
+          </p>
           <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
             The kind of company we want to become.
           </h2>

@@ -3,11 +3,10 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const NAV = [
+  { href: "#how-it-works", label: "How It Works" },
   { href: "#clutch-score", label: "Clutch Score" },
   { href: "#athletes", label: "Athletes" },
-  { href: "#parents", label: "Parents" },
-  { href: "#teams", label: "Teams" },
-  { href: "#learn", label: "Learn" },
+  { href: "#coaches", label: "Teams" },
   { href: "#about", label: "About" },
 ] as const;
 
@@ -37,23 +36,23 @@ export function SiteHeader({ onGetScore }: SiteHeaderProps) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
         scrolled || open
-          ? "border-b border-white/10 bg-[#050505]/95 backdrop-blur-md"
-          : "bg-transparent"
+          ? "border-white/10 bg-[#0B0D10]/94 backdrop-blur-md"
+          : "border-transparent bg-[#0B0D10]/80 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-6 px-5 sm:h-[4.5rem] sm:px-8">
         <a href="#" aria-label="ClutchFuel home" className="shrink-0">
-          <Logo size="md" />
+          <Logo size="md" variant="light" />
         </a>
 
-        <nav className="hidden items-center gap-6 xl:gap-8 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {NAV.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65 transition hover:text-white"
+              className="text-[13px] font-semibold tracking-[0.02em] text-[#c9cdd4] transition hover:text-white"
             >
               {item.label}
             </a>
@@ -64,9 +63,9 @@ export function SiteHeader({ onGetScore }: SiteHeaderProps) {
           <button
             type="button"
             onClick={onGetScore}
-            className="hidden rounded-full bg-lime px-5 py-2.5 text-sm font-semibold text-background transition hover:bg-lime-dark md:inline-flex"
+            className="hidden rounded-full bg-[#FF5A1F] px-5 py-2.5 font-display text-xs font-semibold uppercase tracking-[0.04em] text-white shadow-[0_10px_24px_-10px_rgba(255,90,31,0.7)] transition hover:bg-[#D4460F] md:inline-flex"
           >
-            Get Your Score
+            Get My Score
           </button>
           <button
             type="button"
@@ -81,7 +80,7 @@ export function SiteHeader({ onGetScore }: SiteHeaderProps) {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-[#050505] lg:hidden">
+        <div className="border-t border-white/10 bg-[#0B0D10] lg:hidden">
           <nav
             className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-5 py-6"
             aria-label="Mobile"
@@ -102,9 +101,9 @@ export function SiteHeader({ onGetScore }: SiteHeaderProps) {
                 setOpen(false);
                 onGetScore();
               }}
-              className="mt-4 w-full rounded-full bg-lime px-5 py-3.5 text-center text-sm font-semibold text-background"
+              className="mt-4 w-full rounded-full bg-[#FF5A1F] px-5 py-3.5 text-center font-display text-sm font-semibold uppercase tracking-[0.04em] text-white"
             >
-              Get Your Score
+              Get My Score
             </button>
           </nav>
         </div>

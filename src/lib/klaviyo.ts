@@ -17,9 +17,7 @@ export type AssessmentProfileFields = {
   clutchMove2?: string | null;
 };
 
-export type ProfileIdentity =
-  | { email: string; id?: undefined }
-  | { id: string; email?: string };
+export type ProfileIdentity = { email: string; id?: undefined } | { id: string; email?: string };
 
 function apiKey(): string | undefined {
   const key = getEnv("KLAVIYO_API_KEY");
@@ -106,11 +104,7 @@ async function createEvent(opts: {
             attributes: { name: opts.metricName },
           },
         },
-        profile: profileResource(
-          opts.identity,
-          opts.firstName,
-          opts.profileProperties ?? {},
-        ),
+        profile: profileResource(opts.identity, opts.firstName, opts.profileProperties ?? {}),
       },
     },
   };

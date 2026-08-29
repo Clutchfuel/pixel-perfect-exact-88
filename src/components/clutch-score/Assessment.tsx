@@ -4,7 +4,6 @@ import { optInSms, submitAssessment } from "@/lib/assessment.functions";
 import { SegmentedClutchRing } from "@/components/clutch-score/ScoreRing";
 import { toast } from "sonner";
 
-
 function generateSessionToken(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, "");
@@ -96,8 +95,7 @@ const NEXT_STEP: Record<Opportunity, Partial<Record<GoalId, string>> & { default
       "You're close. Lock in electrolytes before every session this week and notice the difference.",
     consistency:
       "You're already consistent with training. Now make hydration equally boring: same routine, before every session, for 2 weeks.",
-    feel:
-      "You want to feel better after workouts. That comes from doing the small stuff every time, pre-hydrate, then train. Two weeks.",
+    feel: "You want to feel better after workouts. That comes from doing the small stuff every time, pre-hydrate, then train. Two weeks.",
     energy:
       "You're close. Make pre-workout hydration a non-negotiable habit for 2 weeks — that's usually where the energy shows up.",
   },
@@ -134,10 +132,7 @@ function opportunityPillar(opportunity: Opportunity): BehaviorPillar {
   return "Consistency";
 }
 
-const OPPORTUNITY_INSIGHT: Record<
-  BehaviorPillar,
-  { description: string; whyItMatters: string }
-> = {
+const OPPORTUNITY_INSIGHT: Record<BehaviorPillar, { description: string; whyItMatters: string }> = {
   Hydration: {
     description:
       "Based on your responses, improving your hydration habits will have the greatest impact on your performance.",
@@ -299,7 +294,9 @@ function scrollToTop() {
 }
 
 function scrollToAssessment() {
-  document.getElementById("clutch-assessment")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document
+    .getElementById("clutch-assessment")
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function emitPhase(phase: string) {
@@ -453,7 +450,11 @@ function StepHeader({
             const n = i + 1;
             const complete = n < step;
             const current = n === step;
-            const width = complete ? "100%" : current ? `${Math.max(8, fillWithinStep * 100)}%` : "0%";
+            const width = complete
+              ? "100%"
+              : current
+                ? `${Math.max(8, fillWithinStep * 100)}%`
+                : "0%";
             return (
               <div key={n} className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/[0.10]">
                 <div
@@ -537,9 +538,7 @@ function GoalStep({
   onContinue: () => void;
 }) {
   const toggle = (id: GoalId) => {
-    onChange(
-      selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id],
-    );
+    onChange(selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id]);
   };
   const [otherOpen, setOtherOpen] = useState(otherValue.trim().length > 0);
   const canContinue = selected.length > 0 || otherValue.trim().length > 0;
@@ -576,11 +575,7 @@ function GoalStep({
             </button>
           );
         })}
-        <OtherToggle
-          label="Other"
-          active={otherOpen}
-          onClick={() => setOtherOpen(true)}
-        />
+        <OtherToggle label="Other" active={otherOpen} onClick={() => setOtherOpen(true)} />
       </div>
 
       {otherOpen && (
@@ -661,11 +656,7 @@ function AthleteStep({
             </button>
           );
         })}
-        <OtherToggle
-          label="Other"
-          active={otherOpen}
-          onClick={() => setOtherOpen(true)}
-        />
+        <OtherToggle label="Other" active={otherOpen} onClick={() => setOtherOpen(true)} />
       </div>
 
       {otherOpen && (
@@ -881,11 +872,7 @@ function Result({
                   />
                   {b.id}
                 </span>
-                <ContributionDots
-                  level={b.level}
-                  color={b.color}
-                  empty="rgba(0,0,0,0.12)"
-                />
+                <ContributionDots level={b.level} color={b.color} empty="rgba(0,0,0,0.12)" />
               </li>
             ))}
           </ul>
@@ -950,9 +937,7 @@ function EmailCapture({
   const [phase, setPhase] = useState<"form" | "joined" | "retake" | "sms_done">("form");
   const [phone, setPhone] = useState("");
   const [smsSubmitting, setSmsSubmitting] = useState(false);
-  const [retakeScores, setRetakeScores] = useState<{ previous: number; next: number } | null>(
-    null,
-  );
+  const [retakeScores, setRetakeScores] = useState<{ previous: number; next: number } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -965,9 +950,7 @@ function EmailCapture({
     setSubmitting(true);
     const sessionToken = generateSessionToken();
     const sourceValue =
-      source === "Other" && sourceOther.trim()
-        ? `Other: ${sourceOther.trim()}`
-        : source || null;
+      source === "Other" && sourceOther.trim() ? `Other: ${sourceOther.trim()}` : source || null;
     const goalValue = combinedGoalsLabel(goals, goalOther) || null;
     const athleteTypeValue =
       athleteType ?? (athleteOther.trim() ? `Other: ${athleteOther.trim()}` : null);
@@ -1060,7 +1043,10 @@ function EmailCapture({
           Watch for your first Clutch Move and performance insights in your inbox.
         </p>
         {phase === "joined" ? (
-          <form onSubmit={handleSms} className="mx-auto mt-8 flex max-w-sm flex-col gap-3 text-left">
+          <form
+            onSubmit={handleSms}
+            className="mx-auto mt-8 flex max-w-sm flex-col gap-3 text-left"
+          >
             <p className="text-center text-sm text-white/70">
               Optional: get check-ins by text. Reply STOP anytime.
             </p>

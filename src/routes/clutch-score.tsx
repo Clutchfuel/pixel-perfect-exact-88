@@ -19,18 +19,18 @@ export const Route = createFileRoute("/clutch-score")({
   component: ClutchScorePage,
 });
 
-const TRUST = [
-  "Takes 60 seconds",
-  "Personalized insights",
-  "Built for everyday athletes",
-] as const;
+const TRUST = ["Takes 60 seconds", "Personalized insights", "Built for everyday athletes"] as const;
 
 function ClutchScorePage() {
-  const [showIntro, setShowIntro] = useState(true); const hasAdvancedRef = useRef(false);
+  const [showIntro, setShowIntro] = useState(true);
+  const hasAdvancedRef = useRef(false);
 
   useEffect(() => {
     const onPhase = () => {
-      if (!hasAdvancedRef.current) { hasAdvancedRef.current = true; return; }
+      if (!hasAdvancedRef.current) {
+        hasAdvancedRef.current = true;
+        return;
+      }
       setShowIntro(false);
     };
     window.addEventListener("clutch-score:phase", onPhase);
@@ -44,7 +44,8 @@ function ClutchScorePage() {
   }, [showIntro]);
 
   const start = () => {
-    hasAdvancedRef.current = true; setShowIntro(false);
+    hasAdvancedRef.current = true;
+    setShowIntro(false);
   };
 
   return (

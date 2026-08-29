@@ -26,19 +26,58 @@ export const Route = createFileRoute("/community")({
 });
 
 const ATHLETES = [
-  { tag: "Runner", name: "Marathon mornings", copy: "Training for her fourth marathon between two kids and a full-time job.", image: athleteRunning },
-  { tag: "Hoopers", name: "Pickup regular", copy: "Playing three nights a week and finally feeling steady in the fourth quarter.", image: athleteBasketball },
-  { tag: "Busy parent", name: "Between school runs", copy: "Squeezes in 45 minutes at 5am, and refuses to sacrifice recovery.", image: athleteParent },
-  { tag: "College athlete", name: "Off-season strength", copy: "Building capacity now so the season doesn't build it for him.", image: athleteCollege },
-  { tag: "Weekend warrior", name: "Sunday long run", copy: "Not chasing PRs. Chasing enjoying it again.", image: athleteWeekend },
-  { tag: "CrossFit", name: "Class of 5:30am", copy: "Sharp workouts, sharper recovery, the missing piece for years.", image: athleteCrossfit },
-  { tag: "HYROX", name: "First doubles", copy: "Preparing for his first HYROX Doubles with a partner from his run club.", image: athleteHyrox },
+  {
+    tag: "Runner",
+    name: "Marathon mornings",
+    copy: "Training for her fourth marathon between two kids and a full-time job.",
+    image: athleteRunning,
+  },
+  {
+    tag: "Hoopers",
+    name: "Pickup regular",
+    copy: "Playing three nights a week and finally feeling steady in the fourth quarter.",
+    image: athleteBasketball,
+  },
+  {
+    tag: "Busy parent",
+    name: "Between school runs",
+    copy: "Squeezes in 45 minutes at 5am, and refuses to sacrifice recovery.",
+    image: athleteParent,
+  },
+  {
+    tag: "College athlete",
+    name: "Off-season strength",
+    copy: "Building capacity now so the season doesn't build it for him.",
+    image: athleteCollege,
+  },
+  {
+    tag: "Weekend warrior",
+    name: "Sunday long run",
+    copy: "Not chasing PRs. Chasing enjoying it again.",
+    image: athleteWeekend,
+  },
+  {
+    tag: "CrossFit",
+    name: "Class of 5:30am",
+    copy: "Sharp workouts, sharper recovery, the missing piece for years.",
+    image: athleteCrossfit,
+  },
+  {
+    tag: "HYROX",
+    name: "First doubles",
+    copy: "Preparing for his first HYROX Doubles with a partner from his run club.",
+    image: athleteHyrox,
+  },
 ];
 
 const HIGHLIGHTS = [
   { icon: Users, title: "Run clubs", copy: "Local crews training smarter together." },
   { icon: Calendar, title: "Events", copy: "Meetups, challenges, and pop-up hydration labs." },
-  { icon: Users, title: "Future ambassadors", copy: "Everyday athletes who want to help others perform better." },
+  {
+    icon: Users,
+    title: "Future ambassadors",
+    copy: "Everyday athletes who want to help others perform better.",
+  },
 ];
 
 function CommunityPage() {
@@ -52,7 +91,8 @@ function CommunityPage() {
             Built for everyday athletes.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            No professionals. No influencers. Real people chasing better between school runs, night shifts, and full weekends.
+            No professionals. No influencers. Real people chasing better between school runs, night
+            shifts, and full weekends.
           </p>
         </div>
       </section>
@@ -72,7 +112,10 @@ function CommunityPage() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     style={{ filter: "grayscale(1) contrast(1.05)" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" aria-hidden />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+                    aria-hidden
+                  />
                   <div className="relative flex h-full flex-col justify-end p-6 text-background">
                     <p className="text-xs uppercase tracking-eyebrow text-electric">{a.tag}</p>
                     <h3 className="mt-1 text-2xl font-bold">{a.name}</h3>

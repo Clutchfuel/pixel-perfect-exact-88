@@ -22,7 +22,9 @@ function hasLeadsDb(path) {
 
 const found = candidates.filter((p) => existsSync(p));
 if (found.length === 0) {
-  console.error("[assert-leads-db] No generated wrangler.json found under .output/server or dist/server");
+  console.error(
+    "[assert-leads-db] No generated wrangler.json found under .output/server or dist/server",
+  );
   process.exit(1);
 }
 

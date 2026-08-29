@@ -37,9 +37,7 @@ function mergeBindings(target, source) {
     if (!Array.isArray(from) || from.length === 0) continue;
     const existing = Array.isArray(target[key]) ? target[key] : [];
     const byBinding = new Map(
-      existing
-        .filter((b) => b && typeof b.binding === "string")
-        .map((b) => [b.binding, b]),
+      existing.filter((b) => b && typeof b.binding === "string").map((b) => [b.binding, b]),
     );
     for (const binding of from) {
       if (!binding?.binding) continue;

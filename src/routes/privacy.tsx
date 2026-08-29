@@ -82,8 +82,8 @@ function PrivacyPage() {
                 Worker. If that primary store is unavailable, we may fall back to a Supabase
                 database or deliver the lead details to our team inbox so your signup is not lost.
                 Feedback submissions are write-once: once you submit a 👍/👎 or a note, that
-                submission can't be modified again. We don't make your individual responses
-                publicly readable.
+                submission can't be modified again. We don't make your individual responses publicly
+                readable.
               </p>
             </div>
 

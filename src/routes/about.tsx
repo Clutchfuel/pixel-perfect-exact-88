@@ -50,7 +50,10 @@ const TIMELINE = [
   { label: "Learning", copy: "Testing ideas in real training, not just theory." },
   { label: "Clutch Score", copy: "A simple way to turn habits into one clear next step." },
   { label: "Community", copy: "Everyday athletes learning and improving together." },
-  { label: "The Future", copy: "Better tools, better habits, more people ready for their clutch moment." },
+  {
+    label: "The Future",
+    copy: "Better tools, better habits, more people ready for their clutch moment.",
+  },
 ] as const;
 
 function AboutPage() {
@@ -75,8 +78,7 @@ function AboutPage() {
             <h1 className="mt-10 text-balance text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-5xl md:text-6xl">
               <span className="text-white/90">"</span>
               What's holding me back from performing at my{" "}
-              <span className="text-[#c1ff00]">best</span>?
-              <span className="text-white/90">"</span>
+              <span className="text-[#c1ff00]">best</span>?<span className="text-white/90">"</span>
             </h1>
           </Reveal>
         </div>
@@ -116,7 +118,9 @@ function AboutPage() {
               <p>Recovery was inconsistent.</p>
               <p>Energy came and went.</p>
               <p>I kept asking myself...</p>
-              <p className="text-3xl font-extrabold tracking-tight text-[#c1ff00] sm:text-4xl">Why?</p>
+              <p className="text-3xl font-extrabold tracking-tight text-[#c1ff00] sm:text-4xl">
+                Why?
+              </p>
             </div>
           </Reveal>
         </div>
@@ -136,7 +140,11 @@ function AboutPage() {
                 <li
                   key={item}
                   className={`rounded-sm border border-black/10 bg-white/70 px-4 py-2 text-sm font-medium tracking-wide ${
-                    i % 3 === 1 ? "rotate-[-1.5deg] text-[#8ebc00]" : i % 3 === 2 ? "rotate-[1deg]" : "rotate-[-0.5deg]"
+                    i % 3 === 1
+                      ? "rotate-[-1.5deg] text-[#8ebc00]"
+                      : i % 3 === 2
+                        ? "rotate-[1deg]"
+                        : "rotate-[-0.5deg]"
                   }`}
                 >
                   {item}
@@ -149,8 +157,8 @@ function AboutPage() {
               <p>The more I learned...</p>
               <p>The more I realized something surprising.</p>
               <p className="text-2xl font-extrabold leading-snug text-foreground sm:text-3xl">
-                Most athletes don't have a{" "}
-                <span className="bg-[#c1ff00]/40 px-1">motivation</span> problem.
+                Most athletes don't have a <span className="bg-[#c1ff00]/40 px-1">motivation</span>{" "}
+                problem.
               </p>
               <p className="text-2xl font-extrabold leading-snug text-foreground sm:text-3xl">
                 They have an <span className="bg-[#c1ff00]/40 px-1">information</span> problem.
@@ -216,7 +224,9 @@ function AboutPage() {
               <Reveal key={item.title} delay={i * 0.06}>
                 <div className="h-full border border-black/10 bg-white p-8">
                   <h3 className="text-xl font-bold tracking-tight">{item.title}</h3>
-                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">{item.copy}</p>
+                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                    {item.copy}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -228,7 +238,9 @@ function AboutPage() {
       <section className="border-t border-black/5 bg-white">
         <div className="mx-auto w-full max-w-2xl px-5 py-24 sm:px-8 sm:py-32">
           <Reveal>
-            <h2 className="text-center text-3xl font-extrabold tracking-tight sm:text-4xl">The path so far</h2>
+            <h2 className="text-center text-3xl font-extrabold tracking-tight sm:text-4xl">
+              The path so far
+            </h2>
           </Reveal>
           <ol className="mt-16">
             {TIMELINE.map((item, i) => (
@@ -240,12 +252,17 @@ function AboutPage() {
                       aria-hidden
                     />
                   )}
-                  <span className="relative mt-2 h-3.5 w-3.5 shrink-0 rounded-full bg-[#c1ff00]" aria-hidden />
+                  <span
+                    className="relative mt-2 h-3.5 w-3.5 shrink-0 rounded-full bg-[#c1ff00]"
+                    aria-hidden
+                  />
                   <div>
                     <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#8ebc00]">
                       {item.label}
                     </p>
-                    <p className="mt-2 text-lg leading-relaxed text-muted-foreground">{item.copy}</p>
+                    <p className="mt-2 text-lg leading-relaxed text-muted-foreground">
+                      {item.copy}
+                    </p>
                   </div>
                 </li>
               </Reveal>

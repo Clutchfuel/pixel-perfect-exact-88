@@ -123,7 +123,8 @@ export const ARTICLES: Article[] = [
     slug: "performance-habits",
     title: "Six performance habits that quietly beat any supplement",
     category: "Performance",
-    excerpt: "The unglamorous stack — sleep, sodium, timing, consistency — that outperforms every shortcut.",
+    excerpt:
+      "The unglamorous stack — sleep, sodium, timing, consistency — that outperforms every shortcut.",
     readingTime: "5 min read",
     image: habits,
     body: [

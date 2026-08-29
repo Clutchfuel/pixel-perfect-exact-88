@@ -82,8 +82,8 @@ function HowItWorksPage() {
             Sixty seconds to see how your habits support your goal.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Clutch Score shows how well your current behaviors align with the performance goal you're
-            trying to achieve, then gives you one clear next move.
+            Clutch Score shows how well your current behaviors align with the performance goal
+            you're trying to achieve, then gives you one clear next move.
           </p>
         </div>
       </section>
@@ -115,18 +115,13 @@ function HowItWorksPage() {
               What you'll actually see.
             </h2>
             <p className="mt-6 text-lg text-muted-foreground">
-              A goal-aligned Clutch Score, the behavior holding you back most, and one Clutch Move to
-              try before your next workout.
+              A goal-aligned Clutch Score, the behavior holding you back most, and one Clutch Move
+              to try before your next workout.
             </p>
           </Reveal>
           <Reveal delay={0.08}>
             <div className="overflow-hidden rounded-3xl border border-black/10 bg-[#070707] p-8 text-center sm:p-10">
-              <SegmentedClutchRing
-                score={68}
-                segments={SAMPLE_SEGMENTS}
-                size={200}
-                stroke={14}
-              />
+              <SegmentedClutchRing score={68} segments={SAMPLE_SEGMENTS} size={200} stroke={14} />
               <p className="mt-8 text-sm font-semibold uppercase tracking-eyebrow text-[#c1ff00]">
                 Building Momentum
               </p>
@@ -136,12 +131,12 @@ function HowItWorksPage() {
               </p>
               <p className="mt-2 text-xl font-bold leading-snug text-white">Recovery</p>
               <p className="mt-3 text-sm leading-relaxed text-white/55">
-                Based on your responses, improving your recovery habits will have the greatest impact
-                on your performance.
+                Based on your responses, improving your recovery habits will have the greatest
+                impact on your performance.
               </p>
               <p className="mt-4 text-sm leading-relaxed text-white/45">
-                First Clutch Move: Rehydrate with sodium within 60 minutes after training, even if you
-                don't feel thirsty yet.
+                First Clutch Move: Rehydrate with sodium within 60 minutes after training, even if
+                you don't feel thirsty yet.
               </p>
             </div>
           </Reveal>

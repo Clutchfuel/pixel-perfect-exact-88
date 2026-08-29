@@ -54,7 +54,10 @@ export function ScoreRing({ score, size = 240, stroke = 16 }: ScoreRingProps) {
       : "text-5xl font-extrabold tracking-tight text-white tabular-nums";
 
   return (
-    <div className="relative mx-auto" style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}>
+    <div
+      className="relative mx-auto"
+      style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}
+    >
       <div
         className="pointer-events-none absolute inset-[-20%] rounded-full transition-opacity duration-700"
         style={{
@@ -183,12 +186,14 @@ export function SegmentedClutchRing({
   let cursor = gap / 2;
 
   return (
-    <div className="relative mx-auto" style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}>
+    <div
+      className="relative mx-auto"
+      style={{ width: size, maxWidth: "100%", aspectRatio: "1 / 1" }}
+    >
       <div
         className="pointer-events-none absolute inset-[-18%] rounded-full opacity-60"
         style={{
-          background:
-            "radial-gradient(circle, rgba(193,255,0,0.16) 0%, transparent 65%)",
+          background: "radial-gradient(circle, rgba(193,255,0,0.16) 0%, transparent 65%)",
         }}
         aria-hidden
       />
