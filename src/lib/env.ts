@@ -27,7 +27,6 @@ function pickKv(env: unknown): KVNamespace | undefined {
  */
 function readNitroEnv(): unknown {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (globalThis as { __env__?: unknown }).__env__;
   } catch {
     return undefined;

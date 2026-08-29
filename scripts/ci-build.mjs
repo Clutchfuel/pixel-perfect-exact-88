@@ -37,7 +37,5 @@ if (buildStatus !== 0) process.exit(buildStatus);
 const mergeStatus = run(process.execPath, [join(root, "scripts", "merge-wrangler-bindings.mjs")]);
 if (mergeStatus !== 0) process.exit(mergeStatus);
 
-const assertStatus = run(process.execPath, [
-  join(root, "scripts", "assert-leads-db-binding.mjs"),
-]);
+const assertStatus = run(process.execPath, [join(root, "scripts", "assert-leads-db-binding.mjs")]);
 process.exit(assertStatus);

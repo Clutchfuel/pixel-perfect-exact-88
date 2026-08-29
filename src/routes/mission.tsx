@@ -19,10 +19,18 @@ export const Route = createFileRoute("/mission")({
 
 const PILLARS = [
   { icon: Compass, title: "Discover", copy: "Understand your body through the Clutch Score." },
-  { icon: GraduationCap, title: "Learn", copy: "Straight answers that remove the guesswork, not gimmicks." },
+  {
+    icon: GraduationCap,
+    title: "Learn",
+    copy: "Straight answers that remove the guesswork, not gimmicks.",
+  },
   { icon: Activity, title: "Perform", copy: "Build habits that improve performance." },
   { icon: Users, title: "Belong", copy: "Join a community of everyday athletes." },
-  { icon: HeartHandshake, title: "Give Back", copy: "As we grow, invest in making sports more accessible." },
+  {
+    icon: HeartHandshake,
+    title: "Give Back",
+    copy: "As we grow, invest in making sports more accessible.",
+  },
 ];
 
 const VISION = [
@@ -44,10 +52,12 @@ function MissionPage() {
             We believe performance creates opportunity.
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Performance isn't just about becoming a better athlete. It's about becoming a better teammate, a better coach, a better parent, a better leader.
+            Performance isn't just about becoming a better athlete. It's about becoming a better
+            teammate, a better coach, a better parent, a better leader.
           </p>
           <p className="mt-4 text-lg text-muted-foreground">
-            When people become healthier, stronger, and more confident, they make their communities stronger too. That's the kind of impact we're building toward.
+            When people become healthier, stronger, and more confident, they make their communities
+            stronger too. That's the kind of impact we're building toward.
           </p>
         </div>
       </section>
@@ -76,7 +86,9 @@ function MissionPage() {
 
       <section className="border-b border-black/5">
         <div className="mx-auto w-full max-w-4xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">The future we're building</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+            The future we're building
+          </p>
           <h2 className="mt-4 text-balance text-4xl font-bold leading-tight sm:text-5xl">
             We imagine a world where…
           </h2>
@@ -88,7 +100,9 @@ function MissionPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-10 text-lg font-semibold text-foreground">That's the future we're building.</p>
+          <p className="mt-10 text-lg font-semibold text-foreground">
+            That's the future we're building.
+          </p>
         </div>
       </section>
 

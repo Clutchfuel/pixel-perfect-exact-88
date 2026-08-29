@@ -1,8 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import {
-  findPriorClutchScoreByEmail,
-  persistClutchScoreLead,
-} from "@/lib/leads-db";
+import { findPriorClutchScoreByEmail, persistClutchScoreLead } from "@/lib/leads-db";
 import {
   trackAssessmentCompleted,
   trackClutch100Joined,
@@ -218,13 +215,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
     });
 
     if (prior && Number.isFinite(prior.score)) {
-      await trackScoreRetaken(
-        data.email,
-        data.first_name,
-        data.clutch_score,
-        prior.score,
-        fields,
-      );
+      await trackScoreRetaken(data.email, data.first_name, data.clutch_score, prior.score, fields);
       return {
         ok: true as const,
         kind: "retake" as const,

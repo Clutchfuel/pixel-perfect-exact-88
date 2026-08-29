@@ -7,7 +7,13 @@ import { ArticleCover } from "@/components/ArticleCover";
 import { canonical, makeMeta } from "@/lib/seo";
 
 const CATEGORIES: ("All" | ArticleCategory)[] = [
-  "All", "Hydration", "Recovery", "Fueling", "Performance", "Training", "Mindset",
+  "All",
+  "Hydration",
+  "Recovery",
+  "Fueling",
+  "Performance",
+  "Training",
+  "Mindset",
 ];
 
 export const Route = createFileRoute("/performance-hub")({
@@ -41,9 +47,10 @@ function PerformanceHubPage() {
             Learn what your body is trying to tell you.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-background/75">
-            Straight-to-the-point guides on hydration, recovery, fueling, and training habits — the small things that quietly change results, written for people who want to decide fast and move on.
+            Straight-to-the-point guides on hydration, recovery, fueling, and training habits — the
+            small things that quietly change results, written for people who want to decide fast and
+            move on.
           </p>
-
 
           <div className="mt-10 flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
@@ -63,16 +70,21 @@ function PerformanceHubPage() {
         </div>
       </section>
 
-
       {featured && (
         <section className="border-b border-black/5 bg-muted">
           <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
             <Reveal>
               <Link
-                to="/performance-hub/$slug" params={{ slug: featured.slug }}
+                to="/performance-hub/$slug"
+                params={{ slug: featured.slug }}
                 className="group grid gap-8 overflow-hidden rounded-3xl border border-black/10 bg-background transition hover:border-black/25 lg:grid-cols-2"
               >
-                <ArticleCover category={featured.category} title={featured.title} className="aspect-[16/10] w-full lg:aspect-auto lg:h-full" variant="hero" />
+                <ArticleCover
+                  category={featured.category}
+                  title={featured.title}
+                  className="aspect-[16/10] w-full lg:aspect-auto lg:h-full"
+                  variant="hero"
+                />
                 <div className="flex flex-col justify-center p-8 sm:p-10">
                   <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
                     Featured · {featured.category}
@@ -80,8 +92,12 @@ function PerformanceHubPage() {
                   <h2 className="mt-4 text-balance text-3xl font-bold leading-tight sm:text-4xl transition group-hover:text-foreground">
                     {featured.title}
                   </h2>
-                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">{featured.excerpt}</p>
-                  <p className="mt-6 text-xs uppercase tracking-eyebrow text-muted-foreground/80">{featured.readingTime}</p>
+                  <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                    {featured.excerpt}
+                  </p>
+                  <p className="mt-6 text-xs uppercase tracking-eyebrow text-muted-foreground/80">
+                    {featured.readingTime}
+                  </p>
                 </div>
               </Link>
             </Reveal>
@@ -95,24 +111,35 @@ function PerformanceHubPage() {
             {rest.map((a, i) => (
               <Reveal key={a.slug} delay={i * 0.04}>
                 <Link
-                  to="/performance-hub/$slug" params={{ slug: a.slug }}
+                  to="/performance-hub/$slug"
+                  params={{ slug: a.slug }}
                   className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
                 >
-                  <ArticleCover category={a.category} title={a.title} className="aspect-[16/10] w-full" />
+                  <ArticleCover
+                    category={a.category}
+                    title={a.title}
+                    className="aspect-[16/10] w-full"
+                  />
                   <div className="p-6">
-                    <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
+                    <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+                      {a.category}
+                    </p>
                     <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
                       {a.title}
                     </h3>
                     <p className="mt-3 text-sm text-muted-foreground">{a.excerpt}</p>
-                    <p className="mt-4 text-xs uppercase tracking-eyebrow text-muted-foreground/80">{a.readingTime}</p>
+                    <p className="mt-4 text-xs uppercase tracking-eyebrow text-muted-foreground/80">
+                      {a.readingTime}
+                    </p>
                   </div>
                 </Link>
               </Reveal>
             ))}
           </div>
           {rest.length === 0 && !featured && (
-            <p className="text-center text-muted-foreground/80">No articles in this category yet.</p>
+            <p className="text-center text-muted-foreground/80">
+              No articles in this category yet.
+            </p>
           )}
         </div>
       </section>

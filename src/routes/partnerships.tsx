@@ -51,14 +51,17 @@ function PartnershipsPage() {
             Let's build better athletes together.
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            ClutchFuel believes the future of performance is collaborative. We're looking to partner with organizations that share our mission of helping everyday athletes thrive.
+            ClutchFuel believes the future of performance is collaborative. We're looking to partner
+            with organizations that share our mission of helping everyday athletes thrive.
           </p>
         </div>
       </section>
 
       <section className="border-b border-black/5 bg-muted">
         <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Who we love working with</p>
+          <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+            Who we love working with
+          </p>
           <h2 className="mt-4 max-w-3xl text-balance text-4xl font-bold leading-tight sm:text-5xl">
             The people building better athletes every day.
           </h2>
@@ -66,7 +69,9 @@ function PartnershipsPage() {
             {AUDIENCES.map((a, i) => (
               <Reveal key={a.label} delay={i * 0.03}>
                 <div className="card-elevated flex items-center gap-4 p-5">
-                  <span className="text-2xl" aria-hidden>{a.emoji}</span>
+                  <span className="text-2xl" aria-hidden>
+                    {a.emoji}
+                  </span>
                   <span className="text-base font-semibold text-foreground">{a.label}</span>
                 </div>
               </Reveal>
@@ -109,7 +114,10 @@ function PartnershipsPage() {
             Become a ClutchFuel Partner <ArrowRight className="h-4 w-4" />
           </a>
           <div className="mt-6">
-            <Link to="/mission" className="text-sm font-semibold text-electric-dark hover:underline">
+            <Link
+              to="/mission"
+              className="text-sm font-semibold text-electric-dark hover:underline"
+            >
               Read our mission →
             </Link>
           </div>

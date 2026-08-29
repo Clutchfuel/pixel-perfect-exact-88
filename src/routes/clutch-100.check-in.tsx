@@ -4,12 +4,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { submitClutchMoveCheckin } from "@/lib/assessment.functions";
 import { canonical, makeMeta } from "@/lib/seo";
 
-const STATUSES = [
-  "nailed_it",
-  "mostly_consistent",
-  "struggling",
-  "havent_started",
-] as const;
+const STATUSES = ["nailed_it", "mostly_consistent", "struggling", "havent_started"] as const;
 
 type Status = (typeof STATUSES)[number];
 
@@ -92,8 +87,9 @@ function CheckInPage() {
             </p>
             <h1 className="mt-6 text-3xl font-extrabold tracking-tight">Got it.</h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              You marked your Clutch Move as <span className="font-semibold text-foreground">{STATUS_LABEL[status]}</span>.
-              Keep going.
+              You marked your Clutch Move as{" "}
+              <span className="font-semibold text-foreground">{STATUS_LABEL[status]}</span>. Keep
+              going.
             </p>
           </>
         ) : null}

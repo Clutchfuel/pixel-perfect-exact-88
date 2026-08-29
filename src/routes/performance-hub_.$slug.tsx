@@ -14,7 +14,9 @@ export const Route = createFileRoute("/performance-hub_/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Article not found: ClutchFuel" }, { name: "robots", content: "noindex" }] };
+      return {
+        meta: [{ title: "Article not found: ClutchFuel" }, { name: "robots", content: "noindex" }],
+      };
     }
     const { article } = loaderData;
     const path = `/performance-hub/${article.slug}`;
@@ -65,7 +67,8 @@ function ArticlePage() {
             className="pointer-events-none absolute inset-y-0 right-[-6%] hidden lg:flex w-1/2 items-center overflow-hidden select-none"
             aria-hidden
           >
-            <div className="flex flex-col leading-[0.82] font-extrabold lowercase tracking-tighter text-[20vw]"
+            <div
+              className="flex flex-col leading-[0.82] font-extrabold lowercase tracking-tighter text-[20vw]"
               style={{ WebkitTextStroke: "1.5px #c1ff00", color: "transparent" }}
             >
               <span>clutch</span>
@@ -132,8 +135,6 @@ function ArticlePage() {
           </div>
         </header>
 
-
-
         <div className="mx-auto w-full max-w-3xl px-5 py-16 sm:px-8 sm:py-24">
           <div className="prose prose max-w-none space-y-6 text-lg leading-relaxed text-muted-foreground">
             {article.body.map((p: string, i: number) => (
@@ -147,7 +148,10 @@ function ArticlePage() {
               <ul className="mt-5 space-y-3">
                 {article.takeaways.map((t: string, i: number) => (
                   <li key={i} className="flex gap-3 text-base leading-relaxed text-foreground">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-electric-dark" aria-hidden />
+                    <span
+                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-electric-dark"
+                      aria-hidden
+                    />
                     <span>{t}</span>
                   </li>
                 ))}
@@ -158,7 +162,9 @@ function ArticlePage() {
           <div className="mt-12 rounded-2xl border border-black/10 bg-black/[0.03] p-8">
             <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Try it yourself</p>
             <h3 className="mt-3 text-2xl font-bold">Get Your Clutch Score</h3>
-            <p className="mt-2 text-muted-foreground">Find your biggest performance opportunity in 60 seconds.</p>
+            <p className="mt-2 text-muted-foreground">
+              Find your biggest performance opportunity in 60 seconds.
+            </p>
             <Link
               to="/clutch-score"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-electric px-6 py-3 text-sm font-semibold text-black transition hover:bg-electric-dark"
@@ -174,16 +180,25 @@ function ArticlePage() {
           <p className="text-xs uppercase tracking-eyebrow text-electric-dark">Related reads</p>
           <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Keep exploring.</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {related.map((a: typeof related[number]) => (
+            {related.map((a: (typeof related)[number]) => (
               <Link
                 key={a.slug}
-                to="/performance-hub/$slug" params={{ slug: a.slug }}
+                to="/performance-hub/$slug"
+                params={{ slug: a.slug }}
                 className="group block overflow-hidden rounded-2xl border border-black/10 bg-background transition hover:border-black/25"
               >
-                <ArticleCover category={a.category} title={a.title} className="aspect-[16/10] w-full" />
+                <ArticleCover
+                  category={a.category}
+                  title={a.title}
+                  className="aspect-[16/10] w-full"
+                />
                 <div className="p-6">
-                  <p className="text-xs uppercase tracking-eyebrow text-electric-dark">{a.category}</p>
-                  <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">{a.title}</h3>
+                  <p className="text-xs uppercase tracking-eyebrow text-electric-dark">
+                    {a.category}
+                  </p>
+                  <h3 className="mt-3 text-lg font-semibold leading-snug transition group-hover:text-foreground">
+                    {a.title}
+                  </h3>
                 </div>
               </Link>
             ))}

@@ -1,12 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { HomepageMarketing } from "@/components/landing/HomepageMarketing";
+import { PillarRing } from "@/components/clutch-score/PillarRing";
+import { ScoreRing } from "@/components/clutch-score/ScoreRing";
+import { ShareCard } from "@/components/clutch-score/ShareCard";
 import { submitFeedback } from "@/lib/feedback.functions";
+import {
+  ASSESSMENT_QUESTIONS,
+  ASSESSMENT_SCALE,
+  computeClutchScore,
+  legacyQuestionFields,
+  type ClutchScoreResult,
+  type NumericAnswer,
+  type Pillar,
+} from "@/lib/clutch-score-assessment";
 import { canonical, makeMeta } from "@/lib/seo";
 import { toast } from "sonner";
+
+const QUESTION_COUNT = ASSESSMENT_QUESTIONS.length;
+
+const SOURCES = ["Run Club", "Basketball", "HYROX", "Instagram", "Friend", "Other"];
+
+const PILLAR_TAG: Record<Pillar, string> = {
+  prepare: "bg-[#FF5A1F] text-white",
+  perform: "bg-black text-white",
+  recover: "bg-[#1FB6D6] text-[#04262c]",
+};
 
 function generateSessionToken(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -26,10 +48,14 @@ function generateId(): string {
   return generateSessionToken().slice(0, 36);
 }
 
+function emptyAnswers(): (NumericAnswer | null)[] {
+  return Array.from({ length: QUESTION_COUNT }, () => null);
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: makeMeta({
-      title: "ClutchFuel — Build Better Athletes",
+      title: "ClutchFuel — Prepare. Perform. Recover.",
       description:
         "Performance habits for competitive athletes. Take the Clutch Score in 60 seconds — hydration, fueling, recovery, sleep and preparation.",
       path: "/",
@@ -39,79 +65,19 @@ export const Route = createFileRoute("/")({
   component: ClutchScoreApp,
 });
 
-// ---------- Scoring ----------
-
-const ANSWERS = ["Never", "Rarely", "Sometimes", "Often", "Always"] as const;
-type Answer = (typeof ANSWERS)[number];
-
-const QUESTIONS = [
-  "How often do you cramp during training?",
-  "How often do you finish workouts feeling dehydrated?",
-  "How often do you use electrolytes during training?",
-  "How often do you feel your hydration strategy is working?",
-  "How often do you recover well after intense sessions?",
-] as const;
-
-const SOURCES = ["Run Club", "Basketball", "HYROX", "Instagram", "Friend", "Other"];
-
-const pts = (a: Answer) => ANSWERS.indexOf(a);
-const isOftenOrAlways = (a: Answer) => a === "Often" || a === "Always";
-const isNeverOrRarely = (a: Answer) => a === "Never" || a === "Rarely";
-
-type Opportunity = "Hydration Timing" | "Electrolyte Use" | "Recovery & Cramping" | "Consistency";
-
-const NEXT_STEP: Record<Opportunity, string> = {
-  "Hydration Timing":
-    "Drink electrolytes 15–30 minutes before training, not just during. Try it for your next 3 sessions.",
-  "Electrolyte Use":
-    "Add electrolytes to your next 3 workouts, even short ones. Consistency matters more than amount.",
-  "Recovery & Cramping":
-    "Rehydrate within 60 minutes after training, even if you don't feel thirsty yet.",
-  Consistency:
-    "You're close. Lock in electrolytes before every session this week and notice the difference.",
-};
-
-function computeResult(answers: Answer[]) {
-  const adjusted = answers.map((a, i) => (i < 2 ? 4 - pts(a) : pts(a)));
-  const sum = adjusted.reduce((s, v) => s + v, 0);
-  const clutch_score = Math.min(100, Math.round((sum / 20) * 100) + 10);
-
-  const [q1, q2, q3, , q5] = answers;
-  const q4 = answers[3];
-
-  let opportunity: Opportunity;
-  if (isOftenOrAlways(q3) && isNeverOrRarely(q4)) opportunity = "Hydration Timing";
-  else if (isNeverOrRarely(q3)) opportunity = "Electrolyte Use";
-  else if (isOftenOrAlways(q1) || isNeverOrRarely(q5)) opportunity = "Recovery & Cramping";
-  else opportunity = "Consistency";
-
-  // q2 referenced for completeness so unused-var rules don't trip on the destructure
-  void q2;
-
-  return { clutch_score, opportunity, next_step: NEXT_STEP[opportunity] };
-}
-
-// ---------- App ----------
-
 type Step =
   | { kind: "landing" }
   | { kind: "quiz"; index: number }
   | { kind: "email" }
-  | {
-      kind: "result";
-      id: string;
-      sessionToken: string;
-      score: number;
-      opportunity: Opportunity;
-      nextStep: string;
-    };
+  | { kind: "result"; id: string; sessionToken: string; result: ClutchScoreResult };
 
 function ClutchScoreApp() {
   const [step, setStep] = useState<Step>({ kind: "landing" });
-  const [answers, setAnswers] = useState<(Answer | null)[]>([null, null, null, null, null]);
+  const [answers, setAnswers] = useState<(NumericAnswer | null)[]>(emptyAnswers);
 
   const startAssessment = () => {
     window.scrollTo({ top: 0 });
+    setAnswers(emptyAnswers());
     setStep({ kind: "quiz", index: 0 });
   };
 
@@ -123,12 +89,63 @@ function ClutchScoreApp() {
     );
   }
 
+  if (step.kind === "result") {
+    return (
+      <main id="main" className="min-h-screen bg-[#0B0D10] text-white">
+        <Result
+          id={step.id}
+          sessionToken={step.sessionToken}
+          result={step.result}
+          onRetake={() => {
+            setAnswers(emptyAnswers());
+            setStep({ kind: "landing" });
+            window.scrollTo({ top: 0 });
+          }}
+        />
+      </main>
+    );
+  }
+
+  const isQuiz = step.kind === "quiz";
+
   return (
-    <main id="main" className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-5 pt-6 pb-10 sm:py-16">
-        <header className="mb-4 flex items-center gap-4 sm:mb-10">
-          <Logo size="lg" />
+    <main
+      id="main"
+      className={`min-h-screen ${
+        isQuiz ? "bg-[#F5F4EF] text-[#0B0D10]" : "bg-[#0B0D10] text-white"
+      }`}
+    >
+      <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-6 pt-5 pb-10 sm:py-14">
+        <header className="mb-2 flex items-center justify-between">
+          <Logo size="lg" variant={isQuiz ? "dark" : "light"} />
+          {isQuiz && (
+            <button
+              onClick={() => {
+                setStep({ kind: "landing" });
+                window.scrollTo({ top: 0 });
+              }}
+              type="button"
+              className="text-sm font-semibold text-[#767f8c] transition hover:text-[#0B0D10]"
+            >
+              Exit
+            </button>
+          )}
         </header>
+
+        {isQuiz && (
+          <>
+            <div className="mb-1 h-1 overflow-hidden rounded-full bg-[#e2e0d6]">
+              <div
+                className="h-full rounded-full bg-[#FF5A1F] transition-all duration-300"
+                style={{ width: `${(step.index / QUESTION_COUNT) * 100}%` }}
+              />
+            </div>
+            <p className="font-display pt-2.5 text-[11px] uppercase tracking-[0.1em] text-[#767f8c]">
+              Question {step.index + 1} / {QUESTION_COUNT} —{" "}
+              {ASSESSMENT_QUESTIONS[step.index].pillar.toUpperCase()}
+            </p>
+          </>
+        )}
 
         {step.kind === "quiz" && (
           <Quiz
@@ -138,7 +155,7 @@ function ClutchScoreApp() {
               const next = [...answers];
               next[step.index] = value;
               setAnswers(next);
-              if (step.index < QUESTIONS.length - 1) {
+              if (step.index < QUESTION_COUNT - 1) {
                 setStep({ kind: "quiz", index: step.index + 1 });
               } else {
                 setStep({ kind: "email" });
@@ -148,35 +165,20 @@ function ClutchScoreApp() {
               if (step.index === 0) {
                 setStep({ kind: "landing" });
                 window.scrollTo({ top: 0 });
-              } else setStep({ kind: "quiz", index: step.index - 1 });
+              } else {
+                setStep({ kind: "quiz", index: step.index - 1 });
+              }
             }}
           />
         )}
 
         {step.kind === "email" && (
           <EmailCapture
-            answers={answers as Answer[]}
-            onBack={() => setStep({ kind: "quiz", index: QUESTIONS.length - 1 })}
+            answers={answers as NumericAnswer[]}
+            onBack={() => setStep({ kind: "quiz", index: QUESTION_COUNT - 1 })}
             onComplete={(id, token, result) =>
-              setStep({
-                kind: "result",
-                id,
-                sessionToken: token,
-                score: result.clutch_score,
-                opportunity: result.opportunity,
-                nextStep: result.next_step,
-              })
+              setStep({ kind: "result", id, sessionToken: token, result })
             }
-          />
-        )}
-
-        {step.kind === "result" && (
-          <Result
-            id={step.id}
-            sessionToken={step.sessionToken}
-            score={step.score}
-            opportunity={step.opportunity}
-            nextStep={step.nextStep}
           />
         )}
       </div>
@@ -184,7 +186,22 @@ function ClutchScoreApp() {
   );
 }
 
-// ---------- Quiz ----------
+function useSelectThenAdvance(onSelect: (value: NumericAnswer) => void, delayMs = 220) {
+  const [pending, setPending] = useState<NumericAnswer | null>(null);
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  useEffect(() => {
+    if (pending === null) return;
+    const id = window.setTimeout(() => {
+      onSelectRef.current(pending);
+      setPending(null);
+    }, delayMs);
+    return () => window.clearTimeout(id);
+  }, [pending, delayMs]);
+
+  return { pending, choose: (value: NumericAnswer) => setPending(value) };
+}
 
 function Quiz({
   index,
@@ -193,77 +210,76 @@ function Quiz({
   onBack,
 }: {
   index: number;
-  answers: (Answer | null)[];
-  onAnswer: (a: Answer) => void;
+  answers: (NumericAnswer | null)[];
+  onAnswer: (a: NumericAnswer) => void;
   onBack: () => void;
 }) {
-  const progress = ((index + 1) / QUESTIONS.length) * 100;
+  const question = ASSESSMENT_QUESTIONS[index];
+  const { pending, choose } = useSelectThenAdvance(onAnswer);
   const selected = answers[index];
 
   return (
-    <section className="flex flex-1 flex-col">
-      <div className="mb-8">
-        <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-white/50">
-          <span>
-            Question {index + 1} of {QUESTIONS.length}
-          </span>
-          <button
-            onClick={onBack}
-            className="text-white/50 transition hover:text-white"
-            type="button"
-          >
-            ← Back
-          </button>
-        </div>
-        <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full bg-lime transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+    <section className="flex flex-1 flex-col pt-6">
+      <span
+        className={`mb-5 inline-block w-fit rounded-full px-3.5 py-1.5 font-display text-[11px] font-bold uppercase tracking-[0.1em] ${PILLAR_TAG[question.pillar]}`}
+      >
+        {question.pillar}
+      </span>
 
-      <h2 className="text-balance text-3xl font-bold leading-tight sm:text-4xl">
-        {QUESTIONS[index]}
+      <h2 className="max-w-md text-balance text-[clamp(1.375rem,5.6vw,1.75rem)] font-bold leading-snug">
+        {question.text}
       </h2>
 
-      <div className="mt-8 flex flex-col gap-3">
-        {ANSWERS.map((a) => {
-          const isSelected = selected === a;
+      <div className="mt-9 flex flex-col gap-2.5 sm:mt-auto">
+        {ASSESSMENT_SCALE.map((label, i) => {
+          const value = (i + 1) as NumericAnswer;
+          const active = selected === value || pending === value;
           return (
             <button
-              key={a}
-              onClick={() => onAnswer(a)}
-              className={`w-full rounded-2xl border px-6 py-5 text-left text-lg font-semibold transition active:scale-[0.99] ${
-                isSelected
-                  ? "border-lime bg-lime/10 text-lime"
-                  : "border-white/10 bg-white/[0.03] text-white hover:border-white/30 hover:bg-white/[0.06]"
-              }`}
+              key={label}
+              onClick={() => choose(value)}
+              disabled={pending !== null}
               type="button"
+              className={`flex w-full items-center justify-between rounded-[14px] border-[1.5px] px-5 py-[18px] text-left text-[15px] font-semibold transition active:scale-[0.99] disabled:cursor-wait ${
+                active
+                  ? "border-[#FF5A1F] bg-[#fff0e8] text-[#0B0D10]"
+                  : "border-[#e2e0d6] bg-white text-[#0B0D10] hover:border-[#FF5A1F] hover:bg-[#fff0e8]"
+              }`}
             >
-              {a}
+              <span>{label}</span>
+              <span
+                className={`h-5 w-5 shrink-0 rounded-full border-2 ${
+                  active ? "border-[#FF5A1F] bg-[#FF5A1F]" : "border-[#e2e0d6]"
+                }`}
+                aria-hidden
+              />
             </button>
           );
         })}
       </div>
+
+      <div className="mt-7">
+        <button
+          onClick={onBack}
+          disabled={index === 0 || pending !== null}
+          type="button"
+          className="text-[13px] font-semibold text-[#767f8c] transition hover:text-[#0B0D10] disabled:invisible"
+        >
+          ← Back
+        </button>
+      </div>
     </section>
   );
 }
-
-// ---------- Email Capture ----------
 
 function EmailCapture({
   answers,
   onBack,
   onComplete,
 }: {
-  answers: Answer[];
+  answers: NumericAnswer[];
   onBack: () => void;
-  onComplete: (
-    id: string,
-    sessionToken: string,
-    result: { clutch_score: number; opportunity: Opportunity; next_step: string },
-  ) => void;
+  onComplete: (id: string, sessionToken: string, result: ClutchScoreResult) => void;
 }) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -277,7 +293,8 @@ function EmailCapture({
       return;
     }
     setSubmitting(true);
-    const result = computeResult(answers);
+    const result = computeClutchScore(answers);
+    const legacy = legacyQuestionFields(answers);
     const sessionToken = generateSessionToken();
     const id = generateId();
     try {
@@ -286,14 +303,10 @@ function EmailCapture({
         first_name: firstName.trim() || null,
         email: email.trim(),
         source: source || null,
-        q1: answers[0],
-        q2: answers[1],
-        q3: answers[2],
-        q4: answers[3],
-        q5: answers[4],
-        clutch_score: result.clutch_score,
-        opportunity: result.opportunity,
-        next_step: result.next_step,
+        ...legacy,
+        clutch_score: result.overall,
+        opportunity: result.opportunity.title,
+        next_step: result.opportunity.move,
         session_token: sessionToken,
       });
       if (error) {
@@ -328,23 +341,23 @@ function EmailCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email *"
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-[#FF5A1F] focus:outline-none"
         />
         <input
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           placeholder="First name (optional)"
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white placeholder:text-white/35 focus:border-[#FF5A1F] focus:outline-none"
         />
         <select
           value={source}
           onChange={(e) => setSource(e.target.value)}
-          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white focus:border-lime focus:outline-none"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-base text-white focus:border-[#FF5A1F] focus:outline-none"
         >
           <option value="">How did you hear about Clutch Score? (optional)</option>
           {SOURCES.map((s) => (
-            <option key={s} value={s} className="bg-background">
+            <option key={s} value={s} className="bg-[#0B0D10]">
               {s}
             </option>
           ))}
@@ -352,7 +365,7 @@ function EmailCapture({
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 w-full rounded-full bg-lime px-8 py-5 text-base font-semibold text-background transition hover:bg-lime-dark disabled:opacity-60"
+          className="mt-2 w-full rounded-full bg-[#FF5A1F] px-8 py-5 text-base font-semibold text-white transition hover:bg-[#D4460F] disabled:opacity-60"
         >
           {submitting ? "Calculating…" : "Show My Result"}
         </button>
@@ -361,26 +374,25 @@ function EmailCapture({
   );
 }
 
-// ---------- Result ----------
-
 function Result({
   id,
   sessionToken,
-  score,
-  opportunity,
-  nextStep,
+  result,
+  onRetake,
 }: {
   id: string;
   sessionToken: string;
-  score: number;
-  opportunity: Opportunity;
-  nextStep: string;
+  result: ClutchScoreResult;
+  onRetake: () => void;
 }) {
+  const [showShare, setShowShare] = useState(false);
   const [helpful, setHelpful] = useState<boolean | null>(null);
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const submitFeedbackFn = useServerFn(submitFeedback);
+
+  const { overall, pillars, opportunity, tagline } = result;
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -411,84 +423,117 @@ function Result({
   };
 
   return (
-    <section className="flex flex-1 flex-col">
-      <p className="text-xs uppercase tracking-[0.22em] text-lime">
-        Your biggest hydration opportunity
-      </p>
-      <h2 className="mt-3 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-        {opportunity}
-      </h2>
+    <div className="mx-auto w-full max-w-xl px-6 py-10 pb-16 sm:py-14">
+      <section className="flex flex-col">
+        <p className="text-center font-display text-[11px] uppercase tracking-[0.14em] text-[#8b93a0]">
+          Your Clutch Score™
+        </p>
 
-      <div className="mt-10">
-        <p className="text-xs uppercase tracking-[0.22em] text-white/40">What to do next</p>
-        <p className="mt-3 text-xl leading-relaxed text-white">{nextStep}</p>
-      </div>
+        <div className="mt-4 flex justify-center">
+          <ScoreRing score={overall} size={220} stroke={14} />
+        </div>
 
-      <div className="mt-10 inline-flex items-baseline gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 self-start">
-        <span className="text-xs uppercase tracking-[0.18em] text-white/50">Clutch Score</span>
-        <span className="text-2xl font-bold text-white">{score}</span>
-        <span className="text-sm text-white/40">/ 100</span>
-      </div>
+        <p className="mt-2 text-center text-sm text-[#c9cdd4]">{tagline}</p>
 
-      <p className="mt-10 text-sm leading-relaxed text-white/60">
-        Try your Next Step for the next 2 weeks. We'll check back and see what changed.
-      </p>
+        <div className="mt-8 flex gap-3">
+          <div className="flex flex-1 flex-col items-center rounded-[14px] border border-white/10 bg-white/[0.04] px-2.5 py-4">
+            <PillarRing score={pillars.prepare} label="Prepare" accent="orange" size={56} />
+          </div>
+          <div className="flex flex-1 flex-col items-center rounded-[14px] border border-white/10 bg-white/[0.04] px-2.5 py-4">
+            <PillarRing score={pillars.perform} label="Perform" accent="orange" size={56} />
+          </div>
+          <div className="flex flex-1 flex-col items-center rounded-[14px] border border-white/10 bg-white/[0.04] px-2.5 py-4">
+            <PillarRing score={pillars.recover} label="Recover" accent="cyan" size={56} />
+          </div>
+        </div>
 
-      <div className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
-        {submitted ? (
-          <p className="text-center text-sm text-white/70">Thanks — your feedback is recorded.</p>
-        ) : (
-          <>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
-              Was this result helpful?
-            </p>
-            <div className="mt-4 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setHelpful(true)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === true
-                    ? "border-lime bg-lime/10 text-lime"
-                    : "border-white/10 bg-white/[0.03] hover:border-white/30"
-                }`}
-              >
-                👍 Yes
-              </button>
-              <button
-                type="button"
-                onClick={() => setHelpful(false)}
-                className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
-                  helpful === false
-                    ? "border-lime bg-lime/10 text-lime"
-                    : "border-white/10 bg-white/[0.03] hover:border-white/30"
-                }`}
-              >
-                👎 No
-              </button>
-            </div>
+        <div className="mt-7 rounded-2xl border border-[#ff5a1f]/40 bg-[#ff5a1f]/12 px-5 py-5">
+          <p className="font-display text-[11px] uppercase tracking-[0.12em] text-[#ffb894]">
+            Your Biggest Opportunity
+          </p>
+          <h2 className="mt-2 font-display text-2xl font-bold text-white">{opportunity.title}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-[#e5e8ec]">{opportunity.text}</p>
+        </div>
 
-            <label className="mt-5 block text-sm text-white/70">
-              What surprised you most about your result?
-            </label>
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              rows={3}
-              placeholder="Optional"
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-lime focus:outline-none"
-            />
+        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-5">
+          <p className="font-display text-[11px] uppercase tracking-[0.12em] text-[#1FB6D6]">
+            Your First Clutch Move
+          </p>
+          <p className="mt-3 text-[15px] leading-relaxed text-white">{opportunity.move}</p>
+        </div>
 
-            <button
-              type="button"
-              onClick={handleFeedback}
-              disabled={submitting}
-              className="mt-4 w-full rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-lime hover:text-lime disabled:opacity-60"
-            >
-              {submitting ? "Saving…" : "Submit Feedback"}
-            </button>
-          </>
+        <div className="mt-8 flex flex-col gap-2.5">
+          <button
+            type="button"
+            onClick={() => setShowShare((v) => !v)}
+            className="inline-flex w-full items-center justify-center rounded-full bg-[#FF5A1F] px-6 py-4 font-display text-[13px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#D4460F]"
+          >
+            {showShare ? "Hide Share Card" : "Share My Score"}
+          </button>
+          <button
+            type="button"
+            onClick={onRetake}
+            className="inline-flex w-full items-center justify-center rounded-full border border-white/30 px-6 py-4 font-display text-[13px] font-semibold uppercase tracking-wide text-white transition hover:bg-white/[0.06]"
+          >
+            Retake My Clutch Score Later
+          </button>
+        </div>
+
+        {showShare && (
+          <div className="mt-6">
+            <ShareCard overall={overall} pillars={pillars} opportunityTitle={opportunity.title} />
+          </div>
         )}
-      </div>
-    </section>
+
+        <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          {submitted ? (
+            <p className="text-center text-sm text-white/70">Thanks — your feedback is recorded.</p>
+          ) : (
+            <>
+              <p className="text-sm font-semibold text-white/70">Was this result helpful?</p>
+              <div className="mt-3 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setHelpful(true)}
+                  className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
+                    helpful === true
+                      ? "border-[#FF5A1F] bg-[#ff5a1f]/10 text-[#FF5A1F]"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                  }`}
+                >
+                  👍 Yes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setHelpful(false)}
+                  className={`flex-1 rounded-xl border px-4 py-3 text-lg transition ${
+                    helpful === false
+                      ? "border-[#FF5A1F] bg-[#ff5a1f]/10 text-[#FF5A1F]"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/30"
+                  }`}
+                >
+                  👎 No
+                </button>
+              </div>
+              <textarea
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                rows={2}
+                placeholder="Optional note"
+                className="mt-4 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-[#FF5A1F] focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={handleFeedback}
+                disabled={submitting}
+                className="mt-3 w-full rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-[#FF5A1F] hover:text-[#FF5A1F] disabled:opacity-60"
+              >
+                {submitting ? "Saving…" : "Submit Feedback"}
+              </button>
+            </>
+          )}
+        </div>
+      </section>
+    </div>
   );
 }
