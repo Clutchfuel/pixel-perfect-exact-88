@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { HomepageMarketing } from "@/components/landing/HomepageMarketing";
 import { PillarRing } from "@/components/clutch-score/PillarRing";
-import { ScoreRing } from "@/components/clutch-score/ScoreRing";
 import { ShareCard } from "@/components/clutch-score/ShareCard";
 import { submitFeedback } from "@/lib/feedback.functions";
 import {
@@ -67,7 +66,9 @@ export const Route = createFileRoute("/")({
 
 type Step =
   | { kind: "landing" }
+  | { kind: "intro" }
   | { kind: "quiz"; index: number }
+  | { kind: "calculating" }
   | { kind: "email" }
   | { kind: "result"; id: string; sessionToken: string; result: ClutchScoreResult };
 
@@ -78,7 +79,12 @@ function ClutchScoreApp() {
   const startAssessment = () => {
     window.scrollTo({ top: 0 });
     setAnswers(emptyAnswers());
-    setStep({ kind: "quiz", index: 0 });
+    setStep({ kind: "intro" });
+  };
+
+  const exitToLanding = () => {
+    setStep({ kind: "landing" });
+    window.scrollTo({ top: 0 });
   };
 
   if (step.kind === "landing") {
@@ -106,31 +112,33 @@ function ClutchScoreApp() {
     );
   }
 
+  const isLightFlow = step.kind === "intro" || step.kind === "quiz" || step.kind === "calculating";
   const isQuiz = step.kind === "quiz";
 
   return (
     <main
       id="main"
       className={`min-h-screen ${
-        isQuiz ? "bg-[#F5F4EF] text-[#0B0D10]" : "bg-[#0B0D10] text-white"
+        isLightFlow ? "bg-[#F5F4EF] text-[#0B0D10]" : "bg-[#0B0D10] text-white"
       }`}
     >
       <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col px-6 pt-5 pb-10 sm:py-14">
-        <header className="mb-2 flex items-center justify-between">
-          <Logo size="lg" variant={isQuiz ? "dark" : "light"} />
-          {isQuiz && (
-            <button
-              onClick={() => {
-                setStep({ kind: "landing" });
-                window.scrollTo({ top: 0 });
-              }}
-              type="button"
-              className="text-sm font-semibold text-[#767f8c] transition hover:text-[#0B0D10]"
-            >
-              Exit
-            </button>
-          )}
-        </header>
+        {step.kind !== "calculating" && (
+          <header className="mb-2 flex items-center justify-between">
+            <Logo size="lg" variant={isLightFlow ? "dark" : "light"} />
+            {(step.kind === "intro" || isQuiz) && (
+              <button
+                onClick={exitToLanding}
+                type="button"
+                className="text-sm font-semibold text-[#767f8c] transition hover:text-[#0B0D10]"
+              >
+                Exit
+              </button>
+            )}
+          </header>
+        )}
+
+        {step.kind === "intro" && <QuizIntro onStart={() => setStep({ kind: "quiz", index: 0 })} />}
 
         {isQuiz && (
           <>
@@ -158,18 +166,21 @@ function ClutchScoreApp() {
               if (step.index < QUESTION_COUNT - 1) {
                 setStep({ kind: "quiz", index: step.index + 1 });
               } else {
-                setStep({ kind: "email" });
+                setStep({ kind: "calculating" });
               }
             }}
             onBack={() => {
               if (step.index === 0) {
-                setStep({ kind: "landing" });
-                window.scrollTo({ top: 0 });
+                setStep({ kind: "intro" });
               } else {
                 setStep({ kind: "quiz", index: step.index - 1 });
               }
             }}
           />
+        )}
+
+        {step.kind === "calculating" && (
+          <CalculatingScreen onDone={() => setStep({ kind: "email" })} />
         )}
 
         {step.kind === "email" && (
@@ -201,6 +212,130 @@ function useSelectThenAdvance(onSelect: (value: NumericAnswer) => void, delayMs 
   }, [pending, delayMs]);
 
   return { pending, choose: (value: NumericAnswer) => setPending(value) };
+}
+
+function QuizIntro({ onStart }: { onStart: () => void }) {
+  return (
+    <section className="flex flex-1 flex-col justify-center pt-4">
+      <p className="eyebrow-orange mb-5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-[#D4460F]">
+        Clutch Score™
+      </p>
+      <h1 className="text-balance font-display text-[clamp(2rem,8vw,2.75rem)] font-bold uppercase leading-[1.05]">
+        What does your game need next?
+      </h1>
+      <p className="mt-4 max-w-md text-base leading-relaxed text-[#454b54]">
+        A 60-second snapshot of the habits and factors supporting your performance — built from your
+        last seven days.
+      </p>
+
+      <div className="mt-8 flex gap-2.5">
+        {[
+          { label: "Prepare", weight: "35%" },
+          { label: "Perform", weight: "35%" },
+          { label: "Recover", weight: "30%" },
+        ].map((pillar) => (
+          <div
+            key={pillar.label}
+            className="flex-1 rounded-xl bg-[#eceae2] px-2 py-3.5 text-center"
+          >
+            <p className="font-display text-[13px] font-bold uppercase text-[#0B0D10]">
+              {pillar.label}
+            </p>
+            <p className="mt-0.5 text-[11px] text-[#767f8c]">{pillar.weight}</p>
+          </div>
+        ))}
+      </div>
+
+      <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-[#454b54]">
+        {["15 questions", "~60 seconds", "Personalized results"].map((item) => (
+          <li key={item} className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#FF5A1F]" aria-hidden />
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        onClick={onStart}
+        className="mt-9 w-full rounded-full bg-[#FF5A1F] px-6 py-[18px] font-display text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#D4460F]"
+      >
+        Start My Clutch Score
+      </button>
+    </section>
+  );
+}
+
+function CalculatingScreen({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const id = window.setTimeout(onDone, 1100);
+    return () => window.clearTimeout(id);
+  }, [onDone]);
+
+  return (
+    <section className="-mx-6 flex flex-1 flex-col items-center justify-center bg-[#0B0D10] px-6 py-16 text-white sm:-mx-0 sm:rounded-2xl">
+      <div
+        className="mb-6 h-[52px] w-[52px] animate-spin rounded-full border-[3px] border-white/15 border-t-[#FF5A1F]"
+        aria-hidden
+      />
+      <p className="font-display text-[15px] uppercase tracking-[0.08em] text-[#c9cdd4]">
+        Building your Clutch Score
+      </p>
+    </section>
+  );
+}
+
+function GamePlan({ items }: { items: string[] }) {
+  const [done, setDone] = useState<Set<number>>(new Set());
+
+  const toggle = (index: number) => {
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
+
+  return (
+    <div className="mt-5">
+      <p className="font-display text-xs uppercase tracking-[0.1em] text-[#8b93a0]">
+        Your 7-Day Game Plan
+      </p>
+      <ul className="mt-3 divide-y divide-white/8">
+        {items.map((item, index) => {
+          const checked = done.has(index);
+          return (
+            <li key={item}>
+              <button
+                type="button"
+                onClick={() => toggle(index)}
+                className="flex w-full items-start gap-3 py-3 text-left"
+              >
+                <span
+                  className={`mt-0.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md border-[1.5px] text-[13px] transition ${
+                    checked
+                      ? "border-[#FF5A1F] bg-[#FF5A1F] text-white"
+                      : "border-white/30 text-transparent"
+                  }`}
+                  aria-hidden
+                >
+                  ✓
+                </span>
+                <span
+                  className={`text-sm leading-relaxed ${
+                    checked ? "text-[#8b93a0] line-through" : "text-[#e5e8ec]"
+                  }`}
+                >
+                  {item}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 function Quiz({
@@ -429,9 +564,9 @@ function Result({
           Your Clutch Score™
         </p>
 
-        <div className="mt-4 flex justify-center">
-          <ScoreRing score={overall} size={220} stroke={14} />
-        </div>
+        <p className="mt-2 text-center font-display text-[clamp(4rem,18vw,6rem)] font-bold leading-none text-[#FF5A1F]">
+          {overall}
+        </p>
 
         <p className="mt-2 text-center text-sm text-[#c9cdd4]">{tagline}</p>
 
@@ -461,6 +596,8 @@ function Result({
           </p>
           <p className="mt-3 text-[15px] leading-relaxed text-white">{opportunity.move}</p>
         </div>
+
+        <GamePlan items={opportunity.plan} />
 
         <div className="mt-8 flex flex-col gap-2.5">
           <button
